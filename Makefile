@@ -13,7 +13,7 @@ LIB             = /usr/lib
 EFI_CRT_OBJS    = $(LIB)/crt0-efi-$(ARCH).o
 EFI_LDS         = $(LIB)/elf_$(ARCH)_efi.lds
 
-CFLAGS          = $(EFIINCS) -fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Wall 
+CFLAGS          = $(EFIINCS) -std=c99 -fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Wall 
 ifeq ($(ARCH),x86_64)
   CFLAGS += -DEFI_FUNCTION_WRAPPER
 endif
