@@ -1,8 +1,10 @@
 #include <efi.h>
 #include <efilib.h>
 
+#include "kernel.h"
+
 EFI_STATUS
-get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *map_key, OUT UINTN *descriptor_size) {
+get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, OUT UINTN *descriptor_size) {
   EFI_STATUS status;
   *mem_map_size = sizeof(EFI_MEMORY_DESCRIPTOR)*48;
   UINTN mem_map_descriptor_version;
@@ -16,21 +18,19 @@ get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *map_key, OUT 
       return status;
     }
 
-    Print(L"Trying to get map with size: %d, buffer: %x...\n", *mem_map_size, *map);
-    status = uefi_call_wrapper(BS->GetMemoryMap, 5, mem_map_size, *map, map_key, descriptor_size, &mem_map_descriptor_version);
+    Print(L"Trying to get memory map with size: %d, buffer: %x...\n", *mem_map_size, *map);
+    status = uefi_call_wrapper(BS->GetMemoryMap, 5, mem_map_size, *map, mem_map_key, descriptor_size, &mem_map_descriptor_version);
 
     // We can only recover from an EFI_BUFFER_TOO_SMALL error
     if (status == EFI_BUFFER_TOO_SMALL) {
-      /* `mem_map_size` will point to the size needed if the previous call failed
-         but we want to reserve a bit more space than we needed for the last
-         call in case the new allocation changed the memory map. */
-
-      Print(L"Too small... Needed: %d\n", *mem_map_size);
+      /*
+        `mem_map_size` will point to the size needed if the previous call failed
+        but we want to reserve a bit more space than we needed for the last
+        call in case the new allocation changed the memory map.
+      */
 
       status = uefi_call_wrapper(BS->FreePool, 1, *map);
       *mem_map_size += sizeof(EFI_MEMORY_DESCRIPTOR)*16;
-
-      Print(L"Freed and resized\n");
     } else {
       return status; // It's up to caller to check for an error
     }
@@ -42,27 +42,32 @@ EFIAPI
 efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   InitializeLib(ImageHandle, SystemTable);
 
-  UINTN mem_map_size, mem_map_key, mem_map_descriptor_size;
+  EFI_STATUS status;
+  UINTN mem_map_size = 0, mem_map_key = 0, mem_map_descriptor_size = 0;
   uint8_t *mem_map = NULL;
 
-  EFI_STATUS status = get_memory_map((void **)&mem_map, &mem_map_size, &mem_map_key, &mem_map_descriptor_size);
-  Print(L"get_memory_map() status: %d, buffer: %x\n", status, mem_map);
+  // Try to exit boot services 3 times
+  for (int retries = 0; retries < 3; ++retries) {
+    status = get_memory_map((void **)&mem_map, &mem_map_size, &mem_map_key, &mem_map_descriptor_size);
 
-  if (EFI_ERROR(status)) {
-    Print(L"Error getting memory map!\n");
-    return status;
+    if (EFI_ERROR(status)) {
+      Print(L"Error getting memory map!\n");
+      return status;
+    }
+
+    // Exit boot services
+    status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, mem_map_key);
+    // Execute kernel if we are successful
+    if (status == EFI_SUCCESS) kernel_main(mem_map, mem_map_size, mem_map_descriptor_size);
   }
 
-  int num_map_entries = mem_map_size / mem_map_descriptor_size;
+  /*
+    If we've reached here, we haven't managed to exit boot services,
+    we should print an error, free our resources and return.
+  */
 
-  for (int i = 0; i < num_map_entries; ++i) {
-    EFI_MEMORY_DESCRIPTOR *entry = (EFI_MEMORY_DESCRIPTOR *)(mem_map + i*mem_map_descriptor_size);
-
-    Print(L"Type: %d, PAddress: %x, VAddress: %x, Number of Pages: %d\n", entry->Type, entry->PhysicalStart, entry->VirtualStart, entry->NumberOfPages);
-  }
-
-  // Free allocation
-  status = uefi_call_wrapper(BS->FreePool, 1, mem_map);
+  Print(L"Unable to successfully exit boot services. Last status: %d\n", status);
+  uefi_call_wrapper(BS->FreePool, 1, mem_map);
 
   return EFI_SUCCESS;
 }
