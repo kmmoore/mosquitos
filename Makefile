@@ -1,9 +1,9 @@
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
-FILENAME        = kmalloc
+SRCS            = loader.c
 
-OBJS            = $(FILENAME).o
-TARGET          = $(FILENAME).efi
+OBJS            = $(SRCS:%.c=%.o)
+TARGET          = $(SRCS:%.c=%.efi)
 
 CC = gcc
 
