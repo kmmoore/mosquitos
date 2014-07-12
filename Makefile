@@ -1,31 +1,51 @@
+# Makefile for MosquitOS
+# Note: Only works on x86_64
+
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
-SRCS            = loader.c
-
+# Edit this line to add more source files (*.c or *.S)
+SRCS            = loader.c kernel.c
 OBJS            = $(SRCS:%.c=%.o)
-TARGET          = $(SRCS:%.c=%.efi)
 
-CC = gcc
+TARGET          = loader.efi
+SO_FILE         = $(TARGET:%.efi=%.so)
+
+CC      = gcc
+LD      = ld
+OBJCOPY = objcopy
 
 EFIINC          = /usr/include/efi
 EFIINCS         = -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
-LIB             = /usr/lib
-EFI_CRT_OBJS    = $(LIB)/crt0-efi-$(ARCH).o
-EFI_LDS         = $(LIB)/elf_$(ARCH)_efi.lds
+LIBDIR          = /usr/lib
+EFI_CRT_OBJS    = $(LIBDIR)/crt0-efi-$(ARCH).o
+EFI_LDS         = $(LIBDIR)/elf_$(ARCH)_efi.lds
+LIBS            = -lefi -lgnuefi $(shell $(CC) -print-libgcc-file-name)
 
 CFLAGS          = $(EFIINCS) -std=c99 -fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Wall 
 ifeq ($(ARCH),x86_64)
   CFLAGS += -DEFI_FUNCTION_WRAPPER
 endif
 
-LDFLAGS         = -nostdlib -znocombreloc -T $(EFI_LDS) -shared -Bsymbolic -L $(LIB) $(EFI_CRT_OBJS) 
+LDFLAGS         = -nostdlib -znocombreloc -T $(EFI_LDS) -shared -Bsymbolic -L $(LIBDIR) $(EFI_CRT_OBJS) 
 
 all: $(TARGET)
 
-%.so: $(OBJS)
-	ld $(LDFLAGS) $(OBJS) -o $@ -lefi -lgnuefi
+.PHONY : clean
+clean:
+	rm -f $(TARGET) $(OBJS) $(SO_FILE)
 
-%.efi: %.so
-	objcopy -j .text -j .sdata -j .data -j .dynamic \
-		-j .dynsym  -j .rel -j .rela -j .reloc \
-		--target=efi-app-$(ARCH) $^ $@
+# Compile
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.S 
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Link
+%.so: $(OBJS)
+	$(LD) $(LDFLAGS) $^ -o $@ $(LIBS)
+
+# Copy
+%.efi: %.so 
+	$(OBJCOPY) -j .text -j .sdata -j .data -j .dynamic -j .dynsym -j .rel \
+		   -j .rela -j .reloc --target=efi-app-$(ARCH) $*.so $@
