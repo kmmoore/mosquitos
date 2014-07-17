@@ -1,0 +1,40 @@
+# Makefile for MosquitOS kernel
+# Note: Only works on x86_64
+
+ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
+
+# Edit this line to add more source files (*.c or *.S)
+SRCS            = kernel.c
+OBJS            = $(SRCS:%.c=%.o)
+
+TARGET          = kernel
+
+CC      = gcc
+LD      = ld
+
+LIBDIR          = /usr/lib
+LIBS            = 
+
+CFLAGS          = -std=c99 -Wall -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone	
+ifeq ($(ARCH),x86_64)
+	CFLAGS += -DEFI_FUNCTION_WRAPPER
+endif
+
+LDFLAGS         = -nostdlib -static -z max-page-size=0x1000 -T kernel_link.lds
+
+all: $(TARGET)
+
+.PHONY : clean
+clean:
+	rm -f $(TARGET) $(OBJS)
+
+# Compile
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.S 
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Link
+$(TARGET): $(OBJS)
+	$(LD) $(LDFLAGS) $^ -o $@ $(LIBS)
