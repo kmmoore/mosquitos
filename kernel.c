@@ -11,7 +11,7 @@ void kernel_main(uint8_t *memory_map, UINTN mem_map_size, UINTN mem_map_descript
   text_output_clear_screen(0x00000000);
 
   int x = 10;
-  for (char c = ' '; c <= 'Z'; ++c) {
+  for (char c = ' '; c <= '~'; ++c) {
     text_output_draw_char(c, x++, 10);
   }
 

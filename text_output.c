@@ -31,13 +31,9 @@ void text_output_draw_char(char c, int x, int y) {
   int pixel_x = x * kCharacterWidth;
   int pixel_y = y * kCharacterHeight;
 
-  if (c >= 'a' && c <= 'z') {
-    c = c - 'a' + 'A';
-  }
-
   int font_char_index;
 
-  if (c >= ' ' && c <= 'Z') {
+  if (c >= ' ' && c <= '~') {
     font_char_index = c - ' ';
   } else {
     return; // We cannot print this character
