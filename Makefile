@@ -1,18 +1,18 @@
-# Makefile for MosquitOS
+# Makefile for MosquitOS bootloader
 # Note: Only works on x86_64
 
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
 # Edit this line to add more source files (*.c or *.S)
-SRCS            = loader.c kernel.c
+SRCS            = loader.c kernel.c text_output.c font.c
 OBJS            = $(SRCS:%.c=%.o)
 
 TARGET          = loader.efi
 SO_FILE         = $(TARGET:%.efi=%.so)
 
-CC      = gcc
-LD      = ld
-OBJCOPY = objcopy
+CC              = gcc
+LD              = ld
+OBJCOPY         = objcopy
 
 EFIINC          = /usr/include/efi
 EFIINCS         = -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
@@ -21,7 +21,7 @@ EFI_CRT_OBJS    = $(LIBDIR)/crt0-efi-$(ARCH).o
 EFI_LDS         = $(LIBDIR)/elf_$(ARCH)_efi.lds
 LIBS            = -lefi -lgnuefi $(shell $(CC) -print-libgcc-file-name)
 
-CFLAGS          = $(EFIINCS) -std=c99 -fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Wall 
+CFLAGS          = $(EFIINCS) -std=c99 -fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Wall -Werror
 ifeq ($(ARCH),x86_64)
   CFLAGS += -DEFI_FUNCTION_WRAPPER
 endif

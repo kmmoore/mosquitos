@@ -37,12 +37,28 @@ get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, 
   }
 }
 
+int cpu_mode() {
+  uint64_t mode;
+
+  __asm__ ("movq %%cr0, %0" : "=r" (mode));
+
+  return mode;
+}
+
 EFI_STATUS
 EFIAPI
 efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   InitializeLib(ImageHandle, SystemTable);
 
+  Print(L"CR0 Register contents: %x\n", cpu_mode());
+
   EFI_STATUS status;
+
+  EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
+  EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
+   
+  status = uefi_call_wrapper(BS->LocateProtocol, 3, &gop_guid, NULL, &gop);
+
   UINTN mem_map_size = 0, mem_map_key = 0, mem_map_descriptor_size = 0;
   uint8_t *mem_map = NULL;
 
@@ -58,7 +74,7 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     // Exit boot services
     status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, mem_map_key);
     // Execute kernel if we are successful
-    if (status == EFI_SUCCESS) kernel_main(mem_map, mem_map_size, mem_map_descriptor_size);
+    if (status == EFI_SUCCESS) kernel_main(mem_map, mem_map_size, mem_map_descriptor_size, gop);
   }
 
   /*
