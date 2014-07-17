@@ -7,15 +7,12 @@
 static struct {
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   int current_row, current_col;
-  uint32_t font[kNumCharsInFont * kCharacterHeight];
 } text_output;
 
 void text_output_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
   text_output.gop = gop;
 
   text_output.current_row = text_output.current_col = 0;
-
-  store_font((uint32_t *)&text_output.font);
 }
 
 void text_output_draw_pixel(int x, int y, uint32_t color) {
@@ -40,17 +37,15 @@ void text_output_draw_char(char c, int x, int y) {
 
   int font_char_index;
 
-  if (c >= '0' && c <= '9') {
-    font_char_index = 26 + c - '0';
-  } else if (c == ' ') {
-    font_char_index = 36;
+  if (c >= ' ' && c <= 'Z') {
+    font_char_index = c - ' ';
   } else {
-    font_char_index = c - 'A';
+    return; // We cannot print this character
   }
 
   for (int i = 0; i < kCharacterWidth; ++i) {
     for (int j = 0; j < kCharacterHeight; ++j) {
-      uint32_t color = (text_output.font[j + font_char_index * kCharacterHeight] & (1 << (7-i))) == 0 ? 0x0 : 0x00ffffff;
+      uint32_t color = (font[j + font_char_index * kCharacterHeight] & (1 << (7-i))) == 0 ? 0x0 : 0x00ffffff;
       text_output_draw_pixel(pixel_x + i, pixel_y + j, color);
     }
   }
