@@ -25,15 +25,15 @@
 #define ICW4_SFNM 0x10    /* Special fully nested (not) */
 
 void pic_remap(int offset1, int offset2) {
-  // unsigned char a1, a2;
+  unsigned char a1, a2;
    
-  //   a1 = inb(PIC1_DATA);                        // save masks
-  //   a2 = inb(PIC2_DATA);
+    a1 = inb(PIC1_DATA);                        // save masks
+    a2 = inb(PIC2_DATA);
 
-    // char buf[20];
-    // int2str(a1, buf, sizeof(buf));
-    // text_output_print(buf);
-    // text_output_print("\n");
+    char buf[20];
+    int2str(a1, buf, sizeof(buf));
+    text_output_print(buf);
+    text_output_print("\n");
    
     outb(PIC1_COMMAND, ICW1_INIT+ICW1_ICW4);  // starts the initialization sequence (in cascade mode)
     outb(PIC2_COMMAND, ICW1_INIT+ICW1_ICW4);
@@ -45,8 +45,8 @@ void pic_remap(int offset1, int offset2) {
     outb(PIC1_DATA, ICW4_8086);
     outb(PIC2_DATA, ICW4_8086);
    
-    outb(PIC1_DATA, 0);   // restore saved masks.
-    outb(PIC2_DATA, 0);
+    outb(PIC1_DATA, a1);   // restore saved masks.
+    outb(PIC2_DATA, a2);
 }
 
 void pic_unmask_line(uint8_t line) {

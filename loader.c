@@ -56,9 +56,9 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   // Print(L"APIC: %d\n", cpuHasAPIC());
   Print(L"Waiting for keypress to continue booting...\n");
 
-  UINTN event_index;
-  EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
-  uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
+  // UINTN event_index;
+  // EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
+  // uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
 
   EFI_STATUS status;
 

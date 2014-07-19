@@ -59,17 +59,35 @@ static void set_idt_entry(int index, uint64_t base, uint16_t selector, uint8_t a
    IDT[index].zero_2      = 0;
 }
 
-void isr() {
+void double_fault_isr() {
+  text_output_print("Double fault!\n");
+
+  __asm__ ("iretq");
+}
+
+void default_isr() {
+  outb(0x20, 0x20); // Acknowledge interrupts
+  // __asm__ ("iretq");
+}
+
+void timer_isr() {
+  text_output_print("Timer!\n");
+  outb(0x20, 0x20); // Acknowledge interrupts
+
+  __asm__ ("iretq");
+}
+
+void keyboard_isr() {
   uint8_t key = inb(0x60);
 
-  char buf[] = {key + '0', 0};
+  char buf[] = {key + '0', '\n', 0};
   text_output_print(buf);
-  text_output_print("ISR\n");
+  text_output_print("Keyboard\n");
 
   outb(0x20, 0x20); // Acknowledge interrupts
   // __asm__ ("hlt");
 
-  // __asm__ ("iretq");
+  __asm__ ("iretq");
 }
 
 extern void isr1();
@@ -94,11 +112,25 @@ void keyboard_controller_init() {
 
   pic_remap(0x20, 0x28);
   // TODO: Determine why this doesn't work
-  pic_unmask_line(0x1); // Turn on keyboard interrupt line
+  outb(0x21,0b11111101);
+  outb(0xa1,0xff);
+  // pic_unmask_line(0x1); // Turn on keyboard interrupt line
   
-  for (int i = 0; i < 256; ++i) {
-    set_idt_entry(i, (uint64_t)isr, 0x08, 0b10001110);
-  }
+  // for (int i = 0; i < 256; ++i) {
+  //   set_idt_entry(i, (uint64_t)timer_isr, 0x08, 0b10001110);
+  // }
+
+  set_idt_entry(12, (uint64_t)timer_isr, 0x08, 0b10001110);
+
+  // for (int i = 0x00; i < 256; ++i) {
+  //   set_idt_entry(i, (uint64_t)timer_isr, 0x08, 0b10001110);
+  // }
+
+  // set_idt_entry(0x20, (uint64_t)keyboard_isr, 0x08, 0b10001110);
+
+  set_idt_entry(0x20, (uint64_t)timer_isr, 0x08, 0b10001110);
+  set_idt_entry(0x08, (uint64_t)double_fault_isr, 0x08, 0b10001110);
+  set_idt_entry(0x21, (uint64_t)keyboard_isr, 0x08, 0b10001110);
 
   IDTR.size = sizeof(IDT) - 1;
   IDTR.address = (uint64_t)&IDT[0];
@@ -109,17 +141,15 @@ void keyboard_controller_init() {
 
   // TODO: Figure out why this is required...
   char buf[20];
-  int2str((uint64_t)isr, buf, sizeof(buf));
+  int2str((uint64_t)default_isr, buf, sizeof(buf));
   text_output_print(buf);
   text_output_print("\n");
 
-  int2str((uint64_t)isr1, buf, sizeof(buf));
+  int2str((uint64_t)keyboard_isr, buf, sizeof(buf));
   text_output_print(buf);
   text_output_print("\n");
 
   // __asm__ ("int $0x21");
 
   __asm__ ("sti");
-
-  text_output_print("Fired interrupt 0x1.\n");
 }
