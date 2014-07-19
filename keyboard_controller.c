@@ -1,6 +1,10 @@
+#include <efi.h>
+#include <efilib.h>
+
 #include "keyboard_controller.h"
 #include "text_output.h"
 #include "util.h"
+#include "pic.h"
 
 struct GDTEntry {
   uint16_t limit_low;         // The lower 16 bits of the limit.
@@ -56,17 +60,22 @@ static void set_idt_entry(int index, uint64_t base, uint16_t selector, uint8_t a
 }
 
 void isr() {
+  uint8_t key = inb(0x60);
+
+  char buf[] = {key + '0', 0};
+  text_output_print(buf);
   text_output_print("ISR\n");
 
-  __asm__ ("iretq");
+  outb(0x20, 0x20); // Acknowledge interrupts
+  // __asm__ ("hlt");
+
+  // __asm__ ("iretq");
 }
+
+extern void isr1();
 
 void keyboard_controller_init() {
   text_output_print("Attempting to setup GDT and interrupts.\n");
-
-  // Setup page table
-
-
 
   // Setup GDT
 
@@ -82,6 +91,10 @@ void keyboard_controller_init() {
   __asm__ ("lgdt %0" : : "m" (GDTR));
 
   text_output_print("Loaded GDT.\n");
+
+  pic_remap(0x20, 0x28);
+  // TODO: Determine why this doesn't work
+  pic_unmask_line(0x1); // Turn on keyboard interrupt line
   
   for (int i = 0; i < 256; ++i) {
     set_idt_entry(i, (uint64_t)isr, 0x08, 0b10001110);
@@ -94,12 +107,19 @@ void keyboard_controller_init() {
 
   text_output_print("Loaded IDT.\n");
 
+  // TODO: Figure out why this is required...
   char buf[20];
   int2str((uint64_t)isr, buf, sizeof(buf));
   text_output_print(buf);
   text_output_print("\n");
 
-  __asm__ ("int $0x1");
+  int2str((uint64_t)isr1, buf, sizeof(buf));
+  text_output_print(buf);
+  text_output_print("\n");
 
-  text_output_print("Fired interrupt 0x1.");
+  // __asm__ ("int $0x21");
+
+  __asm__ ("sti");
+
+  text_output_print("Fired interrupt 0x1.\n");
 }

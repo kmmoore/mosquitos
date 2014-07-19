@@ -4,8 +4,9 @@
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
 # Edit this line to add more source files (*.c or *.S)
-SRCS            = loader.c kernel.c text_output.c font.c keyboard_controller.c util.c
-OBJS            = $(SRCS:%.c=%.o)
+SRCS            = loader.c kernel.c text_output.c font.c keyboard_controller.c util.c interrupts.s pic.c
+TMP_SRCS        = $(SRCS:%.c=%.o)
+OBJS            = $(TMP_SRCS:%.s=%.o)
 
 TARGET          = loader.efi
 SO_FILE         = $(TARGET:%.efi=%.so)
@@ -49,5 +50,3 @@ clean:
 %.efi: %.so 
 	$(OBJCOPY) -j .text -j .sdata -j .data -j .dynamic -j .dynsym -j .rel \
 		   -j .rela -j .reloc --target=efi-app-$(ARCH) $*.so $@
-
-	$(OBJCOPY) --only-keep-debug $*.so loader_debug.sym

@@ -18,3 +18,19 @@ int int2str(uint64_t n, char *buf, int buf_len) {
 
   return 0;
 }
+
+uint8_t inb(uint16_t port) {
+    uint8_t ret;
+    __asm__ volatile ( "inb %1, %0" : "=a"(ret) : "Nd"(port) );
+    /* TODO: Is it wrong to use 'N' for the port? It's not a 8-bit constant. */
+    /* TODO: Should %1 be %w1? */
+    /* TODO: Is there any reason to force the use of eax and edx? */
+    return ret;
+}
+
+void outb(uint16_t port, uint8_t val) {
+  __asm__ volatile ( "outb %0, %1" : : "a"(val), "Nd"(port) );
+  /* TODO: Is it wrong to use 'N' for the port? It's not a 8-bit constant. */
+  /* TODO: Should %1 be %w1? */
+  /* TODO: Is there any reason to force the use of eax and edx? */
+}

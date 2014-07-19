@@ -37,19 +37,23 @@ get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, 
   }
 }
 
-int cpu_mode() {
-  uint64_t mode;
+// int cpuHasAPIC() {
+//    uint32_t eax, edx;
+//    cpuid(1, &eax, &edx);
+//    return edx & CPUID_FLAG_APIC;
+// }
 
-  __asm__ ("movq %%cr0, %0" : "=r" (mode));
-
-  return mode;
-}
+extern void isr();
+extern void isr1();
 
 EFI_STATUS
 EFIAPI
 efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   InitializeLib(ImageHandle, SystemTable);
 
+  Print(L"isr: %x\n", isr);
+  Print(L"isr1: %x\n", isr1);
+  // Print(L"APIC: %d\n", cpuHasAPIC());
   Print(L"Waiting for keypress to continue booting...\n");
 
   UINTN event_index;
