@@ -4,7 +4,7 @@
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
 # Edit this line to add more source files (*.c or *.S)
-SRCS            = loader.c kernel.c text_output.c font.c
+SRCS            = loader.c kernel.c text_output.c font.c keyboard_controller.c util.c
 OBJS            = $(SRCS:%.c=%.o)
 
 TARGET          = loader.efi
@@ -21,7 +21,7 @@ EFI_CRT_OBJS    = $(LIBDIR)/crt0-efi-$(ARCH).o
 EFI_LDS         = $(LIBDIR)/elf_$(ARCH)_efi.lds
 LIBS            = -lefi -lgnuefi $(shell $(CC) -print-libgcc-file-name)
 
-CFLAGS          = $(EFIINCS) -std=c99 -fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Wall -Werror
+CFLAGS          = $(EFIINCS) -std=c99 -fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Wall -Wextra -Werror -ggdb
 ifeq ($(ARCH),x86_64)
   CFLAGS += -DEFI_FUNCTION_WRAPPER
 endif
@@ -49,3 +49,5 @@ clean:
 %.efi: %.so 
 	$(OBJCOPY) -j .text -j .sdata -j .data -j .dynamic -j .dynsym -j .rel \
 		   -j .rela -j .reloc --target=efi-app-$(ARCH) $*.so $@
+
+	$(OBJCOPY) --only-keep-debug $*.so loader_debug.sym

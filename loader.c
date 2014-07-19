@@ -50,7 +50,11 @@ EFIAPI
 efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   InitializeLib(ImageHandle, SystemTable);
 
-  Print(L"CR0 Register contents: %x\n", cpu_mode());
+  Print(L"Waiting for keypress to continue booting...\n");
+
+  UINTN event_index;
+  EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
+  uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
 
   EFI_STATUS status;
 
