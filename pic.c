@@ -29,11 +29,6 @@ void pic_remap(int offset1, int offset2) {
    
     a1 = inb(PIC1_DATA);                        // save masks
     a2 = inb(PIC2_DATA);
-
-    char buf[20];
-    int2str(a1, buf, sizeof(buf));
-    text_output_print(buf);
-    text_output_print("\n");
    
     outb(PIC1_COMMAND, ICW1_INIT+ICW1_ICW4);  // starts the initialization sequence (in cascade mode)
     outb(PIC2_COMMAND, ICW1_INIT+ICW1_ICW4);

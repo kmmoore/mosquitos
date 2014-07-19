@@ -66,21 +66,22 @@ void double_fault_isr() {
 }
 
 void default_isr() {
-  outb(0x20, 0x20); // Acknowledge interrupts
-  // __asm__ ("iretq");
+  // outb(0x20, 0x20); // Acknowledge interrupts
+  __asm__ ("iretq");
 }
 
 void timer_isr() {
   text_output_print("Timer!\n");
   outb(0x20, 0x20); // Acknowledge interrupts
 
-  __asm__ ("iretq");
+  // __asm__ ("iretq");
 }
 
 void keyboard_isr() {
+  uint8_t status = inb(0x64);
   uint8_t key = inb(0x60);
 
-  char buf[] = {key + '0', '\n', 0};
+  char buf[] = {key + '0', status + '0', '\n', 0};
   text_output_print(buf);
   text_output_print("Keyboard\n");
 
@@ -115,18 +116,8 @@ void keyboard_controller_init() {
   outb(0x21,0b11111101);
   outb(0xa1,0xff);
   // pic_unmask_line(0x1); // Turn on keyboard interrupt line
-  
-  // for (int i = 0; i < 256; ++i) {
-  //   set_idt_entry(i, (uint64_t)timer_isr, 0x08, 0b10001110);
-  // }
 
-  set_idt_entry(12, (uint64_t)timer_isr, 0x08, 0b10001110);
-
-  // for (int i = 0x00; i < 256; ++i) {
-  //   set_idt_entry(i, (uint64_t)timer_isr, 0x08, 0b10001110);
-  // }
-
-  // set_idt_entry(0x20, (uint64_t)keyboard_isr, 0x08, 0b10001110);
+  set_idt_entry(7, (uint64_t)default_isr, 0x08, 0b10001110); 
 
   set_idt_entry(0x20, (uint64_t)timer_isr, 0x08, 0b10001110);
   set_idt_entry(0x08, (uint64_t)double_fault_isr, 0x08, 0b10001110);
@@ -138,18 +129,6 @@ void keyboard_controller_init() {
   __asm__ ("lidt %0" : : "m" (IDTR));
 
   text_output_print("Loaded IDT.\n");
-
-  // TODO: Figure out why this is required...
-  char buf[20];
-  int2str((uint64_t)default_isr, buf, sizeof(buf));
-  text_output_print(buf);
-  text_output_print("\n");
-
-  int2str((uint64_t)keyboard_isr, buf, sizeof(buf));
-  text_output_print(buf);
-  text_output_print("\n");
-
-  // __asm__ ("int $0x21");
 
   __asm__ ("sti");
 }
