@@ -4,6 +4,8 @@
 #include "font.h"
 #include "text_output.h"
 
+#define kTextOutputPadding 10
+
 static struct {
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   int current_row, current_col;
@@ -12,7 +14,7 @@ static struct {
 void text_output_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
   text_output.gop = gop;
 
-  text_output.current_row = text_output.current_col = 0;
+  text_output.current_row = text_output.current_col = kTextOutputPadding;
 }
 
 void text_output_draw_pixel(int x, int y, uint32_t color) {
@@ -20,8 +22,8 @@ void text_output_draw_pixel(int x, int y, uint32_t color) {
 }
 
 void text_output_clear_screen(uint32_t color) {
-  for (int x = 0; x < text_output.gop->Mode->Info->HorizontalResolution; ++x) {
-    for (int y = 0; y < text_output.gop->Mode->Info->VerticalResolution; y++) {
+  for (unsigned int x = 0; x < text_output.gop->Mode->Info->HorizontalResolution; ++x) {
+    for (unsigned int y = 0; y < text_output.gop->Mode->Info->VerticalResolution; y++) {
       text_output_draw_pixel(x, y, color);
     }
   }
@@ -47,9 +49,14 @@ void text_output_draw_char(char c, int x, int y) {
   }
 }
 
-void text_output_draw_string(char *str, int x, int y) {
+void text_output_print(char *str) {
   while (*str != '\0') {
-    text_output_draw_char(*str, x++, y);
+    if (*str == '\n') {
+      text_output.current_row += 2; // Put an empty line between text lines
+      text_output.current_col = kTextOutputPadding;
+    } else{
+      text_output_draw_char(*str, text_output.current_col++, text_output.current_row);
+    }
     str++;
   }
 }
