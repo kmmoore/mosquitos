@@ -22,13 +22,19 @@ void keyboard_isr() {
     scancode = scancode & ~0x80;
     if (scancode == 0x2a || scancode == 0x36) shift_down = false;
   } else {
-    if (scancode == 0x2a || scancode == 0x36) shift_down = true;
-    char buf[2] = { 0, 0 };
+    if (scancode == 0x2a || scancode == 0x36) {
+      shift_down = true;
+    } else {
+      char pressed_char;
+      if (shift_down) pressed_char = SCAN_CODE_MAPPING_SHIFTED[scancode];
+      else pressed_char = SCAN_CODE_MAPPING[scancode];
 
-    if (shift_down) buf[0] = SCAN_CODE_MAPPING_SHIFTED[scancode];
-    else buf[0] = SCAN_CODE_MAPPING[scancode];
-
-    text_output_print(buf);
+      if (pressed_char == '\b' || pressed_char == 127) {
+        text_output_backspace();
+      } else {
+        text_output_putchar(pressed_char);
+      }
+    }
   }
 
   outb(0x20, 0x20); // Acknowledge interrupt

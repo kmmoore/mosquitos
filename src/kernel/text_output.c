@@ -49,14 +49,29 @@ void text_output_draw_char(char c, int x, int y) {
   }
 }
 
+inline void text_output_putchar(char c) {
+  if (c == '\n') {
+    text_output.current_row += 2; // Put an empty line between text lines
+    text_output.current_col = kTextOutputPadding;
+  } else{
+    text_output_draw_char(c, text_output.current_col, text_output.current_row);
+    text_output.current_col += 1;
+  }
+}
+
 void text_output_print(char *str) {
   while (*str != '\0') {
-    if (*str == '\n') {
-      text_output.current_row += 2; // Put an empty line between text lines
-      text_output.current_col = kTextOutputPadding;
-    } else{
-      text_output_draw_char(*str, text_output.current_col++, text_output.current_row);
-    }
+    text_output_putchar(*str);
     str++;
+  }
+}
+
+void text_output_backspace() {
+  if (text_output.current_col == kTextOutputPadding) { // Beginning of line
+    // TODO: Figure out how to go back up...
+  } else {
+    text_output.current_col -= 1;
+    // Blank out character
+    text_output_draw_char(' ', text_output.current_col, text_output.current_row);
   }
 }

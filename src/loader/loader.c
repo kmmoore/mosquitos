@@ -49,20 +49,14 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
   EFI_STATUS status;
 
-  uint64_t rsp;
-  __asm__ volatile ("mov %%rsp, %0" : "=q" (rsp));
-
-  Print(L"RSP: 0x%x\n", rsp);
-
-  Print(L"isr1: %x\n", isr1);
-  Print(L"gpe_isr: %x\n", gpe_isr);
-  Print(L"kernel_main: %x\n", kernel_main);
+  // Wait for keypress to give us time to attach a debugger, etc.
   Print(L"Waiting for keypress to continue booting...\n");
 
   UINTN event_index;
   EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
   uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
 
+  // Load the kernel ELF file into memory and get the entry address
   void *kernel_main_addr = NULL;
   status = load_kernel(L"kernel", &kernel_main_addr);
   if (status != EFI_SUCCESS) {
@@ -70,13 +64,15 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     return EFI_ABORTED;
   }
 
-  Print(L"got kernel_main at: 0x%x\n", kernel_main_addr);
+  Print(L"Got kernel_main at: 0x%x\n", kernel_main_addr);
 
+  // Get access to a simple graphics buffer
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
    
   status = uefi_call_wrapper(BS->LocateProtocol, 3, &gop_guid, NULL, &gop);
 
+  // Get memory map
   UINTN mem_map_size = 0, mem_map_key = 0, mem_map_descriptor_size = 0;
   uint8_t *mem_map = NULL;
 
@@ -106,5 +102,5 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   Print(L"Unable to successfully exit boot services. Last status: %d\n", status);
   uefi_call_wrapper(BS->FreePool, 1, mem_map);
 
-  return EFI_SUCCESS;
+  return EFI_ABORTED;
 }
