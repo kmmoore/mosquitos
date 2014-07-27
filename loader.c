@@ -43,7 +43,7 @@ get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, 
 //    return edx & CPUID_FLAG_APIC;
 // }
 
-extern void isr();
+extern void gpe_isr();
 extern void isr1();
 
 EFI_STATUS
@@ -51,14 +51,15 @@ EFIAPI
 efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   InitializeLib(ImageHandle, SystemTable);
 
-  Print(L"isr: %x\n", isr);
   Print(L"isr1: %x\n", isr1);
+  Print(L"gpe_isr: %x\n", gpe_isr);
+  Print(L"kernel_main: %x\n", kernel_main);
   // Print(L"APIC: %d\n", cpuHasAPIC());
   Print(L"Waiting for keypress to continue booting...\n");
 
-  // UINTN event_index;
-  // EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
-  // uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
+  UINTN event_index;
+  EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
+  uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
 
   EFI_STATUS status;
 

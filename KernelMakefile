@@ -4,18 +4,22 @@
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
 # Edit this line to add more source files (*.c or *.S)
-SRCS            = kernel.c
-OBJS            = $(SRCS:%.c=%.o)
+SRCS            = kernel.c text_output.c font.c keyboard_controller.c util.c interrupts.s pic.c
+TMP_SRCS        = $(SRCS:%.c=%.o)
+OBJS            = $(TMP_SRCS:%.s=%.o)
 
 TARGET          = kernel
 
 CC      = gcc
 LD      = ld
 
+EFIINC          = /usr/include/efi
+EFIINCS         = -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
+
 LIBDIR          = /usr/lib
 LIBS            = 
 
-CFLAGS          = -std=c99 -Wall -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone	
+CFLAGS          = $(EFIINCS) -std=gnu99 -Wall -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone	
 ifeq ($(ARCH),x86_64)
 	CFLAGS += -DEFI_FUNCTION_WRAPPER
 endif
