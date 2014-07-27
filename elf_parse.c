@@ -1,17 +1,16 @@
+#include <efi.h>
+#include <efilib.h>
+
 #include <elf.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/stat.h>
-#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
 
-#include <sys/mman.h>
-
 #include "elf_parse.h"
+#include "fileops.h"
 
-bool valid_elf64_header(Elf64_Ehdr *elf_hdr) {
+static bool valid_elf64_header(Elf64_Ehdr *elf_hdr) {
   // Check header
   if (elf_hdr->e_ident[EI_MAG0] != ELFMAG0 ||
       elf_hdr->e_ident[EI_MAG1] != ELFMAG1 ||
@@ -35,49 +34,64 @@ bool valid_elf64_header(Elf64_Ehdr *elf_hdr) {
 
 }
 
-int main(int argc, char const *argv[]) {
-  FILE *fp = fopen("kernel", "rb");
+EFI_STATUS load_kernel(CHAR16 *kernel_fname) {
+  EFI_STATUS status;
 
-  fseek(fp, 0, SEEK_END); // seek to end of file
-  int kernel_size = ftell(fp); // get current file pointer
-  fseek(fp, 0, SEEK_SET); // seek back to beginning of file
+  // Open filesystem
+  EFI_FILE_IO_INTERFACE *fs = fops_get_filesystem();
+  EFI_FILE *fs_root = fops_open_volume(fs);
+  
+  // Open kernel file
+  EFI_FILE *kernel_file = fops_open_file(fs_root, kernel_fname, EFI_FILE_MODE_READ, 0);
+  UINTN kernel_size = fops_file_size(kernel_file);
 
-  printf("Kernel size: %d\n", kernel_size);
+  Print(L"Kernel size: %lu\n", kernel_size);
 
-  uint8_t *buffer = malloc(kernel_size);
-  fread(buffer, 1, kernel_size, fp);
-  fclose(fp);
+  // Allocate memory for file
+  uint8_t *buffer;
+  status = uefi_call_wrapper(BS->AllocatePool, 3, EfiLoaderData, kernel_size, &buffer);
+
+  if (status != EFI_SUCCESS) {
+    Print(L"Error allocating kernel buffer!\n");
+    return status;
+  }
+
+  // Read kernel
+  UINTN bytes_read = fops_file_read(kernel_file, kernel_size, buffer);
+
+  if (bytes_read != kernel_size) {
+    Print(L"Error reading kernel file!\n");
+    return EFI_ABORTED;
+  }
+
+  fops_file_close(kernel_file);
 
   Elf64_Ehdr *elf_hdr = (Elf64_Ehdr *)buffer;
 
   if (!valid_elf64_header(elf_hdr)) {
-    fprintf(stderr, "Invalid ELF header!\n");
+    Print(L"Invalid ELF header!\n");
     return -1;
   }
 
 
-  // Allocate memory to run executable from
-  uint8_t *region = mmap((void *)elf_hdr->e_entry, kernel_size, PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_SHARED, -1, 0);
-  assert(region == (void *)0x100000);
+  Print(L"Program header table size: %d\n", elf_hdr->e_phnum);
+  Print(L"Section header table size: %d\n", elf_hdr->e_shnum);
 
-  printf("Program header table size: %d\n", elf_hdr->e_phnum);
-  printf("Section header table size: %d\n", elf_hdr->e_shnum);
-
-  printf("\n");
+  Print(L"\n");
 
   Elf64_Shdr *section_headers = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff);
 
-  Elf64_Phdr *program_headers = (Elf64_Phdr *)(buffer + elf_hdr->e_phoff);
+  // Elf64_Phdr *program_headers = (Elf64_Phdr *)(buffer + elf_hdr->e_phoff);
 
   Elf64_Shdr *strtab_header = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff + (elf_hdr->e_shstrndx * elf_hdr->e_shentsize));
   char *string_table = (char *)(buffer + strtab_header->sh_offset);
 
   for (int i = 0; i < elf_hdr->e_shnum; ++i) {
-    assert (section_headers[i].sh_name < strtab_header->sh_size);
+    // assert (section_headers[i].sh_name < strtab_header->sh_size);
 
-    printf("Section type: %d, name: %s\n", section_headers[i].sh_type, string_table + section_headers[i].sh_name);
+    Print(L"Section type: %d, name: %s\n", section_headers[i].sh_type, string_table + section_headers[i].sh_name);
 
-    printf("Section virtual address: %p, size: %d bytes\n", (void *)section_headers[i].sh_addr, (int)section_headers[i].sh_size);
+    Print(L"Section virtual address: %p, size: %d bytes\n", (void *)section_headers[i].sh_addr, (int)section_headers[i].sh_size);
     if (section_headers[i].sh_addr != 0) {
       if (section_headers[i].sh_type == SHT_NOBITS) {
         // Create empty section for BSS
@@ -85,15 +99,15 @@ int main(int argc, char const *argv[]) {
       } else {
         // Copy section from ELF file
         memcpy((void *)section_headers[i].sh_addr, buffer + section_headers[i].sh_offset, section_headers[i].sh_size);
-        printf("Copied.\n");
+        Print(L"Copied.\n");
       }
     }
-    printf("\n");
+    Print(L"\n");
   }
 
-  int (*kernel_main) () = (int (*) ())region;
+  // int (*kernel_main) () = (int (*) ())region;
 
-  printf("kernel_main(): %d\n", kernel_main());
+  // printf("kernel_main(): %d\n", kernel_main());
 
   return 0;
 }

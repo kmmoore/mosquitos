@@ -2,6 +2,7 @@
 #include <efilib.h>
 
 #include "kernel.h"
+#include "elf_parse.h"
 
 EFI_STATUS
 get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, OUT UINTN *descriptor_size) {

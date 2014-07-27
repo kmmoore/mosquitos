@@ -4,7 +4,7 @@
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
 # Edit this line to add more source files (*.c or *.S)
-SRCS            = loader.c kernel.c text_output.c font.c keyboard_controller.c util.c interrupts.s pic.c
+SRCS            = loader.c elf_parse.c fileops.c
 TMP_SRCS        = $(SRCS:%.c=%.o)
 OBJS            = $(TMP_SRCS:%.s=%.o)
 

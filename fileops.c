@@ -46,4 +46,27 @@ UINTN fops_file_size(EFI_FILE *file) {
   UINTN info_buffer_size = sizeof(file_info_buffer);
   EFI_GUID file_info_guid = EFI_FILE_INFO_ID;
 
-  EFI_STATUS status = uefi_call_wr
+  EFI_STATUS status = uefi_call_wrapper(file->GetInfo, 4, file, &file_info_guid, &info_buffer_size, file_info_ptr);
+
+  if (status == EFI_SUCCESS) {
+    return file_info_ptr->FileSize;
+  } else {
+    Print(L"fops_file_size() error: %d\n", status);
+    return -1;
+  }
+}
+
+UINTN fops_file_read(EFI_FILE *file, UINTN length, OUT void *buffer) {
+  EFI_STATUS status = uefi_call_wrapper(file->Read, 3, file, &length, buffer);
+
+  if (status == EFI_SUCCESS) {
+    return length;
+  } else {
+    Print(L"fops_file_read() error: %d\n", status);
+    return 0;
+  }
+}
+
+void fops_file_close(EFI_FILE *file) {
+  uefi_call_wrapper(file->Close, 1, file);
+}
