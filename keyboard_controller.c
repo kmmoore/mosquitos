@@ -101,8 +101,6 @@ void keyboard_isr() {
 
 void isr() {
   text_output_print("ISR\n");
-
-  // __asm__ ("iretq");
 }
 
 void print_something() {
@@ -119,7 +117,15 @@ uint64_t get_esp() {
   return ret;
 }
 
+extern void gdt_flush();
+
 void keyboard_controller_init() {
+  char buf[20];
+  int2str((uint64_t)IDT, buf, sizeof(buf));
+  text_output_print("IDT addres: ");
+  text_output_print(buf);
+  text_output_print("\n");
+
   text_output_print("Attempting to setup GDT and interrupts.\n");
 
   // Setup GDT
@@ -130,20 +136,16 @@ void keyboard_controller_init() {
   set_gdt_entry(3, 0, 0xFFFFFFFF, 0b11111010, 0b1010); // User mode code segment
   set_gdt_entry(4, 0, 0xFFFFFFFF, 0b11110010, 0b1010); // User mode data segment
 
-  // char buf[20];
-  // int2str(, buf, sizeof(buf));
-  // text_output_print(buf);
-  // text_output_print("\n");
-
   GDTR.size = sizeof(GDT) - 1;
   GDTR.address = (uint64_t)&GDT[0];
 
-  __asm__ ("lgdt %0" : : "m" (GDTR));
+  // __asm__ ("lgdt %0" : : "m" (GDTR));
+  gdt_flush();
 
   text_output_print("Loaded GDT.\n");
 
   pic_remap(0x20, 0x28);
-  outb(0x21,0b11111101);
+  outb(0x21,0b11111101); // Enable keyboard IRQ
   outb(0xa1,0xff);
 
   // for (int i = 0; i < 256; ++i) {
@@ -155,7 +157,7 @@ void keyboard_controller_init() {
 
   set_idt_entry(0x03, (uint64_t)double_fault_isr, 0x08, 0b10001110);
 
-  // // set_idt_entry(0x20, (uint64_t)isr1, 0x08, 0b10001110);
+  set_idt_entry(0x20, (uint64_t)isr1, 0x08, 0b10001110);
   set_idt_entry(0x21, (uint64_t)isr1, 0x08, 0b10001110);
 
   IDTR.size = sizeof(IDT) - 1;
@@ -165,11 +167,11 @@ void keyboard_controller_init() {
 
   text_output_print("Loaded IDT.\n");
 
-  // __asm__ ("sti");
+  __asm__ ("sti");
 
-  __asm__ ("int $0x21");
-  // __asm__ ("int $0x21");
-  // __asm__ ("int $0x21");
+  // __asm__ ("int $0x20");
+  // __asm__ ("int $0x20");
+  // __asm__ ("int $0x20");
 
   text_output_print("Sent interrupt.\n");
 }

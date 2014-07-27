@@ -49,6 +49,11 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
   EFI_STATUS status;
 
+  uint64_t rsp;
+  __asm__ volatile ("mov %%rsp, %0" : "=q" (rsp));
+
+  Print(L"RSP: 0x%x\n", rsp);
+
   Print(L"isr1: %x\n", isr1);
   Print(L"gpe_isr: %x\n", gpe_isr);
   Print(L"kernel_main: %x\n", kernel_main);

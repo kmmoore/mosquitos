@@ -16,7 +16,7 @@ int kernel_main(uint8_t *memory_map, UINTN mem_map_size, UINTN mem_map_descripto
   text_output_clear_screen(0x00000000);
   text_output_print("Text output initialized!\n");
 
-  // keyboard_controller_init();
+  keyboard_controller_init();
 
   while (1); // Prevent the kernel from returning
 

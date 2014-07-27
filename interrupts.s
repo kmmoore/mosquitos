@@ -29,7 +29,7 @@
 .endm
 
 
-.text
+
 
 .globl gpe_isr
 gpe_isr:
@@ -41,13 +41,13 @@ gpe_isr:
 .globl isr1
 isr1:
 
-  # save_context
+  save_context
 
-  # inb  $0x60, %al
-  # movb $0x20, %al
-  # outb %al, $0x20
-  # call print_something
+  inb  $0x60, %al
+  movb $0x20, %al
+  outb %al, $0x20
+  call print_something
 
-  # restore_context
+  restore_context
 
   iretq
