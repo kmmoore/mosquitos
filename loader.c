@@ -1,7 +1,9 @@
 #include <efi.h>
 #include <efilib.h>
+#include <string.h>
 
 #include "kernel.h"
+#include "elf_parse.h"
 
 EFI_STATUS
 get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, OUT UINTN *descriptor_size) {
@@ -37,22 +39,38 @@ get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, 
   }
 }
 
-int cpu_mode() {
-  uint64_t mode;
-
-  __asm__ ("movq %%cr0, %0" : "=r" (mode));
-
-  return mode;
-}
+extern void gpe_isr();
+extern void isr1();
 
 EFI_STATUS
 EFIAPI
 efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   InitializeLib(ImageHandle, SystemTable);
 
-  Print(L"CR0 Register contents: %x\n", cpu_mode());
-
   EFI_STATUS status;
+
+  uint64_t rsp;
+  __asm__ volatile ("mov %%rsp, %0" : "=q" (rsp));
+
+  Print(L"RSP: 0x%x\n", rsp);
+
+  Print(L"isr1: %x\n", isr1);
+  Print(L"gpe_isr: %x\n", gpe_isr);
+  Print(L"kernel_main: %x\n", kernel_main);
+  Print(L"Waiting for keypress to continue booting...\n");
+
+  UINTN event_index;
+  EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
+  uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
+
+  void *kernel_main_addr = NULL;
+  status = load_kernel(L"kernel", &kernel_main_addr);
+  if (status != EFI_SUCCESS) {
+    Print(L"Error loading kernel: %d\n", status);
+    return EFI_ABORTED;
+  }
+
+  Print(L"got kernel_main at: 0x%x\n", kernel_main_addr);
 
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
@@ -74,7 +92,10 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     // Exit boot services
     status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, mem_map_key);
     // Execute kernel if we are successful
-    if (status == EFI_SUCCESS) kernel_main(mem_map, mem_map_size, mem_map_descriptor_size, gop);
+    if (status == EFI_SUCCESS) {
+      // Jump to kernel code
+      ((KERNEL_MAIN_FUNC_SIG)kernel_main_addr)(mem_map, mem_map_size, mem_map_descriptor_size, gop);
+    }
   }
 
   /*
