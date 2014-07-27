@@ -28,26 +28,62 @@
     pop %r12
 .endm
 
+.extern interrupts_handlers
+.extern isr_common
 
-
-
-.globl gpe_isr
-gpe_isr:
-  pop %rax
-  mov $123, %rdx
-
-  iretq
-
-.globl isr1
-isr1:
-
+# A macro with two parameters
+#  implements the write system call
+.macro isr_noerror num 
+.globl isr\num
+isr\num:
   save_context
 
-  inb  $0x60, %al
-  movb $0x20, %al
-  outb %al, $0x20
-  call print_something
+    # TODO: Inline the isr_common call
+    movq $0, %rsi
+    movq $\num, %rdi
+    call isr_common
 
-  restore_context
+    restore_context
 
-  iretq
+    iretq
+.endm
+
+.macro isr_error num 
+.globl isr\num
+isr\num:
+  save_context
+
+    # TODO: Inline the isr_common call
+    popq %rsi
+    movq $\num, %rdi
+    call isr_common
+
+    restore_context
+
+    iretq
+.endm
+
+# Actual isr definitions
+isr_noerror 0
+isr_noerror 1
+isr_noerror 2
+isr_noerror 3
+isr_noerror 4
+isr_noerror 5
+isr_noerror 6
+isr_noerror 7
+isr_error 8
+isr_noerror 9
+isr_error 10
+isr_error 11
+isr_error 12
+isr_error 13
+isr_error 14
+isr_noerror 16
+isr_error 17
+isr_noerror 18
+isr_noerror 19
+isr_noerror 20
+isr_noerror 30
+isr_noerror 32
+isr_noerror 33
