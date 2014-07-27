@@ -49,13 +49,6 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
   EFI_STATUS status;
 
-  // Wait for keypress to give us time to attach a debugger, etc.
-  Print(L"Waiting for keypress to continue booting...\n");
-
-  UINTN event_index;
-  EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
-  uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
-
   // Load the kernel ELF file into memory and get the entry address
   void *kernel_main_addr = NULL;
   status = load_kernel(L"kernel", &kernel_main_addr);
@@ -65,6 +58,13 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   }
 
   Print(L"Got kernel_main at: 0x%x\n", kernel_main_addr);
+
+  // Wait for keypress to give us time to attach a debugger, etc.
+  Print(L"Waiting for keypress to continue booting...\n");
+
+  UINTN event_index;
+  EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
+  uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
 
   // Get access to a simple graphics buffer
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;

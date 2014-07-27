@@ -80,7 +80,7 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
 
   if (!valid_elf64_header(elf_hdr)) {
     Print(L"Invalid ELF header!\n");
-    return -1;
+    return EFI_ABORTED;
   }
 
   Elf64_Shdr *section_headers = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff);
@@ -103,9 +103,10 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
   Print(L"Trying to allocate %d pages at 0x%x\n", num_pages_needed, region);
   status = uefi_call_wrapper(BS->AllocatePages, 4, AllocateAddress, EfiLoaderData, num_pages_needed, &region);
 
-  if (status != EFI_SUCCESS) {
+  if (status != EFI_SUCCESS || region != elf_hdr->e_entry) {
     Print(L"Error allocating pages for kernel.\n");
     Print(L"status: %d, region: 0x%x, e_entry: 0x%x\n", status, region, elf_hdr->e_entry);
+    return EFI_ABORTED;
   }
   
   // Copy program sections to the pages we allocated (at their appropriate addresses)
@@ -121,9 +122,10 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
     }
   }
 
+  *entry_address = (void *)elf_hdr->e_entry;
+
   // Free the kernel file buffer
   uefi_call_wrapper(BS->FreePool, 1, buffer);
-  *entry_address = (void *)elf_hdr->e_entry;
 
   return EFI_SUCCESS;
 }
