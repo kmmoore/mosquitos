@@ -20,7 +20,7 @@ MosquitOS is a tiny x86_64 UEFI-based operating system built from scratch.
     
   2. Run `make` from the base directory.
   
-  3. This will produce an EFI bootloader file (`loader.efi`) that can be run from an EFI Shell (see below).
+  3. This will produce an EFI bootloader file (`build/loader.efi`) and a kernel file (`build/kernel`) that can be used to boot a virtual machine.
 
 
 **Running in VirtualBox:**
@@ -31,11 +31,9 @@ MosquitOS is a tiny x86_64 UEFI-based operating system built from scratch.
   
   3. Highlight the new virtual machine. Go to Settings->System and check 'Enable EFI' under Extended Features.
   
-  4. Create a new CD-image (on Mac OS X this can be done in Disk Utility) and copy `loader.efi` that you compiled earlier into the base directory of the image.
+  4. Create a new CD-image (on Mac OS X this can be done in Disk Utility) and copy `loader.efi` that you compiled earlier into a file called `/EFI/BOOT/BOOTx64.EFI` on the disk image. Additionally, copy `kernel` into the root directory of the disk image.
   
-  5. Start the VM and attach the disk image as a virtual CD drive.
-  
-  6. The VM should boot the the UEFI Shell. Type `fs0:` and press enter to mount the first available filesystem (the CD image we created in step 4 and attached in step 5).
-  
-  7. Type the name of any `.efi` file to execute that file (e.g., `loader.efi`).
+  5. Attach the disk image as a virtual CD drive to the VM.
+
+  6. Boot the VM, it should boot off of the CD image and into MosquitOS.
   
