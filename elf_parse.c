@@ -98,8 +98,8 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
   }
 
   Elf64_Shdr *section_headers = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff);
-  Elf64_Shdr *strtab_header = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff + (elf_hdr->e_shstrndx * elf_hdr->e_shentsize));
-  char *string_table = (char *)(buffer + strtab_header->sh_offset);
+  // Elf64_Shdr *strtab_header = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff + (elf_hdr->e_shstrndx * elf_hdr->e_shentsize));
+  // char *string_table = (char *)(buffer + strtab_header->sh_offset);
 
   // Compute the number of bytes we need to copy over
   Elf64_Addr highest_addr_found = 0;
@@ -128,10 +128,10 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
   for (int i = 0; i < elf_hdr->e_shnum; ++i) {
     // assert (section_headers[i].sh_name < strtab_header->sh_size);
 
-    print_c_str(string_table + section_headers[i].sh_name);
-    Print(L"\n");
+    // print_c_str(string_table + section_headers[i].sh_name);
+    // Print(L"\n");
 
-    Print(L"Section virtual address: 0x%x, size: %d bytes\n", (void *)section_headers[i].sh_addr, (int)section_headers[i].sh_size);
+    // Print(L"Section virtual address: 0x%x, size: %d bytes\n", (void *)section_headers[i].sh_addr, (int)section_headers[i].sh_size);
     if (section_headers[i].sh_addr != 0) {
       if (section_headers[i].sh_type == SHT_NOBITS) {
         // Create empty section for BSS
@@ -141,12 +141,8 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
         memcpy((void *)section_headers[i].sh_addr, buffer + section_headers[i].sh_offset, section_headers[i].sh_size);
       }
     }
-    Print(L"\n");
+    // Print(L"\n");
   }
-
-  // int (*kernel_main) () = (int (*) ())region;
-
-  // printf("kernel_main(): %d\n", kernel_main());
 
   uefi_call_wrapper(BS->FreePool, 1, buffer);
   *entry_address = (void *)elf_hdr->e_entry;

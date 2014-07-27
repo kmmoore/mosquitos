@@ -39,12 +39,6 @@ get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, 
   }
 }
 
-// int cpuHasAPIC() {
-//    uint32_t eax, edx;
-//    cpuid(1, &eax, &edx);
-//    return edx & CPUID_FLAG_APIC;
-// }
-
 extern void gpe_isr();
 extern void isr1();
 
@@ -58,7 +52,6 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   Print(L"isr1: %x\n", isr1);
   Print(L"gpe_isr: %x\n", gpe_isr);
   Print(L"kernel_main: %x\n", kernel_main);
-  // Print(L"APIC: %d\n", cpuHasAPIC());
   Print(L"Waiting for keypress to continue booting...\n");
 
   UINTN event_index;
@@ -66,13 +59,15 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
 
   void *kernel_main_addr = NULL;
-  status = load_kernel(L"kernel", kernel_main_addr);
+  status = load_kernel(L"kernel", &kernel_main_addr);
   if (status != EFI_SUCCESS) {
     Print(L"Error loading kernel: %d\n", status);
     return EFI_ABORTED;
   }
 
-  Print(L"kernel_main: %x\n", kernel_main_addr);
+  Print(L"got kernel_main at: 0x%x\n", kernel_main_addr);
+
+  Print(L"kernel_main(): %d\n", ((int (*) ())kernel_main_addr)());
 
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
