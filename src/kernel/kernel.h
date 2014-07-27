@@ -1,3 +1,4 @@
+#include "kernel_common.h"
 #include <efi.h>
 #include <efilib.h>
 

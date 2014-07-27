@@ -5,6 +5,7 @@
 #include "text_output.h"
 #include "gdt.h"
 #include "interrupts.h"
+#include "exceptions.h"
 #include "pic.h"
 #include "keyboard_controller.h"
 
@@ -24,11 +25,12 @@ int kernel_main(uint8_t *memory_map, UINTN mem_map_size, UINTN mem_map_descripto
   // Initialize subsystems
   gdt_init();
   interrupts_init();
+  exceptions_init();
   pic_init();
 
   keyboard_controller_init();
 
-  // Now that interrupt handlers are set up, we can enable interrupts
+  // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
 
   while (1); // Prevent the kernel from returning

@@ -1,8 +1,3 @@
-#include <efi.h>
-#include <efilib.h>
-
-#include <stdbool.h>
-
 #include "keyboard_controller.h"
 #include "text_output.h"
 #include "util.h"

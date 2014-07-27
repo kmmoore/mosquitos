@@ -4,7 +4,7 @@
 include ../../Makefile.inc
 
 # Edit this line to add more source files (*.c or *.S)
-C_SRCS          := kernel.c text_output.c font.c keyboard_controller.c util.c pic.c ../common/mem_util.c gdt.c interrupts.c
+C_SRCS          := kernel.c text_output.c font.c keyboard_controller.c util.c pic.c ../common/mem_util.c gdt.c interrupts.c exceptions.c
 ASM_SRCS        := gdt.s interrupts.s
 OBJS            := $(C_SRCS:%.c=%.o) $(ASM_SRCS:%.s=%_asm.o)
 DEPS            := $(C_SRCS:.c=.d)
@@ -17,7 +17,7 @@ EFIINCS         := -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
 LIBDIR          := /usr/lib
 LIBS            := 
 
-CFLAGS          := $(EFIINCS) -std=gnu99 -Wall -Werror -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone	-Os
+CFLAGS          := $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone	-Os
 ifeq ($(ARCH),x86_64)
 	CFLAGS += -DEFI_FUNCTION_WRAPPER
 endif

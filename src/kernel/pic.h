@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include "kernel_common.h"
 
 #ifndef _PIC_H
 #define _PIC_H

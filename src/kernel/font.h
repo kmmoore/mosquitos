@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include "kernel_common.h"
 
 #ifndef _FONT_H_
 #define _FONT_H_

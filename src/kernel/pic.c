@@ -1,5 +1,3 @@
-#include <stdint.h>
-
 #include "pic.h"
 #include "util.h"
 #include "text_output.h"

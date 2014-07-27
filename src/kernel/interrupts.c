@@ -1,5 +1,3 @@
-#include <stdint.h>
-
 #include "interrupts.h"
 #include "gdt.h"
 #include "text_output.h"
@@ -21,9 +19,7 @@ struct IDTR {
   uint64_t address;
 } __attribute__((packed)) IDTR;
 
-void (*interrupts_handlers[256])();
-
-extern void isr33();
+void (*interrupts_handlers[256])(int);
 
 // Helper functions
 static void set_idt_entry(int index, uint64_t base, uint16_t selector, uint8_t attributes) {
@@ -38,8 +34,8 @@ static void set_idt_entry(int index, uint64_t base, uint16_t selector, uint8_t a
    IDT[index].zero_2      = 0;
 }
 
-void isr_common(uint64_t num) {
-  interrupts_handlers[num]();
+void isr_common(uint64_t num, uint64_t error_code) {
+  interrupts_handlers[num](error_code);
 }
 
 extern void isr0();
@@ -63,7 +59,6 @@ extern void isr18();
 extern void isr19();
 extern void isr20();
 extern void isr30();
-extern void isr32();
 extern void isr33();
 
 // Public functions
@@ -94,7 +89,6 @@ void interrupts_init() {
   set_idt_entry(19, (uint64_t)isr19, GDT_KERNEL_CS, 0b10001110);
   set_idt_entry(20, (uint64_t)isr20, GDT_KERNEL_CS, 0b10001110);
   set_idt_entry(30, (uint64_t)isr30, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(32, (uint64_t)isr32, GDT_KERNEL_CS, 0b10001110);
 
   // IRQs
   set_idt_entry(33, (uint64_t)isr33, GDT_KERNEL_CS, 0b10001110);
@@ -111,6 +105,4 @@ void interrupts_register_handler(int index, void (*handler)()) {
   if (index < 0 || index >= 256) return;
 
   interrupts_handlers[index] = handler;
-
-  text_output_print("Registered handler for isr\n");
 }

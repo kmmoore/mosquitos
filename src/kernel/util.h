@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include "kernel_common.h"
 
 #ifndef _UTIL_H
 #define _UTIL_H
