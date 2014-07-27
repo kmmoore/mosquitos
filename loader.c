@@ -67,8 +67,6 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
   Print(L"got kernel_main at: 0x%x\n", kernel_main_addr);
 
-  Print(L"kernel_main(): %d\n", ((int (*) ())kernel_main_addr)());
-
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
    
@@ -90,8 +88,8 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, mem_map_key);
     // Execute kernel if we are successful
     if (status == EFI_SUCCESS) {
-      while (1);
-      // kernel_main(mem_map, mem_map_size, mem_map_descriptor_size, gop);
+      // Jump to kernel code
+      ((KERNEL_MAIN_FUNC_SIG)kernel_main_addr)(mem_map, mem_map_size, mem_map_descriptor_size, gop);
     }
   }
 

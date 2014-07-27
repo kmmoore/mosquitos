@@ -4,11 +4,11 @@
 #include <elf.h>
 #include <sys/stat.h>
 #include <stdint.h>
-#include <string.h>
 #include <stdbool.h>
 
 #include "elf_parse.h"
 #include "fileops.h"
+#include "mem_util.h"
 
 static bool valid_elf64_header(Elf64_Ehdr *elf_hdr) {
   // Check header
@@ -39,20 +39,6 @@ void print_c_str(char *str) {
     Print(L"%c", (CHAR16)(*str));
     str++;
   }
-}
-
-void * memset(void *buffer, int value, size_t length) {
-  for (size_t i = 0; i < length; ++i) {
-    ((uint8_t *)buffer)[i] = (uint8_t)value;
-  }
-  return buffer;
-}
-
-void * memcpy(void *destination, const void *source, size_t length) {
-  for (size_t i = 0; i < length; ++i) {
-    ((uint8_t *)destination)[i] = ((uint8_t *)source)[i];
-  }
-  return destination;
 }
 
 EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
@@ -98,8 +84,6 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
   }
 
   Elf64_Shdr *section_headers = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff);
-  // Elf64_Shdr *strtab_header = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff + (elf_hdr->e_shstrndx * elf_hdr->e_shentsize));
-  // char *string_table = (char *)(buffer + strtab_header->sh_offset);
 
   // Compute the number of bytes we need to copy over
   Elf64_Addr highest_addr_found = 0;
@@ -124,14 +108,8 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
     Print(L"status: %d, region: 0x%x, e_entry: 0x%x\n", status, region, elf_hdr->e_entry);
   }
   
-
+  // Copy program sections to the pages we allocated (at their appropriate addresses)
   for (int i = 0; i < elf_hdr->e_shnum; ++i) {
-    // assert (section_headers[i].sh_name < strtab_header->sh_size);
-
-    // print_c_str(string_table + section_headers[i].sh_name);
-    // Print(L"\n");
-
-    // Print(L"Section virtual address: 0x%x, size: %d bytes\n", (void *)section_headers[i].sh_addr, (int)section_headers[i].sh_size);
     if (section_headers[i].sh_addr != 0) {
       if (section_headers[i].sh_type == SHT_NOBITS) {
         // Create empty section for BSS
@@ -141,9 +119,9 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
         memcpy((void *)section_headers[i].sh_addr, buffer + section_headers[i].sh_offset, section_headers[i].sh_size);
       }
     }
-    // Print(L"\n");
   }
 
+  // Free the kernel file buffer
   uefi_call_wrapper(BS->FreePool, 1, buffer);
   *entry_address = (void *)elf_hdr->e_entry;
 
