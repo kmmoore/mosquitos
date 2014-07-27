@@ -8,7 +8,7 @@
 
 #include "elf_parse.h"
 #include "fileops.h"
-#include "mem_util.h"
+#include "../common/mem_util.h"
 
 static bool valid_elf64_header(Elf64_Ehdr *elf_hdr) {
   // Check header

@@ -2,7 +2,7 @@
 #include <efilib.h>
 #include <string.h>
 
-#include "kernel.h"
+#include "../kernel/kernel.h"
 #include "elf_parse.h"
 
 EFI_STATUS

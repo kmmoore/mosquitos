@@ -1,3 +1,4 @@
+
 /*
   Wrapper functions for reading files with EFI.
   Only works while boot services are still active.
