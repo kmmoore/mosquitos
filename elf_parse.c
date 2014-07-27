@@ -34,18 +34,42 @@ static bool valid_elf64_header(Elf64_Ehdr *elf_hdr) {
 
 }
 
-EFI_STATUS load_kernel(CHAR16 *kernel_fname) {
+void print_c_str(char *str) {
+  while (*str != '\0') {
+    Print(L"%c", (CHAR16)(*str));
+    str++;
+  }
+}
+
+void * memset(void *buffer, int value, size_t length) {
+  for (size_t i = 0; i < length; ++i) {
+    ((uint8_t *)buffer)[i] = (uint8_t)value;
+  }
+  return buffer;
+}
+
+void * memcpy(void *destination, const void *source, size_t length) {
+  for (size_t i = 0; i < length; ++i) {
+    ((uint8_t *)destination)[i] = ((uint8_t *)source)[i];
+  }
+  return destination;
+}
+
+EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
   EFI_STATUS status;
 
   // Open filesystem
   EFI_FILE_IO_INTERFACE *fs = fops_get_filesystem();
   EFI_FILE *fs_root = fops_open_volume(fs);
+  if (fs_root == NULL) return EFI_ABORTED;
   
   // Open kernel file
   EFI_FILE *kernel_file = fops_open_file(fs_root, kernel_fname, EFI_FILE_MODE_READ, 0);
+  if (kernel_file == NULL) return EFI_ABORTED;
+  
   UINTN kernel_size = fops_file_size(kernel_file);
 
-  Print(L"Kernel size: %lu\n", kernel_size);
+  Print(L"Kernel size: %d\n", kernel_size);
 
   // Allocate memory for file
   uint8_t *buffer;
@@ -73,25 +97,41 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname) {
     return -1;
   }
 
-
-  Print(L"Program header table size: %d\n", elf_hdr->e_phnum);
-  Print(L"Section header table size: %d\n", elf_hdr->e_shnum);
-
-  Print(L"\n");
-
   Elf64_Shdr *section_headers = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff);
-
-  // Elf64_Phdr *program_headers = (Elf64_Phdr *)(buffer + elf_hdr->e_phoff);
-
   Elf64_Shdr *strtab_header = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff + (elf_hdr->e_shstrndx * elf_hdr->e_shentsize));
   char *string_table = (char *)(buffer + strtab_header->sh_offset);
+
+  // Compute the number of bytes we need to copy over
+  Elf64_Addr highest_addr_found = 0;
+  for (int i = 0; i < elf_hdr->e_shnum; ++i) {
+    Elf64_Addr section_end = section_headers[i].sh_addr + section_headers[i].sh_size;
+    if (section_end > highest_addr_found) highest_addr_found = section_end;
+  }
+
+  int bytes_needed = (int)(highest_addr_found - elf_hdr->e_entry);
+
+  Print(L"Need %d bytes for kernel.\n", bytes_needed);
+
+  // Allocate pages from which to execute kernel
+  int num_pages_needed = (bytes_needed / EFI_PAGE_SIZE) + 1;
+  EFI_PHYSICAL_ADDRESS region = elf_hdr->e_entry;
+
+  Print(L"Trying to allocate %d pages at 0x%x\n", num_pages_needed, region);
+  status = uefi_call_wrapper(BS->AllocatePages, 4, AllocateAddress, EfiLoaderData, num_pages_needed, &region);
+
+  if (status != EFI_SUCCESS) {
+    Print(L"Error allocating pages for kernel.\n");
+    Print(L"status: %d, region: 0x%x, e_entry: 0x%x\n", status, region, elf_hdr->e_entry);
+  }
+  
 
   for (int i = 0; i < elf_hdr->e_shnum; ++i) {
     // assert (section_headers[i].sh_name < strtab_header->sh_size);
 
-    Print(L"Section type: %d, name: %s\n", section_headers[i].sh_type, string_table + section_headers[i].sh_name);
+    print_c_str(string_table + section_headers[i].sh_name);
+    Print(L"\n");
 
-    Print(L"Section virtual address: %p, size: %d bytes\n", (void *)section_headers[i].sh_addr, (int)section_headers[i].sh_size);
+    Print(L"Section virtual address: 0x%x, size: %d bytes\n", (void *)section_headers[i].sh_addr, (int)section_headers[i].sh_size);
     if (section_headers[i].sh_addr != 0) {
       if (section_headers[i].sh_type == SHT_NOBITS) {
         // Create empty section for BSS
@@ -99,7 +139,6 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname) {
       } else {
         // Copy section from ELF file
         memcpy((void *)section_headers[i].sh_addr, buffer + section_headers[i].sh_offset, section_headers[i].sh_size);
-        Print(L"Copied.\n");
       }
     }
     Print(L"\n");
@@ -109,5 +148,8 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname) {
 
   // printf("kernel_main(): %d\n", kernel_main());
 
-  return 0;
+  uefi_call_wrapper(BS->FreePool, 1, buffer);
+  *entry_address = (void *)elf_hdr->e_entry;
+
+  return EFI_SUCCESS;
 }

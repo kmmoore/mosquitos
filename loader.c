@@ -1,5 +1,6 @@
 #include <efi.h>
 #include <efilib.h>
+#include <string.h>
 
 #include "kernel.h"
 #include "elf_parse.h"
@@ -52,6 +53,8 @@ EFIAPI
 efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   InitializeLib(ImageHandle, SystemTable);
 
+  EFI_STATUS status;
+
   Print(L"isr1: %x\n", isr1);
   Print(L"gpe_isr: %x\n", gpe_isr);
   Print(L"kernel_main: %x\n", kernel_main);
@@ -62,7 +65,14 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
   uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
 
-  EFI_STATUS status;
+  void *kernel_main_addr = NULL;
+  status = load_kernel(L"kernel", kernel_main_addr);
+  if (status != EFI_SUCCESS) {
+    Print(L"Error loading kernel: %d\n", status);
+    return EFI_ABORTED;
+  }
+
+  Print(L"kernel_main: %x\n", kernel_main_addr);
 
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
@@ -84,7 +94,10 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     // Exit boot services
     status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, mem_map_key);
     // Execute kernel if we are successful
-    if (status == EFI_SUCCESS) kernel_main(mem_map, mem_map_size, mem_map_descriptor_size, gop);
+    if (status == EFI_SUCCESS) {
+      while (1);
+      // kernel_main(mem_map, mem_map_size, mem_map_descriptor_size, gop);
+    }
   }
 
   /*
