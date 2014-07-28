@@ -30,13 +30,38 @@ struct PML4E {
 static void add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
   // We can do this because we have identity mapping in the kernel
   // TODO: Figure out if there is a way to directly access physical memory/if this is necessary
-  list_entry *entry = (list_entry *)physical_address;
 
+  // Search to see if we can combine this chunk with another
+  // TODO: Is this a potential DOS if the freelist gets too long?
+  list_entry *current = virtual_memory.free_list;
+  list_entry *prev = NULL;
+  while (current) {
+    uint64_t physical_start = (uint64_t)current;
+    uint64_t physical_end = physical_start + current->value * EFI_PAGE_SIZE;
+
+    if (physical_address >= physical_start && physical_address < physical_end) {
+    } else if (physical_address == physical_end) {
+      current->value += num_pages;
+      return;
+    }
+
+    prev = current;
+    current = current->next;
+  }
+
+  // If we get here, we could not combine, insert a new chunk at the end
+  // TODO: Should we keep this sorted?
+  list_entry *entry = (list_entry *)physical_address;
   entry->value = num_pages;
-  virtual_memory.free_list = list_insert_before(virtual_memory.free_list, entry);
+
+  if (prev) {
+    list_insert_after(prev, entry);
+  } else {
+    virtual_memory.free_list = entry;
+  }
 }
 
-static void compute_pysical_memory_properties() {
+static void setup_free_memory() {
   int num_entries = virtual_memory.mem_map_size / virtual_memory.mem_map_descriptor_size;
 
   virtual_memory.physical_end = 0;
@@ -45,6 +70,9 @@ static void compute_pysical_memory_properties() {
   for (int i = 0; i < num_entries; ++i) {
     EFI_MEMORY_DESCRIPTOR *descriptor = (EFI_MEMORY_DESCRIPTOR *)(virtual_memory.memory_map + i * virtual_memory.mem_map_descriptor_size);
 
+    uint64_t physical_end = descriptor->PhysicalStart + descriptor->NumberOfPages * EFI_PAGE_SIZE;
+
+    // If the type of the chunk is usable now, add it to the free list
     EFI_MEMORY_TYPE type = descriptor->Type;
     if (type == EfiLoaderCode || type == EfiBootServicesCode ||
         type == EfiBootServicesData || type == EfiConventionalMemory) { // Types of free memory after boot services are exited
@@ -52,7 +80,7 @@ static void compute_pysical_memory_properties() {
       virtual_memory.num_free_pages += descriptor->NumberOfPages;
     }
 
-    uint64_t physical_end = descriptor->PhysicalStart + descriptor->NumberOfPages * EFI_PAGE_SIZE;
+    // Keep track of the highest physical address we've seen so far
     if (physical_end > virtual_memory.physical_end) virtual_memory.physical_end = physical_end;
   }
 }
@@ -69,18 +97,48 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
   virtual_memory.mem_map_descriptor_size = mem_map_descriptor_size;
 
   text_output_printf("Determining free memory...");
-  compute_pysical_memory_properties();
+  setup_free_memory();
   text_output_printf("Done\n");
 
   text_output_printf("Found %dMB of physical memory, %dMB free.\n", virtual_memory.physical_end / (1024*1024), virtual_memory.num_free_pages * 4 / 1024);
 }
 
-void mv_map(uint64_t physical_address, uint64_t virtual_address, uint64_t flags) {
+void * vm_palloc(uint64_t num_pages) {
+  list_entry *chunk = virtual_memory.free_list;
+
+  while (chunk) {
+    if (chunk->value > num_pages) break;
+    chunk = chunk->next;
+  }
+
+  if (chunk == NULL) {
+    return NULL; // We can't fulfill the request
+  }
+
+  text_output_printf("Chunk address: 0x%x, num_pages: %d\n", chunk, num_pages);
+
+  void *last_pages = ((uint8_t *)chunk) + (chunk->value - num_pages) * EFI_PAGE_SIZE;
+
+  chunk->value -= num_pages;
+  if (chunk->value == 0) {
+    list_remove(chunk);
+  }
+
+  return last_pages;
+}
+
+void vm_pfree(void *virtual_address, uint64_t num_pages) {
+  (void)virtual_address;
+  (void)num_pages;
+  // TODO: Fill in
+}
+
+void vm_map(uint64_t physical_address, void *virtual_address, uint64_t flags) {
   (void)physical_address;
   (void)virtual_address;
   (void)flags;
 }
 
-void mv_unmap(uint64_t virtual_address) {
+void vm_unmap(void *virtual_address) {
   (void)virtual_address;
 }
