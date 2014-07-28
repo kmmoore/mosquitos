@@ -13,7 +13,7 @@ static struct {
 
   uint64_t physical_end;
   uint64_t num_free_pages;
-  list_entry *free_list;
+  list free_list;
 
 } virtual_memory;
 
@@ -33,40 +33,33 @@ static void add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
 
   // Search to see if we can combine this chunk with another
   // TODO: Is this a potential DOS if the freelist gets too long?
-  list_entry *current = virtual_memory.free_list;
+  list_entry *current = list_head(&virtual_memory.free_list);
   list_entry *prev = NULL;
   while (current) {
-    uint64_t physical_start = (uint64_t)current;
-    uint64_t physical_end = physical_start + current->value * EFI_PAGE_SIZE;
+    uint64_t num_pages_in_entry = list_entry_value(current);
+    uint64_t physical_start = (uint64_t)current; // TODO: Make this guarantee in the list interface
+    uint64_t physical_end = physical_start + num_pages_in_entry * EFI_PAGE_SIZE;
 
     if (physical_address >= physical_start && physical_address < physical_end) {
     } else if (physical_address == physical_end) {
-      current->value += num_pages;
+      list_entry_set_value(current, num_pages_in_entry + num_pages);
       return;
     }
 
     prev = current;
-    current = current->next;
+    current = list_next(current);
   }
 
   // If we get here, we could not combine, insert a new chunk at the end
   // TODO: Should we keep this sorted?
   list_entry *entry = (list_entry *)physical_address;
-  entry->value = num_pages;
-
-  if (prev) {
-    list_insert_after(prev, entry);
-  } else {
-    virtual_memory.free_list = entry;
-  }
+  list_entry_set_value(entry, num_pages);
+  list_insert_after(&virtual_memory.free_list, prev, entry);
 }
 
 static void setup_free_memory() {
   int num_entries = virtual_memory.mem_map_size / virtual_memory.mem_map_descriptor_size;
 
-  virtual_memory.physical_end = 0;
-  virtual_memory.num_free_pages = 0;
-  virtual_memory.free_list = NULL;
   for (int i = 0; i < num_entries; ++i) {
     EFI_MEMORY_DESCRIPTOR *descriptor = (EFI_MEMORY_DESCRIPTOR *)(virtual_memory.memory_map + i * virtual_memory.mem_map_descriptor_size);
 
@@ -96,6 +89,10 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
   virtual_memory.mem_map_size = mem_map_size;
   virtual_memory.mem_map_descriptor_size = mem_map_descriptor_size;
 
+  virtual_memory.physical_end = 0;
+  virtual_memory.num_free_pages = 0;
+  list_init(&virtual_memory.free_list);
+
   text_output_printf("Determining free memory...");
   setup_free_memory();
   text_output_printf("Done\n");
@@ -104,11 +101,11 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
 }
 
 void * vm_palloc(uint64_t num_pages) {
-  list_entry *chunk = virtual_memory.free_list;
+  list_entry *chunk = list_head(&virtual_memory.free_list);
 
   while (chunk) {
-    if (chunk->value > num_pages) break;
-    chunk = chunk->next;
+    if (list_entry_value(chunk) >= num_pages) break;
+    chunk = list_next(chunk);
   }
 
   if (chunk == NULL) {
@@ -117,11 +114,13 @@ void * vm_palloc(uint64_t num_pages) {
 
   text_output_printf("Chunk address: 0x%x, num_pages: %d\n", chunk, num_pages);
 
-  void *last_pages = ((uint8_t *)chunk) + (chunk->value - num_pages) * EFI_PAGE_SIZE;
+  uint64_t available_pages = list_entry_value(chunk);
+  void *last_pages = ((uint8_t *)chunk) + (available_pages - num_pages) * EFI_PAGE_SIZE;
 
-  chunk->value -= num_pages;
-  if (chunk->value == 0) {
-    list_remove(chunk);
+  if (available_pages == num_pages) {
+    list_remove(&virtual_memory.free_list, chunk);
+  } else {
+    list_entry_set_value(chunk, available_pages - num_pages);
   }
 
   return last_pages;
