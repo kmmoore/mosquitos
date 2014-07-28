@@ -3,17 +3,22 @@
 
 #include <math.h>
 
-int int2str(uint64_t n, char *buf, int buf_len) {
+int int2str(uint64_t n, char *buf, int buf_len, int radix) {
+  static char *digit_lookup = "0123456789abcdef";
 
+  // Compute log base `radix` of the number
   int len = 0;
-  // Compute ceil(log10(n))
-  for (int tmp = n; tmp > 0; tmp /= 10, len++);
-  if (len + 1 > buf_len) return -1;
+  for (uint64_t tmp = n; tmp > 0; tmp /= radix, len++);
+
+  // Special case for zero
+  if (n == 0) len = 1;
+
+  if (len + 1 > buf_len) return -1; // Don't overflow
 
   buf[len] = '\0';
   for (int i = len-1; i >= 0; --i) {
-    buf[i] = (n % 10) + '0';
-    n /= 10;
+    buf[i] = digit_lookup[(n % radix)];
+    n /= radix;
   }
 
   return 0;

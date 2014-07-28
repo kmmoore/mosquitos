@@ -8,14 +8,11 @@
 #include "exceptions.h"
 #include "pic.h"
 #include "keyboard_controller.h"
+#include "virtual_memory.h"
 
 #include "util.h"
 
-int kernel_main(uint8_t *memory_map, UINTN mem_map_size, UINTN mem_map_descriptor_size, EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
-
-  (void)memory_map;
-  (void)mem_map_size;
-  (void)mem_map_descriptor_size;
+int kernel_main(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descriptor_size, EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
 
   text_output_init(gop);
 
@@ -26,6 +23,9 @@ int kernel_main(uint8_t *memory_map, UINTN mem_map_size, UINTN mem_map_descripto
   gdt_init();
   interrupts_init();
   exceptions_init();
+
+  vm_init(memory_map, mem_map_size, mem_map_descriptor_size);
+
   pic_init();
 
   keyboard_controller_init();

@@ -4,7 +4,7 @@
 include ../../Makefile.inc
 
 # Edit this line to add more source files (*.c or *.S)
-C_SRCS          := kernel.c text_output.c font.c keyboard_controller.c util.c pic.c ../common/mem_util.c gdt.c interrupts.c exceptions.c
+C_SRCS          := kernel.c text_output.c font.c keyboard_controller.c util.c pic.c ../common/mem_util.c gdt.c interrupts.c exceptions.c virtual_memory.c
 ASM_SRCS        := gdt.s interrupts.s
 OBJS            := $(C_SRCS:%.c=%.o) $(ASM_SRCS:%.s=%_asm.o)
 DEPS            := $(C_SRCS:.c=.d)
