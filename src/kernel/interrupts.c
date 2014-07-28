@@ -1,5 +1,6 @@
 #include "interrupts.h"
 #include "gdt.h"
+#include "apic.h"
 #include "text_output.h"
 #include "util.h"
 
@@ -63,6 +64,10 @@ extern void isr33();
 
 // Public functions
 void interrupts_init() {
+  // Setup GDT and APIC before we can do interrupts
+  gdt_init();
+  apic_init();
+
   text_output_print("Loading IDT...");
 
   // TODO: Explain what the attributes mean

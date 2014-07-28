@@ -1,7 +1,7 @@
 #include "keyboard_controller.h"
 #include "text_output.h"
 #include "util.h"
-#include "pic.h"
+#include "apic.h"
 #include "interrupts.h"
 
 static bool shift_down = false;
@@ -12,6 +12,14 @@ static uint8_t SCAN_CODE_MAPPING_SHIFTED[] = "\x00""\x1B""!@#$%^&*()_+""\x08""\t
 void keyboard_isr() {
   // uint8_t status = inb(0x64);
   uint8_t scancode = inb(0x60); // Read scancode
+
+  // Reset keyboard controller
+  // TODO: This apparently isn't necessary, figure out more about it
+  uint8_t a = inb(0x61);
+  a |= 0x82;
+  outb(0x61, a);
+  a &= 0x7f;
+  outb(0x61, a);
 
   if (scancode & 0x80) {
     scancode = scancode & ~0x80;
@@ -32,14 +40,14 @@ void keyboard_isr() {
     }
   }
 
-  outb(0x20, 0x20); // Acknowledge interrupt
+  apic_send_eoi();
 }
 
 extern void gdt_flush();
 
 void keyboard_controller_init() {
-  outb(0x21,0b11111101); // Enable keyboard IRQ
-  outb(0xa1,0xff);
+  // Map keyboard interrupt
+  ioapic_map(1, 0x21);
 
   interrupts_register_handler(0x21, keyboard_isr);
 }

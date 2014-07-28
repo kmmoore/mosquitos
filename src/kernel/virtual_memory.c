@@ -4,11 +4,7 @@
 #include "virtual_memory.h"
 #include "text_output.h"
 #include "util.h"
-
-struct free_list_entry {
-  struct free_list_entry *next, *prev;
-  int num_pages;
-};
+#include "datastructures/list.h"
 
 static struct {
   uint8_t *memory_map;
@@ -17,7 +13,7 @@ static struct {
 
   uint64_t physical_end;
   uint64_t num_free_pages;
-  struct free_list_entry *free_list;
+  list_entry *free_list;
 
 } virtual_memory;
 
@@ -34,15 +30,10 @@ struct PML4E {
 static void add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
   // We can do this because we have identity mapping in the kernel
   // TODO: Figure out if there is a way to directly access physical memory/if this is necessary
-  struct free_list_entry *entry = (struct free_list_entry *)physical_address;
+  list_entry *entry = (list_entry *)physical_address;
 
-  entry->num_pages = num_pages;
-  entry->next = virtual_memory.free_list;
-  if (entry->next) {
-    entry->next->prev = entry;
-  }
-  entry->prev = NULL;
-  virtual_memory.free_list = entry;
+  entry->value = num_pages;
+  virtual_memory.free_list = list_insert_before(virtual_memory.free_list, entry);
 }
 
 static void compute_pysical_memory_properties() {

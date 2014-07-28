@@ -47,3 +47,16 @@ void outb(uint16_t port, uint8_t val) {
   /* TODO: Should %1 be %w1? */
   /* TODO: Is there any reason to force the use of eax and edx? */
 }
+
+void write_msr(uint64_t index, uint64_t value) {
+  uint64_t high = value >> 32;
+  uint64_t low  = (value & 0x0000000000000000ffffffffffffffff);
+  __asm__ ("rdmsr" : : "a" (low), "d" (high), "c" (index));
+}
+
+uint64_t read_msr(uint64_t index) {
+  uint64_t high, low;
+  __asm__ ("rdmsr" : "=a" (low), "=d" (high) : "c" (index));
+
+  return high << 32 | low;
+}
