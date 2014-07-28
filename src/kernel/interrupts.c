@@ -1,10 +1,11 @@
 #include "interrupts.h"
 #include "gdt.h"
+#include "apic.h"
 #include "text_output.h"
 #include "util.h"
 
 // Private structs
-struct IDTEntry {
+static struct IDTEntry {
   uint16_t base_low;
   uint16_t selector;
   uint8_t  zero_1;
@@ -14,12 +15,12 @@ struct IDTEntry {
   uint32_t zero_2;
 } __attribute__((packed)) IDT[256];
 
-struct IDTR {
+static struct IDTR {
   uint16_t size;
   uint64_t address;
 } __attribute__((packed)) IDTR;
 
-void (*interrupts_handlers[256])(int);
+static void (*interrupts_handlers[256])(int);
 
 // Helper functions
 static void set_idt_entry(int index, uint64_t base, uint16_t selector, uint8_t attributes) {
@@ -63,34 +64,38 @@ extern void isr33();
 
 // Public functions
 void interrupts_init() {
+  // Setup GDT and APIC before we can do interrupts
+  gdt_init();
+  apic_init();
+
   text_output_print("Loading IDT...");
 
   // TODO: Explain what the attributes mean
 
-  // Exceptions
-  set_idt_entry(0, (uint64_t)isr0, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(1, (uint64_t)isr1, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(2, (uint64_t)isr2, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(3, (uint64_t)isr3, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(4, (uint64_t)isr4, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(5, (uint64_t)isr5, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(6, (uint64_t)isr6, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(7, (uint64_t)isr7, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(8, (uint64_t)isr8, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(9, (uint64_t)isr9, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(10, (uint64_t)isr10, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(11, (uint64_t)isr11, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(12, (uint64_t)isr12, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(13, (uint64_t)isr13, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(14, (uint64_t)isr14, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(16, (uint64_t)isr16, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(17, (uint64_t)isr17, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(18, (uint64_t)isr18, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(19, (uint64_t)isr19, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(20, (uint64_t)isr20, GDT_KERNEL_CS, 0b10001110);
+  // Exceptions (trap gates)
+  set_idt_entry(0, (uint64_t)isr0, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(1, (uint64_t)isr1, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(2, (uint64_t)isr2, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(3, (uint64_t)isr3, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(4, (uint64_t)isr4, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(5, (uint64_t)isr5, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(6, (uint64_t)isr6, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(7, (uint64_t)isr7, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(8, (uint64_t)isr8, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(9, (uint64_t)isr9, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(10, (uint64_t)isr10, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(11, (uint64_t)isr11, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(12, (uint64_t)isr12, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(13, (uint64_t)isr13, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(14, (uint64_t)isr14, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(16, (uint64_t)isr16, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(17, (uint64_t)isr17, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(18, (uint64_t)isr18, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(19, (uint64_t)isr19, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(20, (uint64_t)isr20, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(30, (uint64_t)isr30, GDT_KERNEL_CS, 0b10001110);
 
-  // IRQs
+  // IRQs (interrupt gates)
   set_idt_entry(33, (uint64_t)isr33, GDT_KERNEL_CS, 0b10001110);
 
   IDTR.size = sizeof(IDT) - 1;

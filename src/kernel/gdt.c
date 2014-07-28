@@ -2,12 +2,12 @@
 #include "text_output.h"
 
 // Private structs 
-struct GDTEntry {
+static struct GDTEntry {
   uint16_t limit_low;         // The lower 16 bits of the limit.
   uint16_t base_low;          // The lower 16 bits of the base.
   uint8_t  base_middle;       // The next 8 bits of the base.
   uint8_t  access;            //type: 4, s: 1, dpl: 2, p: 1;
-  uint8_t  limit_high: 4, flags:4; //avl: 1, l: 1, d: 1, g: 1;
+  uint8_t  limit_high:4, flags:4; //avl: 1, l: 1, d: 1, g: 1;
   uint8_t  base_high;         // The last 8 bits of the base.
 } __attribute__((packed)) GDT[5];
 
