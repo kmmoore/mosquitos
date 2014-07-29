@@ -25,9 +25,6 @@ int kernel_main(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_des
 
   keyboard_controller_init();
 
-  void *page = vm_palloc(1);
-  text_output_printf("Page address: 0x%x\n", page);
-
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
 

@@ -78,6 +78,17 @@ static void setup_free_memory() {
   }
 }
 
+void vm_print_free_list() {
+  text_output_printf("VM free list:\n");
+
+  list_entry *current = list_head(&virtual_memory.free_list);
+  while (current) {
+    uint64_t num_pages = list_entry_value(current);
+    text_output_printf("Address: 0x%x, num_pages: %d\n", current, num_pages);
+    current = list_next(current);
+  }
+}
+
 void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descriptor_size) {
   uint64_t cr3;
 
@@ -98,6 +109,8 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
   text_output_printf("Done\n");
 
   text_output_printf("Found %dMB of physical memory, %dMB free.\n", virtual_memory.physical_end / (1024*1024), virtual_memory.num_free_pages * 4 / 1024);
+
+  vm_print_free_list();
 }
 
 void * vm_palloc(uint64_t num_pages) {
@@ -112,8 +125,6 @@ void * vm_palloc(uint64_t num_pages) {
     return NULL; // We can't fulfill the request
   }
 
-  text_output_printf("Chunk address: 0x%x, num_pages: %d\n", chunk, num_pages);
-
   uint64_t available_pages = list_entry_value(chunk);
   void *last_pages = ((uint8_t *)chunk) + (available_pages - num_pages) * EFI_PAGE_SIZE;
 
@@ -126,10 +137,9 @@ void * vm_palloc(uint64_t num_pages) {
   return last_pages;
 }
 
-void vm_pfree(void *virtual_address, uint64_t num_pages) {
-  (void)virtual_address;
-  (void)num_pages;
-  // TODO: Fill in
+void vm_pfree(void *physical_address, uint64_t num_pages) {
+  // TODO: coalesce
+  add_to_free_list((uint64_t)physical_address, num_pages);
 }
 
 void vm_map(uint64_t physical_address, void *virtual_address, uint64_t flags) {
