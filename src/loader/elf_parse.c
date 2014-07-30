@@ -21,7 +21,8 @@ static bool valid_elf64_header(Elf64_Ehdr *elf_hdr) {
   if (elf_hdr->e_ident[EI_CLASS] != ELFCLASS64) return false;
 
   // Check for System V (Unix) ABI
-  if (elf_hdr->e_ident[EI_OSABI] != ELFOSABI_NONE) return false;
+  if (elf_hdr->e_ident[EI_OSABI] != ELFOSABI_NONE &&
+      elf_hdr->e_ident[EI_OSABI] != ELFOSABI_GNU) return false;
 
   // Check for executable file
   if (elf_hdr->e_type != ET_EXEC) return false;
@@ -83,13 +84,13 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
     return EFI_ABORTED;
   }
 
-  Elf64_Shdr *section_headers = (Elf64_Shdr *)(buffer + elf_hdr->e_shoff);
+  Elf64_Phdr *program_headers = (Elf64_Phdr *)(buffer + elf_hdr->e_phoff);
 
-  // Compute the number of bytes we need to copy over
+  // Determine how much memory we need
   Elf64_Addr highest_addr_found = 0;
-  for (int i = 0; i < elf_hdr->e_shnum; ++i) {
-    Elf64_Addr section_end = section_headers[i].sh_addr + section_headers[i].sh_size;
-    if (section_end > highest_addr_found) highest_addr_found = section_end;
+  for (int i = 0; i < elf_hdr->e_phnum; ++i) {
+    Elf64_Addr chunk_end = program_headers[i].p_vaddr + program_headers[i].p_memsz;
+    if (chunk_end > highest_addr_found) highest_addr_found = chunk_end;
   }
 
   int bytes_needed = (int)(highest_addr_found - elf_hdr->e_entry);
@@ -108,17 +109,16 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
     Print(L"status: %d, region: 0x%x, e_entry: 0x%x\n", status, region, elf_hdr->e_entry);
     return EFI_ABORTED;
   }
-  
-  // Copy program sections to the pages we allocated (at their appropriate addresses)
-  for (int i = 0; i < elf_hdr->e_shnum; ++i) {
-    if (section_headers[i].sh_addr != 0) {
-      if (section_headers[i].sh_type == SHT_NOBITS) {
-        // Create empty section for BSS
-        memset((void *)section_headers[i].sh_addr, 0, section_headers[i].sh_size);
-      } else {
-        // Copy section from ELF file
-        memcpy((void *)section_headers[i].sh_addr, buffer + section_headers[i].sh_offset, section_headers[i].sh_size);
-      }
+
+  // Copy the loadable program sections into the VM region we allocated
+  for (int i = 0; i < elf_hdr->e_phnum; ++i) {
+    Elf64_Phdr ph = program_headers[i];
+
+    if (ph.p_type == PT_LOAD) {
+      // Copy as much data as we have to beginning
+      memcpy((void *)ph.p_vaddr, buffer + ph.p_offset, ph.p_filesz);
+      // Zero out the rest of the section
+      memset((void *)(ph.p_vaddr + ph.p_filesz), 0, ph.p_memsz - ph.p_filesz);
     }
   }
 
