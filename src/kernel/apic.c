@@ -90,6 +90,7 @@ void apic_init() {
 
   // Enable APIC MSR
   uint64_t apic_msr = read_msr(0x1b);
+  apic_base = (uint32_t *)(apic_msr & 0xffffff000);
   apic_msr |= (1 << 11);
   write_msr(0x1b, apic_msr);
 
