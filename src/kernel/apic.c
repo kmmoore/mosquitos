@@ -1,4 +1,5 @@
 #include "apic.h"
+#include "acpi.h"
 #include "util.h"
 #include "text_output.h"
 
@@ -14,6 +15,17 @@
 #define ICW1_INIT 0x10    /* Initialization - required! */
  
 #define ICW4_8086 0x01    /* 8086/88 (MCS-80/85) mode */
+
+typedef struct {
+  ACPISDTHeader header;
+  uint32_t local_controller_address;
+  uint32_t flags;
+} MADT;
+
+typedef struct {
+  uint8_t device_type;
+  uint8_t length;
+} MADTEntryHeader;
 
 static uint32_t *apic_base = (uint32_t *)0xfee00000;
 static uint32_t *ioapic_index = (uint32_t *)0xfec00000;
@@ -87,6 +99,21 @@ void apic_init() {
   /* Disable all interrupts */
   outb(PIC1_DATA, 0xff);
   outb(PIC2_DATA, 0xff);
+
+  MADT *madt = (MADT *)acpi_locate_table("APIC");
+  text_output_printf("APIC APCI Table: 0x%x\n", madt);
+
+  uint32_t length_so_far = sizeof(MADT);
+  while (length_so_far < madt->header.Length) {
+    MADTEntryHeader *header = (MADTEntryHeader *)(((uint8_t *)madt) + length_so_far);
+    text_output_printf("%d, %d\n", header->device_type, header->length);
+
+    if (header->device_type == 1) {
+      text_output_printf("0x%x\n", *((uint32_t *)(((uint8_t *)header) + 4)));
+    }
+
+    length_so_far += header->length;
+  }
 
   // Enable APIC MSR
   uint64_t apic_msr = read_msr(0x1b);

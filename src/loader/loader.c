@@ -39,8 +39,23 @@ get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, 
   }
 }
 
-extern void gpe_isr();
-extern void isr1();
+void wait_for_keypress() {
+  UINTN event_index;
+  EFI_EVENT events[1] = { ST->ConIn->WaitForKey };
+  uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
+}
+
+bool guids_match(EFI_GUID guid1, EFI_GUID guid2) {
+  bool first_part_good = (guid1.Data1 == guid2.Data1 && guid1.Data2 == guid2.Data2 && guid1.Data3 == guid2.Data3);
+
+  if (!first_part_good) return false;
+
+  for (int i = 0; i < 8; ++i) {
+    if (guid1.Data4[i] != guid2.Data4[i]) return false;
+  }
+
+  return true;
+}
 
 EFI_STATUS
 EFIAPI
@@ -59,12 +74,25 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
   Print(L"Got kernel_main at: 0x%x\n", kernel_main_addr);
 
+  EFI_CONFIGURATION_TABLE *configuration_tables = SystemTable->ConfigurationTable;
+
+  void *xdsp_address = NULL;
+  static EFI_GUID acpi_guid = ACPI_20_TABLE_GUID;
+  for (unsigned i = 0; i < SystemTable->NumberOfTableEntries; ++i) {
+    if (guids_match(acpi_guid, configuration_tables[i].VendorGuid)) {
+      Print(L"Found ACPI Table pointer 0x%x\n", configuration_tables[i].VendorTable);
+      xdsp_address = configuration_tables[i].VendorTable;
+    }
+  }
+
+  if (!xdsp_address) {
+    Print(L"Could not locate ACPI v2.0 table, aborting!\n");
+    return EFI_ABORTED;
+  }
+
   // Wait for keypress to give us time to attach a debugger, etc.
   Print(L"Waiting for keypress to continue booting...\n");
-
-  UINTN event_index;
-  EFI_EVENT events[1] = { SystemTable->ConIn->WaitForKey };
-  uefi_call_wrapper(BS->WaitForEvent, 3, 1, events, &event_index);
+  wait_for_keypress();
 
   // Get access to a simple graphics buffer
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
@@ -90,7 +118,14 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     // Execute kernel if we are successful
     if (status == EFI_SUCCESS) {
       // Jump to kernel code
-      ((KERNEL_MAIN_FUNC_SIG)kernel_main_addr)(mem_map, mem_map_size, mem_map_descriptor_size, gop);
+      KernelInfo info = {
+        .xdsp_address = xdsp_address,
+        .memory_map = mem_map,
+        .mem_map_size = mem_map_size,
+        .mem_map_descriptor_size = mem_map_descriptor_size,
+        .gop = gop
+      };
+      ((KernelMainFunc)kernel_main_addr)(info);
     }
   }
 
