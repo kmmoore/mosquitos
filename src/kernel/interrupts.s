@@ -86,3 +86,4 @@ isr_noerror 19
 isr_noerror 20
 isr_noerror 30
 isr_noerror 33
+isr_noerror 34
