@@ -1,8 +1,6 @@
 #include <efi.h>
 #include <efilib.h>
 
-#include <stdarg.h>
-
 #include "font.h"
 #include "text_output.h"
 #include "util.h"
@@ -83,6 +81,12 @@ void text_output_printf(char *format, ...) {
   va_list arg_list;
   va_start(arg_list, format);
 
+  text_output_vprintf(format, arg_list);
+
+  va_end(arg_list);
+}
+
+void text_output_vprintf(char *format, va_list arg_list) {
   char int_conv_buffer[21]; // Can hold a 64-bit decimal string with null termination
 
   while (*format) {
@@ -126,6 +130,4 @@ void text_output_printf(char *format, ...) {
     }
     format++;
   }
-
-  va_end(arg_list);
 }

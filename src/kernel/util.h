@@ -3,6 +3,10 @@
 #ifndef _UTIL_H
 #define _UTIL_H
 
+#define panic(...) do { _panic("PANIC (" __FILE__ ":" STR(__LINE__) ") " __VA_ARGS__); } while (0)
+
+void _panic(char *format, ...);
+
 int int2str(uint64_t n, char *buf, int buf_len, int radix);
 
 uint8_t inb(uint16_t port);

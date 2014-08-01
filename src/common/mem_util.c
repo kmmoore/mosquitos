@@ -16,3 +16,15 @@ void * memcpy(void *destination, const void *source, size_t length) {
   }
   return destination;
 }
+
+int memcmp(const void *s1, const void *s2, size_t n) {
+  const uint8_t *a = (const uint8_t *)s1, *b = (const uint8_t *)s2;
+  
+  for (size_t i = 0; i < n; ++i) {
+    if (a[i] != b[i]) {
+      return a[i] - b[i];
+    }
+  }
+
+  return 0;
+}

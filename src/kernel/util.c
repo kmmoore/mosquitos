@@ -1,7 +1,18 @@
 #include "util.h"
 #include "text_output.h"
 
-#include <math.h>
+#include <stdarg.h>
+
+void _panic(char *format, ...) {
+  va_list arg_list;
+  va_start(arg_list, format);
+
+  text_output_vprintf(format, arg_list);
+
+  va_end(arg_list);
+
+  __asm__ ("cli \n\t hlt");
+}
 
 int int2str(uint64_t n, char *buf, int buf_len, int radix) {
   static char *digit_lookup = "0123456789abcdef";

@@ -1,4 +1,5 @@
 #include "apic.h"
+#include "acpi.h"
 #include "util.h"
 #include "text_output.h"
 
@@ -15,9 +16,38 @@
  
 #define ICW4_8086 0x01    /* 8086/88 (MCS-80/85) mode */
 
-static uint32_t *apic_base = (uint32_t *)0xfee00000;
-static uint32_t *ioapic_index = (uint32_t *)0xfec00000;
-static uint32_t *ioapic_data = (uint32_t *)0xfec00010;
+typedef struct {
+  ACPISDTHeader header;
+  uint32_t local_controller_address;
+  uint32_t flags;
+} __attribute__((packed)) MADT;
+
+typedef struct {
+  uint8_t device_type;
+  uint8_t length;
+} __attribute__((packed)) CommonMADTEntryHeader;
+
+typedef struct {
+  CommonMADTEntryHeader header;
+  uint8_t processor_id;
+  uint8_t apic_id;
+  uint32_t flags;
+} __attribute__((packed)) LocalAPICHeader;
+
+typedef struct {
+  CommonMADTEntryHeader header;
+  uint8_t ioapic_id;
+  uint8_t resertved;
+  uint32_t address;
+  uint32_t irq_base;
+} __attribute__((packed)) IOAPICHeader;
+
+// This gets set from an MSR
+static uint32_t *apic_base = NULL;
+
+// These get set from the ACPI table
+static uint32_t *ioapic_index = NULL;
+static uint32_t *ioapic_data = NULL;
 
 void ioapic_write(int index, uint32_t value) {
   *ioapic_index = index;
@@ -65,7 +95,38 @@ void ioapic_map(uint8_t irq_index, uint8_t idt_index) {
   ioapic_write(low_index, low);
 }
 
+// Locates the I/O APIC with IRQ Base == 0 and 
+// loads it's address into the global variables
+// `ioapic_index` and `ioapic_data`.
+bool load_ioapic_address() {
+  MADT *madt = (MADT *)acpi_locate_table("APIC");
+
+  if (!madt) return false;
+
+  bool found = false;
+  uint32_t position = sizeof(MADT);
+  while (position < madt->header.Length) {
+    uint8_t *madt_buffer = (uint8_t *)madt;
+    CommonMADTEntryHeader *entry = (CommonMADTEntryHeader *)(madt_buffer + position);
+
+    if (entry->device_type == 1) {
+      IOAPICHeader *header = (IOAPICHeader *)entry;
+
+      if (header->irq_base == 0x0) {
+        found = true;
+        ioapic_index = (uint32_t *)(intptr_t)header->address;
+        ioapic_data = (uint32_t *)(intptr_t)(header->address + 0x10);
+      }
+    }
+
+    position += entry->length; // Second byte of entry is always 
+  }
+
+  return found;
+}
+
 void apic_init() {
+  text_output_printf("Enabling APICs...");
   // Disable legacy PIC
 
   /* Set ICW1 */
@@ -88,9 +149,13 @@ void apic_init() {
   outb(PIC1_DATA, 0xff);
   outb(PIC2_DATA, 0xff);
 
+  if (!load_ioapic_address()) {
+    panic("\nCould not find I/O APIC! This is currently required.\n");
+  }
+
   // Enable APIC MSR
   uint64_t apic_msr = read_msr(0x1b);
-  apic_base = (uint32_t *)(apic_msr & 0xffffff000);
+  apic_base = (uint32_t *)(apic_msr & 0xffffff000); // Load Local APIC base address
   apic_msr |= (1 << 11);
   write_msr(0x1b, apic_msr);
 
@@ -98,6 +163,8 @@ void apic_init() {
   uint32_t val = apic_read(0x0f);
   val |= (1<<8);
   apic_write(0x0f, val);
+
+  text_output_printf("Done\n");
 }
 
 void apic_send_eoi() {
