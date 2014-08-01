@@ -3,3 +3,6 @@
 #include <stdbool.h>
 
 #define UNUSED __attribute__((unused))
+
+#define STR(s) _STR(s)
+#define _STR(s) #s

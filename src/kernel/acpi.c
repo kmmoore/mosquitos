@@ -1,5 +1,6 @@
 #include "acpi.h"
 #include "text_output.h"
+#include "util.h"
 #include "../common/mem_util.h"
 
 typedef struct {
@@ -60,18 +61,28 @@ ACPISDTHeader * acpi_locate_table(const char *name) {
 
 void acpi_init(void *xdsp_address) {
   text_output_printf("Locating ACPI Tables...");
-  
+
   XDSP *xdsp = (XDSP *)xdsp_address;
   if (!validate_xdsp(xdsp)) {
-    text_output_printf("ERROR: XDSP validation failed! This is a problem.\n");
+    panic("\nXDSP validation failed!\n");
   }
 
-  text_output_printf("XDSP: 0x%x\n", xdsp_address);
   acpi.xsdt = (XSDT *)xdsp->xsdt_phys;
 
   if (!validate_acpi_checksum(acpi.xsdt, acpi.xsdt->header.Length)) {
-    text_output_printf("ERROR: XDST validation failed! This is a problem.\n");
+    panic("\nXDST validation failed!\n");
   }
 
   text_output_printf("Done\n");
+
+  int entries = (acpi.xsdt->header.Length - sizeof(acpi.xsdt->header)) / sizeof(ACPISDTHeader *);
+
+  text_output_printf("ACPI Tables: ");
+  for (int i = 0; i < entries; i++) {
+    // TODO: Figure out why this works
+    ACPISDTHeader *header = (&acpi.xsdt->table_pointers)[i];
+    text_output_printf("%c%c%c%c ", header->Signature[0], header->Signature[1], header->Signature[2], header->Signature[3]);
+  }
+  text_output_printf("\n");
+
 }
