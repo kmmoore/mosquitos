@@ -4,4 +4,7 @@ CC              := gcc
 LD              := ld
 OBJCOPY         := objcopy
 
-# TODO: Add cflags
+EFIINC          := /usr/include/efi
+EFIINCS         := -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
+
+CFLAGS_COMMON   := $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -Os

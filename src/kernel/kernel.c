@@ -9,15 +9,19 @@
 #include "timer.h"
 #include "keyboard_controller.h"
 #include "virtual_memory.h"
+#include "scheduler.h"
 
 #include "util.h"
+
+#include "../common/build_info.h"
 
 int kernel_main(KernelInfo info) {
 
   text_output_init(info.gop);
 
   text_output_clear_screen(0x00000000);
-  text_output_print("Text output initialized!\n");
+  text_output_printf("MosquitOS -- A tiny, annoying operating system\n");
+  text_output_printf("Built from %s on %s\n", build_git_info, build_time);
 
   // Initialize subsystems
   acpi_init(info.xdsp_address);
@@ -29,6 +33,8 @@ int kernel_main(KernelInfo info) {
   timer_init();
   keyboard_controller_init();
 
+  scheduler_init();
+
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
 
@@ -36,7 +42,7 @@ int kernel_main(KernelInfo info) {
     __asm__ ("hlt"); // Prevent the kernel from returning
   }
 
-  ASSERT(false); // We should never get here
+  assert(false); // We should never get here
 
   return 123;
 }

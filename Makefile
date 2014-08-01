@@ -2,7 +2,7 @@ BIULD_DIR         := build
 
 all: loader kernel
 
-.PHONY : clean
+.PHONY: clean
 clean:
 	$(MAKE) -C src/loader clean
 	$(MAKE) -C src/kernel clean
