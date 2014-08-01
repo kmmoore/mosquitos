@@ -28,10 +28,12 @@ void list_entry_set_value(list_entry *entry, uint64_t value) {
 }
 
 list_entry *list_next(list_entry *entry) {
+  if (!entry) return NULL;
   return entry->next;
 }
 
 list_entry *list_prev(list_entry *entry) {
+  if (!entry) return NULL;
   return entry->prev;
 }
 

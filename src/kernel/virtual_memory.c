@@ -17,15 +17,21 @@ static struct {
 
 } virtual_memory;
 
-struct PML4E {
-  uint8_t present:1, writable:1, user_accessable:1;
-  uint8_t pwt:1, pcd:1;
-  uint8_t accessed:1, dirty:1;
-  uint8_t page_size:1, global:1;
+typedef struct {
+  uint64_t present:1, writable:1, user_accessable:1;
+  uint64_t pwt:1, pcd:1;
+  uint64_t accessed:1, dirty:1;
+  uint64_t page_size:1, global:1;
+  
+  uint64_t reserved:3;
 
-  uint32_t reserved:4;
-  uint32_t pdpte_ptr_upper:24;
-};
+  uint64_t address:40;
+
+  uint64_t ignored:11;
+  uint64_t execute_disabled:1;
+} PageTableEntry;
+
+#define PTES_PER_PAGE (EFI_PAGE_SIZE / sizeof(PageTableEntry))
 
 static void add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
   // We can do this because we have identity mapping in the kernel
@@ -84,17 +90,27 @@ void vm_print_free_list() {
   list_entry *current = list_head(&virtual_memory.free_list);
   while (current) {
     uint64_t num_pages = list_entry_value(current);
-    text_output_printf("Address: 0x%x, num_pages: %d\n", current, num_pages);
+    text_output_printf("  Address: 0x%x, num_pages: %d\n", current, num_pages);
     current = list_next(current);
   }
 }
 
-void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descriptor_size) {
-  uint64_t cr3;
+PageTableEntry * follow_pte(PageTableEntry entry) {
+  return (PageTableEntry *)(intptr_t)(entry.address << 12);
+}
 
+void vm_write_cr3(uint64_t cr3) {
+  __asm__ ("movq %0, %%cr3": : "r" (cr3));
+}
+
+uint64_t vm_read_cr3() {
+  uint64_t cr3;
   __asm__ ("movq %%cr3, %0": "=r" (cr3));
 
-  text_output_printf("CR3: 0x%x\n", cr3);
+  return cr3;
+}
+
+void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descriptor_size) {
 
   virtual_memory.memory_map = memory_map;
   virtual_memory.mem_map_size = mem_map_size;

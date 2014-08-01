@@ -15,13 +15,18 @@
 
 #include "../common/build_info.h"
 
+int kernel_main(KernelInfo info);
+void * thread_main(void *);
+
 int kernel_main(KernelInfo info) {
+
+  cli();
 
   text_output_init(info.gop);
 
   text_output_clear_screen(0x00000000);
   text_output_printf("MosquitOS -- A tiny, annoying operating system\n");
-  text_output_printf("Built from %s on %s\n", build_git_info, build_time);
+  text_output_printf("Built from %s on %s\n\n", build_git_info, build_time);
 
   // Initialize subsystems
   acpi_init(info.xdsp_address);
@@ -35,6 +40,10 @@ int kernel_main(KernelInfo info) {
 
   scheduler_init();
 
+  scheduler_create_thread(thread_main);
+  scheduler_schedule_next();
+  text_output_printf("asdf");
+
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
 
@@ -45,4 +54,13 @@ int kernel_main(KernelInfo info) {
   assert(false); // We should never get here
 
   return 123;
+}
+
+void * thread_main(void *p) {
+  (void)p;
+  uint64_t rsp;
+  __asm__ ("mov %%rsp, %0" : "=r" (rsp));
+  text_output_printf("From a thread! 0x%x\n", rsp);
+  while (1);
+  return NULL;
 }
