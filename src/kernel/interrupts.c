@@ -61,6 +61,7 @@ extern void isr19();
 extern void isr20();
 extern void isr30();
 extern void isr33();
+extern void isr34();
 
 // Public functions
 void interrupts_init() {
@@ -97,6 +98,7 @@ void interrupts_init() {
 
   // IRQs (interrupt gates)
   set_idt_entry(33, (uint64_t)isr33, GDT_KERNEL_CS, 0b10001110);
+  set_idt_entry(34, (uint64_t)isr34, GDT_KERNEL_CS, 0b10001110);
 
   IDTR.size = sizeof(IDT) - 1;
   IDTR.address = (uint64_t)&IDT[0];

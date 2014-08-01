@@ -6,6 +6,7 @@
 #include "acpi.h"
 #include "interrupts.h"
 #include "exceptions.h"
+#include "timer.h"
 #include "keyboard_controller.h"
 #include "virtual_memory.h"
 
@@ -25,6 +26,7 @@ int kernel_main(KernelInfo info) {
 
   vm_init(info.memory_map, info.mem_map_size, info.mem_map_descriptor_size);
 
+  timer_init();
   keyboard_controller_init();
 
   // Now that interrupt/exception handlers are set up, we can enable interrupts
