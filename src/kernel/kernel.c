@@ -40,7 +40,7 @@ int kernel_main(KernelInfo info) {
 
   scheduler_init();
 
-  scheduler_create_thread(thread_main);
+  scheduler_create_thread(thread_main, NULL, 31);
   scheduler_schedule_next();
   text_output_printf("asdf");
 
