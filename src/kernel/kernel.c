@@ -15,8 +15,31 @@
 
 #include "../common/build_info.h"
 
-int kernel_main(KernelInfo info);
-void * thread_main(void *);
+void * thread1_main(void *p) {
+  (void)p;
+  uint64_t rsp;
+  __asm__ ("mov %%rsp, %0" : "=r" (rsp));
+  text_output_printf("From thread 1! 0x%x\n", rsp);
+  for (uint64_t i = 0; i < 0xffffffff; ++i) {
+    __asm__ volatile ("nop");
+  }
+  text_output_printf("From thread 1.1! 0x%x\n", rsp);
+  while(1);
+  return NULL;
+}
+
+void * thread2_main(void *p) {
+  (void)p;
+  uint64_t rsp;
+  __asm__ ("mov %%rsp, %0" : "=r" (rsp));
+  text_output_printf("From thread 2! 0x%x\n", rsp);
+  for (uint64_t i = 0; i < 0xffffffff; ++i) {
+    __asm__ volatile ("nop");
+  }
+  text_output_printf("From thread 2.1! 0x%x\n", rsp);
+  while(1);
+  return NULL;
+}
 
 int kernel_main(KernelInfo info) {
 
@@ -38,14 +61,22 @@ int kernel_main(KernelInfo info) {
   timer_init();
   keyboard_controller_init();
 
-  scheduler_init();
-
-  scheduler_create_thread(thread_main, NULL, 31);
-  scheduler_schedule_next();
-  text_output_printf("asdf");
-
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
+
+  // text_output_printf("start..");
+  // uint64_t start = timer_ticks();
+  // while(timer_ticks() < 5000 + start);
+  // text_output_printf("end\n");
+
+  // Set up scheduler
+  scheduler_init();
+
+  KernelThread *t1 = scheduler_create_thread(thread1_main, NULL, 31);
+  scheduler_create_thread(thread2_main, NULL, 31);
+  scheduler_start_scheduling(t1);
+  // scheduler_schedule_next();
+  // text_output_printf("asdf");
 
   while (1) {
     __asm__ ("hlt"); // Prevent the kernel from returning
@@ -54,13 +85,4 @@ int kernel_main(KernelInfo info) {
   assert(false); // We should never get here
 
   return 123;
-}
-
-void * thread_main(void *p) {
-  (void)p;
-  uint64_t rsp;
-  __asm__ ("mov %%rsp, %0" : "=r" (rsp));
-  text_output_printf("From a thread! 0x%x\n", rsp);
-  while (1);
-  return NULL;
 }

@@ -4,6 +4,9 @@
 #include "util.h"
 #include "virtual_memory.h"
 #include "gdt.h"
+#include "apic.h"
+#include "timer.h"
+#include "interrupts.h"
 
 
 struct KernelThread {
@@ -22,20 +25,68 @@ struct KernelThread {
   uint64_t rax, rbx, rcx, rdx, rsi, rdi, rbp;
   uint64_t r8, r9, r10, r11, r12, r13, r14, r15;
   uint64_t ds, es, fs, gs;
-} threads[6]; // TODO: Make this dynamic
+} threads[16]; // TODO: Make this dynamic
+
+#define SCHEDULER_TIMER_CALIBRATION_IV 35
+#define SCHEDULER_TIMER_IV 36
+
+#define SCHEDULER_TIMER_CALIBRATION_PERIOD 0x08ffffff
+#define SCHEDULER_TIMER_DIVIDER APIC_DIV_2
+#define SCHEDULER_TIME_SLICE_MS 1000
 
 struct {
+  KernelThread *current_thread;
   list thread_list;
-  list_entry *current_thread;
   uint32_t next_tid;
+  uint64_t apic_timer_frequency;
 } scheduler_data;
+
+static volatile uint64_t calibration_end = 0;
+static void apic_timer_calibration_isr() {
+  calibration_end = timer_ticks();
+  apic_send_eoi();
+}
+
+static void calibrate_apic_timer() {
+  apic_setup_local_timer(SCHEDULER_TIMER_DIVIDER, SCHEDULER_TIMER_CALIBRATION_IV, APIC_TIMER_ONE_SHOT, SCHEDULER_TIMER_CALIBRATION_PERIOD);
+  interrupts_register_handler(SCHEDULER_TIMER_CALIBRATION_IV, apic_timer_calibration_isr);
+
+  text_output_printf("Calibrating APIC timer...");
+
+  uint64_t calibration_start = timer_ticks();
+  apic_set_local_timer_masked(false);
+
+  // Spin until we get the APIC timer interrupt
+  while(calibration_end == 0);
+
+  scheduler_data.apic_timer_frequency = (uint64_t)SCHEDULER_TIMER_CALIBRATION_PERIOD * TIMER_FREQUENCY / (calibration_end - calibration_start);
+
+  text_output_printf("Done - frequency: %dHz\n", scheduler_data.apic_timer_frequency);
+}
+
+void setup_scheduler_timer() {
+  uint32_t period = scheduler_data.apic_timer_frequency * SCHEDULER_TIME_SLICE_MS / 1000;
+  // text_output_printf("Period: %d\n", period);
+  apic_setup_local_timer(SCHEDULER_TIMER_DIVIDER, SCHEDULER_TIMER_IV, APIC_TIMER_PERIODIC, period);
+  apic_set_local_timer_masked(false);
+}
 
 void scheduler_init() {
   list_init(&scheduler_data.thread_list);
 
   scheduler_data.next_tid = 0;
 
+  calibrate_apic_timer();
+
   text_output_printf("Scheduler init\n");
+}
+
+void scheduler_load_thread(uint64_t *ss_pointer);
+void scheduler_start_scheduling(KernelThread *initial_thread) {
+  scheduler_data.current_thread = initial_thread;
+  setup_scheduler_timer();
+  // TODO: There is a race condition between these lines
+  scheduler_load_thread(&initial_thread->ss);
 }
 
 KernelThread * scheduler_create_thread(KernelThreadMain main_func, void * parameter, uint8_t priority) {
@@ -67,14 +118,9 @@ KernelThread * scheduler_create_thread(KernelThreadMain main_func, void * parame
   return &threads[0];
 }
 
-void scheduler_add_thread(KernelThread *thread){
-  (void)thread;
-}
+extern void scheduler_load_thread(uint64_t *ss_address);
 
-extern void scheduler_context_switch(uint64_t *ss_address);
-
-void scheduler_schedule_next() {
-  KernelThread *next = &threads[0];
-
-  scheduler_context_switch(&next->ss);
+void scheduler_set_next() {
+  uint32_t next_tid = scheduler_data.current_thread->tid == 0 ? 1 : 0; // Switch between first two threads
+  scheduler_data.current_thread = &threads[next_tid];
 }

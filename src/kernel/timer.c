@@ -7,16 +7,16 @@
 #define TIMER_IRQ 2
 #define TIMER_IV 0x22
 
-volatile uint64_t milliseconds = 0; // Won't overflow for 5e8
+static volatile uint64_t ticks = 0; // Won't overflow for 5e8
 
 void timer_isr() {
-  ++milliseconds;
+  ++ticks;
 
   apic_send_eoi();
 }
 
-uint64_t timer_millis() {
-  return milliseconds;
+uint64_t timer_ticks() {
+  return ticks;
 }
 
 void timer_init() {
@@ -30,9 +30,9 @@ void timer_init() {
   // TODO: Use HPET eventually
   outb(0x43, 0x68);
 
-  // Set up 1000.151Hz timer (1 tick/ms)
-  outb(0x40, 0xa9);
-  outb(0x40, 0x04);
+  // Set up timer to have frequency TIMER_FREQUENCY
+  outb(0x40, TIMER_DIVIDER & 0xff);
+  outb(0x40, TIMER_DIVIDER >> 8);
 
   text_output_printf("Done\n");
 }

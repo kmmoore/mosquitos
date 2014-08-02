@@ -110,6 +110,14 @@ void text_output_vprintf(char *format, va_list arg_list) {
         }
         break;
 
+        case 'b':
+        {
+          uint64_t number = va_arg(arg_list, uint64_t);
+          int2str(number, int_conv_buffer, sizeof(int_conv_buffer), 2);
+          text_output_print(int_conv_buffer);
+        }
+        break;
+
         case 'c':
         {
           char c = va_arg(arg_list, int);
