@@ -75,6 +75,9 @@ static void setup_free_memory() {
     EFI_MEMORY_TYPE type = descriptor->Type;
     if (type == EfiLoaderCode || type == EfiBootServicesCode ||
         type == EfiBootServicesData || type == EfiConventionalMemory) { // Types of free memory after boot services are exited
+      if (descriptor->PhysicalStart == 0) {
+        descriptor->PhysicalStart = EFI_PAGE_SIZE; // Don't add the zero page to the free list
+      }
       add_to_free_list(descriptor->PhysicalStart, descriptor->NumberOfPages);
       virtual_memory.num_free_pages += descriptor->NumberOfPages;
     }

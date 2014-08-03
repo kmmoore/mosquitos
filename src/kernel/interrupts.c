@@ -85,12 +85,12 @@ void interrupts_init() {
   set_idt_entry(5, (uint64_t)isr5, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(6, (uint64_t)isr6, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(7, (uint64_t)isr7, GDT_KERNEL_CS, 0b10001111);
-  // set_idt_entry(8, (uint64_t)isr8, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(8, (uint64_t)isr8, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(9, (uint64_t)isr9, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(10, (uint64_t)isr10, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(11, (uint64_t)isr11, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(12, (uint64_t)isr12, GDT_KERNEL_CS, 0b10001111);
-  // set_idt_entry(13, (uint64_t)isr13, GDT_KERNEL_CS, 0b10001111);
+  set_idt_entry(13, (uint64_t)isr13, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(14, (uint64_t)isr14, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(16, (uint64_t)isr16, GDT_KERNEL_CS, 0b10001111);
   set_idt_entry(17, (uint64_t)isr17, GDT_KERNEL_CS, 0b10001111);

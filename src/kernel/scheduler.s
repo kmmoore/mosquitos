@@ -59,7 +59,6 @@ scheduler_timer_isr:
   push %rdi
   
   mov   (scheduler_data), %rdi # Current thread is first element of scheduler_data struct
-  add   $0x08, %rdi # Address of ss in the structure
   
   save_thread
 
@@ -69,11 +68,12 @@ scheduler_timer_isr:
 
   call  scheduler_set_next # Set current thread to next thread
 
+  # Load new thread
   mov   (scheduler_data), %rdi # Current thread is first element of scheduler_data struct
-  add   $0x08, %rdi # Address of ss in the structure
   call  scheduler_load_thread
 
 
+# This needs to be a function call because it is called from scheduler_start_scheduling()
 # NOTE: Should be called from the end of an interrupt handler
 # instead of iretq
 .globl scheduler_load_thread

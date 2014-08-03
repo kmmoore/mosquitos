@@ -1,12 +1,5 @@
 #include "list.h"
 
-// List entry type is opaque
-
-struct _list_entry {
-  struct _list_entry *next, *prev;
-  uint64_t value;
-};
-
 void list_init(list *l) {
   l->head = l->tail = NULL;
 }

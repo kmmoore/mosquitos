@@ -8,6 +8,7 @@ typedef void *(*KernelThreadMain) (void *);
 
 void scheduler_init();
 KernelThread * scheduler_create_thread(KernelThreadMain main_func, void * parameter, uint8_t priority);
-void scheduler_start_scheduling(KernelThread *initial_thread);
+void scheduler_register_thread(KernelThread *thread);
+void scheduler_start_scheduling();
 
 #endif

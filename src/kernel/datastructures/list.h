@@ -11,6 +11,11 @@ struct _list {
   struct _list_entry *tail;
 };
 
+struct _list_entry {
+  struct _list_entry *next, *prev;
+  uint64_t value;
+};
+
 // TODO: We need a way to tell the client how large a list entry is
 
 void list_init(list *l);
