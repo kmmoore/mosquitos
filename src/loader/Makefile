@@ -4,7 +4,7 @@
 include ../../Makefile.inc
 
 # Edit this line to add more source files (*.c or *.S)
-C_SRCS          := loader.c elf_parse.c fileops.c ../common/mem_util.c
+C_SRCS          := ../common/build_info.c loader.c elf_parse.c fileops.c ../common/mem_util.c
 ASM_SRCS        := 
 OBJS            := $(C_SRCS:%.c=%.o) $(ASM_SRCS:%.s=%_asm.o)
 DEPS            := $(C_SRCS:.c=.d)
@@ -12,14 +12,13 @@ DEPS            := $(C_SRCS:.c=.d)
 TARGET          := ../../build/loader.efi
 SO_FILE         := $(TARGET:%.efi=%.so)
 
-EFIINC          := /usr/include/efi
-EFIINCS         := -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
+
 LIBDIR          := /usr/lib
 EFI_CRT_OBJS    := $(LIBDIR)/crt0-efi-$(ARCH).o
 EFI_LDS         := $(LIBDIR)/elf_$(ARCH)_efi.lds
 LIBS            := -lefi -lgnuefi $(shell $(CC) -print-libgcc-file-name)
 
-CFLAGS          := $(EFIINCS) -std=gnu99 -fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Wall -Wextra -Werror
+CFLAGS          := $(CFLAGS_COMMON) -fno-stack-protector -fpic -fshort-wchar -mno-red-zone 
 ifeq ($(ARCH),x86_64)
   CFLAGS += -DEFI_FUNCTION_WRAPPER
 endif

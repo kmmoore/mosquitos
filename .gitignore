@@ -3,3 +3,4 @@ build/*
 *.o
 *.d
 *.so
+src/common/build_info.c

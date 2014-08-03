@@ -88,23 +88,27 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
 
   // Determine how much memory we need
   Elf64_Addr highest_addr_found = 0;
+  Elf64_Addr lowest_addr_found = -1;
   for (int i = 0; i < elf_hdr->e_phnum; ++i) {
-    Elf64_Addr chunk_end = program_headers[i].p_vaddr + program_headers[i].p_memsz;
-    if (chunk_end > highest_addr_found) highest_addr_found = chunk_end;
+    if (program_headers[i].p_type == PT_LOAD) {
+      Elf64_Addr chunk_end = program_headers[i].p_vaddr + program_headers[i].p_memsz;
+      if (chunk_end > highest_addr_found) highest_addr_found = chunk_end;
+      if (program_headers[i].p_vaddr < lowest_addr_found) lowest_addr_found = program_headers[i].p_vaddr;
+    }
   }
 
-  int bytes_needed = (int)(highest_addr_found - elf_hdr->e_entry);
+  int bytes_needed = (int)(highest_addr_found - lowest_addr_found);
 
   Print(L"Need %d bytes for kernel.\n", bytes_needed);
 
   // Allocate pages from which to execute kernel
   int num_pages_needed = (bytes_needed / EFI_PAGE_SIZE) + 1;
-  EFI_PHYSICAL_ADDRESS region = elf_hdr->e_entry;
+  EFI_PHYSICAL_ADDRESS region = lowest_addr_found;
 
   Print(L"Trying to allocate %d pages at 0x%x\n", num_pages_needed, region);
   status = uefi_call_wrapper(BS->AllocatePages, 4, AllocateAddress, EfiLoaderData, num_pages_needed, &region);
 
-  if (status != EFI_SUCCESS || region != elf_hdr->e_entry) {
+  if (status != EFI_SUCCESS || region != lowest_addr_found) {
     Print(L"Error allocating pages for kernel.\n");
     Print(L"status: %d, region: 0x%x, e_entry: 0x%x\n", status, region, elf_hdr->e_entry);
     return EFI_ABORTED;

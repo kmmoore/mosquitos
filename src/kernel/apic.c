@@ -16,6 +16,11 @@
  
 #define ICW4_8086 0x01    /* 8086/88 (MCS-80/85) mode */
 
+#define APIC_TIMER_LVT_IDX 0x32
+#define APIC_TIMER_DIV_IDX 0x3e
+#define APIC_TIMER_ICR_IDX 0x38
+#define APIC_TIMER_CCR_IDX 0x39
+
 typedef struct {
   ACPISDTHeader header;
   uint32_t local_controller_address;
@@ -41,6 +46,20 @@ typedef struct {
   uint32_t address;
   uint32_t irq_base;
 } __attribute__((packed)) IOAPICHeader;
+
+typedef union {
+  struct {
+    uint8_t interrupt_vector;
+    uint8_t reserved1:4;
+    uint8_t event_pending:1;
+    uint8_t reserved2:3;
+    uint16_t masked:1;
+    uint16_t mode:2;
+    uint16_t reserved3:13;
+  } svalue;
+
+  uint32_t ivalue;
+} LVT;
 
 // This gets set from an MSR
 static uint32_t *apic_base = NULL;
@@ -93,6 +112,33 @@ void ioapic_map(uint8_t irq_index, uint8_t idt_index) {
   low |= idt_index;
 
   ioapic_write(low_index, low);
+}
+
+void apic_setup_local_timer(APICTimerDivider divider, uint8_t interrupt_vector, APICTimerMode mode, uint32_t initial_count) {
+  LVT lvt;
+  lvt.ivalue = 0;
+  lvt.svalue.interrupt_vector = interrupt_vector;
+  lvt.svalue.masked = 1;
+  lvt.svalue.mode = mode;
+
+  apic_write(APIC_TIMER_LVT_IDX, lvt.ivalue);
+
+  uint32_t divider_value = apic_read(APIC_TIMER_DIV_IDX);
+  divider_value &= ~0b1011;
+  divider_value |= divider;
+  apic_write(APIC_TIMER_DIV_IDX, divider_value);
+
+  apic_write(APIC_TIMER_ICR_IDX, initial_count);
+  apic_write(APIC_TIMER_CCR_IDX, 0);
+}
+
+void apic_set_local_timer_masked(bool masked) {
+  LVT lvt;
+  lvt.ivalue = apic_read(APIC_TIMER_LVT_IDX);
+
+  lvt.svalue.masked = masked;
+
+  apic_write(APIC_TIMER_LVT_IDX, lvt.ivalue);
 }
 
 // Locates the I/O APIC with IRQ Base == 0 and 

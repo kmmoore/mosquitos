@@ -62,6 +62,9 @@ extern void isr20();
 extern void isr30();
 extern void isr33();
 extern void isr34();
+extern void isr35();
+// TODO: Figure out how to not special case this here
+extern void scheduler_timer_isr(); // We have to handle this separately
 
 // Public functions
 void interrupts_init() {
@@ -97,8 +100,10 @@ void interrupts_init() {
   set_idt_entry(30, (uint64_t)isr30, GDT_KERNEL_CS, 0b10001110);
 
   // IRQs (interrupt gates)
-  set_idt_entry(33, (uint64_t)isr33, GDT_KERNEL_CS, 0b10001110);
-  set_idt_entry(34, (uint64_t)isr34, GDT_KERNEL_CS, 0b10001110);
+  set_idt_entry(33, (uint64_t)isr33, GDT_KERNEL_CS, 0b10001110); // Keyboard
+  set_idt_entry(34, (uint64_t)isr34, GDT_KERNEL_CS, 0b10001110); // PIC timer
+  set_idt_entry(35, (uint64_t)isr35, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (calibration)
+  set_idt_entry(36, (uint64_t)scheduler_timer_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
 
   IDTR.size = sizeof(IDT) - 1;
   IDTR.address = (uint64_t)&IDT[0];

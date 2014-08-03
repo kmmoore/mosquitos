@@ -4,22 +4,19 @@
 include ../../Makefile.inc
 
 # Edit this line to add more source files (*.c or *.S)
-C_SRCS          := kernel.c text_output.c font.c keyboard_controller.c util.c apic.c ../common/mem_util.c gdt.c interrupts.c exceptions.c virtual_memory.c datastructures/list.c acpi.c timer.c
-ASM_SRCS        := gdt.s interrupts.s
+C_SRCS          := ../common/build_info.c kernel.c text_output.c font.c keyboard_controller.c util.c apic.c ../common/mem_util.c gdt.c interrupts.c exceptions.c virtual_memory.c datastructures/list.c acpi.c timer.c scheduler.c
+ASM_SRCS        := gdt.s interrupts.s scheduler.s
 OBJS            := $(C_SRCS:%.c=%.o) $(ASM_SRCS:%.s=%_asm.o)
 DEPS            := $(C_SRCS:.c=.d)
 
 TARGET          := ../../build/kernel
 
-EFIINC          := /usr/include/efi
-EFIINCS         := -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
-
 LIBDIR          := /usr/lib
 LIBS            := 
 
-CFLAGS          := $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone	-Os
+CFLAGS          := $(CFLAGS_COMMON) -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone
 ifeq ($(ARCH),x86_64)
-	CFLAGS += -DEFI_FUNCTION_WRAPPER
+	CFLAGS        += -DEFI_FUNCTION_WRAPPER
 endif
 
 LDFLAGS         := -nostdlib -static -z max-page-size=0x1000 -T kernel_link.lds
