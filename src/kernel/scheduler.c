@@ -99,7 +99,7 @@ void scheduler_set_next() {
 
   KernelThread *next = NULL;
   if (next_thread_entry) next = (KernelThread *)list_entry_value(next_thread_entry);
-    
+  
   // If we can't use the next one, pull highest priority ready thread off
   if (!next || next->priority < scheduler_data.current_thread->priority) {
     list_entry *entry = list_head(&scheduler_data.thread_list);
@@ -133,9 +133,7 @@ void scheduler_start_scheduling() {
 
 KernelThread * scheduler_create_thread(KernelThreadMain main_func, void * parameter, uint8_t priority) {
   KernelThread *new_thread = &threads[scheduler_data.next_tid]; // TODO: Make this dynamic
-
-  text_output_printf("Creating thread with tid: %d\n", scheduler_data.next_tid);
-
+  
   list_entry_set_value(&new_thread->entry, (uint64_t)new_thread); // Make list entry point to struct
 
   new_thread->tid = scheduler_data.next_tid++;
@@ -149,7 +147,6 @@ KernelThread * scheduler_create_thread(KernelThreadMain main_func, void * parame
   // Setup stack
   void *stack = vm_palloc(2);
   new_thread->rsp = (uint64_t) ((uint8_t *)stack + 4096*2);
-  text_output_printf("Thread rsp: 0x%x\n", new_thread->rsp);
   new_thread->rbp = new_thread->rsp;
 
   // Setup flags and segments
@@ -168,11 +165,17 @@ KernelThread * scheduler_create_thread(KernelThreadMain main_func, void * parame
 void scheduler_register_thread(KernelThread *thread) {
   list_entry *current = list_head(&scheduler_data.thread_list);
 
-  while (current) {
+  // Try to find a place to put the new thread
+  while (true) {
     KernelThread *t = (KernelThread *)list_entry_value(current);
     if (thread->priority >= t->priority) break;
     current = list_next(current);
   }
 
-  list_insert_before(&scheduler_data.thread_list, current, &thread->entry);
+  // If we couldn't find a place to put it, put it at the end
+  if (current) {
+    list_insert_before(&scheduler_data.thread_list, current, &thread->entry);
+  } else {
+    list_insert_after(&scheduler_data.thread_list, list_tail(&scheduler_data.thread_list), &thread->entry);
+  }
 }

@@ -41,7 +41,7 @@ void * thread2_main(void *p) {
   return NULL;
 }
 
-int kernel_main(KernelInfo info) {
+void kernel_main(KernelInfo info) {
 
   cli();
 
@@ -67,19 +67,11 @@ int kernel_main(KernelInfo info) {
   // Set up scheduler
   scheduler_init();
 
-  KernelThread *t1 = scheduler_create_thread(thread1_main, NULL, 31);
+  KernelThread *t1 = scheduler_create_thread(thread1_main, NULL, 30);
   KernelThread *t2 = scheduler_create_thread(thread2_main, NULL, 31);
   scheduler_register_thread(t1);
   scheduler_register_thread(t2);
   scheduler_start_scheduling();
-  // scheduler_schedule_next();
-  // text_output_printf("asdf");
-
-  while (1) {
-    __asm__ ("hlt"); // Prevent the kernel from returning
-  }
 
   assert(false); // We should never get here
-
-  return 123;
 }

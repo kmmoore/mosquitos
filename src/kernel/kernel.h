@@ -13,8 +13,8 @@ typedef struct {
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
 } KernelInfo;
 
-typedef int (*KernelMainFunc) (KernelInfo);
+typedef void (*KernelMainFunc) (KernelInfo);
 
-int kernel_main(KernelInfo info);
+void kernel_main(KernelInfo info);
 
 #endif // _KERNEL_H_
