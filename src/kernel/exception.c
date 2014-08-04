@@ -35,34 +35,28 @@ static void device_not_available() {
 }
 
 static void double_fault(int error_code) {
-  (void)error_code;
-  text_output_print("\nDouble Fault -- Halting!\n");
+  text_output_printf("\nDouble Fault -- Halting! Error Code: %d\n", error_code);
   __asm__ ("hlt");
 }
 
 static void invalid_tss(int error_code) {
-  (void)error_code;
-  text_output_print("\nInvalid TSS!\n");
+  text_output_printf("\nInvalid TSS!\n Error Code: %d\n", error_code);
 }
 
 static void segment_not_present(int error_code) {
-  (void)error_code;
-  text_output_print("\nSegment Not Present!\n");
+  text_output_printf("\nSegment Not Present! Error Code: %d\n", error_code);
 }
 
 static void stack_segment_fault(int error_code) {
-  (void)error_code;
-  text_output_print("\nStack Segment Fault!\n");
+  text_output_printf("\nStack Segment Fault! Error Code: %d\n", error_code);
 }
 
 static void general_protection_fault(int error_code) {
-  (void)error_code;
-  text_output_print("\nGeneral Protection Fault!\n");
+  text_output_printf("\nGeneral Protection Fault! Error Code: %d\n", error_code);
 }
 
 static void page_fault(int error_code) {
-  (void)error_code;
-  text_output_print("\nPage Fault!\n");
+  text_output_printf("\nPage Fault! Error Code: %d\n", error_code);
 }
 
 static void x87_fp_exeption() {
@@ -70,8 +64,7 @@ static void x87_fp_exeption() {
 }
 
 static void alignment_check(int error_code) {
-  (void)error_code;
-  text_output_print("\nAlignment Check!\n");
+  text_output_printf("\nAlignment Check! Error Code: %d\n", error_code);
 }
 
 static void machine_check() {

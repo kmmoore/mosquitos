@@ -7,7 +7,7 @@
 typedef struct KernelThread KernelThread;
 typedef void *(*KernelThreadMain) (void *);
 
-KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8_t priority);
+KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8_t priority, uint64_t stack_num_pages);
 
 uint32_t thread_id(KernelThread *thread);
 uint8_t thread_priority(KernelThread *thread);

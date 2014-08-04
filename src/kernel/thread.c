@@ -2,6 +2,8 @@
 #include "scheduler.h"
 #include "virtual_memory.h"
 #include "gdt.h"
+#include "kmalloc.h"
+#include "text_output.h"
 
 struct KernelThread {
   // NOTE: If the following fields are changed, scheduler.s
@@ -23,29 +25,32 @@ struct KernelThread {
   uint32_t waiting_on:8; // Number of mutexes, IOs, etc. this thread is waiting on
   uint32_t priority:5;
   uint32_t reserved:19;
+
+  uint64_t stack_num_pages;
 };
 
 static struct {
-  KernelThread threads[16]; // TODO: Make this dynamic
   uint32_t next_tid;
 } thread_data = { .next_tid = 0 };
 
-KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8_t priority) {
-  KernelThread *new_thread = &thread_data.threads[thread_data.next_tid]; // TODO: Make this dynamic
+KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8_t priority, uint64_t stack_num_pages) {
+  // Allocate large region for thread struct and stack
+  KernelThread *new_thread = vm_palloc(stack_num_pages);
+  text_output_printf("new_thread: 0x%x\n", new_thread);
 
   list_entry_set_value(&new_thread->entry, (uint64_t)new_thread); // Make list entry point to struct
 
   new_thread->tid = thread_data.next_tid++;
   new_thread->priority = priority;
   new_thread->waiting_on = 0;
+  new_thread->stack_num_pages = stack_num_pages;
 
   // Setup entry point
   new_thread->rip = (uint64_t)main_func;
   new_thread->rdi = (uint64_t)parameter;
 
-  // Setup stack
-  void *stack = vm_palloc(2);
-  new_thread->rsp = (uint64_t) ((uint8_t *)stack + 4096*2);
+  // Setup stack at end of region allocated for thread
+  new_thread->rsp = (uint64_t) ((uint8_t *)new_thread + 4096*2);
   new_thread->rbp = new_thread->rsp;
 
   // Setup flags and segments
@@ -86,5 +91,10 @@ uint64_t * thread_register_list_pointer (KernelThread *thread) {
 }
 
 void thread_exit() {
-  scheduler_remove_thread(scheduler_current_thread());
+  // TODO: cli/sti here?
+  
+  KernelThread *current_thread = scheduler_current_thread();
+  scheduler_remove_thread(current_thread);
+
+  vm_pfree(current_thread, current_thread->stack_num_pages);
 }

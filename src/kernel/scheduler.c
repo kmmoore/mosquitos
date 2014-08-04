@@ -63,7 +63,7 @@ void scheduler_init() {
   scheduler_data.current_thread = NULL;
 
   // The idle thread is the thread that runs if we have nothing else to do
-  KernelThread *idle_thread = thread_create(idle_thread_main, NULL, 0);
+  KernelThread *idle_thread = thread_create(idle_thread_main, NULL, 0, 1);
   scheduler_register_thread(idle_thread);
 
   calibrate_apic_timer();
