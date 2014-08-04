@@ -41,8 +41,6 @@ void kmalloc_init () {
   void *base_allocation_address = kmalloc_increase_allocation(kKMallocMinPageAllocation);
 
   assert(base_allocation_address != NULL);
-
-  text_output_printf("[kmalloc_init] size: %d\n", list_entry_value((list_entry *)base_allocation_address));
 } 
 
 void * kmalloc(uint64_t alloc_size) {
@@ -60,8 +58,6 @@ void * kmalloc(uint64_t alloc_size) {
 
   // If there are no available blocks, request more pages
   if (current == NULL) {
-    text_output_printf("Allocating more memory\n");
-
     // Request enough pages to satisfy our request, or at least the minimum number
     int num_pages = (alloc_size >> VM_PAGE_BIT_SIZE) > kKMallocMinPageAllocation ? 
                     (alloc_size >> VM_PAGE_BIT_SIZE) :
@@ -70,9 +66,6 @@ void * kmalloc(uint64_t alloc_size) {
     current = kmalloc_increase_allocation(num_pages);
     if (current == NULL) return NULL; // We couldn't increase our allocation
   }
-
-  text_output_printf("[kmalloc] found block of size: %d, requested: %d\n", entry_size(current), alloc_size);
-
   // Take new block off the end of the free block if free block too big
 
   list_entry *return_block;

@@ -17,6 +17,11 @@ list_entry * thread_list_entry (KernelThread *thread);
 KernelThread * thread_from_list_entry (list_entry *entry);
 uint64_t * thread_register_list_pointer (KernelThread *thread);
 
+// Functions that can be called by threads
 void thread_exit();
+void thread_sleep(uint64_t milliseconds);
+
+// Functions that should not be called by threads
+void thread_wake(KernelThread *thread);
 
 #endif

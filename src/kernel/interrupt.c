@@ -65,6 +65,7 @@ extern void isr34();
 extern void isr35();
 // TODO: Figure out how to not special case this here
 extern void scheduler_timer_isr(); // We have to handle this separately
+extern void scheduler_yield_without_saving_isr(); // We have to handle this separately
 
 // Public functions
 void interrupts_init() {
@@ -104,6 +105,7 @@ void interrupts_init() {
   set_idt_entry(34, (uint64_t)isr34, GDT_KERNEL_CS, 0b10001110); // PIC timer
   set_idt_entry(35, (uint64_t)isr35, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (calibration)
   set_idt_entry(36, (uint64_t)scheduler_timer_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
+  set_idt_entry(37, (uint64_t)scheduler_yield_without_saving_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
 
   IDTR.size = sizeof(IDT) - 1;
   IDTR.address = (uint64_t)&IDT[0];

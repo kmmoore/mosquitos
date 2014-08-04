@@ -4,6 +4,8 @@
 #include "gdt.h"
 #include "kmalloc.h"
 #include "text_output.h"
+#include "timer.h"
+#include "util.h"
 
 struct KernelThread {
   // NOTE: If the following fields are changed, scheduler.s
@@ -97,4 +99,31 @@ void thread_exit() {
   scheduler_remove_thread(current_thread);
 
   vm_pfree(current_thread, current_thread->stack_num_pages);
+
+  scheduler_yield_no_save(); 
+}
+
+void thread_sleep(uint64_t milliseconds) {
+  KernelThread *current_thread = scheduler_current_thread();
+
+  ++current_thread->waiting_on;
+
+  // TODO: The following is a race condition
+  timer_thread_sleep(current_thread, milliseconds); // TODO: Calibrate to timer frequency
+
+  if (current_thread->waiting_on == 1) {
+    scheduler_remove_thread(current_thread);
+  }
+
+  scheduler_yield(); // This doesn't return until we wake up
+}
+
+void thread_wake(KernelThread *thread) {
+  assert(thread->waiting_on > 0);
+  
+  --thread->waiting_on;
+
+  if (thread->waiting_on == 0) {
+    scheduler_register_thread(thread);
+  }
 }

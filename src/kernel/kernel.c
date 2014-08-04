@@ -11,7 +11,7 @@
 #include "virtual_memory.h"
 #include "scheduler.h"
 #include "kmalloc.h"
-
+#include "../common/mem_util.h"
 #include "util.h"
 
 #include "../common/build_info.h"
@@ -30,11 +30,9 @@ void * thread1_main(void *p UNUSED) {
   KernelThread *t2 = thread_create(thread2_main, NULL, 31, 2);
   scheduler_register_thread(t2);
 
-  // Wait for a context switch
-  for (int i = 0; i < 0xaffffff; ++i) __asm__ volatile ("nop");
+  thread_sleep(4000);
+  text_output_printf("[1] Woke up\n");
 
-  text_output_printf("[1] Back to thread 1\n");
-  text_output_printf("[1] Exiting!\n");
   thread_exit();
   return NULL;
 }

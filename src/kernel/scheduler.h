@@ -11,5 +11,6 @@ void scheduler_start_scheduling();
 
 KernelThread * scheduler_current_thread();
 void scheduler_yield();
+void scheduler_yield_no_save();
 
 #endif

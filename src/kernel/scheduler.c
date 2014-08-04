@@ -9,10 +9,11 @@
 
 #define SCHEDULER_TIMER_CALIBRATION_IV 35
 #define SCHEDULER_TIMER_IV 36
+#define SCHEDULER_YIELD_NO_SAVE_IV 37
 
 #define SCHEDULER_TIMER_CALIBRATION_PERIOD 0x08ffffff
 #define SCHEDULER_TIMER_DIVIDER APIC_DIV_2
-#define SCHEDULER_TIME_SLICE_MS 16
+#define SCHEDULER_TIME_SLICE_MS 10
 
 struct {
   KernelThread *current_thread; // This must be the first entry
@@ -139,15 +140,17 @@ KernelThread * scheduler_current_thread() {
 }
 
 void scheduler_yield() {
-  assert(false);
-  // TODO: This
+  // Yield and save the current thread
+  __asm__ ("int $" STR(SCHEDULER_TIMER_IV));
+}
+
+void scheduler_yield_no_save() {
+  // Yield without saving the current thread
+  __asm__ ("int $" STR(SCHEDULER_YIELD_NO_SAVE_IV));
 }
 
 void scheduler_remove_thread(KernelThread *thread) {
   list_entry *current_entry = thread_list_entry(thread);
 
   list_remove(&scheduler_data.thread_list, current_entry);
-
-  scheduler_set_next();
-  scheduler_load_thread(thread_register_list_pointer(scheduler_data.current_thread));
 }
