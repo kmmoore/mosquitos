@@ -18,7 +18,7 @@ MosquitOS is a tiny x86_64 UEFI-based operating system built from scratch.
 
     `sudo apt-get install gnu-efi`
     
-  2. Run `make` from the base directory.
+  2. Run `./build.sh` from the base directory.
   
   3. This will produce an EFI bootloader file (`build/loader.efi`) and a kernel file (`build/kernel`) that can be used to boot a virtual machine.
 
