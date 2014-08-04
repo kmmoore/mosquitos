@@ -9,10 +9,11 @@
 
 #define SCHEDULER_TIMER_CALIBRATION_IV 35
 #define SCHEDULER_TIMER_IV 36
+#define SCHEDULER_YIELD_NO_SAVE_IV 37
 
 #define SCHEDULER_TIMER_CALIBRATION_PERIOD 0x08ffffff
 #define SCHEDULER_TIMER_DIVIDER APIC_DIV_2
-#define SCHEDULER_TIME_SLICE_MS 16
+#define SCHEDULER_TIME_SLICE_MS 10
 
 struct {
   KernelThread *current_thread; // This must be the first entry
@@ -63,7 +64,7 @@ void scheduler_init() {
   scheduler_data.current_thread = NULL;
 
   // The idle thread is the thread that runs if we have nothing else to do
-  KernelThread *idle_thread = thread_create(idle_thread_main, NULL, 0);
+  KernelThread *idle_thread = thread_create(idle_thread_main, NULL, 0, 1);
   scheduler_register_thread(idle_thread);
 
   calibrate_apic_timer();
@@ -130,7 +131,7 @@ void scheduler_register_thread(KernelThread *thread) {
   if (current) {
     list_insert_before(&scheduler_data.thread_list, current, thread_list_entry(thread));
   } else {
-    list_insert_after(&scheduler_data.thread_list, list_tail(&scheduler_data.thread_list), thread_list_entry(thread));
+    list_push_back(&scheduler_data.thread_list, thread_list_entry(thread));
   }
 }
 
@@ -139,17 +140,17 @@ KernelThread * scheduler_current_thread() {
 }
 
 void scheduler_yield() {
-  assert(false);
-  // TODO: This
+  // Yield and save the current thread
+  __asm__ ("int $" STR(SCHEDULER_TIMER_IV));
 }
 
-void scheduler_destroy_thread(KernelThread *thread) {
+void scheduler_yield_no_save() {
+  // Yield without saving the current thread
+  __asm__ ("int $" STR(SCHEDULER_YIELD_NO_SAVE_IV));
+}
+
+void scheduler_remove_thread(KernelThread *thread) {
   list_entry *current_entry = thread_list_entry(thread);
 
   list_remove(&scheduler_data.thread_list, current_entry);
-
-  // TODO: free memory used by thread
-
-  scheduler_set_next();
-  scheduler_load_thread(thread_register_list_pointer(scheduler_data.current_thread));
 }

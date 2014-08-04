@@ -5,6 +5,7 @@
 #include "text_output.h"
 #include "util.h"
 #include "datastructures/list.h"
+#include "kmalloc.h"
 
 static struct {
   uint8_t *memory_map;
@@ -131,6 +132,8 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
   text_output_printf("Found %dMB of physical memory, %dMB free.\n", virtual_memory.physical_end / (1024*1024), virtual_memory.num_free_pages * 4 / 1024);
 
   vm_print_free_list();
+
+  kmalloc_init();
 }
 
 void * vm_palloc(uint64_t num_pages) {

@@ -6,10 +6,11 @@
 
 void scheduler_init();
 void scheduler_register_thread(KernelThread *thread);
+void scheduler_remove_thread(KernelThread *thread);
 void scheduler_start_scheduling();
 
 KernelThread * scheduler_current_thread();
 void scheduler_yield();
-void scheduler_destroy_thread(KernelThread *thread);
+void scheduler_yield_no_save();
 
 #endif

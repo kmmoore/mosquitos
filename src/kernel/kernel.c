@@ -10,38 +10,29 @@
 #include "keyboard_controller.h"
 #include "virtual_memory.h"
 #include "scheduler.h"
-
+#include "kmalloc.h"
+#include "../common/mem_util.h"
 #include "util.h"
 
 #include "../common/build_info.h"
 
-void * thread2_main(void *p) {
-  (void)p;
-  uint64_t rsp;
-  __asm__ ("mov %%rsp, %0" : "=r" (rsp));
-  text_output_printf("From thread 2! 0x%x\n", rsp);
-  for (uint64_t i = 0; i < 0xafffffff; ++i) {
-    __asm__ volatile ("nop");
-  }
+void * thread2_main(void *p UNUSED) {
+  text_output_printf("[2] Started!\n");
+  text_output_printf("[2] Exiting!\n");
   thread_exit();
-  text_output_printf("From thread 2.1! 0x%x\n", rsp);
-  while(1);
   return NULL;
 }
 
-void * thread1_main(void *p) {
-  (void)p;
-  uint64_t rsp;
-  __asm__ ("mov %%rsp, %0" : "=r" (rsp));
-  text_output_printf("From thread 1! 0x%x\n", rsp);
+void * thread1_main(void *p UNUSED) {
+  text_output_printf("[1] Started!\n");
+  text_output_printf("[1] Spawning thread 2...\n");
 
-  KernelThread *t2 = thread_create(thread2_main, NULL, 31);
+  KernelThread *t2 = thread_create(thread2_main, NULL, 31, 2);
   scheduler_register_thread(t2);
 
-  for (uint64_t i = 0; i < 0xafffffff; ++i) {
-    __asm__ volatile ("nop");
-  }
-  text_output_printf("From thread 1.1! 0x%x\n", rsp);
+  thread_sleep(4000);
+  text_output_printf("[1] Woke up\n");
+
   thread_exit();
   return NULL;
 }
@@ -72,7 +63,7 @@ void kernel_main(KernelInfo info) {
   // Set up scheduler
   scheduler_init();
 
-  KernelThread *t1 = thread_create(thread1_main, NULL, 20);
+  KernelThread *t1 = thread_create(thread1_main, NULL, 20, 2);
   scheduler_register_thread(t1);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call

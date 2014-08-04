@@ -54,9 +54,6 @@
 
 .extern scheduler_data
 
-loc0:
-  .ascii ";\0"
-
 .globl scheduler_timer_isr
 scheduler_timer_isr:
   push %rdi
@@ -76,6 +73,16 @@ scheduler_timer_isr:
   mov   (scheduler_data), %rdi # Current thread is first element of scheduler_data struct
   call  scheduler_load_thread
 
+# Yields the current thread without saving its state
+.globl scheduler_yield_without_saving_isr
+scheduler_yield_without_saving_isr:
+  call  apic_send_eoi
+
+  call  scheduler_set_next # Set current thread to next thread
+
+  # Load new thread
+  mov   (scheduler_data), %rdi # Current thread is first element of scheduler_data struct
+  call  scheduler_load_thread
 
 # This needs to be a function call because it is called from scheduler_start_scheduling()
 # NOTE: Should be called from the end of an interrupt handler
