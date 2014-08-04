@@ -54,6 +54,9 @@
 
 .extern scheduler_data
 
+loc0:
+  .ascii ";\0"
+
 .globl scheduler_timer_isr
 scheduler_timer_isr:
   push %rdi
@@ -61,6 +64,9 @@ scheduler_timer_isr:
   mov   (scheduler_data), %rdi # Current thread is first element of scheduler_data struct
   
   save_thread
+
+  # mov  loc0, %rdi
+  # call text_output_printf
 
   # NOTE: We can do whatever we want to registers now, they are all saved
 

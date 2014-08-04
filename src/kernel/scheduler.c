@@ -9,7 +9,7 @@
 #include "interrupts.h"
 
 
-struct KernelThread {
+static struct KernelThread {
   // NOTE: If the following fields are changed, scheduler.s
   // MUST be updated.
   // DO NOT ADD FIELDS BEFORE THESE ONES
@@ -42,8 +42,6 @@ struct {
   list thread_list;
   uint32_t next_tid;
   uint64_t apic_timer_frequency;
-
-  KernelThread *idle_thread;
 } scheduler_data;
 
 static volatile uint64_t calibration_end = 0;
@@ -75,8 +73,8 @@ void setup_scheduler_timer() {
   apic_set_local_timer_masked(false);
 }
 
-void * idle_thread(void *p UNUSED) {
-  while(1) __asm__("hlt");
+void * idle_thread_main(void *p UNUSED) {
+  while (1) __asm__ ("hlt");
   return NULL;
 }
 
@@ -84,7 +82,10 @@ void scheduler_init() {
   list_init(&scheduler_data.thread_list);
 
   scheduler_data.next_tid = 0;
-  scheduler_data.idle_thread = scheduler_create_thread(idle_thread, NULL, 0);
+  scheduler_data.current_thread = NULL;
+
+  KernelThread *idle_thread = scheduler_create_thread(idle_thread_main, NULL, 0);
+  scheduler_register_thread(idle_thread);
 
   calibrate_apic_timer();
 
@@ -94,11 +95,15 @@ void scheduler_init() {
 void scheduler_set_next() {
   // Attempt to use next thread in list to round-robin
   // schedule all top priority threads
-  list_entry *current_thread_entry = &scheduler_data.current_thread->entry;
-  list_entry *next_thread_entry = list_next(current_thread_entry);
 
   KernelThread *next = NULL;
-  if (next_thread_entry) next = (KernelThread *)list_entry_value(next_thread_entry);
+
+  if (scheduler_data.current_thread) {
+    list_entry *current_thread_entry = &scheduler_data.current_thread->entry;
+    list_entry *next_thread_entry = list_next(current_thread_entry);
+
+    if (next_thread_entry) next = (KernelThread *)list_entry_value(next_thread_entry);
+  }
   
   // If we can't use the next one, pull highest priority ready thread off
   if (!next || next->priority < scheduler_data.current_thread->priority) {
@@ -111,14 +116,8 @@ void scheduler_set_next() {
       entry = list_next(entry);
     }
   }
-
-  // If we found a ready thread, use it, otherwise idle
-  if (next) {
-    scheduler_data.current_thread = next;
-  } else {
-    text_output_printf(".");
-    scheduler_data.current_thread = scheduler_data.idle_thread;
-  }
+  
+  scheduler_data.current_thread = next;
 }
 
 void scheduler_load_thread(uint64_t *ss_pointer);
@@ -133,7 +132,7 @@ void scheduler_start_scheduling() {
 
 KernelThread * scheduler_create_thread(KernelThreadMain main_func, void * parameter, uint8_t priority) {
   KernelThread *new_thread = &threads[scheduler_data.next_tid]; // TODO: Make this dynamic
-  
+
   list_entry_set_value(&new_thread->entry, (uint64_t)new_thread); // Make list entry point to struct
 
   new_thread->tid = scheduler_data.next_tid++;
@@ -160,7 +159,7 @@ KernelThread * scheduler_create_thread(KernelThreadMain main_func, void * parame
   new_thread->r13 = new_thread->r14 = new_thread->r15 = 0;
 
   return new_thread;
-}
+} 
 
 void scheduler_register_thread(KernelThread *thread) {
   list_entry *current = list_head(&scheduler_data.thread_list);

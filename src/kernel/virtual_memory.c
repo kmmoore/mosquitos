@@ -75,8 +75,9 @@ static void setup_free_memory() {
     EFI_MEMORY_TYPE type = descriptor->Type;
     if (type == EfiLoaderCode || type == EfiBootServicesCode ||
         type == EfiBootServicesData || type == EfiConventionalMemory) { // Types of free memory after boot services are exited
-      if (descriptor->PhysicalStart == 0) {
-        descriptor->PhysicalStart = EFI_PAGE_SIZE; // Don't add the zero page to the free list
+      if (descriptor->PhysicalStart < 0x100000) {
+        continue; // Low memory is not actually available
+        // TODO: Fix this, some of this memory (i.e., page 1) is used for things that we don't know about
       }
       add_to_free_list(descriptor->PhysicalStart, descriptor->NumberOfPages);
       virtual_memory.num_free_pages += descriptor->NumberOfPages;
