@@ -11,49 +11,72 @@ static struct {
   list free_list;
 } kmalloc_data;
 
-static inline uint64_t entry_size(list_entry *entry) {
-  return list_entry_value(entry);
+typedef struct {
+  list_entry entry; // Must be the first entry
+  uint64_t size:63;
+  uint64_t free:1;
+} FreeBlock;
+
+static void add_to_free_list(FreeBlock *block) {
+  block->free = 1;
+
+  FreeBlock *prev = (FreeBlock *)list_prev(&block->entry);
+
+  // TODO: Coalesce forward too
+  if (prev && prev->free) {
+    if ((uint64_t)prev + prev->size == (uint64_t)block) { 
+      prev->size += block->size;
+    } else {
+      list_insert_after(&kmalloc_data.free_list, &prev->entry, &block->entry);
+    }
+  } else {
+    list_push_front(&kmalloc_data.free_list, &block->entry);
+  }
 }
 
-static inline void entry_set_size(list_entry *entry, uint64_t size) {
-  list_entry_set_value(entry, size);
-}
+static FreeBlock * kmalloc_increase_allocation (int num_pages) {
+  FreeBlock *new_block = vm_palloc(num_pages);
 
-static void * kmalloc_increase_allocation (int num_pages) {
-  // EFI_STATUS status = uefi_call_wrapper(BS->AllocatePages, 4, AllocateAnyPages, EfiLoaderData, num_pages, allocation_address);
-  void *allocation_address = vm_palloc(num_pages);
-
-  if (allocation_address) {
+  if (new_block) {
     // Put the new block on the start of the free list
-    list_entry *block_entry = (list_entry *)allocation_address;
-    list_entry_set_value(block_entry, num_pages * VM_PAGE_SIZE);
+    new_block->size = num_pages * VM_PAGE_SIZE;
 
-    list_push_front(&kmalloc_data.free_list, block_entry);
+    add_to_free_list(new_block);
   }
 
-  return allocation_address;
+  return new_block;
+}
+
+void kmalloc_print_free_list() {
+  FreeBlock *current = (FreeBlock *)list_head(&kmalloc_data.free_list);
+  text_output_printf("kmalloc() free list:\n");
+  while (current) {
+    text_output_printf("  0x%x, free: %d, size: %d\n", current, current->free, current->size);
+
+    current = (FreeBlock *)list_next(&current->entry);
+  }
 }
 
 void kmalloc_init () {
   list_init(&kmalloc_data.free_list);
 
-  // Request some pages from the firmware
-  void *base_allocation_address = kmalloc_increase_allocation(kKMallocMinPageAllocation);
+  // Request some pages from the page allocator
+  FreeBlock *initial_block = kmalloc_increase_allocation(kKMallocMinPageAllocation);
 
-  assert(base_allocation_address != NULL);
+  assert(initial_block != NULL);
 } 
 
 void * kmalloc(uint64_t alloc_size) {
 
-  alloc_size += sizeof(list_entry); // We need space for our header
+  alloc_size += sizeof(FreeBlock); // We need space for our header
   alloc_size = ((alloc_size - 1) | 0xf) + 1; // Round up `size` to the nearest multiple of 16 bytes
 
   // Find the first block that will fit the request
-  list_entry *current = list_head(&kmalloc_data.free_list);
+  FreeBlock *current = (FreeBlock *)list_head(&kmalloc_data.free_list);
   while (current) {
-    if (entry_size(current) >= alloc_size) break;
+    if (current->size >= alloc_size) break;
 
-    current = current->next;
+    current = (FreeBlock *)list_next(&current->entry);
   }
 
   // If there are no available blocks, request more pages
@@ -68,20 +91,25 @@ void * kmalloc(uint64_t alloc_size) {
   }
   // Take new block off the end of the free block if free block too big
 
-  list_entry *return_block;
-  uint64_t chosen_block_size = entry_size(current);
+  FreeBlock *return_block;
 
-  if (chosen_block_size > alloc_size) {
+  if (current->size > alloc_size) {
     // Pull block off end
-    entry_set_size(current, chosen_block_size - alloc_size);
-    return_block = (list_entry *)((uint8_t *)current + sizeof(list_entry) + chosen_block_size - alloc_size);
-    entry_set_size(return_block, alloc_size);
+    current->size -= alloc_size;
+    return_block = (FreeBlock *)((uint8_t *)current + current->size);
+    return_block->size = alloc_size;
+
+    // TODO: Figure out a better way to do this
+    list_insert_after(&kmalloc_data.free_list, &current->entry, &return_block->entry);
+    list_remove(&kmalloc_data.free_list, &return_block->entry);
   } else {
     // Remove `current` from free-list entirely
-    list_remove(&kmalloc_data.free_list, current);
+    list_remove(&kmalloc_data.free_list, &current->entry);
 
     return_block = current;
   }
+
+  return_block->free = 0;
 
   return &return_block[1]; // Return address of data after header
 }
@@ -89,10 +117,7 @@ void * kmalloc(uint64_t alloc_size) {
 void kfree(void *addr) {
 
   // Use pointer arithmatic to get to the start of the block
-  list_entry *block = (list_entry *)((uint8_t *)addr - sizeof(list_entry));
+  FreeBlock *block = (FreeBlock *)((uint8_t *)addr - sizeof(FreeBlock));
 
-  // Put the block back on the front of the free list
-  // TODO: Sort the free list by size?
-  // TODO: Coalesce adjacent free blocks
-  list_push_front(&kmalloc_data.free_list, block);
+  add_to_free_list(block);
 }

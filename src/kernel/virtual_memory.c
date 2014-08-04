@@ -16,7 +16,7 @@ static struct {
   uint64_t num_free_pages;
   list free_list;
 
-} virtual_memory;
+} virtual_memory_data;
 
 typedef struct {
   list_entry entry;
@@ -52,7 +52,7 @@ static void add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
   // TODO: Figure out if there is a way to directly access physical memory/if this is necessary
 
   // Search to determine where this block should be inserted
-  FreeBlock *current = (FreeBlock *)list_head(&virtual_memory.free_list);
+  FreeBlock *current = (FreeBlock *)list_head(&virtual_memory_data.free_list);
   while (current) {
     if (physical_address <= physical_end(current)) break;
 
@@ -68,10 +68,10 @@ static void add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
     new_block->num_pages = num_pages;
 
     if (current) {
-      list_insert_before(&virtual_memory.free_list, &current->entry, &new_block->entry);
+      list_insert_before(&virtual_memory_data.free_list, &current->entry, &new_block->entry);
     } else {
       // We couldn't find a block to insert this before
-      list_push_back(&virtual_memory.free_list, &new_block->entry);
+      list_push_back(&virtual_memory_data.free_list, &new_block->entry);
     }
 
     current = new_block;
@@ -80,16 +80,16 @@ static void add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
   // Coalesce if possible (current is now the block we created/added to)
   FreeBlock *next_block = (FreeBlock *)list_next(&current->entry);
   if (next_block && physical_end(current) == physical_start(next_block)) {
-    list_remove(&virtual_memory.free_list, &next_block->entry);
+    list_remove(&virtual_memory_data.free_list, &next_block->entry);
     current->num_pages += next_block->num_pages;
   }
 }
 
 static void setup_free_memory() {
-  int num_entries = virtual_memory.mem_map_size / virtual_memory.mem_map_descriptor_size;
+  int num_entries = virtual_memory_data.mem_map_size / virtual_memory_data.mem_map_descriptor_size;
 
   for (int i = 0; i < num_entries; ++i) {
-    EFI_MEMORY_DESCRIPTOR *descriptor = (EFI_MEMORY_DESCRIPTOR *)(virtual_memory.memory_map + i * virtual_memory.mem_map_descriptor_size);
+    EFI_MEMORY_DESCRIPTOR *descriptor = (EFI_MEMORY_DESCRIPTOR *)(virtual_memory_data.memory_map + i * virtual_memory_data.mem_map_descriptor_size);
 
     uint64_t physical_end = descriptor->PhysicalStart + descriptor->NumberOfPages * EFI_PAGE_SIZE;
 
@@ -102,18 +102,18 @@ static void setup_free_memory() {
         // TODO: Fix this, some of this memory (i.e., page 1) is used for things that we don't know about
       }
       add_to_free_list(descriptor->PhysicalStart, descriptor->NumberOfPages);
-      virtual_memory.num_free_pages += descriptor->NumberOfPages;
+      virtual_memory_data.num_free_pages += descriptor->NumberOfPages;
     }
 
     // Keep track of the highest physical address we've seen so far
-    if (physical_end > virtual_memory.physical_end) virtual_memory.physical_end = physical_end;
+    if (physical_end > virtual_memory_data.physical_end) virtual_memory_data.physical_end = physical_end;
   }
 }
 
 void vm_print_free_list() {
   text_output_printf("VM free list:\n");
 
-  FreeBlock *current = (FreeBlock *)list_head(&virtual_memory.free_list);
+  FreeBlock *current = (FreeBlock *)list_head(&virtual_memory_data.free_list);
   while (current) {
     text_output_printf("  Address: 0x%x, num_pages: %d\n", current, current->num_pages);
     current = (FreeBlock *)list_next(&current->entry);
@@ -137,19 +137,19 @@ uint64_t vm_read_cr3() {
 
 void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descriptor_size) {
 
-  virtual_memory.memory_map = memory_map;
-  virtual_memory.mem_map_size = mem_map_size;
-  virtual_memory.mem_map_descriptor_size = mem_map_descriptor_size;
+  virtual_memory_data.memory_map = memory_map;
+  virtual_memory_data.mem_map_size = mem_map_size;
+  virtual_memory_data.mem_map_descriptor_size = mem_map_descriptor_size;
 
-  virtual_memory.physical_end = 0;
-  virtual_memory.num_free_pages = 0;
-  list_init(&virtual_memory.free_list);
+  virtual_memory_data.physical_end = 0;
+  virtual_memory_data.num_free_pages = 0;
+  list_init(&virtual_memory_data.free_list);
 
   text_output_printf("Determining free memory...");
   setup_free_memory();
   text_output_printf("Done\n");
 
-  text_output_printf("Found %dMB of physical memory, %dMB free.\n", virtual_memory.physical_end / (1024*1024), virtual_memory.num_free_pages * 4 / 1024);
+  text_output_printf("Found %dMB of physical memory, %dMB free.\n", virtual_memory_data.physical_end / (1024*1024), virtual_memory_data.num_free_pages * 4 / 1024);
 
   vm_print_free_list();
 
@@ -157,7 +157,7 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
 }
 
 void * vm_palloc(uint64_t num_pages) {
-  FreeBlock *chunk = (FreeBlock *)list_head(&virtual_memory.free_list);
+  FreeBlock *chunk = (FreeBlock *)list_head(&virtual_memory_data.free_list);
 
   while (chunk) {
     if (chunk->num_pages >= num_pages) break;
@@ -171,7 +171,7 @@ void * vm_palloc(uint64_t num_pages) {
   void *last_pages = ((uint8_t *)chunk) + (chunk->num_pages - num_pages) * VM_PAGE_SIZE;
 
   if (chunk->num_pages == num_pages) {
-    list_remove(&virtual_memory.free_list, &chunk->entry);
+    list_remove(&virtual_memory_data.free_list, &chunk->entry);
   } else {
     chunk->num_pages -= num_pages;
   }
