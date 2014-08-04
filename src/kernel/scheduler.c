@@ -2,34 +2,10 @@
 #include "text_output.h"
 #include "datastructures/list.h"
 #include "util.h"
-#include "virtual_memory.h"
-#include "gdt.h"
 #include "apic.h"
 #include "timer.h"
-#include "interrupts.h"
-
-
-static struct KernelThread {
-  // NOTE: If the following fields are changed, scheduler.s
-  // MUST be updated.
-  // DO NOT ADD FIELDS BEFORE THESE ONES
-
-  // Registers popped off by iret
-  uint64_t ss, rsp, rflags, cs, rip;
-
-  // Other registers
-  uint64_t rax, rbx, rcx, rdx, rsi, rdi, rbp;
-  uint64_t r8, r9, r10, r11, r12, r13, r14, r15;
-  uint64_t ds, es, fs, gs;
-
-  // These fields can be modified at will
-
-  list_entry entry;
-  uint32_t tid;
-  uint32_t can_run:1;
-  uint32_t priority:5;
-  uint32_t reserved:26;
-} threads[16]; // TODO: Make this dynamic
+#include "interrupt.h"
+#include "thread.h"
 
 #define SCHEDULER_TIMER_CALIBRATION_IV 35
 #define SCHEDULER_TIMER_IV 36
@@ -41,8 +17,7 @@ static struct KernelThread {
 struct {
   KernelThread *current_thread; // This must be the first entry
 
-  list thread_list;
-  uint32_t next_tid;
+  list thread_list; // Sorted list (by priority) used as a priority queue
   uint64_t apic_timer_frequency;
 } scheduler_data;
 
@@ -53,6 +28,7 @@ static void apic_timer_calibration_isr() {
 }
 
 static void calibrate_apic_timer() {
+  // Setup a one-shot timer
   apic_setup_local_timer(SCHEDULER_TIMER_DIVIDER, SCHEDULER_TIMER_CALIBRATION_IV, APIC_TIMER_ONE_SHOT, SCHEDULER_TIMER_CALIBRATION_PERIOD);
   interrupts_register_handler(SCHEDULER_TIMER_CALIBRATION_IV, apic_timer_calibration_isr);
 
@@ -64,6 +40,7 @@ static void calibrate_apic_timer() {
   // Spin until we get the APIC timer interrupt
   while(calibration_end == 0);
 
+  // Determine APIC frequency pased on number of PIC ticks that happened
   scheduler_data.apic_timer_frequency = (uint64_t)SCHEDULER_TIMER_CALIBRATION_PERIOD * TIMER_FREQUENCY / (calibration_end - calibration_start);
 
   text_output_printf("Done - frequency: %dHz\n", scheduler_data.apic_timer_frequency);
@@ -83,10 +60,10 @@ void * idle_thread_main(void *p UNUSED) {
 void scheduler_init() {
   list_init(&scheduler_data.thread_list);
 
-  scheduler_data.next_tid = 0;
   scheduler_data.current_thread = NULL;
 
-  KernelThread *idle_thread = scheduler_create_thread(idle_thread_main, NULL, 0);
+  // The idle thread is the thread that runs if we have nothing else to do
+  KernelThread *idle_thread = thread_create(idle_thread_main, NULL, 0);
   scheduler_register_thread(idle_thread);
 
   calibrate_apic_timer();
@@ -100,28 +77,31 @@ void scheduler_set_next() {
 
   KernelThread *next = NULL;
   list_entry *first_thread_entry = list_head(&scheduler_data.thread_list);
-  KernelThread *first_thread = (KernelThread *)list_entry_value(first_thread_entry);
+  KernelThread *first_thread = thread_from_list_entry(first_thread_entry);
 
   // Schedule the next thread in line if there isn't a higher priority thread waiting
-  if (scheduler_data.current_thread && scheduler_data.current_thread->priority >= first_thread->priority) {
-    list_entry *current_thread_entry = &scheduler_data.current_thread->entry;
+  if (scheduler_data.current_thread &&
+      thread_priority(scheduler_data.current_thread) >= thread_priority(first_thread)) {
+
+    list_entry *current_thread_entry = thread_list_entry(scheduler_data.current_thread);
     list_entry *next_thread_entry = list_next(current_thread_entry);
 
-    if (next_thread_entry) next = (KernelThread *)list_entry_value(next_thread_entry);
+    if (next_thread_entry) next = thread_from_list_entry(next_thread_entry);
   }
   
   // If we can't use the next one, pull highest priority ready thread off
-  if (!next || next->priority < scheduler_data.current_thread->priority) {
+  if (!next || thread_priority(next) < thread_priority(scheduler_data.current_thread)) {
     list_entry *entry = list_head(&scheduler_data.thread_list);
 
     while (entry) {
-      next = (KernelThread *)list_entry_value(entry);
-      if (next->can_run) break;
+      next = thread_from_list_entry(entry);
+      if (thread_can_run(next)) break;
 
       entry = list_next(entry);
     }
   }
-  
+
+  // Set the next thread
   scheduler_data.current_thread = next;
 }
 
@@ -132,65 +112,44 @@ void scheduler_start_scheduling() {
   setup_scheduler_timer();
   // TODO: There is a race condition between these lines, but it shouldn't be an issue
   // because the thread loading should happen so much faster than the first clock tick
-  scheduler_load_thread(&scheduler_data.current_thread->ss);
+  scheduler_load_thread(thread_register_list_pointer(scheduler_data.current_thread));
 }
 
-KernelThread * scheduler_create_thread(KernelThreadMain main_func, void * parameter, uint8_t priority) {
-  KernelThread *new_thread = &threads[scheduler_data.next_tid]; // TODO: Make this dynamic
-
-  list_entry_set_value(&new_thread->entry, (uint64_t)new_thread); // Make list entry point to struct
-
-  new_thread->tid = scheduler_data.next_tid++;
-  new_thread->priority = priority;
-  new_thread->can_run = true;
-
-  // Setup entry point
-  new_thread->rip = (uint64_t)main_func;
-  new_thread->rdi = (uint64_t)parameter;
-
-  // Setup stack
-  void *stack = vm_palloc(2);
-  new_thread->rsp = (uint64_t) ((uint8_t *)stack + 4096*2);
-  new_thread->rbp = new_thread->rsp;
-
-  // Setup flags and segments
-  new_thread->cs = GDT_KERNEL_CS;
-  new_thread->ss = new_thread->ds = new_thread->es = new_thread->fs = new_thread->gs = GDT_KERNEL_DS;
-  new_thread->rflags = 0x202;
-
-  // Setup general purpose registers
-  new_thread->rax = new_thread->rbx = new_thread->rcx = new_thread->rdx = new_thread->rsi = new_thread->rdi = 0;
-  new_thread->r8 = new_thread->r9 = new_thread->r10 = new_thread->r11 = new_thread->r12 = 0;
-  new_thread->r13 = new_thread->r14 = new_thread->r15 = 0;
-
-  return new_thread;
-} 
-
 void scheduler_register_thread(KernelThread *thread) {
+  // Put the new thread in the priority queue
   list_entry *current = list_head(&scheduler_data.thread_list);
 
   // Try to find a place to put the new thread
   while (true) {
-    KernelThread *t = (KernelThread *)list_entry_value(current);
-    if (thread->priority >= t->priority) break;
+    KernelThread *t = thread_from_list_entry(current);
+    if (thread_priority(thread) >= thread_priority(t)) break;
     current = list_next(current);
   }
 
   // If we couldn't find a place to put it, put it at the end
   if (current) {
-    list_insert_before(&scheduler_data.thread_list, current, &thread->entry);
+    list_insert_before(&scheduler_data.thread_list, current, thread_list_entry(thread));
   } else {
-    list_insert_after(&scheduler_data.thread_list, list_tail(&scheduler_data.thread_list), &thread->entry);
+    list_insert_after(&scheduler_data.thread_list, list_tail(&scheduler_data.thread_list), thread_list_entry(thread));
   }
 }
 
-void scheduler_thread_exit() {
-  list_entry *current_entry = &scheduler_data.current_thread->entry;
+KernelThread * scheduler_current_thread() {
+  return scheduler_data.current_thread;
+}
+
+void scheduler_yield() {
+  assert(false);
+  // TODO: This
+}
+
+void scheduler_destroy_thread(KernelThread *thread) {
+  list_entry *current_entry = thread_list_entry(thread);
 
   list_remove(&scheduler_data.thread_list, current_entry);
 
   // TODO: free memory used by thread
 
   scheduler_set_next();
-  scheduler_load_thread(&scheduler_data.current_thread->ss);
+  scheduler_load_thread(thread_register_list_pointer(scheduler_data.current_thread));
 }

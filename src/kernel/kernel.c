@@ -4,8 +4,8 @@
 #include "kernel.h"
 #include "text_output.h"
 #include "acpi.h"
-#include "interrupts.h"
-#include "exceptions.h"
+#include "interrupt.h"
+#include "exception.h"
 #include "timer.h"
 #include "keyboard_controller.h"
 #include "virtual_memory.h"
@@ -23,7 +23,7 @@ void * thread2_main(void *p) {
   for (uint64_t i = 0; i < 0xafffffff; ++i) {
     __asm__ volatile ("nop");
   }
-  scheduler_thread_exit();
+  thread_exit();
   text_output_printf("From thread 2.1! 0x%x\n", rsp);
   while(1);
   return NULL;
@@ -34,13 +34,15 @@ void * thread1_main(void *p) {
   uint64_t rsp;
   __asm__ ("mov %%rsp, %0" : "=r" (rsp));
   text_output_printf("From thread 1! 0x%x\n", rsp);
-  KernelThread *t2 = scheduler_create_thread(thread2_main, NULL, 31);
+
+  KernelThread *t2 = thread_create(thread2_main, NULL, 31);
   scheduler_register_thread(t2);
+
   for (uint64_t i = 0; i < 0xafffffff; ++i) {
     __asm__ volatile ("nop");
   }
   text_output_printf("From thread 1.1! 0x%x\n", rsp);
-  while(1);
+  thread_exit();
   return NULL;
 }
 
@@ -70,7 +72,7 @@ void kernel_main(KernelInfo info) {
   // Set up scheduler
   scheduler_init();
 
-  KernelThread *t1 = scheduler_create_thread(thread1_main, NULL, 20);
+  KernelThread *t1 = thread_create(thread1_main, NULL, 20);
   scheduler_register_thread(t1);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call

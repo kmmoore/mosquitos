@@ -1,4 +1,4 @@
-#include "interrupts.h"
+#include "interrupt.h"
 #include "gdt.h"
 #include "apic.h"
 #include "text_output.h"

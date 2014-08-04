@@ -2,7 +2,7 @@
 #include "text_output.h"
 #include "util.h"
 #include "apic.h"
-#include "interrupts.h"
+#include "interrupt.h"
 
 #define KEYBOARD_IRQ 1
 #define KEYBOARD_IV 0x21

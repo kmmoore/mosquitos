@@ -1,6 +1,6 @@
-#include "exceptions.h"
+#include "exception.h"
 #include "text_output.h"
-#include "interrupts.h"
+#include "interrupt.h"
 
 static void div_by_zero() {
   text_output_print("\nDivision by Zero!\n");

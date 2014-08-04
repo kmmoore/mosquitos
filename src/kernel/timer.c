@@ -1,7 +1,7 @@
 #include "timer.h"
 #include "text_output.h"
 #include "apic.h"
-#include "interrupts.h"
+#include "interrupt.h"
 #include "util.h"
 
 #define TIMER_IRQ 2
