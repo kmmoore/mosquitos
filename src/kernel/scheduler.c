@@ -22,6 +22,8 @@ static struct KernelThread {
   uint64_t r8, r9, r10, r11, r12, r13, r14, r15;
   uint64_t ds, es, fs, gs;
 
+  // These fields can be modified at will
+
   list_entry entry;
   uint32_t tid;
   uint32_t can_run:1;
@@ -180,4 +182,15 @@ void scheduler_register_thread(KernelThread *thread) {
   } else {
     list_insert_after(&scheduler_data.thread_list, list_tail(&scheduler_data.thread_list), &thread->entry);
   }
+}
+
+void scheduler_thread_exit() {
+  list_entry *current_entry = &scheduler_data.current_thread->entry;
+
+  list_remove(&scheduler_data.thread_list, current_entry);
+
+  // TODO: free memory used by thread
+
+  scheduler_set_next();
+  scheduler_load_thread(&scheduler_data.current_thread->ss);
 }

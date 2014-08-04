@@ -23,6 +23,7 @@ void * thread2_main(void *p) {
   for (uint64_t i = 0; i < 0xafffffff; ++i) {
     __asm__ volatile ("nop");
   }
+  scheduler_thread_exit();
   text_output_printf("From thread 2.1! 0x%x\n", rsp);
   while(1);
   return NULL;
