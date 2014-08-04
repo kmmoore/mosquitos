@@ -30,7 +30,7 @@ void * thread1_main(void *p UNUSED) {
   KernelThread *t2 = thread_create(thread2_main, NULL, 31, 2);
   scheduler_register_thread(t2);
 
-  thread_sleep(4000);
+  thread_sleep(1000);
   text_output_printf("[1] Woke up\n");
 
   thread_exit();
