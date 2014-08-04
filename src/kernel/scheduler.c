@@ -97,8 +97,11 @@ void scheduler_set_next() {
   // schedule all top priority threads
 
   KernelThread *next = NULL;
+  list_entry *first_thread_entry = list_head(&scheduler_data.thread_list);
+  KernelThread *first_thread = (KernelThread *)list_entry_value(first_thread_entry);
 
-  if (scheduler_data.current_thread) {
+  // Schedule the next thread in line if there isn't a higher priority thread waiting
+  if (scheduler_data.current_thread && scheduler_data.current_thread->priority >= first_thread->priority) {
     list_entry *current_thread_entry = &scheduler_data.current_thread->entry;
     list_entry *next_thread_entry = list_next(current_thread_entry);
 

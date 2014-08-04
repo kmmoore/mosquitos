@@ -65,10 +65,8 @@ scheduler_timer_isr:
   
   save_thread
 
-  # mov  loc0, %rdi
-  # call text_output_printf
-
   # NOTE: We can do whatever we want to registers now, they are all saved
+  # NOTE 2: Theoretically this is true, but annecdotally it is false
 
   call  apic_send_eoi
 
