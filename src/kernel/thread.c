@@ -93,13 +93,15 @@ uint64_t * thread_register_list_pointer (KernelThread *thread) {
 }
 
 void thread_exit() {
-  // TODO: cli/sti here?
-  
   KernelThread *current_thread = scheduler_current_thread();
+
+  cli();
   scheduler_remove_thread(current_thread);
 
   vm_pfree(current_thread, current_thread->stack_num_pages);
+  sti();
 
+  // TODO: There is a race if the scheduler comes in right now
   scheduler_yield_no_save(); 
 }
 
@@ -108,19 +110,22 @@ void thread_sleep(uint64_t milliseconds) {
 
   ++current_thread->waiting_on;
 
-  // TODO: The following is a race condition
-  timer_thread_sleep(current_thread, milliseconds); // TODO: Calibrate to timer frequency
+  uint64_t num_ticks = milliseconds * 1000 / TIMER_FREQUENCY;
+
+  cli();
+  timer_thread_sleep(current_thread, num_ticks);
 
   if (current_thread->waiting_on == 1) {
     scheduler_remove_thread(current_thread);
   }
+  sti();
 
   scheduler_yield(); // This doesn't return until we wake up
 }
 
 void thread_wake(KernelThread *thread) {
   assert(thread->waiting_on > 0);
-  
+
   --thread->waiting_on;
 
   if (thread->waiting_on == 0) {

@@ -65,12 +65,12 @@ void timer_init() {
 }
 
 void timer_thread_sleep(KernelThread *thread, uint64_t ticks) {
+  // NOTE: This function must be called with interrupts disabled
+  
   struct waiting_thread *new_entry = kmalloc(sizeof(struct waiting_thread));
 
   new_entry->thread = thread;
   new_entry->wake_time = timer_data.ticks + ticks;
 
-  cli();
   list_push_front(&timer_data.waiting_threads, &new_entry->entry);
-  sti();
 }
