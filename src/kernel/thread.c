@@ -20,9 +20,9 @@ struct KernelThread {
 
   list_entry entry;
   uint32_t tid;
-  uint32_t can_run:1;
+  uint32_t waiting_on:8; // Number of mutexes, IOs, etc. this thread is waiting on
   uint32_t priority:5;
-  uint32_t reserved:26;
+  uint32_t reserved:19;
 };
 
 static struct {
@@ -37,7 +37,7 @@ KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8
 
   new_thread->tid = thread_data.next_tid++;
   new_thread->priority = priority;
-  new_thread->can_run = true;
+  new_thread->waiting_on = 0;
 
   // Setup entry point
   new_thread->rip = (uint64_t)main_func;
@@ -70,7 +70,7 @@ uint8_t thread_priority(KernelThread *thread) {
 }
 
 bool thread_can_run(KernelThread *thread) {
-  return thread->can_run;
+  return thread->waiting_on == 0;
 }
 
 list_entry * thread_list_entry (KernelThread *thread) {
@@ -78,7 +78,7 @@ list_entry * thread_list_entry (KernelThread *thread) {
 }
 
 KernelThread * thread_from_list_entry (list_entry *entry) {
-  return (KernelThread *)list_entry_value(entry);
+  return list_entry_cast(entry, KernelThread *);
 }
 
 uint64_t * thread_register_list_pointer (KernelThread *thread) {
@@ -86,5 +86,5 @@ uint64_t * thread_register_list_pointer (KernelThread *thread) {
 }
 
 void thread_exit() {
-  scheduler_destroy_thread(scheduler_current_thread());
+  scheduler_remove_thread(scheduler_current_thread());
 }

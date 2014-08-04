@@ -30,6 +30,14 @@ list_entry *list_prev(list_entry *entry) {
   return entry->prev;
 }
 
+void list_push_front(list *l, list_entry *new) {
+  list_insert_before(l, list_head(l), new);
+}
+
+void list_push_back(list *l, list_entry *new) {
+  list_insert_after(l, list_tail(l), new);
+}
+
 void list_insert_before(list *l, list_entry *before, list_entry *new) {
   if (before == NULL) {
     l->head = new;

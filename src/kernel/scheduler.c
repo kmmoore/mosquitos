@@ -130,7 +130,7 @@ void scheduler_register_thread(KernelThread *thread) {
   if (current) {
     list_insert_before(&scheduler_data.thread_list, current, thread_list_entry(thread));
   } else {
-    list_insert_after(&scheduler_data.thread_list, list_tail(&scheduler_data.thread_list), thread_list_entry(thread));
+    list_push_back(&scheduler_data.thread_list, thread_list_entry(thread));
   }
 }
 
@@ -143,12 +143,10 @@ void scheduler_yield() {
   // TODO: This
 }
 
-void scheduler_destroy_thread(KernelThread *thread) {
+void scheduler_remove_thread(KernelThread *thread) {
   list_entry *current_entry = thread_list_entry(thread);
 
   list_remove(&scheduler_data.thread_list, current_entry);
-
-  // TODO: free memory used by thread
 
   scheduler_set_next();
   scheduler_load_thread(thread_register_list_pointer(scheduler_data.current_thread));
