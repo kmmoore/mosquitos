@@ -40,6 +40,7 @@ void list_push_back(list *l, list_entry *new) {
 
 void list_insert_before(list *l, list_entry *before, list_entry *new) {
   if (before == NULL) {
+    new->prev = new->next = NULL;
     l->head = new;
     l->tail = new;
     return;
@@ -60,6 +61,7 @@ void list_insert_before(list *l, list_entry *before, list_entry *new) {
 
 void list_insert_after(list *l, list_entry *after, list_entry *new) {
   if (after == NULL) {
+    new->prev = new->next = NULL;
     l->head = new;
     l->tail = new;
     return;
