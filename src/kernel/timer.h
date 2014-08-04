@@ -10,6 +10,6 @@
 void timer_init();
 uint64_t timer_ticks();
 
-void timer_thread_sleep(KernelThread *thread, uint64_t ticks);
+void timer_thread_sleep(uint64_t milliseconds);
 
 #endif

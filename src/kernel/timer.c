@@ -5,6 +5,7 @@
 #include "util.h"
 #include "datastructures/list.h"
 #include "kmalloc.h"
+#include "scheduler.h"
 
 #define TIMER_IRQ 2
 #define TIMER_IV 0x22
@@ -64,13 +65,24 @@ void timer_init() {
   text_output_printf("Done\n");
 }
 
-void timer_thread_sleep(KernelThread *thread, uint64_t ticks) {
-  // NOTE: This function must be called with interrupts disabled
-  
+void timer_thread_sleep(uint64_t milliseconds) {
+  KernelThread *thread = scheduler_current_thread();
+
   struct waiting_thread *new_entry = kmalloc(sizeof(struct waiting_thread));
 
   new_entry->thread = thread;
+
+  uint64_t ticks = milliseconds * 1000 / TIMER_FREQUENCY;
   new_entry->wake_time = timer_data.ticks + ticks;
 
+  cli();
+
   list_push_front(&timer_data.waiting_threads, &new_entry->entry);
+
+  // This won't return until the thread wakes up
+  // NOTE: Interrupts will be disabled when it returns
+  thread_sleep(thread);
+
+  sti();
+
 }

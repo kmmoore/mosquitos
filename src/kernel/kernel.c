@@ -14,24 +14,31 @@
 #include "../common/mem_util.h"
 #include "util.h"
 
+#include "mutex/semaphore.h"
+
 #include "../common/build_info.h"
 
-void * thread2_main(void *p UNUSED) {
+void * thread2_main(void *p) {
   text_output_printf("[2] Started!\n");
+  Semaphore *sema = (Semaphore *)p;
+  semaphore_down(sema);
+  text_output_printf("[2] Sema value: %d\n", semaphore_value(sema));
   text_output_printf("[2] Exiting!\n");
   thread_exit();
   return NULL;
 }
 
-void * thread1_main(void *p UNUSED) {
+void * thread1_main(void *p) {
+  Semaphore *sema = (Semaphore *)p;
   text_output_printf("[1] Started!\n");
   text_output_printf("[1] Spawning thread 2...\n");
 
   KernelThread *t2 = thread_create(thread2_main, NULL, 31, 2);
   scheduler_register_thread(t2);
 
-  thread_sleep(1000);
+  timer_thread_sleep(1000);
   text_output_printf("[1] Woke up\n");
+  semaphore_up(sema);
 
   thread_exit();
   return NULL;
@@ -63,7 +70,10 @@ void kernel_main(KernelInfo info) {
   // Set up scheduler
   scheduler_init();
 
-  KernelThread *t1 = thread_create(thread1_main, NULL, 20, 2);
+  Semaphore sema;
+  semaphore_init(&sema);
+
+  KernelThread *t1 = thread_create(thread1_main, &sema, 31, 2);
   scheduler_register_thread(t1);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call

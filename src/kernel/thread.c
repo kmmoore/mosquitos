@@ -105,25 +105,23 @@ void thread_exit() {
   scheduler_yield_no_save(); 
 }
 
-void thread_sleep(uint64_t milliseconds) {
-  KernelThread *current_thread = scheduler_current_thread();
+void thread_sleep(KernelThread *thread) {
+  // NOTE: This function must be called with interrupts disabled
 
-  ++current_thread->waiting_on;
+  ++thread->waiting_on;
 
-  uint64_t num_ticks = milliseconds * 1000 / TIMER_FREQUENCY;
-
-  cli();
-  timer_thread_sleep(current_thread, num_ticks);
-
-  if (current_thread->waiting_on == 1) {
-    scheduler_remove_thread(current_thread);
+  if (thread->waiting_on == 1) {
+    scheduler_remove_thread(thread);
   }
-  sti();
 
+  sti(); // We need interrupts to get scheduling
   scheduler_yield(); // This doesn't return until we wake up
+  cli(); // Leave interrupts off (like we found them)
 }
 
 void thread_wake(KernelThread *thread) {
+  // NOTE: This function must be called with interrupts disabled
+  
   assert(thread->waiting_on > 0);
 
   --thread->waiting_on;
