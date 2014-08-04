@@ -28,7 +28,7 @@ struct KernelThread {
 static struct {
   KernelThread threads[16]; // TODO: Make this dynamic
   uint32_t next_tid;
-} thread_data;
+} thread_data = { .next_tid = 0 };
 
 KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8_t priority) {
   KernelThread *new_thread = &thread_data.threads[thread_data.next_tid]; // TODO: Make this dynamic
