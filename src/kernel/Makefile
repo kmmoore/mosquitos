@@ -4,8 +4,16 @@
 include ../../Makefile.inc
 
 # Edit this line to add more source files (*.c or *.S)
-C_SRCS          := ../common/build_info.c kernel.c text_output.c font.c keyboard_controller.c util.c apic.c ../common/mem_util.c gdt.c interrupt.c exception.c virtual_memory.c datastructures/list.c acpi.c timer.c scheduler.c thread.c kmalloc.c mutex/semaphore.c mutex/lock.c
-ASM_SRCS        := gdt.s interrupt.s scheduler.s
+C_SRCS          :=  kernel.c
+C_SRCS          += ../common/build_info.c util.c ../common/mem_util.c
+C_SRCS          += datastructures/list.c
+C_SRCS          += hardware/gdt.c hardware/interrupt.c hardware/exception.c hardware/timer.c hardware/acpi.c hardware/apic.c
+C_SRCS          += drivers/text_output.c drivers/font.c drivers/keyboard_controller.c drivers/pci.c
+C_SRCS          += memory/virtual_memory.c memory/kmalloc.c
+C_SRCS          += threading/scheduler.c threading/thread.c threading/mutex/semaphore.c threading/mutex/lock.c
+
+ASM_SRCS        := hardware/gdt.s hardware/interrupt.s threading/scheduler.s
+
 OBJS            := $(C_SRCS:%.c=%.o) $(ASM_SRCS:%.s=%_asm.o)
 DEPS            := $(C_SRCS:.c=.d)
 

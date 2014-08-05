@@ -1,5 +1,5 @@
 #include "util.h"
-#include "text_output.h"
+#include "drivers/text_output.h"
 
 #include <stdarg.h>
 
@@ -43,14 +43,34 @@ void cli() {
   __asm__ ("cli");
 }
 
-uint8_t inb(uint16_t port) {
+uint8_t io_read_8(unsigned port) {
     uint8_t ret;
-    __asm__ volatile ( "inb %1, %0" : "=a"(ret) : "d"(port) );
+    __asm__ volatile ("inb %w1, %b0" : "=a" (ret) : "Nd" (port));
     return ret;
 }
 
-void outb(uint16_t port, uint8_t val) {
-  __asm__ volatile ( "outb %0, %1" : : "a"(val), "d"(port) );
+void io_write_8(unsigned port, uint8_t val) {
+  __asm__ volatile ("outb %b0, %w1" : : "a" (val), "Nd" (port));
+}
+
+uint16_t io_read_16(unsigned port) {
+    uint8_t ret;
+    __asm__ volatile ("inw %w1, %w0" : "=a" (ret) : "Nd" (port));
+    return ret;
+}
+
+void io_write_16(unsigned port, uint16_t val) {
+  __asm__ volatile ("outw %w0, %w1" : : "a" (val), "Nd" (port));
+}
+
+uint32_t io_read_32(unsigned port) {
+    uint8_t ret;
+    __asm__ volatile ("inl %w1, %k0" : "=a" (ret) : "Nd" (port));
+    return ret;
+}
+
+void io_write_32(unsigned port, uint32_t val) {
+  __asm__ volatile ("outl %k0, %w1" : : "a" (val), "Nd" (port));
 }
 
 void write_msr(uint64_t index, uint64_t value) {

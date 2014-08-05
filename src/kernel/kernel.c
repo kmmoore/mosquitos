@@ -2,19 +2,24 @@
 #include <efilib.h>
 
 #include "kernel.h"
-#include "text_output.h"
-#include "acpi.h"
-#include "interrupt.h"
-#include "exception.h"
-#include "timer.h"
-#include "keyboard_controller.h"
-#include "virtual_memory.h"
-#include "scheduler.h"
-#include "kmalloc.h"
 #include "../common/mem_util.h"
 #include "util.h"
 
-#include "mutex/semaphore.h"
+#include "drivers/text_output.h"
+#include "drivers/keyboard_controller.h"
+#include "drivers/pci.h"
+
+#include "hardware/acpi.h"
+#include "hardware/interrupt.h"
+#include "hardware/exception.h"
+#include "hardware/timer.h"
+
+#include "memory/virtual_memory.h"
+#include "memory/kmalloc.h"
+
+#include "threading/scheduler.h"
+
+#include "threading/mutex/semaphore.h"
 
 #include "../common/build_info.h"
 
@@ -63,6 +68,8 @@ void kernel_main(KernelInfo info) {
 
   timer_init();
   keyboard_controller_init();
+
+  pci_init();
 
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
