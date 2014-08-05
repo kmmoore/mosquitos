@@ -54,7 +54,7 @@ void io_write_8(unsigned port, uint8_t val) {
 }
 
 uint16_t io_read_16(unsigned port) {
-    uint8_t ret;
+    uint16_t ret;
     __asm__ volatile ("inw %w1, %w0" : "=a" (ret) : "Nd" (port));
     return ret;
 }
@@ -64,13 +64,13 @@ void io_write_16(unsigned port, uint16_t val) {
 }
 
 uint32_t io_read_32(unsigned port) {
-    uint8_t ret;
-    __asm__ volatile ("inl %w1, %k0" : "=a" (ret) : "Nd" (port));
+    uint32_t ret;
+    __asm__ volatile ("inl %w1, %0" : "=a" (ret) : "Nd" (port));
     return ret;
 }
 
 void io_write_32(unsigned port, uint32_t val) {
-  __asm__ volatile ("outl %k0, %w1" : : "a" (val), "Nd" (port));
+  __asm__ volatile ("outl %0, %w1" : : "a" (val), "Nd" (port));
 }
 
 void write_msr(uint64_t index, uint64_t value) {
