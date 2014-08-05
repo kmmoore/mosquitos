@@ -1,47 +1,81 @@
 #include "pci.h"
-#include "../util.h"
 #include "text_output.h"
 
-typedef struct {
-  uint16_t vendor_id, device_id;
-  uint16_t command, status;
-  uint8_t revision_id, program_if, subclass, class_code;
-  uint8_t cache_line_size, latency_timer, header_type, bist;
-  uint32_t base_address_0;
-  uint32_t base_address_1;
-  uint8_t primary_bus_number, secondary_bus_number, subcoordinate_bus_number, secondary_latency_timer;
-  uint16_t io_base:8, io_limit:8, secondary_status;
-  uint16_t memory_base, memory_limit;
-  uint16_t prefetchable_memory_base, prefetchable_memory_limit;
-  uint32_t prefetchable_base_upper;
-  uint32_t prefetchable_limit_upper;
-  uint16_t io_base_upper, io_limit_upper;
-  uint32_t capability_pointer:8, reserved:24;
-  uint32_t expansion_rom_base_address;
-  uint16_t interrupt_line:8, interrupt_pin:8, bridge_control;
-} PCIConfigurationHeader;
+#define PCI_MAX_DEVICES 20
 
-uint16_t pciConfigReadWord (uint8_t bus, uint8_t slot,
-                             uint8_t func, uint8_t offset)
- {
-    uint32_t address;
-    uint32_t lbus  = (uint32_t)bus;
-    uint32_t lslot = (uint32_t)slot;
-    uint32_t lfunc = (uint32_t)func;
-    uint16_t tmp = 0;
- 
-    /* create configuration address as per Figure 1 */
-    address = (uint32_t)((lbus << 16) | (lslot << 11) |
-              (lfunc << 8) | (offset & 0xfc) | ((uint32_t)0x80000000));
- 
-    /* write out the address */
-    io_write_32(0xCF8, address);
-    /* read in the data */
-    /* (offset & 2) * 8) = 0 will choose the first word of the 32 bits register */
-    tmp = (uint16_t)((io_read_32 (0xCFC) >> ((offset & 2) * 8)) & 0xffff);
-    return (tmp);
- }
+typedef union {
+
+  struct {
+    uint8_t offset;
+    uint8_t function_number:3;
+    uint8_t device_number:5;
+    uint8_t bus_number;
+    uint8_t reserved:7;
+    uint8_t enable:1;
+  } __attribute__((packed)) svalue;
+  uint32_t ivalue;
+
+} PCIConfigAddress;
+
+static struct {
+  PCIDevice devices[PCI_MAX_DEVICES];
+  int num_devices;
+} pci_data;
+
+#define OFFSET_FOR_HDR_FIELD(field) (offsetof(PCIConfigurationHeader, field) & ~0b11)
+#define OFFSET_WITHIN_HDR_FIELD(field) (offsetof(PCIConfigurationHeader, field) - OFFSET_FOR_HDR_FIELD(field))
+
+uint32_t pci_config_read_word (uint8_t bus, uint8_t device_number, uint8_t func, uint8_t offset) {
+  PCIConfigAddress address;
+  address.svalue.offset = offset;
+  address.svalue.function_number = func;
+  address.svalue.device_number = device_number;
+  address.svalue.bus_number = bus;
+  address.svalue.reserved = 0;
+  address.svalue.enable = 1;
+
+  io_write_32(0xCF8, address.ivalue);
+  return io_read_32(0xCFC);
+}
+
+static void enumerate_devices() {
+  for(int bus = 0; bus < 256; bus++) {
+    for(int device = 0; device < 32; device++) {
+      if (pci_config_read_word(bus, device, 0, 0) != 0xffffffff) {
+        PCIDevice *new_device = &pci_data.devices[pci_data.num_devices++];
+        new_device->bus = bus;
+        new_device->device_number = device;
+
+        uint32_t class_field = PCI_HEADER_READ_FIELD_WORD(bus, device, 0, class_code);
+
+        new_device->class_code = PCI_HEADER_FIELD_IN_WORD(class_field, class_code);
+        new_device->subclass = PCI_HEADER_FIELD_IN_WORD(class_field, subclass);
+        new_device->program_if = PCI_HEADER_FIELD_IN_WORD(class_field, program_if);
+
+        uint32_t htype_field = PCI_HEADER_READ_FIELD_WORD(bus, device, 0, header_type);
+
+        new_device->header_type = PCI_HEADER_FIELD_IN_WORD(htype_field, header_type);
+        new_device->multifunction = (new_device->header_type & (1 << 7)) > 0;
+        new_device->header_type = new_device->header_type & ~(1 << 7);
+      }
+    }
+  }
+}
 
 void pci_init() {
-  text_output_printf("PCI: %d\n", pciConfigReadWord(0, 0, 0, 0));
+  text_output_printf("Enumerating PCI devices...");
+  enumerate_devices();
+  text_output_printf("Done\n");
 }
+
+PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t program_if) {
+  for (int i = 0; i < pci_data.num_devices; ++i) {
+    PCIDevice *device = &pci_data.devices[i];
+    if (device->class_code == class_code && device->subclass == subclass && device->program_if == program_if) {
+      return device;
+    }
+  }
+
+  return NULL;
+}
+

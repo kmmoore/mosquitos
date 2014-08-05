@@ -8,6 +8,7 @@
 #include "drivers/text_output.h"
 #include "drivers/keyboard_controller.h"
 #include "drivers/pci.h"
+#include "drivers/sata.h"
 
 #include "hardware/acpi.h"
 #include "hardware/interrupt.h"
@@ -60,16 +61,18 @@ void kernel_main(KernelInfo info) {
   text_output_printf("Built from %s on %s\n\n", build_git_info, build_time);
 
   // Initialize subsystems
+  // TODO: Break these into initialization files
   acpi_init(info.xdsp_address);
   interrupts_init();
   exceptions_init();
 
   vm_init(info.memory_map, info.mem_map_size, info.mem_map_descriptor_size);
 
+  pci_init();
+  sata_init();
+
   timer_init();
   keyboard_controller_init();
-
-  pci_init();
 
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
@@ -77,11 +80,11 @@ void kernel_main(KernelInfo info) {
   // Set up scheduler
   scheduler_init();
 
-  Semaphore sema;
-  semaphore_init(&sema);
+  // Semaphore sema;
+  // semaphore_init(&sema);
 
-  KernelThread *t1 = thread_create(thread1_main, &sema, 31, 2);
-  scheduler_register_thread(t1);
+  // KernelThread *t1 = thread_create(thread1_main, &sema, 31, 2);
+  // scheduler_register_thread(t1);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call
 

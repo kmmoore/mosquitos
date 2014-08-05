@@ -8,7 +8,7 @@ C_SRCS          :=  kernel.c
 C_SRCS          += ../common/build_info.c util.c ../common/mem_util.c
 C_SRCS          += datastructures/list.c
 C_SRCS          += hardware/gdt.c hardware/interrupt.c hardware/exception.c hardware/timer.c hardware/acpi.c hardware/apic.c
-C_SRCS          += drivers/text_output.c drivers/font.c drivers/keyboard_controller.c drivers/pci.c
+C_SRCS          += drivers/text_output.c drivers/font.c drivers/keyboard_controller.c drivers/pci.c drivers/sata.c
 C_SRCS          += memory/virtual_memory.c memory/kmalloc.c
 C_SRCS          += threading/scheduler.c threading/thread.c threading/mutex/semaphore.c threading/mutex/lock.c
 
