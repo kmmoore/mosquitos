@@ -9,12 +9,12 @@ typedef struct {
   KernelThread *thread;
 } WaitingThread;
 
-void semaphore_init(Semaphore *sema) {
-  sema->value = 0;
+void semaphore_init(Semaphore *sema, uint64_t initial_value) {
+  sema->value = initial_value;
   list_init(&sema->waiting_threads);
 }
 
-void semaphore_up(Semaphore *sema) {
+void semaphore_up(Semaphore *sema, uint64_t value) {
   cli();
   
   sema->value++;
@@ -29,7 +29,7 @@ void semaphore_up(Semaphore *sema) {
   sti();
 }
 
-void semaphore_down(Semaphore *sema) {
+void semaphore_down(Semaphore *sema, uint64_t value) {
   cli();
 
   if (sema->value == 0) {

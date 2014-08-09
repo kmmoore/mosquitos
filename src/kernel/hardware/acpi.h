@@ -17,5 +17,6 @@ typedef struct {
 
 void acpi_init(void *xdsp_address);
 ACPISDTHeader * acpi_locate_table(const char *name);
+uint64_t acpi_xdsp_address();
 
 #endif

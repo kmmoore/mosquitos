@@ -1,0 +1,536 @@
+ld: warning: cannot find entry symbol _start; defaulting to 00000000004000e8
+dscontrol.o: In function `acpi_ds_exec_end_control_op':
+dscontrol.c:(.text+0x10d): undefined reference to `acpi_os_signal'
+dsmethod.o: In function `acpi_ds_begin_method_execution':
+dsmethod.c:(.text+0x249): undefined reference to `acpi_os_create_semaphore'
+dsmethod.c:(.text+0x3a5): undefined reference to `acpi_os_signal_semaphore'
+dsmethod.o: In function `acpi_ds_terminate_control_method':
+dsmethod.c:(.text+0x4a7): undefined reference to `acpi_os_signal_semaphore'
+dsmethod.o: In function `acpi_ds_call_control_method':
+dsmethod.c:(.text+0x691): undefined reference to `acpi_os_free'
+dsobject.o: In function `acpi_ds_init_object_from_op':
+dsobject.c:(.text+0x192): undefined reference to `strlen'
+dsutils.o: In function `acpi_ds_create_operand':
+dsutils.c:(.text+0x40d): undefined reference to `acpi_os_free'
+dswstate.o: In function `acpi_ds_delete_walk_state':
+dswstate.c:(.text+0x6ca): undefined reference to `acpi_os_free'
+evgpe.o: In function `acpi_ev_asynch_execute_gpe_method':
+evgpe.c:(.text+0x126): undefined reference to `acpi_os_free'
+evgpe.c:(.text+0x18e): undefined reference to `acpi_os_execute'
+evgpe.c:(.text+0x1a1): undefined reference to `acpi_os_free'
+evgpe.o: In function `acpi_ev_asynch_enable_gpe':
+evgpe.c:(.text+0x394): undefined reference to `acpi_os_free'
+evgpe.o: In function `acpi_ev_gpe_dispatch':
+evgpe.c:(.text+0x4ac): undefined reference to `acpi_os_execute'
+evgpe.o: In function `acpi_ev_gpe_detect':
+evgpe.c:(.text+0x550): undefined reference to `acpi_os_acquire_lock'
+evgpe.c:(.text+0x631): undefined reference to `acpi_os_release_lock'
+evgpeblk.o: In function `acpi_ev_delete_gpe_block':
+evgpeblk.c:(.text+0x6b): undefined reference to `acpi_os_acquire_lock'
+evgpeblk.c:(.text+0xaf): undefined reference to `acpi_os_release_lock'
+evgpeblk.c:(.text+0xc8): undefined reference to `acpi_os_free'
+evgpeblk.o: In function `acpi_ev_create_gpe_block':
+evgpeblk.c:(.text+0x2d2): undefined reference to `acpi_os_free'
+evgpeblk.c:(.text+0x2f5): undefined reference to `acpi_os_free'
+evgpeblk.c:(.text+0x347): undefined reference to `acpi_os_acquire_lock'
+evgpeblk.c:(.text+0x390): undefined reference to `acpi_os_release_lock'
+evgpeblk.c:(.text+0x3b5): undefined reference to `acpi_os_free'
+evgpeinit.o: In function `acpi_ev_match_gpe_method':
+evgpeinit.c:(.text+0x5d): undefined reference to `strtoul'
+evgpeutil.o: In function `acpi_ev_walk_gpe_list':
+evgpeutil.c:(.text+0x20): undefined reference to `acpi_os_acquire_lock'
+evgpeutil.c:(.text+0x85): undefined reference to `acpi_os_release_lock'
+evgpeutil.o: In function `acpi_ev_get_gpe_xrupt_block':
+evgpeutil.c:(.text+0x172): undefined reference to `acpi_os_acquire_lock'
+evgpeutil.c:(.text+0x1c4): undefined reference to `acpi_os_release_lock'
+evgpeutil.c:(.text+0x1f1): undefined reference to `acpi_os_install_interrupt_handler'
+evgpeutil.o: In function `acpi_ev_delete_gpe_xrupt':
+evgpeutil.c:(.text+0x274): undefined reference to `acpi_os_remove_interrupt_handler'
+evgpeutil.c:(.text+0x291): undefined reference to `acpi_os_acquire_lock'
+evgpeutil.c:(.text+0x2d8): undefined reference to `acpi_os_release_lock'
+evgpeutil.c:(.text+0x2e7): undefined reference to `acpi_os_free'
+evgpeutil.o: In function `acpi_ev_delete_gpe_handlers':
+evgpeutil.c:(.text+0x300): undefined reference to `acpi_os_free'
+evglock.o: In function `acpi_ev_global_lock_handler':
+evglock.c:(.text+0x10): undefined reference to `acpi_os_acquire_lock'
+evglock.c:(.text+0x40): undefined reference to `acpi_os_signal_semaphore'
+evglock.c:(.text+0x94): undefined reference to `acpi_os_release_lock'
+evglock.o: In function `acpi_ev_init_global_lock_handler':
+evglock.c:(.text+0x11f): undefined reference to `acpi_os_create_lock'
+evglock.o: In function `acpi_ev_remove_global_lock_handler':
+evglock.c:(.text+0x17b): undefined reference to `acpi_os_delete_lock'
+evglock.o: In function `acpi_ev_acquire_global_lock':
+evglock.c:(.text+0x215): undefined reference to `acpi_os_acquire_lock'
+evglock.c:(.text+0x24b): undefined reference to `acpi_os_release_lock'
+evglock.o: In function `acpi_ev_release_global_lock':
+evglock.c:(.text+0x2b9): undefined reference to `acpi_os_signal_semaphore'
+evmisc.o: In function `acpi_ev_queue_notify_request':
+evmisc.c:(.text+0x141): undefined reference to `acpi_os_execute'
+evregion.o: In function `acpi_ev_execute_reg_method':
+evregion.c:(.text+0x385): undefined reference to `acpi_os_free'
+evrgnini.o: In function `acpi_ev_system_memory_region_setup':
+evrgnini.c:(.text+0x22): undefined reference to `acpi_os_unmap_memory'
+evrgnini.c:(.text+0x31): undefined reference to `acpi_os_free'
+evrgnini.o: In function `acpi_ev_pci_config_region_setup':
+evrgnini.c:(.text+0xc0): undefined reference to `acpi_os_free'
+evrgnini.c:(.text+0x131): undefined reference to `acpi_os_free'
+evrgnini.c:(.text+0x26b): undefined reference to `acpi_os_free'
+evrgnini.c:(.text+0x31d): undefined reference to `acpi_os_free'
+evsci.o: In function `acpi_ev_sci_dispatch':
+evsci.c:(.text+0x23): undefined reference to `acpi_os_acquire_lock'
+evsci.c:(.text+0x64): undefined reference to `acpi_os_release_lock'
+evsci.o: In function `acpi_ev_install_sci_handler':
+evsci.c:(.text+0xfb): undefined reference to `acpi_os_install_interrupt_handler'
+evsci.o: In function `acpi_ev_remove_all_sci_handlers':
+evsci.c:(.text+0x123): undefined reference to `acpi_os_remove_interrupt_handler'
+evsci.c:(.text+0x14b): undefined reference to `acpi_os_free'
+evsci.c:(.text+0x158): undefined reference to `acpi_os_acquire_lock'
+evsci.c:(.text+0x19b): undefined reference to `acpi_os_release_lock'
+evxface.o: In function `acpi_remove_notify_handler':
+evxface.c:(.text+0x302): undefined reference to `acpi_os_wait_events_complete'
+evxface.c:(.text+0x3b6): undefined reference to `acpi_os_wait_events_complete'
+evxface.o: In function `acpi_install_sci_handler':
+evxface.c:(.text+0x43f): undefined reference to `acpi_os_allocate'
+evxface.c:(.text+0x48c): undefined reference to `acpi_os_acquire_lock'
+evxface.c:(.text+0x4df): undefined reference to `acpi_os_release_lock'
+evxface.c:(.text+0x502): undefined reference to `acpi_os_free'
+evxface.o: In function `acpi_remove_sci_handler':
+evxface.c:(.text+0x555): undefined reference to `acpi_os_acquire_lock'
+evxface.c:(.text+0x5a2): undefined reference to `acpi_os_release_lock'
+evxface.c:(.text+0x5b1): undefined reference to `acpi_os_free'
+evxface.c:(.text+0x5d9): undefined reference to `acpi_os_release_lock'
+evxface.o: In function `acpi_install_gpe_handler':
+evxface.c:(.text+0x8ad): undefined reference to `acpi_os_acquire_lock'
+evxface.c:(.text+0x8d7): undefined reference to `acpi_os_release_lock'
+evxface.c:(.text+0x99f): undefined reference to `acpi_os_free'
+evxface.o: In function `acpi_remove_gpe_handler':
+evxface.c:(.text+0xa08): undefined reference to `acpi_os_acquire_lock'
+evxface.c:(.text+0xa26): undefined reference to `acpi_os_release_lock'
+evxface.c:(.text+0xaac): undefined reference to `acpi_os_wait_events_complete'
+evxface.c:(.text+0xab8): undefined reference to `acpi_os_free'
+evxface.o: In function `acpi_acquire_global_lock':
+evxface.c:(.text+0xb17): undefined reference to `acpi_os_get_thread_id'
+evxfevnt.o: In function `acpi_enable':
+evxfevnt.c:(.text+0x63): undefined reference to `acpi_os_stall'
+evxfgpe.o: In function `acpi_enable_gpe':
+evxfgpe.c:(.text+0x7f): undefined reference to `acpi_os_acquire_lock'
+evxfgpe.c:(.text+0xd0): undefined reference to `acpi_os_release_lock'
+evxfgpe.o: In function `acpi_disable_gpe':
+evxfgpe.c:(.text+0xfb): undefined reference to `acpi_os_acquire_lock'
+evxfgpe.c:(.text+0x14c): undefined reference to `acpi_os_release_lock'
+evxfgpe.o: In function `acpi_setup_gpe_for_wake':
+evxfgpe.c:(.text+0x1cb): undefined reference to `acpi_os_acquire_lock'
+evxfgpe.c:(.text+0x24f): undefined reference to `acpi_os_release_lock'
+evxfgpe.c:(.text+0x263): undefined reference to `acpi_os_free'
+evxfgpe.o: In function `acpi_set_gpe_wake_mask':
+evxfgpe.c:(.text+0x2a0): undefined reference to `acpi_os_acquire_lock'
+evxfgpe.c:(.text+0x34c): undefined reference to `acpi_os_release_lock'
+evxfgpe.o: In function `acpi_clear_gpe':
+evxfgpe.c:(.text+0x37b): undefined reference to `acpi_os_acquire_lock'
+evxfgpe.c:(.text+0x3cc): undefined reference to `acpi_os_release_lock'
+evxfgpe.o: In function `acpi_get_gpe_status':
+evxfgpe.c:(.text+0x404): undefined reference to `acpi_os_acquire_lock'
+evxfgpe.c:(.text+0x460): undefined reference to `acpi_os_release_lock'
+exconfig.o: In function `acpi_ex_load_op':
+exconfig.c:(.text+0x4b9): undefined reference to `acpi_os_allocate'
+exconfig.c:(.text+0x50a): undefined reference to `acpi_os_free'
+exconfig.c:(.text+0x58d): undefined reference to `acpi_os_allocate'
+exconfig.c:(.text+0x621): undefined reference to `acpi_os_free'
+exconvrt.o: In function `acpi_ex_convert_to_buffer':
+exconvrt.c:(.text+0x266): undefined reference to `strncpy'
+excreate.o: In function `acpi_ex_create_event':
+excreate.c:(.text+0xbf): undefined reference to `acpi_os_create_semaphore'
+excreate.o: In function `acpi_ex_create_mutex':
+excreate.c:(.text+0x151): undefined reference to `acpi_os_create_semaphore'
+exdebug.o: In function `acpi_ex_do_debug_object':
+exdebug.c:(.text+0x6b): undefined reference to `acpi_os_printf'
+exdebug.c:(.text+0xb1): undefined reference to `acpi_os_printf'
+exdebug.c:(.text+0xc7): undefined reference to `acpi_os_printf'
+exdebug.c:(.text+0x14e): undefined reference to `acpi_os_printf'
+exdebug.c:(.text+0x2ec): undefined reference to `acpi_os_printf'
+exfldio.o: In function `acpi_ex_insert_into_field':
+exfldio.c:(.text+0x445): undefined reference to `__memcpy_chk'
+exfldio.c:(.text+0x4ed): undefined reference to `__memcpy_chk'
+exfldio.c:(.text+0x570): undefined reference to `acpi_os_free'
+exmutex.o: In function `acpi_ex_release_mutex_object':
+exmutex.c:(.text+0x236): undefined reference to `acpi_os_signal_semaphore'
+exmutex.o: In function `acpi_ex_release_all_mutexes':
+exmutex.c:(.text+0x45d): undefined reference to `acpi_os_signal_semaphore'
+exnames.o: In function `acpi_ex_allocate_name_string':
+exnames.c:(.text+0x1a): undefined reference to `acpi_os_allocate'
+exnames.o: In function `acpi_ex_name_segment':
+exnames.c:(.text+0x18d): undefined reference to `strcat'
+exnames.o: In function `acpi_ex_get_name_string':
+exnames.c:(.text+0x39b): undefined reference to `acpi_os_free'
+exoparg1.o: In function `acpi_ex_opcode_0A_0T_1R':
+exoparg1.c:(.text+0x13): undefined reference to `acpi_os_get_timer'
+exoparg3.o: In function `acpi_ex_opcode_3A_0T_0R':
+exoparg3.c:(.text+0x1b): undefined reference to `acpi_os_allocate'
+exoparg3.c:(.text+0x5d): undefined reference to `acpi_os_signal'
+exoparg3.c:(.text+0x70): undefined reference to `acpi_os_free'
+exmisc.o: In function `acpi_ex_do_concatenate':
+exmisc.c:(.text+0x2d2): undefined reference to `strcpy'
+exmisc.o: In function `acpi_ex_do_logical_op':
+exmisc.c:(.text+0x543): undefined reference to `memcmp'
+exregion.o: In function `acpi_ex_system_memory_space_handler':
+exregion.c:(.text+0xa1): undefined reference to `acpi_os_unmap_memory'
+exregion.c:(.text+0xe2): undefined reference to `acpi_os_map_memory'
+exregion.o: In function `acpi_ex_pci_config_space_handler':
+exregion.c:(.text+0x24f): undefined reference to `acpi_os_write_pci_configuration'
+exregion.c:(.text+0x268): undefined reference to `acpi_os_read_pci_configuration'
+exstorob.o: In function `acpi_ex_store_buffer_to_buffer':
+exstorob.c:(.text+0x31): undefined reference to `acpi_os_allocate'
+exstorob.o: In function `acpi_ex_store_string_to_string':
+exstorob.c:(.text+0xd4): undefined reference to `acpi_os_free'
+exsystem.o: In function `acpi_ex_system_wait_semaphore':
+exsystem.c:(.text+0x13): undefined reference to `acpi_os_wait_semaphore'
+exsystem.o: In function `acpi_ex_system_wait_mutex':
+exsystem.c:(.text+0x74): undefined reference to `acpi_os_wait_semaphore'
+exsystem.o: In function `acpi_ex_system_do_stall':
+exsystem.c:(.text+0xfe): undefined reference to `acpi_os_stall'
+exsystem.o: In function `acpi_ex_system_do_sleep':
+exsystem.c:(.text+0x12a): undefined reference to `acpi_os_sleep'
+exsystem.o: In function `acpi_ex_system_signal_event':
+exsystem.c:(.text+0x158): undefined reference to `acpi_os_signal_semaphore'
+exsystem.o: In function `acpi_ex_system_reset_event':
+exsystem.c:(.text+0x189): undefined reference to `acpi_os_create_semaphore'
+exsystem.c:(.text+0x1af): undefined reference to `acpi_os_delete_semaphore'
+exutils.o: In function `acpi_ex_acquire_global_lock':
+exutils.c:(.text+0xbd): undefined reference to `acpi_os_get_thread_id'
+hwesleep.o: In function `acpi_hw_extended_sleep':
+hwesleep.c:(.text+0x106): undefined reference to `acpi_os_prepare_extended_sleep'
+hwpci.o: In function `acpi_hw_delete_pci_list':
+hwpci.c:(.text+0x3): undefined reference to `acpi_os_free'
+hwpci.o: In function `acpi_hw_derive_pci_id':
+hwpci.c:(.text+0x75): undefined reference to `acpi_os_allocate'
+hwpci.c:(.text+0x14c): undefined reference to `acpi_os_read_pci_configuration'
+hwregs.o: In function `acpi_hw_read':
+hwregs.c:(.text+0x11e): undefined reference to `acpi_os_read_memory'
+hwregs.o: In function `acpi_hw_write':
+hwregs.c:(.text+0x1e2): undefined reference to `acpi_os_write_memory'
+hwregs.o: In function `acpi_hw_clear_acpi_status':
+hwregs.c:(.text+0x563): undefined reference to `acpi_os_acquire_lock'
+hwregs.c:(.text+0x59a): undefined reference to `acpi_os_release_lock'
+hwsleep.o: In function `acpi_hw_legacy_sleep':
+hwsleep.c:(.text+0x110): undefined reference to `acpi_os_prepare_sleep'
+hwsleep.c:(.text+0x14f): undefined reference to `acpi_os_stall'
+hwvalid.o: In function `acpi_hw_read_port':
+hwvalid.c:(.text+0x137): undefined reference to `acpi_os_read_port'
+hwvalid.c:(.text+0x177): undefined reference to `acpi_os_read_port'
+hwvalid.o: In function `acpi_hw_write_port':
+hwvalid.c:(.text+0x1fe): undefined reference to `acpi_os_write_port'
+hwvalid.c:(.text+0x214): undefined reference to `acpi_os_write_port'
+hwxface.o: In function `acpi_reset':
+hwxface.c:(.text+0x40): undefined reference to `acpi_os_write_port'
+hwxface.o: In function `acpi_read':
+hwxface.c:(.text+0xb6): undefined reference to `acpi_os_read_memory'
+hwxface.o: In function `acpi_write':
+hwxface.c:(.text+0x16f): undefined reference to `acpi_os_write_memory'
+hwxface.o: In function `acpi_write_bit_register':
+hwxface.c:(.text+0x24c): undefined reference to `acpi_os_acquire_lock'
+hwxface.c:(.text+0x2d4): undefined reference to `acpi_os_release_lock'
+hwxface.o: In function `acpi_get_sleep_type_data':
+hwxface.c:(.text+0x47f): undefined reference to `acpi_os_free'
+hwxfsleep.o: In function `acpi_enter_sleep_state_s4bios':
+hwxfsleep.c:(.text+0x10d): undefined reference to `acpi_os_stall'
+nsaccess.o: In function `acpi_ns_root_initialize':
+nsaccess.c:(.text+0x447): undefined reference to `strcmp'
+nsaccess.c:(.text+0x4e0): undefined reference to `acpi_os_predefined_override'
+nsaccess.c:(.text+0x5c5): undefined reference to `strlen'
+nsaccess.c:(.text+0x5f8): undefined reference to `acpi_os_create_semaphore'
+nsaccess.c:(.text+0x626): undefined reference to `strcmp'
+nsalloc.o: In function `acpi_ns_create_node':
+nsalloc.c:(.text+0x12): undefined reference to `acpi_os_acquire_object'
+nsalloc.o: In function `acpi_ns_delete_node':
+nsalloc.c:(.text+0xa1): undefined reference to `acpi_os_release_object'
+nseval.o: In function `acpi_ns_evaluate':
+nseval.c:(.text+0x2d0): undefined reference to `acpi_os_free'
+nseval.o: In function `acpi_ns_exec_module_code_list':
+nseval.c:(.text+0x32b): undefined reference to `acpi_os_allocate'
+nseval.c:(.text+0x486): undefined reference to `acpi_os_free'
+nsinit.o: In function `acpi_ns_initialize_devices':
+nsinit.c:(.text+0x3ea): undefined reference to `acpi_os_free'
+nsnames.o: In function `acpi_ns_get_external_pathname':
+nsnames.c:(.text+0x16c): undefined reference to `acpi_os_free'
+nsobject.o: In function `acpi_ns_detach_object':
+nsobject.c:(.text+0x25): undefined reference to `acpi_os_free'
+nsrepair2.o: In function `acpi_ns_repair_HID':
+nsrepair2.c:(.text+0x11d): undefined reference to `toupper'
+nsutils.o: In function `acpi_ns_print_node_pathname':
+nsutils.c:(.text+0x1e): undefined reference to `acpi_os_printf'
+nsutils.c:(.text+0x4d): undefined reference to `acpi_os_printf'
+nsutils.c:(.text+0x83): undefined reference to `acpi_os_free'
+nsutils.o: In function `acpi_ns_build_internal_name':
+nsutils.c:(.text+0x1c0): undefined reference to `toupper'
+nsutils.o: In function `acpi_ns_internalize_name':
+nsutils.c:(.text+0x2f1): undefined reference to `acpi_os_free'
+nsutils.o: In function `acpi_ns_get_node':
+nsutils.c:(.text+0x647): undefined reference to `acpi_os_free'
+nsxfeval.o: In function `acpi_ns_get_device_callback':
+nsxfeval.c:(.text+0xc7): undefined reference to `strcmp'
+nsxfeval.c:(.text+0xde): undefined reference to `acpi_os_free'
+nsxfeval.o: In function `acpi_evaluate_object':
+nsxfeval.c:(.text+0x41a): undefined reference to `acpi_os_free'
+nsxfeval.o: In function `acpi_evaluate_object_typed':
+nsxfeval.c:(.text+0x509): undefined reference to `acpi_os_free'
+nsxfname.o: In function `acpi_get_handle':
+nsxfname.c:(.text+0x77): undefined reference to `strcmp'
+nsxfname.o: In function `acpi_get_object_info':
+nsxfname.c:(.text+0x53e): undefined reference to `acpi_os_free'
+nsxfname.c:(.text+0x554): undefined reference to `acpi_os_free'
+nsxfname.c:(.text+0x56a): undefined reference to `acpi_os_free'
+nsxfname.c:(.text+0x580): undefined reference to `acpi_os_free'
+nsxfname.o: In function `acpi_install_method':
+nsxfname.c:(.text+0x68a): undefined reference to `acpi_os_allocate'
+nsxfname.c:(.text+0x6d2): undefined reference to `acpi_os_free'
+nsxfname.c:(.text+0x7dc): undefined reference to `acpi_os_free'
+psutils.o: In function `acpi_ps_alloc_op':
+psutils.c:(.text+0x22): undefined reference to `acpi_os_acquire_object'
+psutils.o: In function `acpi_ps_free_op':
+psutils.c:(.text+0xa5): undefined reference to `acpi_os_release_object'
+rscreate.o: In function `acpi_buffer_to_resource':
+rscreate.c:(.text+0x85): undefined reference to `acpi_os_free'
+rscreate.o: In function `acpi_rs_create_pci_routing_table':
+rscreate.c:(.text+0x320): undefined reference to `strlen'
+rscreate.c:(.text+0x33c): undefined reference to `strcpy'
+rsutils.o: In function `acpi_rs_get_resource_source':
+rsutils.c:(.text+0x11e): undefined reference to `strlen'
+rsutils.o: In function `acpi_rs_set_resource_source':
+rsutils.c:(.text+0x19b): undefined reference to `strcpy'
+rsutils.o: In function `acpi_rs_set_srs_method_data':
+rsutils.c:(.text+0x385): undefined reference to `acpi_os_free'
+rsxface.o: In function `acpi_rs_match_vendor_resource':
+rsxface.c:(.text+0x7f): undefined reference to `memcmp'
+rsxface.o: In function `acpi_walk_resources':
+rsxface.c:(.text+0x3ea): undefined reference to `acpi_os_free'
+tbdata.o: In function `acpi_tb_acquire_table':
+tbdata.c:(.text+0x56): undefined reference to `acpi_os_map_memory'
+tbdata.o: In function `acpi_tb_release_table':
+tbdata.c:(.text+0x9c): undefined reference to `acpi_os_unmap_memory'
+tbdata.o: In function `acpi_tb_acquire_temp_table':
+tbdata.c:(.text+0xd2): undefined reference to `acpi_os_map_memory'
+tbdata.c:(.text+0x107): undefined reference to `acpi_os_unmap_memory'
+tbdata.o: In function `acpi_tb_resize_root_table_list':
+tbdata.c:(.text+0x3e0): undefined reference to `acpi_os_free'
+tbdata.o: In function `acpi_tb_terminate':
+tbdata.c:(.text+0x4da): undefined reference to `acpi_os_free'
+tbfadt.o: In function `acpi_tb_create_local_fadt':
+tbfadt.c:(.text+0x186): undefined reference to `__memcpy_chk'
+tbfadt.o: In function `acpi_tb_parse_fadt':
+tbfadt.c:(.text+0x5cf): undefined reference to `acpi_os_map_memory'
+tbfadt.c:(.text+0x61c): undefined reference to `acpi_os_unmap_memory'
+tbfind.o: In function `acpi_tb_find_table':
+tbfind.c:(.text+0x1b): undefined reference to `strncpy'
+tbfind.c:(.text+0x8f): undefined reference to `memcmp'
+tbfind.c:(.text+0x11c): undefined reference to `memcmp'
+tbinstal.o: In function `acpi_tb_uninstall_table':
+tbinstal.c:(.text+0x9d): undefined reference to `acpi_os_free'
+tbinstal.o: In function `acpi_tb_override_table':
+tbinstal.c:(.text+0xb3): undefined reference to `acpi_os_table_override'
+tbinstal.c:(.text+0x10b): undefined reference to `acpi_os_physical_table_override'
+tbinstal.o: In function `acpi_tb_install_standard_table':
+tbinstal.c:(.text+0x4c8): undefined reference to `strncmp'
+tbinstal.c:(.text+0x5a1): undefined reference to `memcmp'
+tbprint.o: In function `acpi_tb_fix_string':
+tbprint.c:(.text+0x4): undefined reference to `__ctype_b_loc'
+tbprint.o: In function `acpi_tb_print_table_header':
+tbprint.c:(.text+0xbd): undefined reference to `strncmp'
+tbutils.o: In function `acpi_tb_copy_dsdt':
+tbutils.c:(.text+0x138): undefined reference to `acpi_os_allocate'
+tbutils.o: In function `acpi_tb_parse_root_table':
+tbutils.c:(.text+0x1fc): undefined reference to `acpi_os_map_memory'
+tbutils.c:(.text+0x26e): undefined reference to `acpi_os_unmap_memory'
+tbutils.c:(.text+0x2f1): undefined reference to `acpi_os_map_memory'
+tbutils.c:(.text+0x3d2): undefined reference to `acpi_os_unmap_memory'
+tbxface.o: In function `acpi_initialize_tables':
+tbxface.c:(.text+0x72): undefined reference to `acpi_os_get_root_pointer'
+tbxface.o: In function `acpi_get_table_header':
+tbxface.c:(.text+0x138): undefined reference to `acpi_os_map_memory'
+tbxface.c:(.text+0x15e): undefined reference to `acpi_os_unmap_memory'
+tbxface.o: In function `acpi_get_table_with_size':
+tbxface.c:(.text+0x2a5): undefined reference to `acpi_gbl_permanent_mmap'
+tbxfroot.o: In function `acpi_tb_validate_rsdp':
+tbxfroot.c:(.text+0x12): undefined reference to `strncmp'
+tbxfroot.o: In function `acpi_find_root_pointer':
+tbxfroot.c:(.text+0xb4): undefined reference to `acpi_os_map_memory'
+tbxfroot.c:(.text+0xf3): undefined reference to `acpi_os_unmap_memory'
+utaddress.o: In function `acpi_ut_add_address_range':
+utaddress.c:(.text+0x26): undefined reference to `acpi_os_allocate'
+utaddress.c:(.text+0x6b): undefined reference to `acpi_os_free'
+utaddress.o: In function `acpi_ut_remove_address_range':
+utaddress.c:(.text+0xeb): undefined reference to `acpi_os_free'
+utaddress.o: In function `acpi_ut_check_address_range':
+utaddress.c:(.text+0x1eb): undefined reference to `acpi_os_free'
+utaddress.o: In function `acpi_ut_delete_address_lists':
+utaddress.c:(.text+0x220): undefined reference to `acpi_os_free'
+utaddress.c:(.text+0x248): undefined reference to `acpi_os_free'
+utalloc.o: In function `acpi_os_allocate_zeroed':
+utalloc.c:(.text+0x3): undefined reference to `acpi_os_allocate'
+utalloc.o: In function `acpi_ut_create_caches':
+utalloc.c:(.text+0x48): undefined reference to `acpi_os_create_cache'
+utalloc.o: In function `acpi_ut_delete_caches':
+utalloc.c:(.text+0xfa): undefined reference to `acpi_os_delete_cache'
+utalloc.o: In function `acpi_ut_initialize_buffer':
+utalloc.c:(.text+0x1d1): undefined reference to `acpi_os_allocate'
+utbuffer.o: In function `acpi_ut_dump_buffer':
+utbuffer.c:(.text+0x3a): undefined reference to `acpi_os_printf'
+utbuffer.c:(.text+0x94): undefined reference to `acpi_os_printf'
+utbuffer.c:(.text+0xa1): undefined reference to `acpi_os_printf'
+utbuffer.c:(.text+0x18c): undefined reference to `__ctype_b_loc'
+utcopy.o: In function `acpi_ut_copy_simple_object':
+utcopy.c:(.text+0x23e): undefined reference to `acpi_os_allocate'
+utcopy.c:(.text+0x27d): undefined reference to `acpi_os_allocate'
+utcopy.c:(.text+0x2f5): undefined reference to `acpi_os_create_semaphore'
+utdelete.o: In function `acpi_ut_delete_internal_object_list':
+utdelete.c:(.text+0x61): undefined reference to `acpi_os_free'
+utdelete.o: In function `acpi_ut_update_ref_count':
+utdelete.c:(.text+0x8f): undefined reference to `acpi_os_acquire_lock'
+utdelete.c:(.text+0xa5): undefined reference to `acpi_os_release_lock'
+utdelete.c:(.text+0x1e0): undefined reference to `acpi_os_delete_semaphore'
+utdelete.c:(.text+0x249): undefined reference to `acpi_os_delete_semaphore'
+utdelete.c:(.text+0x268): undefined reference to `acpi_os_delete_semaphore'
+utdelete.c:(.text+0x38b): undefined reference to `acpi_os_free'
+uterror.o: In function `acpi_ut_predefined_warning':
+uterror.c:(.text+0x6f): undefined reference to `acpi_os_printf'
+uterror.c:(.text+0xaf): undefined reference to `acpi_os_vprintf'
+uterror.o: In function `acpi_ut_predefined_info':
+uterror.c:(.text+0x14d): undefined reference to `acpi_os_printf'
+uterror.c:(.text+0x18d): undefined reference to `acpi_os_vprintf'
+uterror.o: In function `acpi_ut_predefined_bios_error':
+uterror.c:(.text+0x22b): undefined reference to `acpi_os_printf'
+uterror.c:(.text+0x26b): undefined reference to `acpi_os_vprintf'
+uterror.o: In function `acpi_ut_namespace_error':
+uterror.c:(.text+0x2bb): undefined reference to `acpi_os_printf'
+uterror.c:(.text+0x338): undefined reference to `acpi_os_free'
+uterror.o: In function `acpi_ut_method_error':
+uterror.c:(.text+0x3ae): undefined reference to `acpi_os_printf'
+uteval.o: In function `acpi_ut_evaluate_object':
+uteval.c:(.text+0x1b9): undefined reference to `acpi_os_free'
+utids.o: In function `acpi_ut_execute_HID':
+utids.c:(.text+0x93): undefined reference to `strcpy'
+utids.o: In function `acpi_ut_execute_SUB':
+utids.c:(.text+0x136): undefined reference to `strcpy'
+utids.o: In function `acpi_ut_execute_UID':
+utids.c:(.text+0x1ff): undefined reference to `strcpy'
+utids.o: In function `acpi_ut_execute_CID':
+utids.c:(.text+0x32a): undefined reference to `strcpy'
+utinit.o: In function `acpi_ut_subsystem_shutdown':
+utinit.c:(.text+0x10): undefined reference to `acpi_os_free'
+utinit.c:(.text+0x82): undefined reference to `acpi_os_free'
+utlock.o: In function `acpi_ut_create_rw_lock':
+utlock.c:(.text+0x7): undefined reference to `acpi_os_create_semaphore'
+utlock.o: In function `acpi_ut_delete_rw_lock':
+utlock.c:(.text+0x47): undefined reference to `acpi_os_delete_semaphore'
+utlock.o: In function `acpi_ut_acquire_read_lock':
+utlock.c:(.text+0x87): undefined reference to `acpi_os_wait_semaphore'
+utlock.c:(.text+0xca): undefined reference to `acpi_os_signal_semaphore'
+utlock.o: In function `acpi_ut_release_read_lock':
+utlock.c:(.text+0xe9): undefined reference to `acpi_os_wait_semaphore'
+utlock.c:(.text+0x107): undefined reference to `acpi_os_signal_semaphore'
+utlock.o: In function `acpi_ut_acquire_write_lock':
+utlock.c:(.text+0x13e): undefined reference to `acpi_os_wait_semaphore'
+utlock.o: In function `acpi_ut_release_write_lock':
+utlock.c:(.text+0x152): undefined reference to `acpi_os_signal_semaphore'
+utmisc.o: In function `acpi_ut_is_pci_root_bridge':
+utmisc.c:(.text+0x11): undefined reference to `strcmp'
+utmutex.o: In function `acpi_ut_mutex_initialize':
+utmutex.c:(.text+0x4): undefined reference to `acpi_os_create_semaphore'
+utmutex.c:(.text+0x64): undefined reference to `acpi_os_create_lock'
+utmutex.c:(.text+0xa8): undefined reference to `acpi_os_create_semaphore'
+utmutex.o: In function `acpi_ut_mutex_terminate':
+utmutex.c:(.text+0xd9): undefined reference to `acpi_os_delete_semaphore'
+utmutex.c:(.text+0x118): undefined reference to `acpi_os_delete_lock'
+utmutex.c:(.text+0x12f): undefined reference to `acpi_os_delete_semaphore'
+utmutex.o: In function `acpi_ut_acquire_mutex':
+utmutex.c:(.text+0x19b): undefined reference to `acpi_os_get_thread_id'
+utmutex.c:(.text+0x1c5): undefined reference to `acpi_os_wait_semaphore'
+utmutex.o: In function `acpi_ut_release_mutex':
+utmutex.c:(.text+0x287): undefined reference to `acpi_os_signal_semaphore'
+utobject.o: In function `acpi_ut_allocate_object_desc_dbg':
+utobject.c:(.text+0x1c0): undefined reference to `acpi_os_acquire_object'
+utobject.o: In function `acpi_ut_delete_object_desc':
+utobject.c:(.text+0x256): undefined reference to `acpi_os_release_object'
+utobject.o: In function `acpi_ut_create_package_object':
+utobject.c:(.text+0x341): undefined reference to `acpi_os_free'
+utosi.o: In function `acpi_ut_initialize_interfaces':
+utosi.c:(.text+0x1a): undefined reference to `acpi_os_wait_semaphore'
+utosi.c:(.text+0x71): undefined reference to `acpi_os_signal_semaphore'
+utosi.o: In function `acpi_ut_interface_terminate':
+utosi.c:(.text+0x9d): undefined reference to `acpi_os_wait_semaphore'
+utosi.c:(.text+0xbe): undefined reference to `acpi_os_free'
+utosi.c:(.text+0x12a): undefined reference to `acpi_os_signal_semaphore'
+utosi.o: In function `acpi_ut_install_interface':
+utosi.c:(.text+0x16a): undefined reference to `strlen'
+utosi.c:(.text+0x188): undefined reference to `acpi_os_free'
+utosi.c:(.text+0x19c): undefined reference to `strcpy'
+utosi.o: In function `acpi_ut_remove_interface':
+utosi.c:(.text+0x1df): undefined reference to `strcmp'
+utosi.c:(.text+0x231): undefined reference to `acpi_os_free'
+utosi.o: In function `acpi_ut_get_interface':
+utosi.c:(.text+0x2c3): undefined reference to `strcmp'
+utosi.o: In function `acpi_ut_osi_implementation':
+utosi.c:(.text+0x371): undefined reference to `acpi_os_wait_semaphore'
+utosi.c:(.text+0x3dc): undefined reference to `acpi_os_signal_semaphore'
+utpredef.o: In function `acpi_ut_get_expected_return_types':
+utpredef.c:(.text+0x71): undefined reference to `strcpy'
+utpredef.c:(.text+0xa4): undefined reference to `strcat'
+utstate.o: In function `acpi_ut_create_generic_state':
+utstate.c:(.text+0x29): undefined reference to `acpi_os_acquire_object'
+utstate.o: In function `acpi_ut_create_thread_state':
+utstate.c:(.text+0x59): undefined reference to `acpi_os_get_thread_id'
+utstate.o: In function `acpi_ut_delete_generic_state':
+utstate.c:(.text+0x167): undefined reference to `acpi_os_release_object'
+utstring.o: In function `acpi_ut_strupr':
+utstring.c:(.text+0xd): undefined reference to `toupper'
+utstring.o: In function `acpi_ut_strtoul64':
+utstring.c:(.text+0x6d): undefined reference to `__ctype_b_loc'
+utstring.c:(.text+0xb9): undefined reference to `tolower'
+utstring.c:(.text+0xdb): undefined reference to `__ctype_b_loc'
+utstring.c:(.text+0x16c): undefined reference to `toupper'
+utstring.o: In function `acpi_ut_print_string':
+utstring.c:(.text+0x24b): undefined reference to `acpi_os_printf'
+utstring.c:(.text+0x35c): undefined reference to `__ctype_b_loc'
+utstring.c:(.text+0x3b8): undefined reference to `acpi_os_printf'
+utxface.o: In function `acpi_terminate':
+utxface.c:(.text+0x3e): undefined reference to `acpi_os_terminate'
+utxface.o: In function `acpi_purge_cached_objects':
+utxface.c:(.text+0x80): undefined reference to `acpi_os_purge_cache'
+utxface.o: In function `acpi_install_interface':
+utxface.c:(.text+0xcf): undefined reference to `strlen'
+utxface.c:(.text+0xff): undefined reference to `acpi_os_wait_semaphore'
+utxface.c:(.text+0x161): undefined reference to `acpi_os_signal_semaphore'
+utxface.o: In function `acpi_remove_interface':
+utxface.c:(.text+0x185): undefined reference to `strlen'
+utxface.c:(.text+0x1b5): undefined reference to `acpi_os_wait_semaphore'
+utxface.c:(.text+0x1e8): undefined reference to `acpi_os_signal_semaphore'
+utxface.o: In function `acpi_install_interface_handler':
+utxface.c:(.text+0x21c): undefined reference to `acpi_os_wait_semaphore'
+utxface.c:(.text+0x269): undefined reference to `acpi_os_signal_semaphore'
+utxface.o: In function `acpi_update_interfaces':
+utxface.c:(.text+0x295): undefined reference to `acpi_os_wait_semaphore'
+utxface.c:(.text+0x2c8): undefined reference to `acpi_os_signal_semaphore'
+utxfinit.o: In function `acpi_initialize_subsystem':
+utxfinit.c:(.text+0x13): undefined reference to `acpi_os_initialize'
+utxferror.o: In function `acpi_error':
+utxferror.c:(.text+0x62): undefined reference to `acpi_os_printf'
+utxferror.c:(.text+0xa9): undefined reference to `acpi_os_vprintf'
+utxferror.o: In function `acpi_exception':
+utxferror.c:(.text+0x139): undefined reference to `acpi_os_printf'
+utxferror.c:(.text+0x18f): undefined reference to `acpi_os_vprintf'
+utxferror.o: In function `acpi_warning':
+utxferror.c:(.text+0x222): undefined reference to `acpi_os_printf'
+utxferror.c:(.text+0x269): undefined reference to `acpi_os_vprintf'
+utxferror.o: In function `acpi_info':
+utxferror.c:(.text+0x2f2): undefined reference to `acpi_os_printf'
+utxferror.c:(.text+0x339): undefined reference to `acpi_os_vprintf'
+utxferror.o: In function `acpi_bios_error':
+utxferror.c:(.text+0x3bd): undefined reference to `acpi_os_printf'
+utxferror.c:(.text+0x404): undefined reference to `acpi_os_vprintf'
+utxferror.o: In function `acpi_bios_warning':
+utxferror.c:(.text+0x497): undefined reference to `acpi_os_printf'
+utxferror.c:(.text+0x4de): undefined reference to `acpi_os_vprintf'
+utxfmutex.o: In function `acpi_acquire_mutex':
+utxfmutex.c:(.text+0xa8): undefined reference to `acpi_os_wait_semaphore'
+utxfmutex.o: In function `acpi_release_mutex':
+utxfmutex.c:(.text+0xf3): undefined reference to `acpi_os_signal_semaphore'
+make: *** [acpica.o] Error 1

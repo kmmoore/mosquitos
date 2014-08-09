@@ -12,4 +12,12 @@ void lock_init(Lock *lock);
 void lock_acquire(Lock *lock);
 void lock_release(Lock *lock);
 
+typedef struct {
+  char value;
+} SpinLock;
+
+void spinlock_init(SpinLock *lock);
+void spinlock_acquire(SpinLock *lock);
+void spinlock_release(SpinLock *lock);
+
 #endif
