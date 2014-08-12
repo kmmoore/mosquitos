@@ -43,6 +43,17 @@ void cli() {
   __asm__ ("cli");
 }
 
+bool interrupts_status() {
+  uint64_t flags;
+
+  __asm__ volatile("pushf ; pop %0"
+                   : "=rm" (flags)
+                   : /* no input */
+                   : "memory");
+
+  return (flags & 0b1000000000) > 0; // IF is 9th bit
+}
+
 uint8_t io_read_8(unsigned port) {
     uint8_t ret;
     __asm__ volatile ("inb %w1, %b0" : "=a" (ret) : "Nd" (port));

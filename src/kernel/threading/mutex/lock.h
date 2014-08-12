@@ -9,7 +9,7 @@ typedef struct {
 } Lock;
 
 void lock_init(Lock *lock);
-void lock_acquire(Lock *lock);
+bool lock_acquire(Lock *lock, int64_t timeout); // timeout of -1 means wait forever
 void lock_release(Lock *lock);
 
 typedef struct {

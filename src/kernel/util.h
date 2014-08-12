@@ -37,5 +37,6 @@ uint64_t read_msr(uint64_t index);
 
 void sti();
 void cli();
+bool interrupts_status();
 
 #endif

@@ -4,8 +4,8 @@ void lock_init(Lock *lock) {
   semaphore_init(&lock->sema, 0);
 }
 
-void lock_acquire(Lock *lock) {
-  semaphore_down(&lock->sema, 1);
+bool lock_acquire(Lock *lock, int64_t timeout) {
+  return semaphore_down(&lock->sema, 1, timeout);
 }
 
 void lock_release(Lock *lock) {

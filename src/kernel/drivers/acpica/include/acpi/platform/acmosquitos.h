@@ -59,18 +59,6 @@
 #define ACPI_REDUCED_HARDWARE 1
 #endif
 
-// #include <linux/string.h>
-// #include <linux/kernel.h>
-// #include <linux/ctype.h>
-// #include <linux/sched.h>
-// #include <linux/atomic.h>
-// #include <linux/math64.h>
-// #include <linux/slab.h>
-// #ifdef EXPORT_ACPI_INTERFACES
-// #include <linux/export.h>
-// #endif
-// #include <asm/acenv.h>
-
 #ifndef CONFIG_ACPI
 
 /* External globals for __KERNEL__, stubs is needed */
@@ -110,6 +98,7 @@
 
 #define acpi_semaphore                      Semaphore *
 #define acpi_spinlock                       SpinLock *
+#define acpi_mutex                          Lock *
 #define acpi_cpu_flags                      uint64_t
 
 /* Use native linux version of acpi_os_allocate_zeroed */

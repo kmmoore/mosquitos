@@ -69,6 +69,8 @@ void acpi_os_release_lock(acpi_spinlock handle, acpi_cpu_flags flags) {
 }
 
 acpi_status acpi_os_create_semaphore(u32 max_units UNUSED, u32 initial_units, acpi_semaphore * out_handle) {
+  // TODO: Implement max_units
+
   *out_handle = kmalloc(sizeof(Semaphore));
   if (*out_handle == NULL) return AE_NO_MEMORY;
 
@@ -77,4 +79,35 @@ acpi_status acpi_os_create_semaphore(u32 max_units UNUSED, u32 initial_units, ac
   return AE_OK;
 }
 
+acpi_status acpi_os_delete_semaphore(acpi_semaphore handle) {
+  kfree(handle);
 
+  return AE_OK;
+}
+
+acpi_status acpi_os_wait_semaphore(acpi_semaphore handle, u32 units, u16 timeout) {
+  if (semaphore_down(handle, units, timeout)) {
+    return AE_OK;
+  } else {
+    return AE_TIME;
+  }
+}
+
+acpi_status acpi_os_signal_semaphore(acpi_semaphore handle, u32 units) {
+  semaphore_up(handle, units);
+
+  return AE_OK;
+}
+
+void acpi_os_printf(const char *format, ...) {
+  va_list arg_list;
+  va_start(arg_list, format);
+
+  text_output_vprintf(format, arg_list);
+
+  va_end(arg_list);
+}
+
+void acpi_os_vprintf(const char *format, va_list args) {
+  text_output_vprintf(format, args);
+}

@@ -22,6 +22,12 @@ static struct {
   list waiting_threads;
 } timer_data;
 
+static inline void wake_waiting_thread(struct waiting_thread *wt) {
+  list_remove(&timer_data.waiting_threads, (list_entry *)wt);
+  thread_wake(wt->thread);
+  kfree(wt);
+}
+
 void timer_isr() {
   ++timer_data.ticks;
 
@@ -29,9 +35,7 @@ void timer_isr() {
   while (current) {
     struct waiting_thread *next = (struct waiting_thread *)list_next((list_entry *)current);
     if (timer_data.ticks >= current->wake_time) {
-      list_remove(&timer_data.waiting_threads, (list_entry *)current);
-      thread_wake(current->thread);
-      kfree(current);
+      wake_waiting_thread(current);
     }
 
     current = next;
@@ -75,6 +79,7 @@ void timer_thread_sleep(uint64_t milliseconds) {
   uint64_t ticks = milliseconds * 1000 / TIMER_FREQUENCY;
   new_entry->wake_time = timer_data.ticks + ticks;
 
+  bool interrupts_enabled = interrupts_status();
   cli();
 
   list_push_front(&timer_data.waiting_threads, &new_entry->entry);
@@ -83,6 +88,24 @@ void timer_thread_sleep(uint64_t milliseconds) {
   // NOTE: Interrupts will be disabled when it returns
   thread_sleep(thread);
 
-  sti();
+  // Only re-enable interrupts if they were enabled before
+  if (interrupts_enabled) sti();
 
 }
+
+void timer_cancel_thread_sleep(KernelThread *thread) {
+  bool interrupts_enabled = interrupts_status();
+  cli();
+
+  struct waiting_thread *current = (struct waiting_thread *)list_head(&timer_data.waiting_threads);
+  while (current) {
+    if (current->thread == thread) {
+      wake_waiting_thread(current);
+    }
+    current = (struct waiting_thread *)list_next(&current->entry);
+  }
+
+  // Only re-enable interrupts if they were enabled before
+  if (interrupts_enabled) sti();
+}
+

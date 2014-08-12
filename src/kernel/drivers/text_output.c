@@ -60,7 +60,7 @@ void text_output_backspace() {
   }
 }
 
-inline void text_output_putchar(char c) {
+inline void text_output_putchar(const char c) {
   if (c == '\n') {
     text_output.current_row += 2; // Put an empty line between text lines
     text_output.current_col = kTextOutputPadding;
@@ -70,14 +70,14 @@ inline void text_output_putchar(char c) {
   }
 }
 
-void text_output_print(char *str) {
+void text_output_print(const char *str) {
   while (*str != '\0') {
     text_output_putchar(*str);
     str++;
   }
 }
 
-void text_output_printf(char *format, ...) {
+void text_output_printf(const char *format, ...) {
   va_list arg_list;
   va_start(arg_list, format);
 
@@ -86,7 +86,7 @@ void text_output_printf(char *format, ...) {
   va_end(arg_list);
 }
 
-void text_output_vprintf(char *format, va_list arg_list) {
+void text_output_vprintf(const char *format, va_list arg_list) {
   char int_conv_buffer[21]; // Can hold a 64-bit decimal string with null termination
 
   while (*format) {

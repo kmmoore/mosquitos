@@ -146,7 +146,10 @@
  *
  *****************************************************************************/
 
-#if defined(_LINUX) || defined(__linux__)
+#if defined(_MOSQUITOS) || defined(__mosquitos__)
+#include "acmosquitos.h"
+
+#elif defined(_LINUX) || defined(__linux__)
 #include <acpi/platform/aclinux.h>
 
 #elif defined(_APPLE) || defined(__APPLE__)
