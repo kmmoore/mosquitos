@@ -57,4 +57,4 @@ include $(DEPS)
 
 # Link
 $(TARGET): $(OBJS)
-	$(LD) $(LDFLAGS) $^ -o $@
+	$(LD) $(LDFLAGS) $^ $(ACPICA_LIB) -o $@

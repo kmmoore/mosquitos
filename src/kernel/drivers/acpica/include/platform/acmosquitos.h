@@ -50,6 +50,7 @@
 
 #undef ACPI_USE_SYSTEM_CLIBRARY
 #define ACPI_USE_DO_WHILE_0
+#define ACPI_REDUCED_HARDWARE 1
 
  #define ACPI_CACHE_T                ACPI_MEMORY_LIST
  #define ACPI_USE_LOCAL_CACHE        1

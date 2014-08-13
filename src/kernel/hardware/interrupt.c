@@ -68,7 +68,7 @@ extern void scheduler_timer_isr(); // We have to handle this separately
 extern void scheduler_yield_without_saving_isr(); // We have to handle this separately
 
 // Public functions
-void interrupts_init() {
+void interrupt_init() {
   // Setup GDT and APIC before we can do interrupts
   gdt_init();
   apic_init();
@@ -115,7 +115,7 @@ void interrupts_init() {
   text_output_print("Done\n");
 }
 
-void interrupts_register_handler(int index, void (*handler)()) {
+void interrupt_register_handler(int index, void (*handler)()) {
   if (index < 0 || index >= 256) return;
 
   interrupts_handlers[index] = handler;

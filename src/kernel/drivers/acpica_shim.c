@@ -2,7 +2,11 @@
 #include "../util.h"
 
 #include "text_output.h"
+#include "pci.h"
+
 #include "../hardware/acpi.h"
+#include "../hardware/timer.h"
+#include "../hardware/interrupt.h"
 #include "../hardware/timer.h"
 #include "../memory/virtual_memory.h"
 #include "../memory/kmalloc.h"
@@ -146,6 +150,114 @@ void * AcpiOsMapMemory(ACPI_PHYSICAL_ADDRESS where, ACPI_SIZE length) {
 void AcpiOsUnmapMemory (void *address, ACPI_SIZE size) {
   vm_pfree(address, size);
 }
+
+ACPI_STATUS AcpiOsReadMemory(ACPI_PHYSICAL_ADDRESS address, UINT64 *value, UINT32 width) {
+  uint64_t full_value = *(uint64_t *)address;
+  *value = (full_value & BOTTOM_N_BITS_ON(width));
+
+  return AE_OK;
+}
+
+ACPI_STATUS AcpiOsWriteMemory(ACPI_PHYSICAL_ADDRESS address, UINT64 value, UINT32 width) {
+  switch (width) {
+    case 64:
+    *(uint64_t *)address = value;
+    break;
+
+    case 32:
+    *(uint32_t *)address = value;
+    break;
+
+    case 16:
+    *(uint16_t *)address = value;
+    break;
+
+    case 8:
+    *(uint8_t *)address = value;
+    break;
+  }
+
+  return AE_OK;
+}
+
+ACPI_STATUS AcpiOsReadPort(ACPI_IO_ADDRESS address, UINT32 *value, UINT32 width) {
+  switch (width) {
+    case 32:
+    *value = io_read_32(address);
+    break;
+
+    case 16:
+    *value = io_read_16(address) & BOTTOM_N_BITS_ON(width);
+    break;
+
+    case 8:
+    *value = io_read_8(address) & BOTTOM_N_BITS_ON(width);
+    break;
+  }
+
+  return AE_OK;
+}
+
+ACPI_STATUS AcpiOsWritePort(ACPI_IO_ADDRESS address, UINT32 value, UINT32 width) {
+  switch (width) {
+    case 32:
+    io_write_32(address, value);
+    break;
+
+    case 16:
+    io_write_16(address, value);
+    break;
+
+    case 8:
+    io_write_8(address, value);
+    break;
+  }
+
+  return AE_OK;
+}
+
+void AcpiOsWaitEventsComplete(void) {
+  panic("AcpiOsWaitEventsComplete");
+}
+
+UINT64 AcpiOsGetTimer(void) {
+  // Return system time in 100-nanosecond units
+  return timer_ticks() * 10000000 / TIMER_FREQUENCY;
+}
+
+ACPI_STATUS AcpiOsReadPciConfiguration(ACPI_PCI_ID *pci_id, UINT32 reg, UINT64 *value, UINT32 width) {
+  uint32_t word = pci_config_read_word(pci_id->Bus, pci_id->Device, pci_id->Function, reg);
+  uint32_t byte_offset_in_word = reg & ((1 << 2) - 1);
+  *value = field_in_word(word, byte_offset_in_word, width >> 3);
+
+  return AE_OK;
+}
+
+ACPI_STATUS AcpiOsWritePciConfiguration(ACPI_PCI_ID *pci_id, UINT32 reg, UINT64 value, UINT32 width) {
+  uint32_t word = pci_config_read_word(pci_id->Bus, pci_id->Device, pci_id->Function, reg);
+  uint32_t byte_offset_in_word = reg & ((1 << 2) - 1);
+
+  uint32_t mask = FIELD_MASK(width, NUM_BITS(byte_offset_in_word));
+  word = (word & ~mask) | (value << NUM_BITS(byte_offset_in_word));
+
+  pci_config_write_word(pci_id->Bus, pci_id->Device, pci_id->Function, reg, word);
+
+  return AE_OK;
+}
+
+// ACPI_STATUS AcpiOsInstallInterruptHandler(UINT32 interrupt_number, ACPI_OSD_HANDLER isr, void *context) {
+//   if (!interrupt_slot_empty(interrupt_number)) return AE_BAD_PARAMETER;
+
+//   interrupt_register_handler(interrupt_number, isr, context);
+
+//   return AE_OK;
+// }
+
+// ACPI_STATUS AcpiOsRemoveInterruptHandler(UINT32 interrupt_number, ACPI_OSD_HANDLER isr UNUSED) {
+//   interrupt_remove_handler(interrupt_number);
+
+//   return AE_OK;
+// }
 
 void AcpiOsPrintf(const char *format, ...) {
   va_list arg_list;

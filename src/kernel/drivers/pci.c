@@ -35,6 +35,19 @@ uint32_t pci_config_read_word (uint8_t bus, uint8_t device, uint8_t func, uint8_
   return io_read_32(0xCFC);
 }
 
+void pci_config_write_word (uint8_t bus, uint8_t device, uint8_t func, uint8_t offset, uint32_t value) {
+  PCIConfigAddress address;
+  address.svalue.offset = offset;
+  address.svalue.function_number = func;
+  address.svalue.device = device;
+  address.svalue.bus_number = bus;
+  address.svalue.reserved = 0;
+  address.svalue.enable = 1;
+
+  io_write_32(0xCF8, address.ivalue);
+  return io_write_32(0xCFC, value);
+}
+
 static void enumerate_devices() {
   for(int bus = 0; bus < 256; bus++) {
     for(int device = 0; device < 32; device++) {

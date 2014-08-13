@@ -54,7 +54,7 @@ void timer_init() {
 
   list_init(&timer_data.waiting_threads);
 
-  interrupts_register_handler(TIMER_IV, timer_isr);
+  interrupt_register_handler(TIMER_IV, timer_isr);
 
   // Use Legacy PIC Timer
   // TODO: Use HPET eventually

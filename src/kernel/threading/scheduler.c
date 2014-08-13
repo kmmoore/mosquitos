@@ -33,7 +33,7 @@ static void apic_timer_calibration_isr() {
 static void calibrate_apic_timer() {
   // Setup a one-shot timer
   apic_setup_local_timer(SCHEDULER_TIMER_DIVIDER, SCHEDULER_TIMER_CALIBRATION_IV, APIC_TIMER_ONE_SHOT, SCHEDULER_TIMER_CALIBRATION_PERIOD);
-  interrupts_register_handler(SCHEDULER_TIMER_CALIBRATION_IV, apic_timer_calibration_isr);
+  interrupt_register_handler(SCHEDULER_TIMER_CALIBRATION_IV, apic_timer_calibration_isr);
 
   text_output_printf("Calibrating APIC timer...");
 

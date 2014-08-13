@@ -89,24 +89,24 @@ static void security_exception() {
 
 void exceptions_init() {
   // Setup interrupt handlers for all exceptions
-  interrupts_register_handler(0, div_by_zero);
-  interrupts_register_handler(1, debug);
-  interrupts_register_handler(2, nmi);
-  interrupts_register_handler(3, breakpoint);
-  interrupts_register_handler(4, overflow);
-  interrupts_register_handler(5, bound_range_exceeded);
-  interrupts_register_handler(6, invalid_opcode);
-  interrupts_register_handler(7, device_not_available);
-  interrupts_register_handler(8, double_fault);
-  interrupts_register_handler(10, invalid_tss);
-  interrupts_register_handler(11, segment_not_present);
-  interrupts_register_handler(12, stack_segment_fault);
-  interrupts_register_handler(13, general_protection_fault);
-  interrupts_register_handler(14, page_fault);
-  interrupts_register_handler(16, x87_fp_exeption);
-  interrupts_register_handler(17, alignment_check);
-  interrupts_register_handler(18, machine_check);
-  interrupts_register_handler(19, simd_fp_exception);
-  interrupts_register_handler(20, virtualization_exception);
-  interrupts_register_handler(30, security_exception);
+  interrupt_register_handler(0, div_by_zero);
+  interrupt_register_handler(1, debug);
+  interrupt_register_handler(2, nmi);
+  interrupt_register_handler(3, breakpoint);
+  interrupt_register_handler(4, overflow);
+  interrupt_register_handler(5, bound_range_exceeded);
+  interrupt_register_handler(6, invalid_opcode);
+  interrupt_register_handler(7, device_not_available);
+  interrupt_register_handler(8, double_fault);
+  interrupt_register_handler(10, invalid_tss);
+  interrupt_register_handler(11, segment_not_present);
+  interrupt_register_handler(12, stack_segment_fault);
+  interrupt_register_handler(13, general_protection_fault);
+  interrupt_register_handler(14, page_fault);
+  interrupt_register_handler(16, x87_fp_exeption);
+  interrupt_register_handler(17, alignment_check);
+  interrupt_register_handler(18, machine_check);
+  interrupt_register_handler(19, simd_fp_exception);
+  interrupt_register_handler(20, virtualization_exception);
+  interrupt_register_handler(30, security_exception);
 }

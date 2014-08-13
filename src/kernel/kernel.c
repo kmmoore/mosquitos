@@ -64,7 +64,7 @@ void kernel_main(KernelInfo info) {
   // Initialize subsystems
   // TODO: Break these into initialization files
   acpi_init(info.xdsp_address);
-  interrupts_init();
+  interrupt_init();
   exceptions_init();
 
   vm_init(info.memory_map, info.mem_map_size, info.mem_map_descriptor_size);
@@ -72,19 +72,11 @@ void kernel_main(KernelInfo info) {
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
 
-  // pci_init();
+  pci_init();
   // sata_init();
 
   timer_init();
-  vm_print_free_list();
-  keyboard_controller_init();
-
-  void * page = vm_pmap(0x200000, 2);
-  text_output_printf("0x%x\n", page);
-  vm_print_free_list();
-  vm_pfree(page, 2);
-  vm_print_free_list();
-  // while(1) __asm__ ("hlt");
+  keyboard_controller_init();;
 
   // Set up scheduler
   scheduler_init();
@@ -96,7 +88,6 @@ void kernel_main(KernelInfo info) {
   thread_start(t1);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call
-  while(1) __asm__ ("hlt");
 
   assert(false); // We should never get here
 }
