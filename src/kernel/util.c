@@ -11,8 +11,29 @@ void _panic(char *format, ...) {
 
   va_end(arg_list);
 
+  print_stack_trace();
+
   __asm__ ("cli \n\t hlt");
 }
+
+void print_stack_trace() {
+  uint64_t rbp;
+  // NOTE: Requires -fno-omit-frame-pointer
+  __asm__ ("movq %%rbp, %0" : "=r" (rbp));
+
+  uint64_t rip = *(uint64_t *)(rbp + 8);
+
+  text_output_printf("Stack Trace:\n");
+
+  while(rip) {
+    text_output_printf("  0x%x\n", rip);
+
+    rbp = *(uint64_t *)(rbp);
+    rip = *(uint64_t *)(rbp + 8);
+  }
+}
+
+
 
 int int2str(uint64_t n, char *buf, int buf_len, int radix) {
   static char *digit_lookup = "0123456789abcdef";

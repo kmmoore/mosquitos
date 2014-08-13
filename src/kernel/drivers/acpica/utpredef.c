@@ -4,67 +4,145 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#define __UTPREDEF_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acpredef.h"
 
+
 #define _COMPONENT          ACPI_UTILITIES
-ACPI_MODULE_NAME("utpredef")
+        ACPI_MODULE_NAME    ("utpredef")
+
 
 /*
  * Names for the types that can be returned by the predefined objects.
  * Used for warning messages. Must be in the same order as the ACPI_RTYPEs
  */
-static const char *ut_rtype_names[] = {
-	"/Integer",
-	"/String",
-	"/Buffer",
-	"/Package",
-	"/Reference",
+static const char   *UtRtypeNames[] =
+{
+    "/Integer",
+    "/String",
+    "/Buffer",
+    "/Package",
+    "/Reference",
 };
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_get_next_predefined_method
+ * FUNCTION:    AcpiUtGetNextPredefinedMethod
  *
- * PARAMETERS:  this_name           - Entry in the predefined method/name table
+ * PARAMETERS:  ThisName            - Entry in the predefined method/name table
  *
  * RETURN:      Pointer to next entry in predefined table.
  *
@@ -74,29 +152,31 @@ static const char *ut_rtype_names[] = {
  *
  ******************************************************************************/
 
-const union acpi_predefined_info *acpi_ut_get_next_predefined_method(const union
-								     acpi_predefined_info
-								     *this_name)
+const ACPI_PREDEFINED_INFO *
+AcpiUtGetNextPredefinedMethod (
+    const ACPI_PREDEFINED_INFO  *ThisName)
 {
 
-	/*
-	 * Skip next entry in the table if this name returns a Package
-	 * (next entry contains the package info)
-	 */
-	if ((this_name->info.expected_btypes & ACPI_RTYPE_PACKAGE) &&
-	    (this_name->info.expected_btypes != ACPI_RTYPE_ALL)) {
-		this_name++;
-	}
+    /*
+     * Skip next entry in the table if this name returns a Package
+     * (next entry contains the package info)
+     */
+    if ((ThisName->Info.ExpectedBtypes & ACPI_RTYPE_PACKAGE) &&
+        (ThisName->Info.ExpectedBtypes != ACPI_RTYPE_ALL))
+    {
+        ThisName++;
+    }
 
-	this_name++;
-	return (this_name);
+    ThisName++;
+    return (ThisName);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_match_predefined_method
+ * FUNCTION:    AcpiUtMatchPredefinedMethod
  *
- * PARAMETERS:  name                - Name to find
+ * PARAMETERS:  Name                - Name to find
  *
  * RETURN:      Pointer to entry in predefined table. NULL indicates not found.
  *
@@ -104,36 +184,43 @@ const union acpi_predefined_info *acpi_ut_get_next_predefined_method(const union
  *
  ******************************************************************************/
 
-const union acpi_predefined_info *acpi_ut_match_predefined_method(char *name)
+const ACPI_PREDEFINED_INFO *
+AcpiUtMatchPredefinedMethod (
+    char                        *Name)
 {
-	const union acpi_predefined_info *this_name;
+    const ACPI_PREDEFINED_INFO  *ThisName;
 
-	/* Quick check for a predefined name, first character must be underscore */
 
-	if (name[0] != '_') {
-		return (NULL);
-	}
+    /* Quick check for a predefined name, first character must be underscore */
 
-	/* Search info table for a predefined method/object name */
+    if (Name[0] != '_')
+    {
+        return (NULL);
+    }
 
-	this_name = acpi_gbl_predefined_methods;
-	while (this_name->info.name[0]) {
-		if (ACPI_COMPARE_NAME(name, this_name->info.name)) {
-			return (this_name);
-		}
+    /* Search info table for a predefined method/object name */
 
-		this_name = acpi_ut_get_next_predefined_method(this_name);
-	}
+    ThisName = AcpiGbl_PredefinedMethods;
+    while (ThisName->Info.Name[0])
+    {
+        if (ACPI_COMPARE_NAME (Name, ThisName->Info.Name))
+        {
+            return (ThisName);
+        }
 
-	return (NULL);		/* Not found */
+        ThisName = AcpiUtGetNextPredefinedMethod (ThisName);
+    }
+
+    return (NULL); /* Not found */
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_get_expected_return_types
+ * FUNCTION:    AcpiUtGetExpectedReturnTypes
  *
- * PARAMETERS:  buffer              - Where the formatted string is returned
- *              expected_Btypes     - Bitfield of expected data types
+ * PARAMETERS:  Buffer              - Where the formatted string is returned
+ *              ExpectedBTypes      - Bitfield of expected data types
  *
  * RETURN:      Formatted string in Buffer.
  *
@@ -141,37 +228,44 @@ const union acpi_predefined_info *acpi_ut_match_predefined_method(char *name)
  *
  ******************************************************************************/
 
-void acpi_ut_get_expected_return_types(char *buffer, u32 expected_btypes)
+void
+AcpiUtGetExpectedReturnTypes (
+    char                    *Buffer,
+    UINT32                  ExpectedBtypes)
 {
-	u32 this_rtype;
-	u32 i;
-	u32 j;
+    UINT32                  ThisRtype;
+    UINT32                  i;
+    UINT32                  j;
 
-	if (!expected_btypes) {
-		ACPI_STRCPY(buffer, "NONE");
-		return;
-	}
 
-	j = 1;
-	buffer[0] = 0;
-	this_rtype = ACPI_RTYPE_INTEGER;
+    if (!ExpectedBtypes)
+    {
+        ACPI_STRCPY (Buffer, "NONE");
+        return;
+    }
 
-	for (i = 0; i < ACPI_NUM_RTYPES; i++) {
+    j = 1;
+    Buffer[0] = 0;
+    ThisRtype = ACPI_RTYPE_INTEGER;
 
-		/* If one of the expected types, concatenate the name of this type */
+    for (i = 0; i < ACPI_NUM_RTYPES; i++)
+    {
+        /* If one of the expected types, concatenate the name of this type */
 
-		if (expected_btypes & this_rtype) {
-			ACPI_STRCAT(buffer, &ut_rtype_names[i][j]);
-			j = 0;	/* Use name separator from now on */
-		}
+        if (ExpectedBtypes & ThisRtype)
+        {
+            ACPI_STRCAT (Buffer, &UtRtypeNames[i][j]);
+            j = 0;              /* Use name separator from now on */
+        }
 
-		this_rtype <<= 1;	/* Next Rtype */
-	}
+        ThisRtype <<= 1;    /* Next Rtype */
+    }
 }
+
 
 /*******************************************************************************
  *
- * The remaining functions are used by iASL and acpi_help only
+ * The remaining functions are used by iASL and AcpiHelp only
  *
  ******************************************************************************/
 
@@ -181,37 +275,43 @@ void acpi_ut_get_expected_return_types(char *buffer, u32 expected_btypes)
 
 /* Local prototypes */
 
-static u32 acpi_ut_get_argument_types(char *buffer, u16 argument_types);
+static UINT32
+AcpiUtGetArgumentTypes (
+    char                    *Buffer,
+    UINT16                  ArgumentTypes);
+
 
 /* Types that can be returned externally by a predefined name */
 
-static const char *ut_external_type_names[] =	/* Indexed by ACPI_TYPE_* */
+static const char   *UtExternalTypeNames[] = /* Indexed by ACPI_TYPE_* */
 {
-	", UNSUPPORTED-TYPE",
-	", Integer",
-	", String",
-	", Buffer",
-	", Package"
+    ", UNSUPPORTED-TYPE",
+    ", Integer",
+    ", String",
+    ", Buffer",
+    ", Package"
 };
 
 /* Bit widths for resource descriptor predefined names */
 
-static const char *ut_resource_type_names[] = {
-	"/1",
-	"/2",
-	"/3",
-	"/8",
-	"/16",
-	"/32",
-	"/64",
-	"/variable",
+static const char   *UtResourceTypeNames[] =
+{
+    "/1",
+    "/2",
+    "/3",
+    "/8",
+    "/16",
+    "/32",
+    "/64",
+    "/variable",
 };
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_match_resource_name
+ * FUNCTION:    AcpiUtMatchResourceName
  *
- * PARAMETERS:  name                - Name to find
+ * PARAMETERS:  Name                - Name to find
  *
  * RETURN:      Pointer to entry in the resource table. NULL indicates not
  *              found.
@@ -221,37 +321,44 @@ static const char *ut_resource_type_names[] = {
  *
  ******************************************************************************/
 
-const union acpi_predefined_info *acpi_ut_match_resource_name(char *name)
+const ACPI_PREDEFINED_INFO *
+AcpiUtMatchResourceName (
+    char                        *Name)
 {
-	const union acpi_predefined_info *this_name;
+    const ACPI_PREDEFINED_INFO  *ThisName;
 
-	/* Quick check for a predefined name, first character must be underscore */
 
-	if (name[0] != '_') {
-		return (NULL);
-	}
+    /* Quick check for a predefined name, first character must be underscore */
 
-	/* Search info table for a predefined method/object name */
+    if (Name[0] != '_')
+    {
+        return (NULL);
+    }
 
-	this_name = acpi_gbl_resource_names;
-	while (this_name->info.name[0]) {
-		if (ACPI_COMPARE_NAME(name, this_name->info.name)) {
-			return (this_name);
-		}
+    /* Search info table for a predefined method/object name */
 
-		this_name++;
-	}
+    ThisName = AcpiGbl_ResourceNames;
+    while (ThisName->Info.Name[0])
+    {
+        if (ACPI_COMPARE_NAME (Name, ThisName->Info.Name))
+        {
+            return (ThisName);
+        }
 
-	return (NULL);		/* Not found */
+        ThisName++;
+    }
+
+    return (NULL); /* Not found */
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_display_predefined_method
+ * FUNCTION:    AcpiUtDisplayPredefinedMethod
  *
- * PARAMETERS:  buffer              - Scratch buffer for this function
- *              this_name           - Entry in the predefined method/name table
- *              multi_line          - TRUE if output should be on >1 line
+ * PARAMETERS:  Buffer              - Scratch buffer for this function
+ *              ThisName            - Entry in the predefined method/name table
+ *              MultiLine           - TRUE if output should be on >1 line
  *
  * RETURN:      None
  *
@@ -262,58 +369,65 @@ const union acpi_predefined_info *acpi_ut_match_resource_name(char *name)
  ******************************************************************************/
 
 void
-acpi_ut_display_predefined_method(char *buffer,
-				  const union acpi_predefined_info *this_name,
-				  u8 multi_line)
+AcpiUtDisplayPredefinedMethod (
+    char                        *Buffer,
+    const ACPI_PREDEFINED_INFO  *ThisName,
+    BOOLEAN                     MultiLine)
 {
-	u32 arg_count;
+    UINT32                      ArgCount;
 
-	/*
-	 * Get the argument count and the string buffer
-	 * containing all argument types
-	 */
-	arg_count = acpi_ut_get_argument_types(buffer,
-					       this_name->info.argument_list);
+    /*
+     * Get the argument count and the string buffer
+     * containing all argument types
+     */
+    ArgCount = AcpiUtGetArgumentTypes (Buffer,
+        ThisName->Info.ArgumentList);
 
-	if (multi_line) {
-		printf("      ");
-	}
+    if (MultiLine)
+    {
+        printf ("      ");
+    }
 
-	printf("%4.4s    Requires %s%u argument%s",
-	       this_name->info.name,
-	       (this_name->info.argument_list & ARG_COUNT_IS_MINIMUM) ?
-	       "(at least) " : "", arg_count, arg_count != 1 ? "s" : "");
+    printf ("%4.4s    Requires %s%u argument%s",
+        ThisName->Info.Name,
+        (ThisName->Info.ArgumentList & ARG_COUNT_IS_MINIMUM) ?
+            "(at least) " : "",
+        ArgCount, ArgCount != 1 ? "s" : "");
 
-	/* Display the types for any arguments */
+    /* Display the types for any arguments */
 
-	if (arg_count > 0) {
-		printf(" (%s)", buffer);
-	}
+    if (ArgCount > 0)
+    {
+        printf (" (%s)", Buffer);
+    }
 
-	if (multi_line) {
-		printf("\n    ");
-	}
+    if (MultiLine)
+    {
+        printf ("\n    ");
+    }
 
-	/* Get the return value type(s) allowed */
+    /* Get the return value type(s) allowed */
 
-	if (this_name->info.expected_btypes) {
-		acpi_ut_get_expected_return_types(buffer,
-						  this_name->info.
-						  expected_btypes);
-		printf("  Return value types: %s\n", buffer);
-	} else {
-		printf("  No return value\n");
-	}
+    if (ThisName->Info.ExpectedBtypes)
+    {
+        AcpiUtGetExpectedReturnTypes (Buffer, ThisName->Info.ExpectedBtypes);
+        printf ("  Return value types: %s\n", Buffer);
+    }
+    else
+    {
+        printf ("  No return value\n");
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_get_argument_types
+ * FUNCTION:    AcpiUtGetArgumentTypes
  *
- * PARAMETERS:  buffer              - Where to return the formatted types
- *              argument_types      - Types field for this method
+ * PARAMETERS:  Buffer              - Where to return the formatted types
+ *              ArgumentTypes       - Types field for this method
  *
- * RETURN:      count - the number of arguments required for this method
+ * RETURN:      Count - the number of arguments required for this method
  *
  * DESCRIPTION: Format the required data types for this method (Integer,
  *              String, Buffer, or Package) and return the required argument
@@ -321,52 +435,57 @@ acpi_ut_display_predefined_method(char *buffer,
  *
  ******************************************************************************/
 
-static u32 acpi_ut_get_argument_types(char *buffer, u16 argument_types)
+static UINT32
+AcpiUtGetArgumentTypes (
+    char                    *Buffer,
+    UINT16                  ArgumentTypes)
 {
-	u16 this_argument_type;
-	u16 sub_index;
-	u16 arg_count;
-	u32 i;
+    UINT16                  ThisArgumentType;
+    UINT16                  SubIndex;
+    UINT16                  ArgCount;
+    UINT32                  i;
 
-	*buffer = 0;
-	sub_index = 2;
 
-	/* First field in the types list is the count of args to follow */
+    *Buffer = 0;
+    SubIndex = 2;
 
-	arg_count = METHOD_GET_ARG_COUNT(argument_types);
-	if (arg_count > METHOD_PREDEF_ARGS_MAX) {
-		printf("**** Invalid argument count (%u) "
-		       "in predefined info structure\n", arg_count);
-		return (arg_count);
-	}
+    /* First field in the types list is the count of args to follow */
 
-	/* Get each argument from the list, convert to ascii, store to buffer */
+    ArgCount = METHOD_GET_ARG_COUNT (ArgumentTypes);
+    if (ArgCount > METHOD_PREDEF_ARGS_MAX)
+    {
+        printf ("**** Invalid argument count (%u) "
+            "in predefined info structure\n", ArgCount);
+        return (ArgCount);
+    }
 
-	for (i = 0; i < arg_count; i++) {
-		this_argument_type = METHOD_GET_NEXT_TYPE(argument_types);
+    /* Get each argument from the list, convert to ascii, store to buffer */
 
-		if (!this_argument_type
-		    || (this_argument_type > METHOD_MAX_ARG_TYPE)) {
-			printf("**** Invalid argument type (%u) "
-			       "in predefined info structure\n",
-			       this_argument_type);
-			return (arg_count);
-		}
+    for (i = 0; i < ArgCount; i++)
+    {
+        ThisArgumentType = METHOD_GET_NEXT_TYPE (ArgumentTypes);
 
-		strcat(buffer,
-		       ut_external_type_names[this_argument_type] + sub_index);
-		sub_index = 0;
-	}
+        if (!ThisArgumentType || (ThisArgumentType > METHOD_MAX_ARG_TYPE))
+        {
+            printf ("**** Invalid argument type (%u) "
+                "in predefined info structure\n", ThisArgumentType);
+            return (ArgCount);
+        }
 
-	return (arg_count);
+        strcat (Buffer, UtExternalTypeNames[ThisArgumentType] + SubIndex);
+        SubIndex = 0;
+    }
+
+    return (ArgCount);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_get_resource_bit_width
+ * FUNCTION:    AcpiUtGetResourceBitWidth
  *
- * PARAMETERS:  buffer              - Where the formatted string is returned
- *              types               - Bitfield of expected data types
+ * PARAMETERS:  Buffer              - Where the formatted string is returned
+ *              Types               - Bitfield of expected data types
  *
  * RETURN:      Count of return types. Formatted string in Buffer.
  *
@@ -374,26 +493,32 @@ static u32 acpi_ut_get_argument_types(char *buffer, u16 argument_types)
  *
  ******************************************************************************/
 
-u32 acpi_ut_get_resource_bit_width(char *buffer, u16 types)
+UINT32
+AcpiUtGetResourceBitWidth (
+    char                    *Buffer,
+    UINT16                  Types)
 {
-	u32 i;
-	u16 sub_index;
-	u32 found;
+    UINT32                  i;
+    UINT16                  SubIndex;
+    UINT32                  Found;
 
-	*buffer = 0;
-	sub_index = 1;
-	found = 0;
 
-	for (i = 0; i < NUM_RESOURCE_WIDTHS; i++) {
-		if (types & 1) {
-			strcat(buffer, &(ut_resource_type_names[i][sub_index]));
-			sub_index = 0;
-			found++;
-		}
+    *Buffer = 0;
+    SubIndex = 1;
+    Found = 0;
 
-		types >>= 1;
-	}
+    for (i = 0; i < NUM_RESOURCE_WIDTHS; i++)
+    {
+        if (Types & 1)
+        {
+            strcat (Buffer, &(UtResourceTypeNames[i][SubIndex]));
+            SubIndex = 0;
+            Found++;
+        }
 
-	return (found);
+        Types >>= 1;
+    }
+
+    return (Found);
 }
 #endif

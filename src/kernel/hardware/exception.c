@@ -1,5 +1,6 @@
 #include "exception.h"
 #include "interrupt.h"
+#include "../util.h"
 
 #include "../drivers/text_output.h"
 
@@ -27,8 +28,8 @@ static void bound_range_exceeded() {
   text_output_print("\nBound Range Exceeded!\n");
 }
 
-static void invalid_opcode() {
-  text_output_print("\nInvalid Opcode!\n");
+static void invalid_opcode(int error_code) {
+  panic("\nInvalid Opcode! RIP: 0x%x\n", error_code);
 }
 
 static void device_not_available() {

@@ -4,60 +4,138 @@
  *
  ******************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+
+#define __UTSTRING_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acnamesp.h"
 
+
 #define _COMPONENT          ACPI_UTILITIES
-ACPI_MODULE_NAME("utstring")
+        ACPI_MODULE_NAME    ("utstring")
+
 
 /*
  * Non-ANSI C library functions - strlwr, strupr, stricmp, and a 64-bit
  * version of strtoul.
  */
+
 #ifdef ACPI_ASL_COMPILER
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_strlwr (strlwr)
+ * FUNCTION:    AcpiUtStrlwr (strlwr)
  *
- * PARAMETERS:  src_string      - The source string to convert
+ * PARAMETERS:  SrcString       - The source string to convert
  *
  * RETURN:      None
  *
@@ -66,31 +144,39 @@ ACPI_MODULE_NAME("utstring")
  * NOTE: This is not a POSIX function, so it appears here, not in utclib.c
  *
  ******************************************************************************/
-void acpi_ut_strlwr(char *src_string)
+
+void
+AcpiUtStrlwr (
+    char                    *SrcString)
 {
-	char *string;
+    char                    *String;
 
-	ACPI_FUNCTION_ENTRY();
 
-	if (!src_string) {
-		return;
-	}
+    ACPI_FUNCTION_ENTRY ();
 
-	/* Walk entire string, lowercasing the letters */
 
-	for (string = src_string; *string; string++) {
-		*string = (char)ACPI_TOLOWER(*string);
-	}
+    if (!SrcString)
+    {
+        return;
+    }
 
-	return;
+    /* Walk entire string, lowercasing the letters */
+
+    for (String = SrcString; *String; String++)
+    {
+        *String = (char) ACPI_TOLOWER (*String);
+    }
+
+    return;
 }
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_ut_stricmp (stricmp)
+ * FUNCTION:    AcpiUtStricmp (stricmp)
  *
- * PARAMETERS:  string1             - first string to compare
- *              string2             - second string to compare
+ * PARAMETERS:  String1             - first string to compare
+ *              String2             - second string to compare
  *
  * RETURN:      int that signifies string relationship. Zero means strings
  *              are equal.
@@ -100,29 +186,35 @@ void acpi_ut_strlwr(char *src_string)
  *
  ******************************************************************************/
 
-int acpi_ut_stricmp(char *string1, char *string2)
+int
+AcpiUtStricmp (
+    char                    *String1,
+    char                    *String2)
 {
-	int c1;
-	int c2;
+    int                     c1;
+    int                     c2;
 
-	do {
-		c1 = tolower((int)*string1);
-		c2 = tolower((int)*string2);
 
-		string1++;
-		string2++;
-	}
-	while ((c1 == c2) && (c1));
+    do
+    {
+        c1 = tolower ((int) *String1);
+        c2 = tolower ((int) *String2);
 
-	return (c1 - c2);
+        String1++;
+        String2++;
+    }
+    while ((c1 == c2) && (c1));
+
+    return (c1 - c2);
 }
 #endif
 
+
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_strupr (strupr)
+ * FUNCTION:    AcpiUtStrupr (strupr)
  *
- * PARAMETERS:  src_string      - The source string to convert
+ * PARAMETERS:  SrcString       - The source string to convert
  *
  * RETURN:      None
  *
@@ -132,33 +224,40 @@ int acpi_ut_stricmp(char *string1, char *string2)
  *
  ******************************************************************************/
 
-void acpi_ut_strupr(char *src_string)
+void
+AcpiUtStrupr (
+    char                    *SrcString)
 {
-	char *string;
+    char                    *String;
 
-	ACPI_FUNCTION_ENTRY();
 
-	if (!src_string) {
-		return;
-	}
+    ACPI_FUNCTION_ENTRY ();
 
-	/* Walk entire string, uppercasing the letters */
 
-	for (string = src_string; *string; string++) {
-		*string = (char)ACPI_TOUPPER(*string);
-	}
+    if (!SrcString)
+    {
+        return;
+    }
 
-	return;
+    /* Walk entire string, uppercasing the letters */
+
+    for (String = SrcString; *String; String++)
+    {
+        *String = (char) ACPI_TOUPPER (*String);
+    }
+
+    return;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_strtoul64
+ * FUNCTION:    AcpiUtStrtoul64
  *
- * PARAMETERS:  string          - Null terminated string
- *              base            - Radix of the string: 16 or ACPI_ANY_BASE;
- *                                ACPI_ANY_BASE means 'in behalf of to_integer'
- *              ret_integer     - Where the converted integer is returned
+ * PARAMETERS:  String          - Null terminated string
+ *              Base            - Radix of the string: 16 or ACPI_ANY_BASE;
+ *                                ACPI_ANY_BASE means 'in behalf of ToInteger'
+ *              RetInteger      - Where the converted integer is returned
  *
  * RETURN:      Status and Converted value
  *
@@ -169,171 +268,206 @@ void acpi_ut_strupr(char *src_string)
  *
  ******************************************************************************/
 
-acpi_status acpi_ut_strtoul64(char *string, u32 base, u64 *ret_integer)
+ACPI_STATUS
+AcpiUtStrtoul64 (
+    char                    *String,
+    UINT32                  Base,
+    UINT64                  *RetInteger)
 {
-	u32 this_digit = 0;
-	u64 return_value = 0;
-	u64 quotient;
-	u64 dividend;
-	u32 to_integer_op = (base == ACPI_ANY_BASE);
-	u32 mode32 = (acpi_gbl_integer_byte_width == 4);
-	u8 valid_digits = 0;
-	u8 sign_of0x = 0;
-	u8 term = 0;
+    UINT32                  ThisDigit = 0;
+    UINT64                  ReturnValue = 0;
+    UINT64                  Quotient;
+    UINT64                  Dividend;
+    UINT32                  ToIntegerOp = (Base == ACPI_ANY_BASE);
+    UINT32                  Mode32 = (AcpiGbl_IntegerByteWidth == 4);
+    UINT8                   ValidDigits = 0;
+    UINT8                   SignOf0x = 0;
+    UINT8                   Term = 0;
 
-	ACPI_FUNCTION_TRACE_STR(ut_stroul64, string);
 
-	switch (base) {
-	case ACPI_ANY_BASE:
-	case 16:
+    ACPI_FUNCTION_TRACE_STR (UtStroul64, String);
 
-		break;
 
-	default:
+    switch (Base)
+    {
+    case ACPI_ANY_BASE:
+    case 16:
 
-		/* Invalid Base */
+        break;
 
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    default:
 
-	if (!string) {
-		goto error_exit;
-	}
+        /* Invalid Base */
 
-	/* Skip over any white space in the buffer */
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-	while ((*string) && (ACPI_IS_SPACE(*string) || *string == '\t')) {
-		string++;
-	}
+    if (!String)
+    {
+        goto ErrorExit;
+    }
 
-	if (to_integer_op) {
-		/*
-		 * Base equal to ACPI_ANY_BASE means 'ToInteger operation case'.
-		 * We need to determine if it is decimal or hexadecimal.
-		 */
-		if ((*string == '0') && (ACPI_TOLOWER(*(string + 1)) == 'x')) {
-			sign_of0x = 1;
-			base = 16;
+    /* Skip over any white space in the buffer */
 
-			/* Skip over the leading '0x' */
-			string += 2;
-		} else {
-			base = 10;
-		}
-	}
+    while ((*String) && (ACPI_IS_SPACE (*String) || *String == '\t'))
+    {
+        String++;
+    }
 
-	/* Any string left? Check that '0x' is not followed by white space. */
+    if (ToIntegerOp)
+    {
+        /*
+         * Base equal to ACPI_ANY_BASE means 'ToInteger operation case'.
+         * We need to determine if it is decimal or hexadecimal.
+         */
+        if ((*String == '0') && (ACPI_TOLOWER (*(String + 1)) == 'x'))
+        {
+            SignOf0x = 1;
+            Base = 16;
 
-	if (!(*string) || ACPI_IS_SPACE(*string) || *string == '\t') {
-		if (to_integer_op) {
-			goto error_exit;
-		} else {
-			goto all_done;
-		}
-	}
+            /* Skip over the leading '0x' */
+            String += 2;
+        }
+        else
+        {
+            Base = 10;
+        }
+    }
 
-	/*
-	 * Perform a 32-bit or 64-bit conversion, depending upon the current
-	 * execution mode of the interpreter
-	 */
-	dividend = (mode32) ? ACPI_UINT32_MAX : ACPI_UINT64_MAX;
+    /* Any string left? Check that '0x' is not followed by white space. */
 
-	/* Main loop: convert the string to a 32- or 64-bit integer */
+    if (!(*String) || ACPI_IS_SPACE (*String) || *String == '\t')
+    {
+        if (ToIntegerOp)
+        {
+            goto ErrorExit;
+        }
+        else
+        {
+            goto AllDone;
+        }
+    }
 
-	while (*string) {
-		if (ACPI_IS_DIGIT(*string)) {
+    /*
+     * Perform a 32-bit or 64-bit conversion, depending upon the current
+     * execution mode of the interpreter
+     */
+    Dividend = (Mode32) ? ACPI_UINT32_MAX : ACPI_UINT64_MAX;
 
-			/* Convert ASCII 0-9 to Decimal value */
+    /* Main loop: convert the string to a 32- or 64-bit integer */
 
-			this_digit = ((u8)*string) - '0';
-		} else if (base == 10) {
+    while (*String)
+    {
+        if (ACPI_IS_DIGIT (*String))
+        {
+            /* Convert ASCII 0-9 to Decimal value */
 
-			/* Digit is out of range; possible in to_integer case only */
+            ThisDigit = ((UINT8) *String) - '0';
+        }
+        else if (Base == 10)
+        {
+            /* Digit is out of range; possible in ToInteger case only */
 
-			term = 1;
-		} else {
-			this_digit = (u8)ACPI_TOUPPER(*string);
-			if (ACPI_IS_XDIGIT((char)this_digit)) {
+            Term = 1;
+        }
+        else
+        {
+            ThisDigit = (UINT8) ACPI_TOUPPER (*String);
+            if (ACPI_IS_XDIGIT ((char) ThisDigit))
+            {
+                /* Convert ASCII Hex char to value */
 
-				/* Convert ASCII Hex char to value */
+                ThisDigit = ThisDigit - 'A' + 10;
+            }
+            else
+            {
+                Term = 1;
+            }
+        }
 
-				this_digit = this_digit - 'A' + 10;
-			} else {
-				term = 1;
-			}
-		}
+        if (Term)
+        {
+            if (ToIntegerOp)
+            {
+                goto ErrorExit;
+            }
+            else
+            {
+                break;
+            }
+        }
+        else if ((ValidDigits == 0) && (ThisDigit == 0) && !SignOf0x)
+        {
+            /* Skip zeros */
+            String++;
+            continue;
+        }
 
-		if (term) {
-			if (to_integer_op) {
-				goto error_exit;
-			} else {
-				break;
-			}
-		} else if ((valid_digits == 0) && (this_digit == 0)
-			   && !sign_of0x) {
+        ValidDigits++;
 
-			/* Skip zeros */
-			string++;
-			continue;
-		}
+        if (SignOf0x && ((ValidDigits > 16) || ((ValidDigits > 8) && Mode32)))
+        {
+            /*
+             * This is ToInteger operation case.
+             * No any restrictions for string-to-integer conversion,
+             * see ACPI spec.
+             */
+            goto ErrorExit;
+        }
 
-		valid_digits++;
+        /* Divide the digit into the correct position */
 
-		if (sign_of0x
-		    && ((valid_digits > 16)
-			|| ((valid_digits > 8) && mode32))) {
-			/*
-			 * This is to_integer operation case.
-			 * No any restrictions for string-to-integer conversion,
-			 * see ACPI spec.
-			 */
-			goto error_exit;
-		}
+        (void) AcpiUtShortDivide ((Dividend - (UINT64) ThisDigit),
+                    Base, &Quotient, NULL);
 
-		/* Divide the digit into the correct position */
+        if (ReturnValue > Quotient)
+        {
+            if (ToIntegerOp)
+            {
+                goto ErrorExit;
+            }
+            else
+            {
+                break;
+            }
+        }
 
-		(void)acpi_ut_short_divide((dividend - (u64)this_digit),
-					   base, &quotient, NULL);
+        ReturnValue *= Base;
+        ReturnValue += ThisDigit;
+        String++;
+    }
 
-		if (return_value > quotient) {
-			if (to_integer_op) {
-				goto error_exit;
-			} else {
-				break;
-			}
-		}
+    /* All done, normal exit */
 
-		return_value *= base;
-		return_value += this_digit;
-		string++;
-	}
+AllDone:
 
-	/* All done, normal exit */
+    ACPI_DEBUG_PRINT ((ACPI_DB_EXEC, "Converted value: %8.8X%8.8X\n",
+        ACPI_FORMAT_UINT64 (ReturnValue)));
 
-all_done:
+    *RetInteger = ReturnValue;
+    return_ACPI_STATUS (AE_OK);
 
-	ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "Converted value: %8.8X%8.8X\n",
-			  ACPI_FORMAT_UINT64(return_value)));
 
-	*ret_integer = return_value;
-	return_ACPI_STATUS(AE_OK);
+ErrorExit:
+    /* Base was set/validated above */
 
-error_exit:
-	/* Base was set/validated above */
-
-	if (base == 10) {
-		return_ACPI_STATUS(AE_BAD_DECIMAL_CONSTANT);
-	} else {
-		return_ACPI_STATUS(AE_BAD_HEX_CONSTANT);
-	}
+    if (Base == 10)
+    {
+        return_ACPI_STATUS (AE_BAD_DECIMAL_CONSTANT);
+    }
+    else
+    {
+        return_ACPI_STATUS (AE_BAD_HEX_CONSTANT);
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_print_string
+ * FUNCTION:    AcpiUtPrintString
  *
- * PARAMETERS:  string          - Null terminated ASCII string
- *              max_length      - Maximum output length. Used to constrain the
+ * PARAMETERS:  String          - Null terminated ASCII string
+ *              MaxLength       - Maximum output length. Used to constrain the
  *                                length of strings during debug output only.
  *
  * RETURN:      None
@@ -343,92 +477,103 @@ error_exit:
  *
  ******************************************************************************/
 
-void acpi_ut_print_string(char *string, u16 max_length)
+void
+AcpiUtPrintString (
+    char                    *String,
+    UINT16                  MaxLength)
 {
-	u32 i;
+    UINT32                  i;
 
-	if (!string) {
-		acpi_os_printf("<\"NULL STRING PTR\">");
-		return;
-	}
 
-	acpi_os_printf("\"");
-	for (i = 0; (i < max_length) && string[i]; i++) {
+    if (!String)
+    {
+        AcpiOsPrintf ("<\"NULL STRING PTR\">");
+        return;
+    }
 
-		/* Escape sequences */
+    AcpiOsPrintf ("\"");
+    for (i = 0; (i < MaxLength) && String[i]; i++)
+    {
+        /* Escape sequences */
 
-		switch (string[i]) {
-		case 0x07:
+        switch (String[i])
+        {
+        case 0x07:
 
-			acpi_os_printf("\\a");	/* BELL */
-			break;
+            AcpiOsPrintf ("\\a");       /* BELL */
+            break;
 
-		case 0x08:
+        case 0x08:
 
-			acpi_os_printf("\\b");	/* BACKSPACE */
-			break;
+            AcpiOsPrintf ("\\b");       /* BACKSPACE */
+            break;
 
-		case 0x0C:
+        case 0x0C:
 
-			acpi_os_printf("\\f");	/* FORMFEED */
-			break;
+            AcpiOsPrintf ("\\f");       /* FORMFEED */
+            break;
 
-		case 0x0A:
+        case 0x0A:
 
-			acpi_os_printf("\\n");	/* LINEFEED */
-			break;
+            AcpiOsPrintf ("\\n");       /* LINEFEED */
+            break;
 
-		case 0x0D:
+        case 0x0D:
 
-			acpi_os_printf("\\r");	/* CARRIAGE RETURN */
-			break;
+            AcpiOsPrintf ("\\r");       /* CARRIAGE RETURN*/
+            break;
 
-		case 0x09:
+        case 0x09:
 
-			acpi_os_printf("\\t");	/* HORIZONTAL TAB */
-			break;
+            AcpiOsPrintf ("\\t");       /* HORIZONTAL TAB */
+            break;
 
-		case 0x0B:
+        case 0x0B:
 
-			acpi_os_printf("\\v");	/* VERTICAL TAB */
-			break;
+            AcpiOsPrintf ("\\v");       /* VERTICAL TAB */
+            break;
 
-		case '\'':	/* Single Quote */
-		case '\"':	/* Double Quote */
-		case '\\':	/* Backslash */
+        case '\'':                      /* Single Quote */
+        case '\"':                      /* Double Quote */
+        case '\\':                      /* Backslash */
 
-			acpi_os_printf("\\%c", (int)string[i]);
-			break;
+            AcpiOsPrintf ("\\%c", (int) String[i]);
+            break;
 
-		default:
+        default:
 
-			/* Check for printable character or hex escape */
+            /* Check for printable character or hex escape */
 
-			if (ACPI_IS_PRINT(string[i])) {
-				/* This is a normal character */
+            if (ACPI_IS_PRINT (String[i]))
+            {
+                /* This is a normal character */
 
-				acpi_os_printf("%c", (int)string[i]);
-			} else {
-				/* All others will be Hex escapes */
+                AcpiOsPrintf ("%c", (int) String[i]);
+            }
+            else
+            {
+                /* All others will be Hex escapes */
 
-				acpi_os_printf("\\x%2.2X", (s32) string[i]);
-			}
-			break;
-		}
-	}
-	acpi_os_printf("\"");
+                AcpiOsPrintf ("\\x%2.2X", (INT32) String[i]);
+            }
+            break;
+        }
+    }
+    AcpiOsPrintf ("\"");
 
-	if (i == max_length && string[i]) {
-		acpi_os_printf("...");
-	}
+    if (i == MaxLength && String[i])
+    {
+        AcpiOsPrintf ("...");
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_valid_acpi_char
+ * FUNCTION:    AcpiUtValidAcpiChar
  *
- * PARAMETERS:  char            - The character to be examined
- *              position        - Byte position (0-3)
+ * PARAMETERS:  Char            - The character to be examined
+ *              Position        - Byte position (0-3)
  *
  * RETURN:      TRUE if the character is valid, FALSE otherwise
  *
@@ -441,29 +586,35 @@ void acpi_ut_print_string(char *string, u16 max_length)
  *
  ******************************************************************************/
 
-u8 acpi_ut_valid_acpi_char(char character, u32 position)
+BOOLEAN
+AcpiUtValidAcpiChar (
+    char                    Character,
+    UINT32                  Position)
 {
 
-	if (!((character >= 'A' && character <= 'Z') ||
-	      (character >= '0' && character <= '9') || (character == '_'))) {
+    if (!((Character >= 'A' && Character <= 'Z') ||
+          (Character >= '0' && Character <= '9') ||
+          (Character == '_')))
+    {
+        /* Allow a '!' in the last position */
 
-		/* Allow a '!' in the last position */
+        if (Character == '!' && Position == 3)
+        {
+            return (TRUE);
+        }
 
-		if (character == '!' && position == 3) {
-			return (TRUE);
-		}
+        return (FALSE);
+    }
 
-		return (FALSE);
-	}
-
-	return (TRUE);
+    return (TRUE);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_valid_acpi_name
+ * FUNCTION:    AcpiUtValidAcpiName
  *
- * PARAMETERS:  name            - The name to be examined. Does not have to
+ * PARAMETERS:  Name            - The name to be examined. Does not have to
  *                                be NULL terminated string.
  *
  * RETURN:      TRUE if the name is valid, FALSE otherwise
@@ -475,26 +626,33 @@ u8 acpi_ut_valid_acpi_char(char character, u32 position)
  *
  ******************************************************************************/
 
-u8 acpi_ut_valid_acpi_name(char *name)
+BOOLEAN
+AcpiUtValidAcpiName (
+    char                    *Name)
 {
-	u32 i;
+    UINT32                  i;
 
-	ACPI_FUNCTION_ENTRY();
 
-	for (i = 0; i < ACPI_NAME_SIZE; i++) {
-		if (!acpi_ut_valid_acpi_char(name[i], i)) {
-			return (FALSE);
-		}
-	}
+    ACPI_FUNCTION_ENTRY ();
 
-	return (TRUE);
+
+    for (i = 0; i < ACPI_NAME_SIZE; i++)
+    {
+        if (!AcpiUtValidAcpiChar (Name[i], i))
+        {
+            return (FALSE);
+        }
+    }
+
+    return (TRUE);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_repair_name
+ * FUNCTION:    AcpiUtRepairName
  *
- * PARAMETERS:  name            - The ACPI name to be repaired
+ * PARAMETERS:  Name            - The ACPI name to be repaired
  *
  * RETURN:      Repaired version of the name
  *
@@ -512,54 +670,64 @@ u8 acpi_ut_valid_acpi_name(char *name)
  *
  ******************************************************************************/
 
-void acpi_ut_repair_name(char *name)
+void
+AcpiUtRepairName (
+    char                    *Name)
 {
-	u32 i;
-	u8 found_bad_char = FALSE;
-	u32 original_name;
+    UINT32                  i;
+    BOOLEAN                 FoundBadChar = FALSE;
+    UINT32                  OriginalName;
 
-	ACPI_FUNCTION_NAME(ut_repair_name);
 
-	ACPI_MOVE_NAME(&original_name, name);
+    ACPI_FUNCTION_NAME (UtRepairName);
 
-	/* Check each character in the name */
 
-	for (i = 0; i < ACPI_NAME_SIZE; i++) {
-		if (acpi_ut_valid_acpi_char(name[i], i)) {
-			continue;
-		}
+    ACPI_MOVE_NAME (&OriginalName, Name);
 
-		/*
-		 * Replace a bad character with something printable, yet technically
-		 * still invalid. This prevents any collisions with existing "good"
-		 * names in the namespace.
-		 */
-		name[i] = '*';
-		found_bad_char = TRUE;
-	}
+    /* Check each character in the name */
 
-	if (found_bad_char) {
+    for (i = 0; i < ACPI_NAME_SIZE; i++)
+    {
+        if (AcpiUtValidAcpiChar (Name[i], i))
+        {
+            continue;
+        }
 
-		/* Report warning only if in strict mode or debug mode */
+        /*
+         * Replace a bad character with something printable, yet technically
+         * still invalid. This prevents any collisions with existing "good"
+         * names in the namespace.
+         */
+        Name[i] = '*';
+        FoundBadChar = TRUE;
+    }
 
-		if (!acpi_gbl_enable_interpreter_slack) {
-			ACPI_WARNING((AE_INFO,
-				      "Invalid character(s) in name (0x%.8X), repaired: [%4.4s]",
-				      original_name, name));
-		} else {
-			ACPI_DEBUG_PRINT((ACPI_DB_INFO,
-					  "Invalid character(s) in name (0x%.8X), repaired: [%4.4s]",
-					  original_name, name));
-		}
-	}
+    if (FoundBadChar)
+    {
+        /* Report warning only if in strict mode or debug mode */
+
+        if (!AcpiGbl_EnableInterpreterSlack)
+        {
+            ACPI_WARNING ((AE_INFO,
+                "Invalid character(s) in name (0x%.8X), repaired: [%4.4s]",
+                OriginalName, Name));
+        }
+        else
+        {
+            ACPI_DEBUG_PRINT ((ACPI_DB_INFO,
+                "Invalid character(s) in name (0x%.8X), repaired: [%4.4s]",
+                OriginalName, Name));
+        }
+    }
 }
+
 
 #if defined ACPI_ASL_COMPILER || defined ACPI_EXEC_APP
 /*******************************************************************************
  *
- * FUNCTION:    ut_convert_backslashes
+ * FUNCTION:    UtConvertBackslashes
  *
- * PARAMETERS:  pathname        - File pathname string to be converted
+ * PARAMETERS:  Pathname        - File pathname string to be converted
  *
  * RETURN:      Modifies the input Pathname
  *
@@ -568,27 +736,32 @@ void acpi_ut_repair_name(char *name)
  *
  ******************************************************************************/
 
-void ut_convert_backslashes(char *pathname)
+void
+UtConvertBackslashes (
+    char                    *Pathname)
 {
 
-	if (!pathname) {
-		return;
-	}
+    if (!Pathname)
+    {
+        return;
+    }
 
-	while (*pathname) {
-		if (*pathname == '\\') {
-			*pathname = '/';
-		}
+    while (*Pathname)
+    {
+        if (*Pathname == '\\')
+        {
+            *Pathname = '/';
+        }
 
-		pathname++;
-	}
+        Pathname++;
+    }
 }
 #endif
 
 #if defined (ACPI_DEBUGGER) || defined (ACPI_APPLICATION)
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_safe_strcpy, acpi_ut_safe_strcat, acpi_ut_safe_strncat
+ * FUNCTION:    AcpiUtSafeStrcpy, AcpiUtSafeStrcat, AcpiUtSafeStrncat
  *
  * PARAMETERS:  Adds a "DestSize" parameter to each of the standard string
  *              functions. This is the size of the Destination buffer.
@@ -606,43 +779,56 @@ void ut_convert_backslashes(char *pathname)
  *
  ******************************************************************************/
 
-u8 acpi_ut_safe_strcpy(char *dest, acpi_size dest_size, char *source)
+BOOLEAN
+AcpiUtSafeStrcpy (
+    char                    *Dest,
+    ACPI_SIZE               DestSize,
+    char                    *Source)
 {
 
-	if (ACPI_STRLEN(source) >= dest_size) {
-		return (TRUE);
-	}
+    if (ACPI_STRLEN (Source) >= DestSize)
+    {
+        return (TRUE);
+    }
 
-	ACPI_STRCPY(dest, source);
-	return (FALSE);
+    ACPI_STRCPY (Dest, Source);
+    return (FALSE);
 }
 
-u8 acpi_ut_safe_strcat(char *dest, acpi_size dest_size, char *source)
+BOOLEAN
+AcpiUtSafeStrcat (
+    char                    *Dest,
+    ACPI_SIZE               DestSize,
+    char                    *Source)
 {
 
-	if ((ACPI_STRLEN(dest) + ACPI_STRLEN(source)) >= dest_size) {
-		return (TRUE);
-	}
+    if ((ACPI_STRLEN (Dest) + ACPI_STRLEN (Source)) >= DestSize)
+    {
+        return (TRUE);
+    }
 
-	ACPI_STRCAT(dest, source);
-	return (FALSE);
+    ACPI_STRCAT (Dest, Source);
+    return (FALSE);
 }
 
-u8
-acpi_ut_safe_strncat(char *dest,
-		     acpi_size dest_size,
-		     char *source, acpi_size max_transfer_length)
+BOOLEAN
+AcpiUtSafeStrncat (
+    char                    *Dest,
+    ACPI_SIZE               DestSize,
+    char                    *Source,
+    ACPI_SIZE               MaxTransferLength)
 {
-	acpi_size actual_transfer_length;
+    ACPI_SIZE               ActualTransferLength;
 
-	actual_transfer_length =
-	    ACPI_MIN(max_transfer_length, ACPI_STRLEN(source));
 
-	if ((ACPI_STRLEN(dest) + actual_transfer_length) >= dest_size) {
-		return (TRUE);
-	}
+    ActualTransferLength = ACPI_MIN (MaxTransferLength, ACPI_STRLEN (Source));
 
-	ACPI_STRNCAT(dest, source, max_transfer_length);
-	return (FALSE);
+    if ((ACPI_STRLEN (Dest) + ActualTransferLength) >= DestSize)
+    {
+        return (TRUE);
+    }
+
+    ACPI_STRNCAT (Dest, Source, MaxTransferLength);
+    return (FALSE);
 }
 #endif

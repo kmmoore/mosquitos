@@ -50,6 +50,6 @@ void keyboard_isr() {
 
 void keyboard_controller_init() {
   // Map keyboard interrupt
-  ioapic_map(KEYBOARD_IRQ, KEYBOARD_IV);
   interrupts_register_handler(KEYBOARD_IV, keyboard_isr);
+  ioapic_map(KEYBOARD_IRQ, KEYBOARD_IV);
 }

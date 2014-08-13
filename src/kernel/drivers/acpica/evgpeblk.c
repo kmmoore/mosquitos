@@ -4,65 +4,143 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#include "acpi.h"
 #include "accommon.h"
 #include "acevents.h"
 #include "acnamesp.h"
 
 #define _COMPONENT          ACPI_EVENTS
-ACPI_MODULE_NAME("evgpeblk")
-#if (!ACPI_REDUCED_HARDWARE)	/* Entire module */
-/* Local prototypes */
-static acpi_status
-acpi_ev_install_gpe_block(struct acpi_gpe_block_info *gpe_block,
-			  u32 interrupt_number);
+        ACPI_MODULE_NAME    ("evgpeblk")
 
-static acpi_status
-acpi_ev_create_gpe_info_blocks(struct acpi_gpe_block_info *gpe_block);
+#if (!ACPI_REDUCED_HARDWARE) /* Entire module */
+
+/* Local prototypes */
+
+static ACPI_STATUS
+AcpiEvInstallGpeBlock (
+    ACPI_GPE_BLOCK_INFO     *GpeBlock,
+    UINT32                  InterruptNumber);
+
+static ACPI_STATUS
+AcpiEvCreateGpeInfoBlocks (
+    ACPI_GPE_BLOCK_INFO     *GpeBlock);
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_install_gpe_block
+ * FUNCTION:    AcpiEvInstallGpeBlock
  *
- * PARAMETERS:  gpe_block               - New GPE block
- *              interrupt_number        - Xrupt to be associated with this
+ * PARAMETERS:  GpeBlock                - New GPE block
+ *              InterruptNumber         - Xrupt to be associated with this
  *                                        GPE block
  *
  * RETURN:      Status
@@ -71,56 +149,66 @@ acpi_ev_create_gpe_info_blocks(struct acpi_gpe_block_info *gpe_block);
  *
  ******************************************************************************/
 
-static acpi_status
-acpi_ev_install_gpe_block(struct acpi_gpe_block_info *gpe_block,
-			  u32 interrupt_number)
+static ACPI_STATUS
+AcpiEvInstallGpeBlock (
+    ACPI_GPE_BLOCK_INFO     *GpeBlock,
+    UINT32                  InterruptNumber)
 {
-	struct acpi_gpe_block_info *next_gpe_block;
-	struct acpi_gpe_xrupt_info *gpe_xrupt_block;
-	acpi_status status;
-	acpi_cpu_flags flags;
+    ACPI_GPE_BLOCK_INFO     *NextGpeBlock;
+    ACPI_GPE_XRUPT_INFO     *GpeXruptBlock;
+    ACPI_STATUS             Status;
+    ACPI_CPU_FLAGS          Flags;
 
-	ACPI_FUNCTION_TRACE(ev_install_gpe_block);
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_EVENTS);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    ACPI_FUNCTION_TRACE (EvInstallGpeBlock);
 
-	status =
-	    acpi_ev_get_gpe_xrupt_block(interrupt_number, &gpe_xrupt_block);
-	if (ACPI_FAILURE(status)) {
-		goto unlock_and_exit;
-	}
 
-	/* Install the new block at the end of the list with lock */
+    Status = AcpiUtAcquireMutex (ACPI_MTX_EVENTS);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	flags = acpi_os_acquire_lock(acpi_gbl_gpe_lock);
-	if (gpe_xrupt_block->gpe_block_list_head) {
-		next_gpe_block = gpe_xrupt_block->gpe_block_list_head;
-		while (next_gpe_block->next) {
-			next_gpe_block = next_gpe_block->next;
-		}
+    Status = AcpiEvGetGpeXruptBlock (InterruptNumber, &GpeXruptBlock);
+    if (ACPI_FAILURE (Status))
+    {
+        goto UnlockAndExit;
+    }
 
-		next_gpe_block->next = gpe_block;
-		gpe_block->previous = next_gpe_block;
-	} else {
-		gpe_xrupt_block->gpe_block_list_head = gpe_block;
-	}
+    /* Install the new block at the end of the list with lock */
 
-	gpe_block->xrupt_block = gpe_xrupt_block;
-	acpi_os_release_lock(acpi_gbl_gpe_lock, flags);
+    Flags = AcpiOsAcquireLock (AcpiGbl_GpeLock);
+    if (GpeXruptBlock->GpeBlockListHead)
+    {
+        NextGpeBlock = GpeXruptBlock->GpeBlockListHead;
+        while (NextGpeBlock->Next)
+        {
+            NextGpeBlock = NextGpeBlock->Next;
+        }
 
-unlock_and_exit:
-	(void)acpi_ut_release_mutex(ACPI_MTX_EVENTS);
-	return_ACPI_STATUS(status);
+        NextGpeBlock->Next = GpeBlock;
+        GpeBlock->Previous = NextGpeBlock;
+    }
+    else
+    {
+        GpeXruptBlock->GpeBlockListHead = GpeBlock;
+    }
+
+    GpeBlock->XruptBlock = GpeXruptBlock;
+    AcpiOsReleaseLock (AcpiGbl_GpeLock, Flags);
+
+
+UnlockAndExit:
+    (void) AcpiUtReleaseMutex (ACPI_MTX_EVENTS);
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_delete_gpe_block
+ * FUNCTION:    AcpiEvDeleteGpeBlock
  *
- * PARAMETERS:  gpe_block           - Existing GPE block
+ * PARAMETERS:  GpeBlock            - Existing GPE block
  *
  * RETURN:      Status
  *
@@ -128,197 +216,215 @@ unlock_and_exit:
  *
  ******************************************************************************/
 
-acpi_status acpi_ev_delete_gpe_block(struct acpi_gpe_block_info *gpe_block)
+ACPI_STATUS
+AcpiEvDeleteGpeBlock (
+    ACPI_GPE_BLOCK_INFO     *GpeBlock)
 {
-	acpi_status status;
-	acpi_cpu_flags flags;
+    ACPI_STATUS             Status;
+    ACPI_CPU_FLAGS          Flags;
 
-	ACPI_FUNCTION_TRACE(ev_install_gpe_block);
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_EVENTS);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    ACPI_FUNCTION_TRACE (EvInstallGpeBlock);
 
-	/* Disable all GPEs in this block */
 
-	status =
-	    acpi_hw_disable_gpe_block(gpe_block->xrupt_block, gpe_block, NULL);
+    Status = AcpiUtAcquireMutex (ACPI_MTX_EVENTS);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	if (!gpe_block->previous && !gpe_block->next) {
+    /* Disable all GPEs in this block */
 
-		/* This is the last gpe_block on this interrupt */
+    Status = AcpiHwDisableGpeBlock (GpeBlock->XruptBlock, GpeBlock, NULL);
 
-		status = acpi_ev_delete_gpe_xrupt(gpe_block->xrupt_block);
-		if (ACPI_FAILURE(status)) {
-			goto unlock_and_exit;
-		}
-	} else {
-		/* Remove the block on this interrupt with lock */
+    if (!GpeBlock->Previous && !GpeBlock->Next)
+    {
+        /* This is the last GpeBlock on this interrupt */
 
-		flags = acpi_os_acquire_lock(acpi_gbl_gpe_lock);
-		if (gpe_block->previous) {
-			gpe_block->previous->next = gpe_block->next;
-		} else {
-			gpe_block->xrupt_block->gpe_block_list_head =
-			    gpe_block->next;
-		}
+        Status = AcpiEvDeleteGpeXrupt (GpeBlock->XruptBlock);
+        if (ACPI_FAILURE (Status))
+        {
+            goto UnlockAndExit;
+        }
+    }
+    else
+    {
+        /* Remove the block on this interrupt with lock */
 
-		if (gpe_block->next) {
-			gpe_block->next->previous = gpe_block->previous;
-		}
-		acpi_os_release_lock(acpi_gbl_gpe_lock, flags);
-	}
+        Flags = AcpiOsAcquireLock (AcpiGbl_GpeLock);
+        if (GpeBlock->Previous)
+        {
+            GpeBlock->Previous->Next = GpeBlock->Next;
+        }
+        else
+        {
+            GpeBlock->XruptBlock->GpeBlockListHead = GpeBlock->Next;
+        }
 
-	acpi_current_gpe_count -= gpe_block->gpe_count;
+        if (GpeBlock->Next)
+        {
+            GpeBlock->Next->Previous = GpeBlock->Previous;
+        }
+        AcpiOsReleaseLock (AcpiGbl_GpeLock, Flags);
+    }
 
-	/* Free the gpe_block */
+    AcpiCurrentGpeCount -= GpeBlock->GpeCount;
 
-	ACPI_FREE(gpe_block->register_info);
-	ACPI_FREE(gpe_block->event_info);
-	ACPI_FREE(gpe_block);
+    /* Free the GpeBlock */
 
-unlock_and_exit:
-	status = acpi_ut_release_mutex(ACPI_MTX_EVENTS);
-	return_ACPI_STATUS(status);
+    ACPI_FREE (GpeBlock->RegisterInfo);
+    ACPI_FREE (GpeBlock->EventInfo);
+    ACPI_FREE (GpeBlock);
+
+UnlockAndExit:
+    Status = AcpiUtReleaseMutex (ACPI_MTX_EVENTS);
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_create_gpe_info_blocks
+ * FUNCTION:    AcpiEvCreateGpeInfoBlocks
  *
- * PARAMETERS:  gpe_block   - New GPE block
+ * PARAMETERS:  GpeBlock    - New GPE block
  *
  * RETURN:      Status
  *
- * DESCRIPTION: Create the register_info and event_info blocks for this GPE block
+ * DESCRIPTION: Create the RegisterInfo and EventInfo blocks for this GPE block
  *
  ******************************************************************************/
 
-static acpi_status
-acpi_ev_create_gpe_info_blocks(struct acpi_gpe_block_info *gpe_block)
+static ACPI_STATUS
+AcpiEvCreateGpeInfoBlocks (
+    ACPI_GPE_BLOCK_INFO     *GpeBlock)
 {
-	struct acpi_gpe_register_info *gpe_register_info = NULL;
-	struct acpi_gpe_event_info *gpe_event_info = NULL;
-	struct acpi_gpe_event_info *this_event;
-	struct acpi_gpe_register_info *this_register;
-	u32 i;
-	u32 j;
-	acpi_status status;
+    ACPI_GPE_REGISTER_INFO  *GpeRegisterInfo = NULL;
+    ACPI_GPE_EVENT_INFO     *GpeEventInfo = NULL;
+    ACPI_GPE_EVENT_INFO     *ThisEvent;
+    ACPI_GPE_REGISTER_INFO  *ThisRegister;
+    UINT32                  i;
+    UINT32                  j;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(ev_create_gpe_info_blocks);
 
-	/* Allocate the GPE register information block */
+    ACPI_FUNCTION_TRACE (EvCreateGpeInfoBlocks);
 
-	gpe_register_info = ACPI_ALLOCATE_ZEROED((acpi_size) gpe_block->
-						 register_count *
-						 sizeof(struct
-							acpi_gpe_register_info));
-	if (!gpe_register_info) {
-		ACPI_ERROR((AE_INFO,
-			    "Could not allocate the GpeRegisterInfo table"));
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
 
-	/*
-	 * Allocate the GPE event_info block. There are eight distinct GPEs
-	 * per register. Initialization to zeros is sufficient.
-	 */
-	gpe_event_info = ACPI_ALLOCATE_ZEROED((acpi_size) gpe_block->gpe_count *
-					      sizeof(struct
-						     acpi_gpe_event_info));
-	if (!gpe_event_info) {
-		ACPI_ERROR((AE_INFO,
-			    "Could not allocate the GpeEventInfo table"));
-		status = AE_NO_MEMORY;
-		goto error_exit;
-	}
+    /* Allocate the GPE register information block */
 
-	/* Save the new Info arrays in the GPE block */
+    GpeRegisterInfo = ACPI_ALLOCATE_ZEROED (
+                        (ACPI_SIZE) GpeBlock->RegisterCount *
+                        sizeof (ACPI_GPE_REGISTER_INFO));
+    if (!GpeRegisterInfo)
+    {
+        ACPI_ERROR ((AE_INFO,
+            "Could not allocate the GpeRegisterInfo table"));
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	gpe_block->register_info = gpe_register_info;
-	gpe_block->event_info = gpe_event_info;
+    /*
+     * Allocate the GPE EventInfo block. There are eight distinct GPEs
+     * per register. Initialization to zeros is sufficient.
+     */
+    GpeEventInfo = ACPI_ALLOCATE_ZEROED ((ACPI_SIZE) GpeBlock->GpeCount *
+                    sizeof (ACPI_GPE_EVENT_INFO));
+    if (!GpeEventInfo)
+    {
+        ACPI_ERROR ((AE_INFO,
+            "Could not allocate the GpeEventInfo table"));
+        Status = AE_NO_MEMORY;
+        goto ErrorExit;
+    }
 
-	/*
-	 * Initialize the GPE Register and Event structures. A goal of these
-	 * tables is to hide the fact that there are two separate GPE register
-	 * sets in a given GPE hardware block, the status registers occupy the
-	 * first half, and the enable registers occupy the second half.
-	 */
-	this_register = gpe_register_info;
-	this_event = gpe_event_info;
+    /* Save the new Info arrays in the GPE block */
 
-	for (i = 0; i < gpe_block->register_count; i++) {
+    GpeBlock->RegisterInfo = GpeRegisterInfo;
+    GpeBlock->EventInfo    = GpeEventInfo;
 
-		/* Init the register_info for this GPE register (8 GPEs) */
+    /*
+     * Initialize the GPE Register and Event structures. A goal of these
+     * tables is to hide the fact that there are two separate GPE register
+     * sets in a given GPE hardware block, the status registers occupy the
+     * first half, and the enable registers occupy the second half.
+     */
+    ThisRegister = GpeRegisterInfo;
+    ThisEvent    = GpeEventInfo;
 
-		this_register->base_gpe_number = (u16)
-		    (gpe_block->block_base_number +
-		     (i * ACPI_GPE_REGISTER_WIDTH));
+    for (i = 0; i < GpeBlock->RegisterCount; i++)
+    {
+        /* Init the RegisterInfo for this GPE register (8 GPEs) */
 
-		this_register->status_address.address = gpe_block->address + i;
+        ThisRegister->BaseGpeNumber = (UINT16)
+            (GpeBlock->BlockBaseNumber + (i * ACPI_GPE_REGISTER_WIDTH));
 
-		this_register->enable_address.address =
-		    gpe_block->address + i + gpe_block->register_count;
+        ThisRegister->StatusAddress.Address =
+            GpeBlock->Address + i;
 
-		this_register->status_address.space_id = gpe_block->space_id;
-		this_register->enable_address.space_id = gpe_block->space_id;
-		this_register->status_address.bit_width =
-		    ACPI_GPE_REGISTER_WIDTH;
-		this_register->enable_address.bit_width =
-		    ACPI_GPE_REGISTER_WIDTH;
-		this_register->status_address.bit_offset = 0;
-		this_register->enable_address.bit_offset = 0;
+        ThisRegister->EnableAddress.Address =
+            GpeBlock->Address + i + GpeBlock->RegisterCount;
 
-		/* Init the event_info for each GPE within this register */
+        ThisRegister->StatusAddress.SpaceId   = GpeBlock->SpaceId;
+        ThisRegister->EnableAddress.SpaceId   = GpeBlock->SpaceId;
+        ThisRegister->StatusAddress.BitWidth  = ACPI_GPE_REGISTER_WIDTH;
+        ThisRegister->EnableAddress.BitWidth  = ACPI_GPE_REGISTER_WIDTH;
+        ThisRegister->StatusAddress.BitOffset = 0;
+        ThisRegister->EnableAddress.BitOffset = 0;
 
-		for (j = 0; j < ACPI_GPE_REGISTER_WIDTH; j++) {
-			this_event->gpe_number =
-			    (u8) (this_register->base_gpe_number + j);
-			this_event->register_info = this_register;
-			this_event++;
-		}
+        /* Init the EventInfo for each GPE within this register */
 
-		/* Disable all GPEs within this register */
+        for (j = 0; j < ACPI_GPE_REGISTER_WIDTH; j++)
+        {
+            ThisEvent->GpeNumber = (UINT8) (ThisRegister->BaseGpeNumber + j);
+            ThisEvent->RegisterInfo = ThisRegister;
+            ThisEvent++;
+        }
 
-		status = acpi_hw_write(0x00, &this_register->enable_address);
-		if (ACPI_FAILURE(status)) {
-			goto error_exit;
-		}
+        /* Disable all GPEs within this register */
 
-		/* Clear any pending GPE events within this register */
+        Status = AcpiHwWrite (0x00, &ThisRegister->EnableAddress);
+        if (ACPI_FAILURE (Status))
+        {
+            goto ErrorExit;
+        }
 
-		status = acpi_hw_write(0xFF, &this_register->status_address);
-		if (ACPI_FAILURE(status)) {
-			goto error_exit;
-		}
+        /* Clear any pending GPE events within this register */
 
-		this_register++;
-	}
+        Status = AcpiHwWrite (0xFF, &ThisRegister->StatusAddress);
+        if (ACPI_FAILURE (Status))
+        {
+            goto ErrorExit;
+        }
 
-	return_ACPI_STATUS(AE_OK);
+        ThisRegister++;
+    }
 
-error_exit:
-	if (gpe_register_info) {
-		ACPI_FREE(gpe_register_info);
-	}
-	if (gpe_event_info) {
-		ACPI_FREE(gpe_event_info);
-	}
+    return_ACPI_STATUS (AE_OK);
 
-	return_ACPI_STATUS(status);
+
+ErrorExit:
+    if (GpeRegisterInfo)
+    {
+        ACPI_FREE (GpeRegisterInfo);
+    }
+    if (GpeEventInfo)
+    {
+        ACPI_FREE (GpeEventInfo);
+    }
+
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_create_gpe_block
+ * FUNCTION:    AcpiEvCreateGpeBlock
  *
- * PARAMETERS:  gpe_device          - Handle to the parent GPE block
- *              gpe_block_address   - Address and space_ID
- *              register_count      - Number of GPE register pairs in the block
- *              gpe_block_base_number - Starting GPE number for the block
- *              interrupt_number    - H/W interrupt for the block
- *              return_gpe_block    - Where the new block descriptor is returned
+ * PARAMETERS:  GpeDevice           - Handle to the parent GPE block
+ *              GpeBlockAddress     - Address and SpaceID
+ *              RegisterCount       - Number of GPE register pairs in the block
+ *              GpeBlockBaseNumber  - Starting GPE number for the block
+ *              InterruptNumber     - H/W interrupt for the block
+ *              ReturnGpeBlock      - Where the new block descriptor is returned
  *
  * RETURN:      Status
  *
@@ -328,102 +434,107 @@ error_exit:
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ev_create_gpe_block(struct acpi_namespace_node *gpe_device,
-			 u64 address,
-			 u8 space_id,
-			 u32 register_count,
-			 u16 gpe_block_base_number,
-			 u32 interrupt_number,
-			 struct acpi_gpe_block_info **return_gpe_block)
+ACPI_STATUS
+AcpiEvCreateGpeBlock (
+    ACPI_NAMESPACE_NODE     *GpeDevice,
+    UINT64                  Address,
+    UINT8                   SpaceId,
+    UINT32                  RegisterCount,
+    UINT16                  GpeBlockBaseNumber,
+    UINT32                  InterruptNumber,
+    ACPI_GPE_BLOCK_INFO     **ReturnGpeBlock)
 {
-	acpi_status status;
-	struct acpi_gpe_block_info *gpe_block;
-	struct acpi_gpe_walk_info walk_info;
+    ACPI_STATUS             Status;
+    ACPI_GPE_BLOCK_INFO     *GpeBlock;
+    ACPI_GPE_WALK_INFO      WalkInfo;
 
-	ACPI_FUNCTION_TRACE(ev_create_gpe_block);
 
-	if (!register_count) {
-		return_ACPI_STATUS(AE_OK);
-	}
+    ACPI_FUNCTION_TRACE (EvCreateGpeBlock);
 
-	/* Allocate a new GPE block */
 
-	gpe_block = ACPI_ALLOCATE_ZEROED(sizeof(struct acpi_gpe_block_info));
-	if (!gpe_block) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
+    if (!RegisterCount)
+    {
+        return_ACPI_STATUS (AE_OK);
+    }
 
-	/* Initialize the new GPE block */
+    /* Allocate a new GPE block */
 
-	gpe_block->address = address;
-	gpe_block->space_id = space_id;
-	gpe_block->node = gpe_device;
-	gpe_block->gpe_count = (u16)(register_count * ACPI_GPE_REGISTER_WIDTH);
-	gpe_block->initialized = FALSE;
-	gpe_block->register_count = register_count;
-	gpe_block->block_base_number = gpe_block_base_number;
+    GpeBlock = ACPI_ALLOCATE_ZEROED (sizeof (ACPI_GPE_BLOCK_INFO));
+    if (!GpeBlock)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	/*
-	 * Create the register_info and event_info sub-structures
-	 * Note: disables and clears all GPEs in the block
-	 */
-	status = acpi_ev_create_gpe_info_blocks(gpe_block);
-	if (ACPI_FAILURE(status)) {
-		ACPI_FREE(gpe_block);
-		return_ACPI_STATUS(status);
-	}
+    /* Initialize the new GPE block */
 
-	/* Install the new block in the global lists */
+    GpeBlock->Address = Address;
+    GpeBlock->SpaceId = SpaceId;
+    GpeBlock->Node = GpeDevice;
+    GpeBlock->GpeCount = (UINT16) (RegisterCount * ACPI_GPE_REGISTER_WIDTH);
+    GpeBlock->Initialized = FALSE;
+    GpeBlock->RegisterCount = RegisterCount;
+    GpeBlock->BlockBaseNumber = GpeBlockBaseNumber;
 
-	status = acpi_ev_install_gpe_block(gpe_block, interrupt_number);
-	if (ACPI_FAILURE(status)) {
-		ACPI_FREE(gpe_block->register_info);
-		ACPI_FREE(gpe_block->event_info);
-		ACPI_FREE(gpe_block);
-		return_ACPI_STATUS(status);
-	}
+    /*
+     * Create the RegisterInfo and EventInfo sub-structures
+     * Note: disables and clears all GPEs in the block
+     */
+    Status = AcpiEvCreateGpeInfoBlocks (GpeBlock);
+    if (ACPI_FAILURE (Status))
+    {
+        ACPI_FREE (GpeBlock);
+        return_ACPI_STATUS (Status);
+    }
 
-	acpi_gbl_all_gpes_initialized = FALSE;
+    /* Install the new block in the global lists */
 
-	/* Find all GPE methods (_Lxx or_Exx) for this block */
+    Status = AcpiEvInstallGpeBlock (GpeBlock, InterruptNumber);
+    if (ACPI_FAILURE (Status))
+    {
+        ACPI_FREE (GpeBlock->RegisterInfo);
+        ACPI_FREE (GpeBlock->EventInfo);
+        ACPI_FREE (GpeBlock);
+        return_ACPI_STATUS (Status);
+    }
 
-	walk_info.gpe_block = gpe_block;
-	walk_info.gpe_device = gpe_device;
-	walk_info.execute_by_owner_id = FALSE;
+    AcpiGbl_AllGpesInitialized = FALSE;
 
-	status = acpi_ns_walk_namespace(ACPI_TYPE_METHOD, gpe_device,
-					ACPI_UINT32_MAX, ACPI_NS_WALK_NO_UNLOCK,
-					acpi_ev_match_gpe_method, NULL,
-					&walk_info, NULL);
+    /* Find all GPE methods (_Lxx or_Exx) for this block */
 
-	/* Return the new block */
+    WalkInfo.GpeBlock = GpeBlock;
+    WalkInfo.GpeDevice = GpeDevice;
+    WalkInfo.ExecuteByOwnerId = FALSE;
 
-	if (return_gpe_block) {
-		(*return_gpe_block) = gpe_block;
-	}
+    Status = AcpiNsWalkNamespace (ACPI_TYPE_METHOD, GpeDevice,
+                ACPI_UINT32_MAX, ACPI_NS_WALK_NO_UNLOCK,
+                AcpiEvMatchGpeMethod, NULL, &WalkInfo, NULL);
 
-	ACPI_DEBUG_PRINT_RAW((ACPI_DB_INIT,
-			      "    Initialized GPE %02X to %02X [%4.4s] %u regs on interrupt 0x%X%s\n",
-			      (u32)gpe_block->block_base_number,
-			      (u32)(gpe_block->block_base_number +
-				    (gpe_block->gpe_count - 1)),
-			      gpe_device->name.ascii, gpe_block->register_count,
-			      interrupt_number,
-			      interrupt_number ==
-			      acpi_gbl_FADT.sci_interrupt ? " (SCI)" : ""));
+    /* Return the new block */
 
-	/* Update global count of currently available GPEs */
+    if (ReturnGpeBlock)
+    {
+        (*ReturnGpeBlock) = GpeBlock;
+    }
 
-	acpi_current_gpe_count += gpe_block->gpe_count;
-	return_ACPI_STATUS(AE_OK);
+    ACPI_DEBUG_PRINT_RAW ((ACPI_DB_INIT,
+        "    Initialized GPE %02X to %02X [%4.4s] %u regs on interrupt 0x%X%s\n",
+        (UINT32) GpeBlock->BlockBaseNumber,
+        (UINT32) (GpeBlock->BlockBaseNumber + (GpeBlock->GpeCount - 1)),
+        GpeDevice->Name.Ascii, GpeBlock->RegisterCount, InterruptNumber,
+        InterruptNumber == AcpiGbl_FADT.SciInterrupt ? " (SCI)" : ""));
+
+    /* Update global count of currently available GPEs */
+
+    AcpiCurrentGpeCount += GpeBlock->GpeCount;
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_initialize_gpe_block
+ * FUNCTION:    AcpiEvInitializeGpeBlock
  *
- * PARAMETERS:  acpi_gpe_callback
+ * PARAMETERS:  ACPI_GPE_CALLBACK
  *
  * RETURN:      Status
  *
@@ -433,79 +544,82 @@ acpi_ev_create_gpe_block(struct acpi_namespace_node *gpe_device,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ev_initialize_gpe_block(struct acpi_gpe_xrupt_info *gpe_xrupt_info,
-			     struct acpi_gpe_block_info *gpe_block,
-			     void *ignored)
+ACPI_STATUS
+AcpiEvInitializeGpeBlock (
+    ACPI_GPE_XRUPT_INFO     *GpeXruptInfo,
+    ACPI_GPE_BLOCK_INFO     *GpeBlock,
+    void                    *Ignored)
 {
-	acpi_status status;
-	struct acpi_gpe_event_info *gpe_event_info;
-	u32 gpe_enabled_count;
-	u32 gpe_index;
-	u32 i;
-	u32 j;
+    ACPI_STATUS             Status;
+    ACPI_GPE_EVENT_INFO     *GpeEventInfo;
+    UINT32                  GpeEnabledCount;
+    UINT32                  GpeIndex;
+    UINT32                  i;
+    UINT32                  j;
 
-	ACPI_FUNCTION_TRACE(ev_initialize_gpe_block);
 
-	/*
-	 * Ignore a null GPE block (e.g., if no GPE block 1 exists), and
-	 * any GPE blocks that have been initialized already.
-	 */
-	if (!gpe_block || gpe_block->initialized) {
-		return_ACPI_STATUS(AE_OK);
-	}
+    ACPI_FUNCTION_TRACE (EvInitializeGpeBlock);
 
-	/*
-	 * Enable all GPEs that have a corresponding method and have the
-	 * ACPI_GPE_CAN_WAKE flag unset. Any other GPEs within this block
-	 * must be enabled via the acpi_enable_gpe() interface.
-	 */
-	gpe_enabled_count = 0;
 
-	for (i = 0; i < gpe_block->register_count; i++) {
-		for (j = 0; j < ACPI_GPE_REGISTER_WIDTH; j++) {
+    /*
+     * Ignore a null GPE block (e.g., if no GPE block 1 exists), and
+     * any GPE blocks that have been initialized already.
+     */
+    if (!GpeBlock || GpeBlock->Initialized)
+    {
+        return_ACPI_STATUS (AE_OK);
+    }
 
-			/* Get the info block for this particular GPE */
+    /*
+     * Enable all GPEs that have a corresponding method and have the
+     * ACPI_GPE_CAN_WAKE flag unset. Any other GPEs within this block
+     * must be enabled via the acpi_enable_gpe() interface.
+     */
+    GpeEnabledCount = 0;
 
-			gpe_index = (i * ACPI_GPE_REGISTER_WIDTH) + j;
-			gpe_event_info = &gpe_block->event_info[gpe_index];
+    for (i = 0; i < GpeBlock->RegisterCount; i++)
+    {
+        for (j = 0; j < ACPI_GPE_REGISTER_WIDTH; j++)
+        {
+            /* Get the info block for this particular GPE */
 
-			/*
-			 * Ignore GPEs that have no corresponding _Lxx/_Exx method
-			 * and GPEs that are used to wake the system
-			 */
-			if (((gpe_event_info->flags & ACPI_GPE_DISPATCH_MASK) ==
-			     ACPI_GPE_DISPATCH_NONE)
-			    || ((gpe_event_info->flags & ACPI_GPE_DISPATCH_MASK)
-				== ACPI_GPE_DISPATCH_HANDLER)
-			    || (gpe_event_info->flags & ACPI_GPE_CAN_WAKE)) {
-				continue;
-			}
+            GpeIndex = (i * ACPI_GPE_REGISTER_WIDTH) + j;
+            GpeEventInfo = &GpeBlock->EventInfo[GpeIndex];
 
-			status = acpi_ev_add_gpe_reference(gpe_event_info);
-			if (ACPI_FAILURE(status)) {
-				ACPI_EXCEPTION((AE_INFO, status,
-					"Could not enable GPE 0x%02X",
-					gpe_index +
-					gpe_block->block_base_number));
-				continue;
-			}
+            /*
+             * Ignore GPEs that have no corresponding _Lxx/_Exx method
+             * and GPEs that are used to wake the system
+             */
+            if (((GpeEventInfo->Flags & ACPI_GPE_DISPATCH_MASK) == ACPI_GPE_DISPATCH_NONE) ||
+                ((GpeEventInfo->Flags & ACPI_GPE_DISPATCH_MASK) == ACPI_GPE_DISPATCH_HANDLER) ||
+                (GpeEventInfo->Flags & ACPI_GPE_CAN_WAKE))
+            {
+                continue;
+            }
 
-			gpe_enabled_count++;
-		}
-	}
+            Status = AcpiEvAddGpeReference (GpeEventInfo);
+            if (ACPI_FAILURE (Status))
+            {
+                ACPI_EXCEPTION ((AE_INFO, Status,
+                    "Could not enable GPE 0x%02X",
+                    GpeIndex + GpeBlock->BlockBaseNumber));
+                continue;
+            }
 
-	if (gpe_enabled_count) {
-		ACPI_INFO((AE_INFO,
-			   "Enabled %u GPEs in block %02X to %02X",
-			   gpe_enabled_count, (u32)gpe_block->block_base_number,
-			   (u32)(gpe_block->block_base_number +
-				 (gpe_block->gpe_count - 1))));
-	}
+            GpeEnabledCount++;
+        }
+    }
 
-	gpe_block->initialized = TRUE;
+    if (GpeEnabledCount)
+    {
+        ACPI_INFO ((AE_INFO,
+            "Enabled %u GPEs in block %02X to %02X", GpeEnabledCount,
+            (UINT32) GpeBlock->BlockBaseNumber,
+            (UINT32) (GpeBlock->BlockBaseNumber + (GpeBlock->GpeCount - 1))));
+    }
 
-	return_ACPI_STATUS(AE_OK);
+    GpeBlock->Initialized = TRUE;
+    return_ACPI_STATUS (AE_OK);
 }
 
-#endif				/* !ACPI_REDUCED_HARDWARE */
+#endif /* !ACPI_REDUCED_HARDWARE */

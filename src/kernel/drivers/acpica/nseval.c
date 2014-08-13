@@ -4,74 +4,153 @@
  *
  ******************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
 
-#include <acpi/acpi.h>
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
+
+#define __NSEVAL_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acparser.h"
 #include "acinterp.h"
 #include "acnamesp.h"
 
+
 #define _COMPONENT          ACPI_NAMESPACE
-ACPI_MODULE_NAME("nseval")
+        ACPI_MODULE_NAME    ("nseval")
 
 /* Local prototypes */
+
 static void
-acpi_ns_exec_module_code(union acpi_operand_object *method_obj,
-			 struct acpi_evaluate_info *info);
+AcpiNsExecModuleCode (
+    ACPI_OPERAND_OBJECT     *MethodObj,
+    ACPI_EVALUATE_INFO      *Info);
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_evaluate
+ * FUNCTION:    AcpiNsEvaluate
  *
- * PARAMETERS:  info            - Evaluation info block, contains:
- *                  prefix_node     - Prefix or Method/Object Node to execute
- *                  relative_path   - Name of method to execute, If NULL, the
+ * PARAMETERS:  Info            - Evaluation info block, contains:
+ *                  PrefixNode      - Prefix or Method/Object Node to execute
+ *                  RelativePath    - Name of method to execute, If NULL, the
  *                                    Node is the object to execute
- *                  parameters      - List of parameters to pass to the method,
+ *                  Parameters      - List of parameters to pass to the method,
  *                                    terminated by NULL. Params itself may be
  *                                    NULL if no parameters are being passed.
- *                  return_object   - Where to put method's return value (if
+ *                  ReturnObject    - Where to put method's return value (if
  *                                    any). If NULL, no value is returned.
- *                  parameter_type  - Type of Parameter list
- *                  return_object   - Where to put method's return value (if
+ *                  ParameterType   - Type of Parameter list
+ *                  ReturnObject    - Where to put method's return value (if
  *                                    any). If NULL, no value is returned.
- *                  flags           - ACPI_IGNORE_RETURN_VALUE to delete return
+ *                  Flags           - ACPI_IGNORE_RETURN_VALUE to delete return
  *
  * RETURN:      Status
  *
@@ -82,251 +161,258 @@ acpi_ns_exec_module_code(union acpi_operand_object *method_obj,
  *
  ******************************************************************************/
 
-acpi_status acpi_ns_evaluate(struct acpi_evaluate_info *info)
+ACPI_STATUS
+AcpiNsEvaluate (
+    ACPI_EVALUATE_INFO      *Info)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(ns_evaluate);
 
-	if (!info) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    ACPI_FUNCTION_TRACE (NsEvaluate);
 
-	if (!info->node) {
-		/*
-		 * Get the actual namespace node for the target object if we
-		 * need to. Handles these cases:
-		 *
-		 * 1) Null node, valid pathname from root (absolute path)
-		 * 2) Node and valid pathname (path relative to Node)
-		 * 3) Node, Null pathname
-		 */
-		status =
-		    acpi_ns_get_node(info->prefix_node, info->relative_pathname,
-				     ACPI_NS_NO_UPSEARCH, &info->node);
-		if (ACPI_FAILURE(status)) {
-			return_ACPI_STATUS(status);
-		}
-	}
 
-	/*
-	 * For a method alias, we must grab the actual method node so that
-	 * proper scoping context will be established before execution.
-	 */
-	if (acpi_ns_get_type(info->node) == ACPI_TYPE_LOCAL_METHOD_ALIAS) {
-		info->node =
-		    ACPI_CAST_PTR(struct acpi_namespace_node,
-				  info->node->object);
-	}
+    if (!Info)
+    {
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-	/* Complete the info block initialization */
+    if (!Info->Node)
+    {
+        /*
+         * Get the actual namespace node for the target object if we
+         * need to. Handles these cases:
+         *
+         * 1) Null node, valid pathname from root (absolute path)
+         * 2) Node and valid pathname (path relative to Node)
+         * 3) Node, Null pathname
+         */
+        Status = AcpiNsGetNode (Info->PrefixNode, Info->RelativePathname,
+            ACPI_NS_NO_UPSEARCH, &Info->Node);
+        if (ACPI_FAILURE (Status))
+        {
+            return_ACPI_STATUS (Status);
+        }
+    }
 
-	info->return_object = NULL;
-	info->node_flags = info->node->flags;
-	info->obj_desc = acpi_ns_get_attached_object(info->node);
+    /*
+     * For a method alias, we must grab the actual method node so that
+     * proper scoping context will be established before execution.
+     */
+    if (AcpiNsGetType (Info->Node) == ACPI_TYPE_LOCAL_METHOD_ALIAS)
+    {
+        Info->Node = ACPI_CAST_PTR (
+            ACPI_NAMESPACE_NODE, Info->Node->Object);
+    }
 
-	ACPI_DEBUG_PRINT((ACPI_DB_NAMES, "%s [%p] Value %p\n",
-			  info->relative_pathname, info->node,
-			  acpi_ns_get_attached_object(info->node)));
+    /* Complete the info block initialization */
 
-	/* Get info if we have a predefined name (_HID, etc.) */
+    Info->ReturnObject = NULL;
+    Info->NodeFlags = Info->Node->Flags;
+    Info->ObjDesc = AcpiNsGetAttachedObject (Info->Node);
 
-	info->predefined =
-	    acpi_ut_match_predefined_method(info->node->name.ascii);
+    ACPI_DEBUG_PRINT ((ACPI_DB_NAMES, "%s [%p] Value %p\n",
+        Info->RelativePathname, Info->Node,
+        AcpiNsGetAttachedObject (Info->Node)));
 
-	/* Get the full pathname to the object, for use in warning messages */
+    /* Get info if we have a predefined name (_HID, etc.) */
 
-	info->full_pathname = acpi_ns_get_external_pathname(info->node);
-	if (!info->full_pathname) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
+    Info->Predefined = AcpiUtMatchPredefinedMethod (Info->Node->Name.Ascii);
 
-	/* Count the number of arguments being passed in */
+    /* Get the full pathname to the object, for use in warning messages */
 
-	info->param_count = 0;
-	if (info->parameters) {
-		while (info->parameters[info->param_count]) {
-			info->param_count++;
-		}
+    Info->FullPathname = AcpiNsGetExternalPathname (Info->Node);
+    if (!Info->FullPathname)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-		/* Warn on impossible argument count */
+    /* Count the number of arguments being passed in */
 
-		if (info->param_count > ACPI_METHOD_NUM_ARGS) {
-			ACPI_WARN_PREDEFINED((AE_INFO, info->full_pathname,
-					      ACPI_WARN_ALWAYS,
-					      "Excess arguments (%u) - using only %u",
-					      info->param_count,
-					      ACPI_METHOD_NUM_ARGS));
+    Info->ParamCount = 0;
+    if (Info->Parameters)
+    {
+        while (Info->Parameters[Info->ParamCount])
+        {
+            Info->ParamCount++;
+        }
 
-			info->param_count = ACPI_METHOD_NUM_ARGS;
-		}
-	}
+        /* Warn on impossible argument count */
 
-	/*
-	 * For predefined names: Check that the declared argument count
-	 * matches the ACPI spec -- otherwise this is a BIOS error.
-	 */
-	acpi_ns_check_acpi_compliance(info->full_pathname, info->node,
-				      info->predefined);
+        if (Info->ParamCount > ACPI_METHOD_NUM_ARGS)
+        {
+            ACPI_WARN_PREDEFINED ((AE_INFO, Info->FullPathname, ACPI_WARN_ALWAYS,
+                "Excess arguments (%u) - using only %u",
+                Info->ParamCount, ACPI_METHOD_NUM_ARGS));
 
-	/*
-	 * For all names: Check that the incoming argument count for
-	 * this method/object matches the actual ASL/AML definition.
-	 */
-	acpi_ns_check_argument_count(info->full_pathname, info->node,
-				     info->param_count, info->predefined);
+            Info->ParamCount = ACPI_METHOD_NUM_ARGS;
+        }
+    }
 
-	/* For predefined names: Typecheck all incoming arguments */
+    /*
+     * For predefined names: Check that the declared argument count
+     * matches the ACPI spec -- otherwise this is a BIOS error.
+     */
+    AcpiNsCheckAcpiCompliance (Info->FullPathname, Info->Node,
+        Info->Predefined);
 
-	acpi_ns_check_argument_types(info);
+    /*
+     * For all names: Check that the incoming argument count for
+     * this method/object matches the actual ASL/AML definition.
+     */
+    AcpiNsCheckArgumentCount (Info->FullPathname, Info->Node,
+        Info->ParamCount, Info->Predefined);
 
-	/*
-	 * Three major evaluation cases:
-	 *
-	 * 1) Object types that cannot be evaluated by definition
-	 * 2) The object is a control method -- execute it
-	 * 3) The object is not a method -- just return it's current value
-	 */
-	switch (acpi_ns_get_type(info->node)) {
-	case ACPI_TYPE_DEVICE:
-	case ACPI_TYPE_EVENT:
-	case ACPI_TYPE_MUTEX:
-	case ACPI_TYPE_REGION:
-	case ACPI_TYPE_THERMAL:
-	case ACPI_TYPE_LOCAL_SCOPE:
-		/*
-		 * 1) Disallow evaluation of certain object types. For these,
-		 *    object evaluation is undefined and not supported.
-		 */
-		ACPI_ERROR((AE_INFO,
-			    "%s: Evaluation of object type [%s] is not supported",
-			    info->full_pathname,
-			    acpi_ut_get_type_name(info->node->type)));
+    /* For predefined names: Typecheck all incoming arguments */
 
-		status = AE_TYPE;
-		goto cleanup;
+    AcpiNsCheckArgumentTypes (Info);
 
-	case ACPI_TYPE_METHOD:
-		/*
-		 * 2) Object is a control method - execute it
-		 */
+    /*
+     * Three major evaluation cases:
+     *
+     * 1) Object types that cannot be evaluated by definition
+     * 2) The object is a control method -- execute it
+     * 3) The object is not a method -- just return it's current value
+     */
+    switch (AcpiNsGetType (Info->Node))
+    {
+    case ACPI_TYPE_DEVICE:
+    case ACPI_TYPE_EVENT:
+    case ACPI_TYPE_MUTEX:
+    case ACPI_TYPE_REGION:
+    case ACPI_TYPE_THERMAL:
+    case ACPI_TYPE_LOCAL_SCOPE:
+        /*
+         * 1) Disallow evaluation of certain object types. For these,
+         *    object evaluation is undefined and not supported.
+         */
+        ACPI_ERROR ((AE_INFO,
+            "%s: Evaluation of object type [%s] is not supported",
+            Info->FullPathname,
+            AcpiUtGetTypeName (Info->Node->Type)));
 
-		/* Verify that there is a method object associated with this node */
+        Status = AE_TYPE;
+        goto Cleanup;
 
-		if (!info->obj_desc) {
-			ACPI_ERROR((AE_INFO,
-				    "%s: Method has no attached sub-object",
-				    info->full_pathname));
-			status = AE_NULL_OBJECT;
-			goto cleanup;
-		}
+    case ACPI_TYPE_METHOD:
+        /*
+         * 2) Object is a control method - execute it
+         */
 
-		ACPI_DEBUG_PRINT((ACPI_DB_EXEC,
-				  "**** Execute method [%s] at AML address %p length %X\n",
-				  info->full_pathname,
-				  info->obj_desc->method.aml_start + 1,
-				  info->obj_desc->method.aml_length - 1));
+        /* Verify that there is a method object associated with this node */
 
-		/*
-		 * Any namespace deletion must acquire both the namespace and
-		 * interpreter locks to ensure that no thread is using the portion of
-		 * the namespace that is being deleted.
-		 *
-		 * Execute the method via the interpreter. The interpreter is locked
-		 * here before calling into the AML parser
-		 */
-		acpi_ex_enter_interpreter();
-		status = acpi_ps_execute_method(info);
-		acpi_ex_exit_interpreter();
-		break;
+        if (!Info->ObjDesc)
+        {
+            ACPI_ERROR ((AE_INFO, "%s: Method has no attached sub-object",
+                Info->FullPathname));
+            Status = AE_NULL_OBJECT;
+            goto Cleanup;
+        }
 
-	default:
-		/*
-		 * 3) All other non-method objects -- get the current object value
-		 */
+        ACPI_DEBUG_PRINT ((ACPI_DB_EXEC,
+            "**** Execute method [%s] at AML address %p length %X\n",
+            Info->FullPathname,
+            Info->ObjDesc->Method.AmlStart + 1,
+            Info->ObjDesc->Method.AmlLength - 1));
 
-		/*
-		 * Some objects require additional resolution steps (e.g., the Node
-		 * may be a field that must be read, etc.) -- we can't just grab
-		 * the object out of the node.
-		 *
-		 * Use resolve_node_to_value() to get the associated value.
-		 *
-		 * NOTE: we can get away with passing in NULL for a walk state because
-		 * the Node is guaranteed to not be a reference to either a method
-		 * local or a method argument (because this interface is never called
-		 * from a running method.)
-		 *
-		 * Even though we do not directly invoke the interpreter for object
-		 * resolution, we must lock it because we could access an op_region.
-		 * The op_region access code assumes that the interpreter is locked.
-		 */
-		acpi_ex_enter_interpreter();
+        /*
+         * Any namespace deletion must acquire both the namespace and
+         * interpreter locks to ensure that no thread is using the portion of
+         * the namespace that is being deleted.
+         *
+         * Execute the method via the interpreter. The interpreter is locked
+         * here before calling into the AML parser
+         */
+        AcpiExEnterInterpreter ();
+        Status = AcpiPsExecuteMethod (Info);
+        AcpiExExitInterpreter ();
+        break;
 
-		/* TBD: resolve_node_to_value has a strange interface, fix */
+    default:
+        /*
+         * 3) All other non-method objects -- get the current object value
+         */
 
-		info->return_object =
-		    ACPI_CAST_PTR(union acpi_operand_object, info->node);
+        /*
+         * Some objects require additional resolution steps (e.g., the Node
+         * may be a field that must be read, etc.) -- we can't just grab
+         * the object out of the node.
+         *
+         * Use ResolveNodeToValue() to get the associated value.
+         *
+         * NOTE: we can get away with passing in NULL for a walk state because
+         * the Node is guaranteed to not be a reference to either a method
+         * local or a method argument (because this interface is never called
+         * from a running method.)
+         *
+         * Even though we do not directly invoke the interpreter for object
+         * resolution, we must lock it because we could access an OpRegion.
+         * The OpRegion access code assumes that the interpreter is locked.
+         */
+        AcpiExEnterInterpreter ();
 
-		status =
-		    acpi_ex_resolve_node_to_value(ACPI_CAST_INDIRECT_PTR
-						  (struct acpi_namespace_node,
-						   &info->return_object), NULL);
-		acpi_ex_exit_interpreter();
+        /* TBD: ResolveNodeToValue has a strange interface, fix */
 
-		if (ACPI_FAILURE(status)) {
-			goto cleanup;
-		}
+        Info->ReturnObject = ACPI_CAST_PTR (ACPI_OPERAND_OBJECT, Info->Node);
 
-		ACPI_DEBUG_PRINT((ACPI_DB_NAMES, "Returned object %p [%s]\n",
-				  info->return_object,
-				  acpi_ut_get_object_type_name(info->
-							       return_object)));
+        Status = AcpiExResolveNodeToValue (ACPI_CAST_INDIRECT_PTR (
+            ACPI_NAMESPACE_NODE, &Info->ReturnObject), NULL);
+        AcpiExExitInterpreter ();
 
-		status = AE_CTRL_RETURN_VALUE;	/* Always has a "return value" */
-		break;
-	}
+        if (ACPI_FAILURE (Status))
+        {
+            goto Cleanup;
+        }
 
-	/*
-	 * For predefined names, check the return value against the ACPI
-	 * specification. Some incorrect return value types are repaired.
-	 */
-	(void)acpi_ns_check_return_value(info->node, info, info->param_count,
-					 status, &info->return_object);
+        ACPI_DEBUG_PRINT ((ACPI_DB_NAMES, "Returned object %p [%s]\n",
+            Info->ReturnObject,
+            AcpiUtGetObjectTypeName (Info->ReturnObject)));
 
-	/* Check if there is a return value that must be dealt with */
+        Status = AE_CTRL_RETURN_VALUE; /* Always has a "return value" */
+        break;
+    }
 
-	if (status == AE_CTRL_RETURN_VALUE) {
+    /*
+     * For predefined names, check the return value against the ACPI
+     * specification. Some incorrect return value types are repaired.
+     */
+    (void) AcpiNsCheckReturnValue (Info->Node, Info, Info->ParamCount,
+        Status, &Info->ReturnObject);
 
-		/* If caller does not want the return value, delete it */
+    /* Check if there is a return value that must be dealt with */
 
-		if (info->flags & ACPI_IGNORE_RETURN_VALUE) {
-			acpi_ut_remove_reference(info->return_object);
-			info->return_object = NULL;
-		}
+    if (Status == AE_CTRL_RETURN_VALUE)
+    {
+        /* If caller does not want the return value, delete it */
 
-		/* Map AE_CTRL_RETURN_VALUE to AE_OK, we are done with it */
+        if (Info->Flags & ACPI_IGNORE_RETURN_VALUE)
+        {
+            AcpiUtRemoveReference (Info->ReturnObject);
+            Info->ReturnObject = NULL;
+        }
 
-		status = AE_OK;
-	}
+        /* Map AE_CTRL_RETURN_VALUE to AE_OK, we are done with it */
 
-	ACPI_DEBUG_PRINT((ACPI_DB_NAMES,
-			  "*** Completed evaluation of object %s ***\n",
-			  info->relative_pathname));
+        Status = AE_OK;
+    }
 
-cleanup:
-	/*
-	 * Namespace was unlocked by the handling acpi_ns* function, so we
-	 * just free the pathname and return
-	 */
-	ACPI_FREE(info->full_pathname);
-	info->full_pathname = NULL;
-	return_ACPI_STATUS(status);
+    ACPI_DEBUG_PRINT ((ACPI_DB_NAMES,
+        "*** Completed evaluation of object %s ***\n",
+        Info->RelativePathname));
+
+Cleanup:
+    /*
+     * Namespace was unlocked by the handling AcpiNs* function, so we
+     * just free the pathname and return
+     */
+    ACPI_FREE (Info->FullPathname);
+    Info->FullPathname = NULL;
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_exec_module_code_list
+ * FUNCTION:    AcpiNsExecModuleCodeList
  *
  * PARAMETERS:  None
  *
@@ -338,61 +424,69 @@ cleanup:
  *
  ******************************************************************************/
 
-void acpi_ns_exec_module_code_list(void)
+void
+AcpiNsExecModuleCodeList (
+    void)
 {
-	union acpi_operand_object *prev;
-	union acpi_operand_object *next;
-	struct acpi_evaluate_info *info;
-	u32 method_count = 0;
+    ACPI_OPERAND_OBJECT     *Prev;
+    ACPI_OPERAND_OBJECT     *Next;
+    ACPI_EVALUATE_INFO      *Info;
+    UINT32                  MethodCount = 0;
 
-	ACPI_FUNCTION_TRACE(ns_exec_module_code_list);
 
-	/* Exit now if the list is empty */
+    ACPI_FUNCTION_TRACE (NsExecModuleCodeList);
 
-	next = acpi_gbl_module_code_list;
-	if (!next) {
-		return_VOID;
-	}
 
-	/* Allocate the evaluation information block */
+    /* Exit now if the list is empty */
 
-	info = ACPI_ALLOCATE(sizeof(struct acpi_evaluate_info));
-	if (!info) {
-		return_VOID;
-	}
+    Next = AcpiGbl_ModuleCodeList;
+    if (!Next)
+    {
+        return_VOID;
+    }
 
-	/* Walk the list, executing each "method" */
+    /* Allocate the evaluation information block */
 
-	while (next) {
-		prev = next;
-		next = next->method.mutex;
+    Info = ACPI_ALLOCATE (sizeof (ACPI_EVALUATE_INFO));
+    if (!Info)
+    {
+        return_VOID;
+    }
 
-		/* Clear the link field and execute the method */
+    /* Walk the list, executing each "method" */
 
-		prev->method.mutex = NULL;
-		acpi_ns_exec_module_code(prev, info);
-		method_count++;
+    while (Next)
+    {
+        Prev = Next;
+        Next = Next->Method.Mutex;
 
-		/* Delete the (temporary) method object */
+        /* Clear the link field and execute the method */
 
-		acpi_ut_remove_reference(prev);
-	}
+        Prev->Method.Mutex = NULL;
+        AcpiNsExecModuleCode (Prev, Info);
+        MethodCount++;
 
-	ACPI_INFO((AE_INFO,
-		   "Executed %u blocks of module-level executable AML code",
-		   method_count));
+        /* Delete the (temporary) method object */
 
-	ACPI_FREE(info);
-	acpi_gbl_module_code_list = NULL;
-	return_VOID;
+        AcpiUtRemoveReference (Prev);
+    }
+
+    ACPI_INFO ((AE_INFO,
+        "Executed %u blocks of module-level executable AML code",
+        MethodCount));
+
+    ACPI_FREE (Info);
+    AcpiGbl_ModuleCodeList = NULL;
+    return_VOID;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_exec_module_code
+ * FUNCTION:    AcpiNsExecModuleCode
  *
- * PARAMETERS:  method_obj          - Object container for the module-level code
- *              info                - Info block for method evaluation
+ * PARAMETERS:  MethodObj           - Object container for the module-level code
+ *              Info                - Info block for method evaluation
  *
  * RETURN:      None. Exceptions during method execution are ignored, since
  *              we cannot abort a table load.
@@ -404,91 +498,102 @@ void acpi_ns_exec_module_code_list(void)
  ******************************************************************************/
 
 static void
-acpi_ns_exec_module_code(union acpi_operand_object *method_obj,
-			 struct acpi_evaluate_info *info)
+AcpiNsExecModuleCode (
+    ACPI_OPERAND_OBJECT     *MethodObj,
+    ACPI_EVALUATE_INFO      *Info)
 {
-	union acpi_operand_object *parent_obj;
-	struct acpi_namespace_node *parent_node;
-	acpi_object_type type;
-	acpi_status status;
+    ACPI_OPERAND_OBJECT     *ParentObj;
+    ACPI_NAMESPACE_NODE     *ParentNode;
+    ACPI_OBJECT_TYPE        Type;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(ns_exec_module_code);
 
-	/*
-	 * Get the parent node. We cheat by using the next_object field
-	 * of the method object descriptor.
-	 */
-	parent_node = ACPI_CAST_PTR(struct acpi_namespace_node,
-				    method_obj->method.next_object);
-	type = acpi_ns_get_type(parent_node);
+    ACPI_FUNCTION_TRACE (NsExecModuleCode);
 
-	/*
-	 * Get the region handler and save it in the method object. We may need
-	 * this if an operation region declaration causes a _REG method to be run.
-	 *
-	 * We can't do this in acpi_ps_link_module_code because
-	 * acpi_gbl_root_node->Object is NULL at PASS1.
-	 */
-	if ((type == ACPI_TYPE_DEVICE) && parent_node->object) {
-		method_obj->method.dispatch.handler =
-		    parent_node->object->device.handler;
-	}
 
-	/* Must clear next_object (acpi_ns_attach_object needs the field) */
+    /*
+     * Get the parent node. We cheat by using the NextObject field
+     * of the method object descriptor.
+     */
+    ParentNode = ACPI_CAST_PTR (ACPI_NAMESPACE_NODE,
+                    MethodObj->Method.NextObject);
+    Type = AcpiNsGetType (ParentNode);
 
-	method_obj->method.next_object = NULL;
+    /*
+     * Get the region handler and save it in the method object. We may need
+     * this if an operation region declaration causes a _REG method to be run.
+     *
+     * We can't do this in AcpiPsLinkModuleCode because
+     * AcpiGbl_RootNode->Object is NULL at PASS1.
+     */
+    if ((Type == ACPI_TYPE_DEVICE) && ParentNode->Object)
+    {
+        MethodObj->Method.Dispatch.Handler =
+            ParentNode->Object->Device.Handler;
+    }
 
-	/* Initialize the evaluation information block */
+    /* Must clear NextObject (AcpiNsAttachObject needs the field) */
 
-	ACPI_MEMSET(info, 0, sizeof(struct acpi_evaluate_info));
-	info->prefix_node = parent_node;
+    MethodObj->Method.NextObject = NULL;
 
-	/*
-	 * Get the currently attached parent object. Add a reference, because the
-	 * ref count will be decreased when the method object is installed to
-	 * the parent node.
-	 */
-	parent_obj = acpi_ns_get_attached_object(parent_node);
-	if (parent_obj) {
-		acpi_ut_add_reference(parent_obj);
-	}
+    /* Initialize the evaluation information block */
 
-	/* Install the method (module-level code) in the parent node */
+    ACPI_MEMSET (Info, 0, sizeof (ACPI_EVALUATE_INFO));
+    Info->PrefixNode = ParentNode;
 
-	status = acpi_ns_attach_object(parent_node, method_obj,
-				       ACPI_TYPE_METHOD);
-	if (ACPI_FAILURE(status)) {
-		goto exit;
-	}
+    /*
+     * Get the currently attached parent object. Add a reference, because the
+     * ref count will be decreased when the method object is installed to
+     * the parent node.
+     */
+    ParentObj = AcpiNsGetAttachedObject (ParentNode);
+    if (ParentObj)
+    {
+        AcpiUtAddReference (ParentObj);
+    }
 
-	/* Execute the parent node as a control method */
+    /* Install the method (module-level code) in the parent node */
 
-	status = acpi_ns_evaluate(info);
+    Status = AcpiNsAttachObject (ParentNode, MethodObj,
+                ACPI_TYPE_METHOD);
+    if (ACPI_FAILURE (Status))
+    {
+        goto Exit;
+    }
 
-	ACPI_DEBUG_PRINT((ACPI_DB_INIT, "Executed module-level code at %p\n",
-			  method_obj->method.aml_start));
+    /* Execute the parent node as a control method */
 
-	/* Delete a possible implicit return value (in slack mode) */
+    Status = AcpiNsEvaluate (Info);
 
-	if (info->return_object) {
-		acpi_ut_remove_reference(info->return_object);
-	}
+    ACPI_DEBUG_PRINT ((ACPI_DB_INIT, "Executed module-level code at %p\n",
+        MethodObj->Method.AmlStart));
 
-	/* Detach the temporary method object */
+    /* Delete a possible implicit return value (in slack mode) */
 
-	acpi_ns_detach_object(parent_node);
+    if (Info->ReturnObject)
+    {
+        AcpiUtRemoveReference (Info->ReturnObject);
+    }
 
-	/* Restore the original parent object */
+    /* Detach the temporary method object */
 
-	if (parent_obj) {
-		status = acpi_ns_attach_object(parent_node, parent_obj, type);
-	} else {
-		parent_node->type = (u8)type;
-	}
+    AcpiNsDetachObject (ParentNode);
 
-exit:
-	if (parent_obj) {
-		acpi_ut_remove_reference(parent_obj);
-	}
-	return_VOID;
+    /* Restore the original parent object */
+
+    if (ParentObj)
+    {
+        Status = AcpiNsAttachObject (ParentNode, ParentObj, Type);
+    }
+    else
+    {
+        ParentNode->Type = (UINT8) Type;
+    }
+
+Exit:
+    if (ParentObj)
+    {
+        AcpiUtRemoveReference (ParentObj);
+    }
+    return_VOID;
 }

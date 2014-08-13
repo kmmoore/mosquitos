@@ -4,58 +4,137 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#define __TBUTILS_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "actables.h"
 
 #define _COMPONENT          ACPI_TABLES
-ACPI_MODULE_NAME("tbutils")
+        ACPI_MODULE_NAME    ("tbutils")
+
 
 /* Local prototypes */
-static acpi_physical_address
-acpi_tb_get_root_table_entry(u8 *table_entry, u32 table_entry_size);
+
+static ACPI_PHYSICAL_ADDRESS
+AcpiTbGetRootTableEntry (
+    UINT8                   *TableEntry,
+    UINT32                  TableEntrySize);
+
 
 #if (!ACPI_REDUCED_HARDWARE)
 /*******************************************************************************
  *
- * FUNCTION:    acpi_tb_initialize_facs
+ * FUNCTION:    AcpiTbInitializeFacs
  *
  * PARAMETERS:  None
  *
@@ -66,28 +145,31 @@ acpi_tb_get_root_table_entry(u8 *table_entry, u32 table_entry_size);
  *
  ******************************************************************************/
 
-acpi_status acpi_tb_initialize_facs(void)
+ACPI_STATUS
+AcpiTbInitializeFacs (
+    void)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	/* If Hardware Reduced flag is set, there is no FACS */
 
-	if (acpi_gbl_reduced_hardware) {
-		acpi_gbl_FACS = NULL;
-		return (AE_OK);
-	}
+    /* If Hardware Reduced flag is set, there is no FACS */
 
-	status = acpi_get_table_by_index(ACPI_TABLE_INDEX_FACS,
-					 ACPI_CAST_INDIRECT_PTR(struct
-								acpi_table_header,
-								&acpi_gbl_FACS));
-	return (status);
+    if (AcpiGbl_ReducedHardware)
+    {
+        AcpiGbl_FACS = NULL;
+        return (AE_OK);
+    }
+
+    Status = AcpiGetTableByIndex (ACPI_TABLE_INDEX_FACS,
+                ACPI_CAST_INDIRECT_PTR (ACPI_TABLE_HEADER, &AcpiGbl_FACS));
+    return (Status);
 }
-#endif				/* !ACPI_REDUCED_HARDWARE */
+#endif /* !ACPI_REDUCED_HARDWARE */
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_tb_tables_loaded
+ * FUNCTION:    AcpiTbTablesLoaded
  *
  * PARAMETERS:  None
  *
@@ -98,19 +180,23 @@ acpi_status acpi_tb_initialize_facs(void)
  *
  ******************************************************************************/
 
-u8 acpi_tb_tables_loaded(void)
+BOOLEAN
+AcpiTbTablesLoaded (
+    void)
 {
 
-	if (acpi_gbl_root_table_list.current_table_count >= 3) {
-		return (TRUE);
-	}
+    if (AcpiGbl_RootTableList.CurrentTableCount >= 3)
+    {
+        return (TRUE);
+    }
 
-	return (FALSE);
+    return (FALSE);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_tb_check_dsdt_header
+ * FUNCTION:    AcpiTbCheckDsdtHeader
  *
  * PARAMETERS:  None
  *
@@ -122,36 +208,35 @@ u8 acpi_tb_tables_loaded(void)
  *
  ******************************************************************************/
 
-void acpi_tb_check_dsdt_header(void)
+void
+AcpiTbCheckDsdtHeader (
+    void)
 {
 
-	/* Compare original length and checksum to current values */
+    /* Compare original length and checksum to current values */
 
-	if (acpi_gbl_original_dsdt_header.length != acpi_gbl_DSDT->length ||
-	    acpi_gbl_original_dsdt_header.checksum != acpi_gbl_DSDT->checksum) {
-		ACPI_BIOS_ERROR((AE_INFO,
-				 "The DSDT has been corrupted or replaced - "
-				 "old, new headers below"));
-		acpi_tb_print_table_header(0, &acpi_gbl_original_dsdt_header);
-		acpi_tb_print_table_header(0, acpi_gbl_DSDT);
+    if (AcpiGbl_OriginalDsdtHeader.Length != AcpiGbl_DSDT->Length ||
+        AcpiGbl_OriginalDsdtHeader.Checksum != AcpiGbl_DSDT->Checksum)
+    {
+        ACPI_BIOS_ERROR ((AE_INFO,
+            "The DSDT has been corrupted or replaced - "
+            "old, new headers below"));
+        AcpiTbPrintTableHeader (0, &AcpiGbl_OriginalDsdtHeader);
+        AcpiTbPrintTableHeader (0, AcpiGbl_DSDT);
 
-		ACPI_ERROR((AE_INFO,
-			    "Please send DMI info to linux-acpi@vger.kernel.org\n"
-			    "If system does not work as expected, please boot with acpi=copy_dsdt"));
+        /* Disable further error messages */
 
-		/* Disable further error messages */
-
-		acpi_gbl_original_dsdt_header.length = acpi_gbl_DSDT->length;
-		acpi_gbl_original_dsdt_header.checksum =
-		    acpi_gbl_DSDT->checksum;
-	}
+        AcpiGbl_OriginalDsdtHeader.Length = AcpiGbl_DSDT->Length;
+        AcpiGbl_OriginalDsdtHeader.Checksum = AcpiGbl_DSDT->Checksum;
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_tb_copy_dsdt
+ * FUNCTION:    AcpiTbCopyDsdt
  *
- * PARAMETERS:  table_desc          - Installed table to copy
+ * PARAMETERS:  TableDesc           - Installed table to copy
  *
  * RETURN:      None
  *
@@ -161,97 +246,107 @@ void acpi_tb_check_dsdt_header(void)
  *
  ******************************************************************************/
 
-struct acpi_table_header *acpi_tb_copy_dsdt(u32 table_index)
+ACPI_TABLE_HEADER *
+AcpiTbCopyDsdt (
+    UINT32                  TableIndex)
 {
-	struct acpi_table_header *new_table;
-	struct acpi_table_desc *table_desc;
+    ACPI_TABLE_HEADER       *NewTable;
+    ACPI_TABLE_DESC         *TableDesc;
 
-	table_desc = &acpi_gbl_root_table_list.tables[table_index];
 
-	new_table = ACPI_ALLOCATE(table_desc->length);
-	if (!new_table) {
-		ACPI_ERROR((AE_INFO, "Could not copy DSDT of length 0x%X",
-			    table_desc->length));
-		return (NULL);
-	}
+    TableDesc = &AcpiGbl_RootTableList.Tables[TableIndex];
 
-	ACPI_MEMCPY(new_table, table_desc->pointer, table_desc->length);
-	acpi_tb_uninstall_table(table_desc);
+    NewTable = ACPI_ALLOCATE (TableDesc->Length);
+    if (!NewTable)
+    {
+        ACPI_ERROR ((AE_INFO, "Could not copy DSDT of length 0x%X",
+            TableDesc->Length));
+        return (NULL);
+    }
 
-	acpi_tb_init_table_descriptor(&acpi_gbl_root_table_list.
-				      tables[ACPI_TABLE_INDEX_DSDT],
-				      ACPI_PTR_TO_PHYSADDR(new_table),
-				      ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL,
-				      new_table);
+    ACPI_MEMCPY (NewTable, TableDesc->Pointer, TableDesc->Length);
+    AcpiTbUninstallTable (TableDesc);
 
-	ACPI_INFO((AE_INFO,
-		   "Forced DSDT copy: length 0x%05X copied locally, original unmapped",
-		   new_table->length));
+    AcpiTbInitTableDescriptor (
+        &AcpiGbl_RootTableList.Tables[ACPI_TABLE_INDEX_DSDT],
+        ACPI_PTR_TO_PHYSADDR (NewTable), ACPI_TABLE_ORIGIN_INTERNAL_VIRTUAL,
+        NewTable);
 
-	return (new_table);
+    ACPI_INFO ((AE_INFO,
+        "Forced DSDT copy: length 0x%05X copied locally, original unmapped",
+        NewTable->Length));
+
+    return (NewTable);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_tb_get_root_table_entry
+ * FUNCTION:    AcpiTbGetRootTableEntry
  *
- * PARAMETERS:  table_entry         - Pointer to the RSDT/XSDT table entry
- *              table_entry_size    - sizeof 32 or 64 (RSDT or XSDT)
+ * PARAMETERS:  TableEntry          - Pointer to the RSDT/XSDT table entry
+ *              TableEntrySize      - sizeof 32 or 64 (RSDT or XSDT)
  *
  * RETURN:      Physical address extracted from the root table
  *
  * DESCRIPTION: Get one root table entry. Handles 32-bit and 64-bit cases on
  *              both 32-bit and 64-bit platforms
  *
- * NOTE:        acpi_physical_address is 32-bit on 32-bit platforms, 64-bit on
+ * NOTE:        ACPI_PHYSICAL_ADDRESS is 32-bit on 32-bit platforms, 64-bit on
  *              64-bit platforms.
  *
  ******************************************************************************/
 
-static acpi_physical_address
-acpi_tb_get_root_table_entry(u8 *table_entry, u32 table_entry_size)
+static ACPI_PHYSICAL_ADDRESS
+AcpiTbGetRootTableEntry (
+    UINT8                   *TableEntry,
+    UINT32                  TableEntrySize)
 {
-	u64 address64;
+    UINT64                  Address64;
 
-	/*
-	 * Get the table physical address (32-bit for RSDT, 64-bit for XSDT):
-	 * Note: Addresses are 32-bit aligned (not 64) in both RSDT and XSDT
-	 */
-	if (table_entry_size == ACPI_RSDT_ENTRY_SIZE) {
-		/*
-		 * 32-bit platform, RSDT: Return 32-bit table entry
-		 * 64-bit platform, RSDT: Expand 32-bit to 64-bit and return
-		 */
-		return ((acpi_physical_address)
-			(*ACPI_CAST_PTR(u32, table_entry)));
-	} else {
-		/*
-		 * 32-bit platform, XSDT: Truncate 64-bit to 32-bit and return
-		 * 64-bit platform, XSDT: Move (unaligned) 64-bit to local,
-		 *  return 64-bit
-		 */
-		ACPI_MOVE_64_TO_64(&address64, table_entry);
+
+    /*
+     * Get the table physical address (32-bit for RSDT, 64-bit for XSDT):
+     * Note: Addresses are 32-bit aligned (not 64) in both RSDT and XSDT
+     */
+    if (TableEntrySize == ACPI_RSDT_ENTRY_SIZE)
+    {
+        /*
+         * 32-bit platform, RSDT: Return 32-bit table entry
+         * 64-bit platform, RSDT: Expand 32-bit to 64-bit and return
+         */
+        return ((ACPI_PHYSICAL_ADDRESS) (*ACPI_CAST_PTR (UINT32, TableEntry)));
+    }
+    else
+    {
+        /*
+         * 32-bit platform, XSDT: Truncate 64-bit to 32-bit and return
+         * 64-bit platform, XSDT: Move (unaligned) 64-bit to local,
+         *  return 64-bit
+         */
+        ACPI_MOVE_64_TO_64 (&Address64, TableEntry);
 
 #if ACPI_MACHINE_WIDTH == 32
-		if (address64 > ACPI_UINT32_MAX) {
+        if (Address64 > ACPI_UINT32_MAX)
+        {
+            /* Will truncate 64-bit address to 32 bits, issue warning */
 
-			/* Will truncate 64-bit address to 32 bits, issue warning */
-
-			ACPI_BIOS_WARNING((AE_INFO,
-					   "64-bit Physical Address in XSDT is too large (0x%8.8X%8.8X),"
-					   " truncating",
-					   ACPI_FORMAT_UINT64(address64)));
-		}
+            ACPI_BIOS_WARNING ((AE_INFO,
+                "64-bit Physical Address in XSDT is too large (0x%8.8X%8.8X),"
+                " truncating",
+                ACPI_FORMAT_UINT64 (Address64)));
+        }
 #endif
-		return ((acpi_physical_address) (address64));
-	}
+        return ((ACPI_PHYSICAL_ADDRESS) (Address64));
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_tb_parse_root_table
+ * FUNCTION:    AcpiTbParseRootTable
  *
- * PARAMETERS:  rsdp                    - Pointer to the RSDP
+ * PARAMETERS:  Rsdp                    - Pointer to the RSDP
  *
  * RETURN:      Status
  *
@@ -264,138 +359,147 @@ acpi_tb_get_root_table_entry(u8 *table_entry, u32 table_entry_size)
  *
  ******************************************************************************/
 
-acpi_status __init acpi_tb_parse_root_table(acpi_physical_address rsdp_address)
+ACPI_STATUS
+AcpiTbParseRootTable (
+    ACPI_PHYSICAL_ADDRESS   RsdpAddress)
 {
-	struct acpi_table_rsdp *rsdp;
-	u32 table_entry_size;
-	u32 i;
-	u32 table_count;
-	struct acpi_table_header *table;
-	acpi_physical_address address;
-	u32 length;
-	u8 *table_entry;
-	acpi_status status;
-	u32 table_index;
+    ACPI_TABLE_RSDP         *Rsdp;
+    UINT32                  TableEntrySize;
+    UINT32                  i;
+    UINT32                  TableCount;
+    ACPI_TABLE_HEADER       *Table;
+    ACPI_PHYSICAL_ADDRESS   Address;
+    UINT32                  Length;
+    UINT8                   *TableEntry;
+    ACPI_STATUS             Status;
+    UINT32                  TableIndex;
 
-	ACPI_FUNCTION_TRACE(tb_parse_root_table);
 
-	/* Map the entire RSDP and extract the address of the RSDT or XSDT */
+    ACPI_FUNCTION_TRACE (TbParseRootTable);
 
-	rsdp = acpi_os_map_memory(rsdp_address, sizeof(struct acpi_table_rsdp));
-	if (!rsdp) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
 
-	acpi_tb_print_table_header(rsdp_address,
-				   ACPI_CAST_PTR(struct acpi_table_header,
-						 rsdp));
+    /* Map the entire RSDP and extract the address of the RSDT or XSDT */
 
-	/* Use XSDT if present and not overridden. Otherwise, use RSDT */
+    Rsdp = AcpiOsMapMemory (RsdpAddress, sizeof (ACPI_TABLE_RSDP));
+    if (!Rsdp)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	if ((rsdp->revision > 1) &&
-	    rsdp->xsdt_physical_address && !acpi_gbl_do_not_use_xsdt) {
-		/*
-		 * RSDP contains an XSDT (64-bit physical addresses). We must use
-		 * the XSDT if the revision is > 1 and the XSDT pointer is present,
-		 * as per the ACPI specification.
-		 */
-		address = (acpi_physical_address) rsdp->xsdt_physical_address;
-		table_entry_size = ACPI_XSDT_ENTRY_SIZE;
-	} else {
-		/* Root table is an RSDT (32-bit physical addresses) */
+    AcpiTbPrintTableHeader (RsdpAddress,
+        ACPI_CAST_PTR (ACPI_TABLE_HEADER, Rsdp));
 
-		address = (acpi_physical_address) rsdp->rsdt_physical_address;
-		table_entry_size = ACPI_RSDT_ENTRY_SIZE;
-	}
+    /* Use XSDT if present and not overridden. Otherwise, use RSDT */
 
-	/*
-	 * It is not possible to map more than one entry in some environments,
-	 * so unmap the RSDP here before mapping other tables
-	 */
-	acpi_os_unmap_memory(rsdp, sizeof(struct acpi_table_rsdp));
+    if ((Rsdp->Revision > 1) &&
+        Rsdp->XsdtPhysicalAddress &&
+        !AcpiGbl_DoNotUseXsdt)
+    {
+        /*
+         * RSDP contains an XSDT (64-bit physical addresses). We must use
+         * the XSDT if the revision is > 1 and the XSDT pointer is present,
+         * as per the ACPI specification.
+         */
+        Address = (ACPI_PHYSICAL_ADDRESS) Rsdp->XsdtPhysicalAddress;
+        TableEntrySize = ACPI_XSDT_ENTRY_SIZE;
+    }
+    else
+    {
+        /* Root table is an RSDT (32-bit physical addresses) */
 
-	/* Map the RSDT/XSDT table header to get the full table length */
+        Address = (ACPI_PHYSICAL_ADDRESS) Rsdp->RsdtPhysicalAddress;
+        TableEntrySize = ACPI_RSDT_ENTRY_SIZE;
+    }
 
-	table = acpi_os_map_memory(address, sizeof(struct acpi_table_header));
-	if (!table) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
+    /*
+     * It is not possible to map more than one entry in some environments,
+     * so unmap the RSDP here before mapping other tables
+     */
+    AcpiOsUnmapMemory (Rsdp, sizeof (ACPI_TABLE_RSDP));
 
-	acpi_tb_print_table_header(address, table);
+    /* Map the RSDT/XSDT table header to get the full table length */
 
-	/*
-	 * Validate length of the table, and map entire table.
-	 * Minimum length table must contain at least one entry.
-	 */
-	length = table->length;
-	acpi_os_unmap_memory(table, sizeof(struct acpi_table_header));
+    Table = AcpiOsMapMemory (Address, sizeof (ACPI_TABLE_HEADER));
+    if (!Table)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	if (length < (sizeof(struct acpi_table_header) + table_entry_size)) {
-		ACPI_BIOS_ERROR((AE_INFO,
-				 "Invalid table length 0x%X in RSDT/XSDT",
-				 length));
-		return_ACPI_STATUS(AE_INVALID_TABLE_LENGTH);
-	}
+    AcpiTbPrintTableHeader (Address, Table);
 
-	table = acpi_os_map_memory(address, length);
-	if (!table) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
+    /*
+     * Validate length of the table, and map entire table.
+     * Minimum length table must contain at least one entry.
+     */
+    Length = Table->Length;
+    AcpiOsUnmapMemory (Table, sizeof (ACPI_TABLE_HEADER));
 
-	/* Validate the root table checksum */
+    if (Length < (sizeof (ACPI_TABLE_HEADER) + TableEntrySize))
+    {
+        ACPI_BIOS_ERROR ((AE_INFO,
+            "Invalid table length 0x%X in RSDT/XSDT", Length));
+        return_ACPI_STATUS (AE_INVALID_TABLE_LENGTH);
+    }
 
-	status = acpi_tb_verify_checksum(table, length);
-	if (ACPI_FAILURE(status)) {
-		acpi_os_unmap_memory(table, length);
-		return_ACPI_STATUS(status);
-	}
+    Table = AcpiOsMapMemory (Address, Length);
+    if (!Table)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	/* Get the number of entries and pointer to first entry */
+    /* Validate the root table checksum */
 
-	table_count = (u32)((table->length - sizeof(struct acpi_table_header)) /
-			    table_entry_size);
-	table_entry = ACPI_ADD_PTR(u8, table, sizeof(struct acpi_table_header));
+    Status = AcpiTbVerifyChecksum (Table, Length);
+    if (ACPI_FAILURE (Status))
+    {
+        AcpiOsUnmapMemory (Table, Length);
+        return_ACPI_STATUS (Status);
+    }
 
-	/*
-	 * First two entries in the table array are reserved for the DSDT
-	 * and FACS, which are not actually present in the RSDT/XSDT - they
-	 * come from the FADT
-	 */
-	acpi_gbl_root_table_list.current_table_count = 2;
+    /* Get the number of entries and pointer to first entry */
 
-	/* Initialize the root table array from the RSDT/XSDT */
+    TableCount = (UINT32) ((Table->Length - sizeof (ACPI_TABLE_HEADER)) /
+        TableEntrySize);
+    TableEntry = ACPI_ADD_PTR (UINT8, Table, sizeof (ACPI_TABLE_HEADER));
 
-	for (i = 0; i < table_count; i++) {
+    /*
+     * First two entries in the table array are reserved for the DSDT
+     * and FACS, which are not actually present in the RSDT/XSDT - they
+     * come from the FADT
+     */
+    AcpiGbl_RootTableList.CurrentTableCount = 2;
 
-		/* Get the table physical address (32-bit for RSDT, 64-bit for XSDT) */
+    /* Initialize the root table array from the RSDT/XSDT */
 
-		address =
-		    acpi_tb_get_root_table_entry(table_entry, table_entry_size);
+    for (i = 0; i < TableCount; i++)
+    {
+        /* Get the table physical address (32-bit for RSDT, 64-bit for XSDT) */
 
-		/* Skip NULL entries in RSDT/XSDT */
+        Address = AcpiTbGetRootTableEntry (TableEntry, TableEntrySize);
 
-		if (!address) {
-			goto next_table;
-		}
+        /* Skip NULL entries in RSDT/XSDT */
 
-		status = acpi_tb_install_standard_table(address,
-							ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL,
-							FALSE, TRUE,
-							&table_index);
+        if (!Address)
+        {
+            goto NextTable;
+        }
 
-		if (ACPI_SUCCESS(status) &&
-		    ACPI_COMPARE_NAME(&acpi_gbl_root_table_list.
-				      tables[table_index].signature,
-				      ACPI_SIG_FADT)) {
-			acpi_tb_parse_fadt(table_index);
-		}
+        Status = AcpiTbInstallStandardTable (Address,
+            ACPI_TABLE_ORIGIN_INTERNAL_PHYSICAL, FALSE, TRUE, &TableIndex);
 
-next_table:
+        if (ACPI_SUCCESS (Status) &&
+            ACPI_COMPARE_NAME (&AcpiGbl_RootTableList.Tables[TableIndex].Signature,
+                ACPI_SIG_FADT))
+        {
+            AcpiTbParseFadt (TableIndex);
+        }
 
-		table_entry += table_entry_size;
-	}
+NextTable:
 
-	acpi_os_unmap_memory(table, length);
+        TableEntry += TableEntrySize;
+    }
 
-	return_ACPI_STATUS(AE_OK);
+    AcpiOsUnmapMemory (Table, Length);
+
+    return_ACPI_STATUS (AE_OK);
 }

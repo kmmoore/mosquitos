@@ -4,70 +4,159 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#define __EXDUMP_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acinterp.h"
 #include "amlcode.h"
 #include "acnamesp.h"
 
+
 #define _COMPONENT          ACPI_EXECUTER
-ACPI_MODULE_NAME("exdump")
+        ACPI_MODULE_NAME    ("exdump")
 
 /*
  * The following routines are used for debug output only
  */
 #if defined(ACPI_DEBUG_OUTPUT) || defined(ACPI_DEBUGGER)
+
 /* Local prototypes */
-static void acpi_ex_out_string(char *title, char *value);
-
-static void acpi_ex_out_pointer(char *title, void *value);
 
 static void
-acpi_ex_dump_object(union acpi_operand_object *obj_desc,
-		    struct acpi_exdump_info *info);
-
-static void acpi_ex_dump_reference_obj(union acpi_operand_object *obj_desc);
+AcpiExOutString (
+    char                    *Title,
+    char                    *Value);
 
 static void
-acpi_ex_dump_package_obj(union acpi_operand_object *obj_desc,
-			 u32 level, u32 index);
+AcpiExOutPointer (
+    char                    *Title,
+    void                    *Value);
+
+static void
+AcpiExDumpObject (
+    ACPI_OPERAND_OBJECT     *ObjDesc,
+    ACPI_EXDUMP_INFO        *Info);
+
+static void
+AcpiExDumpReferenceObj (
+    ACPI_OPERAND_OBJECT     *ObjDesc);
+
+static void
+AcpiExDumpPackageObj (
+    ACPI_OPERAND_OBJECT     *ObjDesc,
+    UINT32                  Level,
+    UINT32                  Index);
+
 
 /*******************************************************************************
  *
@@ -78,278 +167,278 @@ acpi_ex_dump_package_obj(union acpi_operand_object *obj_desc,
  *
  ******************************************************************************/
 
-static struct acpi_exdump_info acpi_ex_dump_integer[2] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_integer), NULL},
-	{ACPI_EXD_UINT64, ACPI_EXD_OFFSET(integer.value), "Value"}
+static ACPI_EXDUMP_INFO     AcpiExDumpInteger[2] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpInteger),        NULL},
+    {ACPI_EXD_UINT64,   ACPI_EXD_OFFSET (Integer.Value),                "Value"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_string[4] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_string), NULL},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(string.length), "Length"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(string.pointer), "Pointer"},
-	{ACPI_EXD_STRING, 0, NULL}
+static ACPI_EXDUMP_INFO     AcpiExDumpString[4] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpString),         NULL},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (String.Length),                "Length"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (String.Pointer),               "Pointer"},
+    {ACPI_EXD_STRING,   0,                                              NULL}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_buffer[5] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_buffer), NULL},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(buffer.length), "Length"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(buffer.pointer), "Pointer"},
-	{ACPI_EXD_NODE, ACPI_EXD_OFFSET(buffer.node), "Parent Node"},
-	{ACPI_EXD_BUFFER, 0, NULL}
+static ACPI_EXDUMP_INFO     AcpiExDumpBuffer[5] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpBuffer),         NULL},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (Buffer.Length),                "Length"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Buffer.Pointer),               "Pointer"},
+    {ACPI_EXD_NODE,     ACPI_EXD_OFFSET (Buffer.Node),                  "Parent Node"},
+    {ACPI_EXD_BUFFER,   0,                                              NULL}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_package[6] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_package), NULL},
-	{ACPI_EXD_NODE, ACPI_EXD_OFFSET(package.node), "Parent Node"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(package.flags), "Flags"},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(package.count), "Elements"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(package.elements), "Element List"},
-	{ACPI_EXD_PACKAGE, 0, NULL}
+static ACPI_EXDUMP_INFO     AcpiExDumpPackage[6] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpPackage),        NULL},
+    {ACPI_EXD_NODE,     ACPI_EXD_OFFSET (Package.Node),                 "Parent Node"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Package.Flags),                "Flags"},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (Package.Count),                "Elements"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Package.Elements),             "Element List"},
+    {ACPI_EXD_PACKAGE,  0,                                              NULL}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_device[4] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_device), NULL},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(device.notify_list[0]),
-	 "System Notify"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(device.notify_list[1]),
-	 "Device Notify"},
-	{ACPI_EXD_HDLR_LIST, ACPI_EXD_OFFSET(device.handler), "Handler"}
+static ACPI_EXDUMP_INFO     AcpiExDumpDevice[4] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpDevice),         NULL},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Device.NotifyList[0]),         "System Notify"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Device.NotifyList[1]),         "Device Notify"},
+    {ACPI_EXD_HDLR_LIST,ACPI_EXD_OFFSET (Device.Handler),               "Handler"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_event[2] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_event), NULL},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(event.os_semaphore), "OsSemaphore"}
+static ACPI_EXDUMP_INFO     AcpiExDumpEvent[2] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpEvent),          NULL},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Event.OsSemaphore),            "OsSemaphore"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_method[9] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_method), NULL},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(method.info_flags), "Info Flags"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(method.param_count),
-	 "Parameter Count"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(method.sync_level), "Sync Level"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(method.mutex), "Mutex"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(method.owner_id), "Owner Id"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(method.thread_count), "Thread Count"},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(method.aml_length), "Aml Length"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(method.aml_start), "Aml Start"}
+static ACPI_EXDUMP_INFO     AcpiExDumpMethod[9] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpMethod),         NULL},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Method.InfoFlags),             "Info Flags"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Method.ParamCount),            "Parameter Count"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Method.SyncLevel),             "Sync Level"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Method.Mutex),                 "Mutex"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Method.OwnerId),               "Owner Id"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Method.ThreadCount),           "Thread Count"},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (Method.AmlLength),             "Aml Length"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Method.AmlStart),              "Aml Start"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_mutex[6] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_mutex), NULL},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(mutex.sync_level), "Sync Level"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(mutex.original_sync_level),
-	 "Original Sync Level"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(mutex.owner_thread), "Owner Thread"},
-	{ACPI_EXD_UINT16, ACPI_EXD_OFFSET(mutex.acquisition_depth),
-	 "Acquire Depth"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(mutex.os_mutex), "OsMutex"}
+static ACPI_EXDUMP_INFO     AcpiExDumpMutex[6] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpMutex),          NULL},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Mutex.SyncLevel),              "Sync Level"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Mutex.OriginalSyncLevel),      "Original Sync Level"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Mutex.OwnerThread),            "Owner Thread"},
+    {ACPI_EXD_UINT16,   ACPI_EXD_OFFSET (Mutex.AcquisitionDepth),       "Acquire Depth"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Mutex.OsMutex),                "OsMutex"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_region[8] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_region), NULL},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(region.space_id), "Space Id"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(region.flags), "Flags"},
-	{ACPI_EXD_NODE, ACPI_EXD_OFFSET(region.node), "Parent Node"},
-	{ACPI_EXD_ADDRESS, ACPI_EXD_OFFSET(region.address), "Address"},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(region.length), "Length"},
-	{ACPI_EXD_HDLR_LIST, ACPI_EXD_OFFSET(region.handler), "Handler"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(region.next), "Next"}
+static ACPI_EXDUMP_INFO     AcpiExDumpRegion[8] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpRegion),         NULL},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Region.SpaceId),               "Space Id"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Region.Flags),                 "Flags"},
+    {ACPI_EXD_NODE,     ACPI_EXD_OFFSET (Region.Node),                  "Parent Node"},
+    {ACPI_EXD_ADDRESS,  ACPI_EXD_OFFSET (Region.Address),               "Address"},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (Region.Length),                "Length"},
+    {ACPI_EXD_HDLR_LIST,ACPI_EXD_OFFSET (Region.Handler),               "Handler"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Region.Next),                  "Next"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_power[6] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_power), NULL},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(power_resource.system_level),
-	 "System Level"},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(power_resource.resource_order),
-	 "Resource Order"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(power_resource.notify_list[0]),
-	 "System Notify"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(power_resource.notify_list[1]),
-	 "Device Notify"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(power_resource.handler), "Handler"}
+static ACPI_EXDUMP_INFO     AcpiExDumpPower[6] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpPower),          NULL},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (PowerResource.SystemLevel),    "System Level"},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (PowerResource.ResourceOrder),  "Resource Order"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (PowerResource.NotifyList[0]),  "System Notify"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (PowerResource.NotifyList[1]),  "Device Notify"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (PowerResource.Handler),        "Handler"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_processor[7] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_processor), NULL},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(processor.proc_id), "Processor ID"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(processor.length), "Length"},
-	{ACPI_EXD_ADDRESS, ACPI_EXD_OFFSET(processor.address), "Address"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(processor.notify_list[0]),
-	 "System Notify"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(processor.notify_list[1]),
-	 "Device Notify"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(processor.handler), "Handler"}
+static ACPI_EXDUMP_INFO     AcpiExDumpProcessor[7] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpProcessor),      NULL},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Processor.ProcId),             "Processor ID"},
+    {ACPI_EXD_UINT8 ,   ACPI_EXD_OFFSET (Processor.Length),             "Length"},
+    {ACPI_EXD_ADDRESS,  ACPI_EXD_OFFSET (Processor.Address),            "Address"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Processor.NotifyList[0]),      "System Notify"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Processor.NotifyList[1]),      "Device Notify"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Processor.Handler),            "Handler"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_thermal[4] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_thermal), NULL},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(thermal_zone.notify_list[0]),
-	 "System Notify"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(thermal_zone.notify_list[1]),
-	 "Device Notify"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(thermal_zone.handler), "Handler"}
+static ACPI_EXDUMP_INFO     AcpiExDumpThermal[4] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpThermal),        NULL},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (ThermalZone.NotifyList[0]),    "System Notify"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (ThermalZone.NotifyList[1]),    "Device Notify"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (ThermalZone.Handler),          "Handler"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_buffer_field[3] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_buffer_field), NULL},
-	{ACPI_EXD_FIELD, 0, NULL},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(buffer_field.buffer_obj),
-	 "Buffer Object"}
+static ACPI_EXDUMP_INFO     AcpiExDumpBufferField[3] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpBufferField),    NULL},
+    {ACPI_EXD_FIELD,    0,                                              NULL},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (BufferField.BufferObj),        "Buffer Object"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_region_field[5] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_region_field), NULL},
-	{ACPI_EXD_FIELD, 0, NULL},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(field.access_length), "AccessLength"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(field.region_obj), "Region Object"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(field.resource_buffer),
-	 "ResourceBuffer"}
+static ACPI_EXDUMP_INFO     AcpiExDumpRegionField[5] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpRegionField),    NULL},
+    {ACPI_EXD_FIELD,    0,                                              NULL},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Field.AccessLength),           "AccessLength"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Field.RegionObj),              "Region Object"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Field.ResourceBuffer),         "ResourceBuffer"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_bank_field[5] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_bank_field), NULL},
-	{ACPI_EXD_FIELD, 0, NULL},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(bank_field.value), "Value"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(bank_field.region_obj),
-	 "Region Object"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(bank_field.bank_obj), "Bank Object"}
+static ACPI_EXDUMP_INFO     AcpiExDumpBankField[5] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpBankField),      NULL},
+    {ACPI_EXD_FIELD,    0,                                              NULL},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (BankField.Value),              "Value"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (BankField.RegionObj),          "Region Object"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (BankField.BankObj),            "Bank Object"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_index_field[5] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_bank_field), NULL},
-	{ACPI_EXD_FIELD, 0, NULL},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(index_field.value), "Value"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(index_field.index_obj),
-	 "Index Object"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(index_field.data_obj), "Data Object"}
+static ACPI_EXDUMP_INFO     AcpiExDumpIndexField[5] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpBankField),      NULL},
+    {ACPI_EXD_FIELD,    0,                                              NULL},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (IndexField.Value),             "Value"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (IndexField.IndexObj),          "Index Object"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (IndexField.DataObj),           "Data Object"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_reference[8] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_reference), NULL},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(reference.class), "Class"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(reference.target_type), "Target Type"},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(reference.value), "Value"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(reference.object), "Object Desc"},
-	{ACPI_EXD_NODE, ACPI_EXD_OFFSET(reference.node), "Node"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(reference.where), "Where"},
-	{ACPI_EXD_REFERENCE, 0, NULL}
+static ACPI_EXDUMP_INFO     AcpiExDumpReference[8] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpReference),       NULL},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Reference.Class),              "Class"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Reference.TargetType),         "Target Type"},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (Reference.Value),              "Value"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Reference.Object),             "Object Desc"},
+    {ACPI_EXD_NODE,     ACPI_EXD_OFFSET (Reference.Node),               "Node"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Reference.Where),              "Where"},
+    {ACPI_EXD_REFERENCE,0,                                              NULL}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_address_handler[6] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_address_handler),
-	 NULL},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(address_space.space_id), "Space Id"},
-	{ACPI_EXD_HDLR_LIST, ACPI_EXD_OFFSET(address_space.next), "Next"},
-	{ACPI_EXD_RGN_LIST, ACPI_EXD_OFFSET(address_space.region_list),
-	 "Region List"},
-	{ACPI_EXD_NODE, ACPI_EXD_OFFSET(address_space.node), "Node"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(address_space.context), "Context"}
+static ACPI_EXDUMP_INFO     AcpiExDumpAddressHandler[6] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpAddressHandler), NULL},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (AddressSpace.SpaceId),         "Space Id"},
+    {ACPI_EXD_HDLR_LIST,ACPI_EXD_OFFSET (AddressSpace.Next),            "Next"},
+    {ACPI_EXD_RGN_LIST, ACPI_EXD_OFFSET (AddressSpace.RegionList),      "Region List"},
+    {ACPI_EXD_NODE,     ACPI_EXD_OFFSET (AddressSpace.Node),            "Node"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (AddressSpace.Context),         "Context"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_notify[7] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_notify), NULL},
-	{ACPI_EXD_NODE, ACPI_EXD_OFFSET(notify.node), "Node"},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(notify.handler_type), "Handler Type"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(notify.handler), "Handler"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(notify.context), "Context"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(notify.next[0]),
-	 "Next System Notify"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(notify.next[1]), "Next Device Notify"}
+static ACPI_EXDUMP_INFO     AcpiExDumpNotify[7] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpNotify),         NULL},
+    {ACPI_EXD_NODE,     ACPI_EXD_OFFSET (Notify.Node),                  "Node"},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (Notify.HandlerType),           "Handler Type"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Notify.Handler),               "Handler"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Notify.Context),               "Context"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Notify.Next[0]),               "Next System Notify"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Notify.Next[1]),               "Next Device Notify"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_extra[6] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_extra), NULL},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(extra.method_REG), "_REG Method"},
-	{ACPI_EXD_NODE, ACPI_EXD_OFFSET(extra.scope_node), "Scope Node"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(extra.region_context),
-	 "Region Context"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(extra.aml_start), "Aml Start"},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(extra.aml_length), "Aml Length"}
+static ACPI_EXDUMP_INFO     AcpiExDumpExtra[6] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpExtra),          NULL},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Extra.Method_REG),             "_REG Method"},
+    {ACPI_EXD_NODE,     ACPI_EXD_OFFSET (Extra.ScopeNode),              "Scope Node"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Extra.RegionContext),          "Region Context"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Extra.AmlStart),               "Aml Start"},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (Extra.AmlLength),              "Aml Length"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_data[3] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_data), NULL},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(data.handler), "Handler"},
-	{ACPI_EXD_POINTER, ACPI_EXD_OFFSET(data.pointer), "Raw Data"}
+static ACPI_EXDUMP_INFO     AcpiExDumpData[3] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpData),           NULL},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Data.Handler),                 "Handler"},
+    {ACPI_EXD_POINTER,  ACPI_EXD_OFFSET (Data.Pointer),                 "Raw Data"}
 };
 
 /* Miscellaneous tables */
 
-static struct acpi_exdump_info acpi_ex_dump_common[5] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_common), NULL},
-	{ACPI_EXD_TYPE, 0, NULL},
-	{ACPI_EXD_UINT16, ACPI_EXD_OFFSET(common.reference_count),
-	 "Reference Count"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(common.flags), "Flags"},
-	{ACPI_EXD_LIST, ACPI_EXD_OFFSET(common.next_object), "Object List"}
+static ACPI_EXDUMP_INFO     AcpiExDumpCommon[5] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpCommon),         NULL},
+    {ACPI_EXD_TYPE ,    0,                                              NULL},
+    {ACPI_EXD_UINT16,   ACPI_EXD_OFFSET (Common.ReferenceCount),        "Reference Count"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (Common.Flags),                 "Flags"},
+    {ACPI_EXD_LIST,     ACPI_EXD_OFFSET (Common.NextObject),            "Object List"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_field_common[7] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_field_common), NULL},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(common_field.field_flags),
-	 "Field Flags"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(common_field.access_byte_width),
-	 "Access Byte Width"},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(common_field.bit_length),
-	 "Bit Length"},
-	{ACPI_EXD_UINT8, ACPI_EXD_OFFSET(common_field.start_field_bit_offset),
-	 "Field Bit Offset"},
-	{ACPI_EXD_UINT32, ACPI_EXD_OFFSET(common_field.base_byte_offset),
-	 "Base Byte Offset"},
-	{ACPI_EXD_NODE, ACPI_EXD_OFFSET(common_field.node), "Parent Node"}
+static ACPI_EXDUMP_INFO     AcpiExDumpFieldCommon[7] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpFieldCommon),    NULL},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (CommonField.FieldFlags),       "Field Flags"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (CommonField.AccessByteWidth),  "Access Byte Width"},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (CommonField.BitLength),        "Bit Length"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_OFFSET (CommonField.StartFieldBitOffset),"Field Bit Offset"},
+    {ACPI_EXD_UINT32,   ACPI_EXD_OFFSET (CommonField.BaseByteOffset),   "Base Byte Offset"},
+    {ACPI_EXD_NODE,     ACPI_EXD_OFFSET (CommonField.Node),             "Parent Node"}
 };
 
-static struct acpi_exdump_info acpi_ex_dump_node[7] = {
-	{ACPI_EXD_INIT, ACPI_EXD_TABLE_SIZE(acpi_ex_dump_node), NULL},
-	{ACPI_EXD_UINT8, ACPI_EXD_NSOFFSET(flags), "Flags"},
-	{ACPI_EXD_UINT8, ACPI_EXD_NSOFFSET(owner_id), "Owner Id"},
-	{ACPI_EXD_LIST, ACPI_EXD_NSOFFSET(object), "Object List"},
-	{ACPI_EXD_NODE, ACPI_EXD_NSOFFSET(parent), "Parent"},
-	{ACPI_EXD_NODE, ACPI_EXD_NSOFFSET(child), "Child"},
-	{ACPI_EXD_NODE, ACPI_EXD_NSOFFSET(peer), "Peer"}
+static ACPI_EXDUMP_INFO     AcpiExDumpNode[7] =
+{
+    {ACPI_EXD_INIT,     ACPI_EXD_TABLE_SIZE (AcpiExDumpNode),           NULL},
+    {ACPI_EXD_UINT8,    ACPI_EXD_NSOFFSET (Flags),                      "Flags"},
+    {ACPI_EXD_UINT8,    ACPI_EXD_NSOFFSET (OwnerId),                    "Owner Id"},
+    {ACPI_EXD_LIST,     ACPI_EXD_NSOFFSET (Object),                     "Object List"},
+    {ACPI_EXD_NODE,     ACPI_EXD_NSOFFSET (Parent),                     "Parent"},
+    {ACPI_EXD_NODE,     ACPI_EXD_NSOFFSET (Child),                      "Child"},
+    {ACPI_EXD_NODE,     ACPI_EXD_NSOFFSET (Peer),                       "Peer"}
 };
+
 
 /* Dispatch table, indexed by object type */
 
-static struct acpi_exdump_info *acpi_ex_dump_info[] = {
-	NULL,
-	acpi_ex_dump_integer,
-	acpi_ex_dump_string,
-	acpi_ex_dump_buffer,
-	acpi_ex_dump_package,
-	NULL,
-	acpi_ex_dump_device,
-	acpi_ex_dump_event,
-	acpi_ex_dump_method,
-	acpi_ex_dump_mutex,
-	acpi_ex_dump_region,
-	acpi_ex_dump_power,
-	acpi_ex_dump_processor,
-	acpi_ex_dump_thermal,
-	acpi_ex_dump_buffer_field,
-	NULL,
-	NULL,
-	acpi_ex_dump_region_field,
-	acpi_ex_dump_bank_field,
-	acpi_ex_dump_index_field,
-	acpi_ex_dump_reference,
-	NULL,
-	NULL,
-	acpi_ex_dump_notify,
-	acpi_ex_dump_address_handler,
-	NULL,
-	NULL,
-	NULL,
-	acpi_ex_dump_extra,
-	acpi_ex_dump_data
+static ACPI_EXDUMP_INFO     *AcpiExDumpInfo[] =
+{
+    NULL,
+    AcpiExDumpInteger,
+    AcpiExDumpString,
+    AcpiExDumpBuffer,
+    AcpiExDumpPackage,
+    NULL,
+    AcpiExDumpDevice,
+    AcpiExDumpEvent,
+    AcpiExDumpMethod,
+    AcpiExDumpMutex,
+    AcpiExDumpRegion,
+    AcpiExDumpPower,
+    AcpiExDumpProcessor,
+    AcpiExDumpThermal,
+    AcpiExDumpBufferField,
+    NULL,
+    NULL,
+    AcpiExDumpRegionField,
+    AcpiExDumpBankField,
+    AcpiExDumpIndexField,
+    AcpiExDumpReference,
+    NULL,
+    NULL,
+    AcpiExDumpNotify,
+    AcpiExDumpAddressHandler,
+    NULL,
+    NULL,
+    NULL,
+    AcpiExDumpExtra,
+    AcpiExDumpData
 };
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_dump_object
+ * FUNCTION:    AcpiExDumpObject
  *
- * PARAMETERS:  obj_desc            - Descriptor to dump
- *              info                - Info table corresponding to this object
+ * PARAMETERS:  ObjDesc             - Descriptor to dump
+ *              Info                - Info table corresponding to this object
  *                                    type
  *
  * RETURN:      None
@@ -359,243 +448,240 @@ static struct acpi_exdump_info *acpi_ex_dump_info[] = {
  ******************************************************************************/
 
 static void
-acpi_ex_dump_object(union acpi_operand_object *obj_desc,
-		    struct acpi_exdump_info *info)
+AcpiExDumpObject (
+    ACPI_OPERAND_OBJECT     *ObjDesc,
+    ACPI_EXDUMP_INFO        *Info)
 {
-	u8 *target;
-	char *name;
-	const char *reference_name;
-	u8 count;
-	union acpi_operand_object *start;
-	union acpi_operand_object *data = NULL;
-	union acpi_operand_object *next;
-	struct acpi_namespace_node *node;
+    UINT8                   *Target;
+    char                    *Name;
+    const char              *ReferenceName;
+    UINT8                   Count;
+    ACPI_OPERAND_OBJECT     *Start;
+    ACPI_OPERAND_OBJECT     *Data = NULL;
+    ACPI_OPERAND_OBJECT     *Next;
+    ACPI_NAMESPACE_NODE     *Node;
 
-	if (!info) {
-		acpi_os_printf
-		    ("ExDumpObject: Display not implemented for object type %s\n",
-		     acpi_ut_get_object_type_name(obj_desc));
-		return;
-	}
 
-	/* First table entry must contain the table length (# of table entries) */
+    if (!Info)
+    {
+        AcpiOsPrintf (
+            "ExDumpObject: Display not implemented for object type %s\n",
+            AcpiUtGetObjectTypeName (ObjDesc));
+        return;
+    }
 
-	count = info->offset;
+    /* First table entry must contain the table length (# of table entries) */
 
-	while (count) {
-		target = ACPI_ADD_PTR(u8, obj_desc, info->offset);
-		name = info->name;
+    Count = Info->Offset;
 
-		switch (info->opcode) {
-		case ACPI_EXD_INIT:
+    while (Count)
+    {
+        Target = ACPI_ADD_PTR (UINT8, ObjDesc, Info->Offset);
+        Name = Info->Name;
 
-			break;
+        switch (Info->Opcode)
+        {
+        case ACPI_EXD_INIT:
 
-		case ACPI_EXD_TYPE:
+            break;
 
-			acpi_os_printf("%20s : %2.2X [%s]\n", "Type",
-				       obj_desc->common.type,
-				       acpi_ut_get_object_type_name(obj_desc));
-			break;
+        case ACPI_EXD_TYPE:
 
-		case ACPI_EXD_UINT8:
+            AcpiOsPrintf ("%20s : %2.2X [%s]\n", "Type",
+                ObjDesc->Common.Type, AcpiUtGetObjectTypeName (ObjDesc));
+            break;
 
-			acpi_os_printf("%20s : %2.2X\n", name, *target);
-			break;
+        case ACPI_EXD_UINT8:
 
-		case ACPI_EXD_UINT16:
+            AcpiOsPrintf ("%20s : %2.2X\n", Name, *Target);
+            break;
 
-			acpi_os_printf("%20s : %4.4X\n", name,
-				       ACPI_GET16(target));
-			break;
+        case ACPI_EXD_UINT16:
 
-		case ACPI_EXD_UINT32:
+            AcpiOsPrintf ("%20s : %4.4X\n", Name, ACPI_GET16 (Target));
+            break;
 
-			acpi_os_printf("%20s : %8.8X\n", name,
-				       ACPI_GET32(target));
-			break;
+        case ACPI_EXD_UINT32:
 
-		case ACPI_EXD_UINT64:
+            AcpiOsPrintf ("%20s : %8.8X\n", Name, ACPI_GET32 (Target));
+            break;
 
-			acpi_os_printf("%20s : %8.8X%8.8X\n", "Value",
-				       ACPI_FORMAT_UINT64(ACPI_GET64(target)));
-			break;
+        case ACPI_EXD_UINT64:
 
-		case ACPI_EXD_POINTER:
-		case ACPI_EXD_ADDRESS:
+            AcpiOsPrintf ("%20s : %8.8X%8.8X\n", "Value",
+                ACPI_FORMAT_UINT64 (ACPI_GET64 (Target)));
+            break;
 
-			acpi_ex_out_pointer(name,
-					    *ACPI_CAST_PTR(void *, target));
-			break;
+        case ACPI_EXD_POINTER:
+        case ACPI_EXD_ADDRESS:
 
-		case ACPI_EXD_STRING:
+            AcpiExOutPointer (Name, *ACPI_CAST_PTR (void *, Target));
+            break;
 
-			acpi_ut_print_string(obj_desc->string.pointer,
-					     ACPI_UINT8_MAX);
-			acpi_os_printf("\n");
-			break;
+        case ACPI_EXD_STRING:
 
-		case ACPI_EXD_BUFFER:
+            AcpiUtPrintString (ObjDesc->String.Pointer, ACPI_UINT8_MAX);
+            AcpiOsPrintf ("\n");
+            break;
 
-			ACPI_DUMP_BUFFER(obj_desc->buffer.pointer,
-					 obj_desc->buffer.length);
-			break;
+        case ACPI_EXD_BUFFER:
 
-		case ACPI_EXD_PACKAGE:
+            ACPI_DUMP_BUFFER (ObjDesc->Buffer.Pointer, ObjDesc->Buffer.Length);
+            break;
 
-			/* Dump the package contents */
+        case ACPI_EXD_PACKAGE:
 
-			acpi_os_printf("\nPackage Contents:\n");
-			acpi_ex_dump_package_obj(obj_desc, 0, 0);
-			break;
+            /* Dump the package contents */
 
-		case ACPI_EXD_FIELD:
+            AcpiOsPrintf ("\nPackage Contents:\n");
+            AcpiExDumpPackageObj (ObjDesc, 0, 0);
+            break;
 
-			acpi_ex_dump_object(obj_desc,
-					    acpi_ex_dump_field_common);
-			break;
+        case ACPI_EXD_FIELD:
 
-		case ACPI_EXD_REFERENCE:
+            AcpiExDumpObject (ObjDesc, AcpiExDumpFieldCommon);
+            break;
 
-			reference_name = acpi_ut_get_reference_name(obj_desc);
-			acpi_ex_out_string("Class Name",
-					   ACPI_CAST_PTR(char, reference_name));
-			acpi_ex_dump_reference_obj(obj_desc);
-			break;
+        case ACPI_EXD_REFERENCE:
 
-		case ACPI_EXD_LIST:
+            ReferenceName = AcpiUtGetReferenceName (ObjDesc);
+            AcpiExOutString ("Class Name", ACPI_CAST_PTR (char, ReferenceName));
+            AcpiExDumpReferenceObj (ObjDesc);
+            break;
 
-			start = *ACPI_CAST_PTR(void *, target);
-			next = start;
+        case ACPI_EXD_LIST:
 
-			acpi_os_printf("%20s : %p", name, next);
-			if (next) {
-				acpi_os_printf("(%s %2.2X)",
-					       acpi_ut_get_object_type_name
-					       (next), next->common.type);
+            Start = *ACPI_CAST_PTR (void *, Target);
+            Next = Start;
 
-				while (next->common.next_object) {
-					if ((next->common.type ==
-					     ACPI_TYPE_LOCAL_DATA) && !data) {
-						data = next;
-					}
+            AcpiOsPrintf ("%20s : %p", Name, Next);
+            if (Next)
+            {
+                AcpiOsPrintf ("(%s %2.2X)",
+                    AcpiUtGetObjectTypeName (Next), Next->Common.Type);
 
-					next = next->common.next_object;
-					acpi_os_printf("->%p(%s %2.2X)", next,
-						       acpi_ut_get_object_type_name
-						       (next),
-						       next->common.type);
+                while (Next->Common.NextObject)
+                {
+                    if ((Next->Common.Type == ACPI_TYPE_LOCAL_DATA) &&
+                        !Data)
+                    {
+                        Data = Next;
+                    }
 
-					if ((next == start) || (next == data)) {
-						acpi_os_printf
-						    ("\n**** Error: Object list appears to be circular linked");
-						break;
-					}
-				}
-			}
+                    Next = Next->Common.NextObject;
+                    AcpiOsPrintf ("->%p(%s %2.2X)", Next,
+                        AcpiUtGetObjectTypeName (Next), Next->Common.Type);
 
-			acpi_os_printf("\n", next);
-			break;
+                    if ((Next == Start) || (Next == Data))
+                    {
+                        AcpiOsPrintf ("\n**** Error: Object list appears to be circular linked");
+                        break;
+                    }
+                }
+            }
 
-		case ACPI_EXD_HDLR_LIST:
+            AcpiOsPrintf ("\n");
+            break;
 
-			start = *ACPI_CAST_PTR(void *, target);
-			next = start;
+        case ACPI_EXD_HDLR_LIST:
 
-			acpi_os_printf("%20s : %p", name, next);
-			if (next) {
-				acpi_os_printf("(%s %2.2X)",
-					       acpi_ut_get_object_type_name
-					       (next), next->common.type);
+            Start = *ACPI_CAST_PTR (void *, Target);
+            Next = Start;
 
-				while (next->address_space.next) {
-					if ((next->common.type ==
-					     ACPI_TYPE_LOCAL_DATA) && !data) {
-						data = next;
-					}
+            AcpiOsPrintf ("%20s : %p", Name, Next);
+            if (Next)
+            {
+                AcpiOsPrintf ("(%s %2.2X)",
+                    AcpiUtGetObjectTypeName (Next), Next->Common.Type);
 
-					next = next->address_space.next;
-					acpi_os_printf("->%p(%s %2.2X)", next,
-						       acpi_ut_get_object_type_name
-						       (next),
-						       next->common.type);
+                while (Next->AddressSpace.Next)
+                {
+                    if ((Next->Common.Type == ACPI_TYPE_LOCAL_DATA) &&
+                        !Data)
+                    {
+                        Data = Next;
+                    }
 
-					if ((next == start) || (next == data)) {
-						acpi_os_printf
-						    ("\n**** Error: Handler list appears to be circular linked");
-						break;
-					}
-				}
-			}
+                    Next = Next->AddressSpace.Next;
+                    AcpiOsPrintf ("->%p(%s %2.2X)", Next,
+                        AcpiUtGetObjectTypeName (Next), Next->Common.Type);
 
-			acpi_os_printf("\n", next);
-			break;
+                    if ((Next == Start) || (Next == Data))
+                    {
+                        AcpiOsPrintf ("\n**** Error: Handler list appears to be circular linked");
+                        break;
+                    }
+                }
+            }
 
-		case ACPI_EXD_RGN_LIST:
+            AcpiOsPrintf ("\n");
+            break;
 
-			start = *ACPI_CAST_PTR(void *, target);
-			next = start;
+        case ACPI_EXD_RGN_LIST:
 
-			acpi_os_printf("%20s : %p", name, next);
-			if (next) {
-				acpi_os_printf("(%s %2.2X)",
-					       acpi_ut_get_object_type_name
-					       (next), next->common.type);
+            Start = *ACPI_CAST_PTR (void *, Target);
+            Next = Start;
 
-				while (next->region.next) {
-					if ((next->common.type ==
-					     ACPI_TYPE_LOCAL_DATA) && !data) {
-						data = next;
-					}
+            AcpiOsPrintf ("%20s : %p", Name, Next);
+            if (Next)
+            {
+                AcpiOsPrintf ("(%s %2.2X)",
+                    AcpiUtGetObjectTypeName (Next), Next->Common.Type);
 
-					next = next->region.next;
-					acpi_os_printf("->%p(%s %2.2X)", next,
-						       acpi_ut_get_object_type_name
-						       (next),
-						       next->common.type);
+                while (Next->Region.Next)
+                {
+                    if ((Next->Common.Type == ACPI_TYPE_LOCAL_DATA) &&
+                        !Data)
+                    {
+                        Data = Next;
+                    }
 
-					if ((next == start) || (next == data)) {
-						acpi_os_printf
-						    ("\n**** Error: Region list appears to be circular linked");
-						break;
-					}
-				}
-			}
+                    Next = Next->Region.Next;
+                    AcpiOsPrintf ("->%p(%s %2.2X)", Next,
+                        AcpiUtGetObjectTypeName (Next), Next->Common.Type);
 
-			acpi_os_printf("\n", next);
-			break;
+                    if ((Next == Start) || (Next == Data))
+                    {
+                        AcpiOsPrintf ("\n**** Error: Region list appears to be circular linked");
+                        break;
+                    }
+                }
+            }
 
-		case ACPI_EXD_NODE:
+            AcpiOsPrintf ("\n");
+            break;
 
-			node =
-			    *ACPI_CAST_PTR(struct acpi_namespace_node *,
-					   target);
+        case ACPI_EXD_NODE:
 
-			acpi_os_printf("%20s : %p", name, node);
-			if (node) {
-				acpi_os_printf(" [%4.4s]", node->name.ascii);
-			}
-			acpi_os_printf("\n");
-			break;
+            Node = *ACPI_CAST_PTR (ACPI_NAMESPACE_NODE *, Target);
 
-		default:
+            AcpiOsPrintf ("%20s : %p", Name, Node);
+            if (Node)
+            {
+                AcpiOsPrintf (" [%4.4s]", Node->Name.Ascii);
+            }
+            AcpiOsPrintf ("\n");
+            break;
 
-			acpi_os_printf("**** Invalid table opcode [%X] ****\n",
-				       info->opcode);
-			return;
-		}
+        default:
 
-		info++;
-		count--;
-	}
+            AcpiOsPrintf ("**** Invalid table opcode [%X] ****\n",
+                Info->Opcode);
+            return;
+        }
+
+        Info++;
+        Count--;
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_dump_operand
+ * FUNCTION:    AcpiExDumpOperand
  *
- * PARAMETERS:  *obj_desc       - Pointer to entry to be dumped
- *              depth           - Current nesting depth
+ * PARAMETERS:  *ObjDesc        - Pointer to entry to be dumped
+ *              Depth           - Current nesting depth
  *
  * RETURN:      None
  *
@@ -603,326 +689,342 @@ acpi_ex_dump_object(union acpi_operand_object *obj_desc,
  *
  ******************************************************************************/
 
-void acpi_ex_dump_operand(union acpi_operand_object *obj_desc, u32 depth)
+void
+AcpiExDumpOperand (
+    ACPI_OPERAND_OBJECT     *ObjDesc,
+    UINT32                  Depth)
 {
-	u32 length;
-	u32 index;
+    UINT32                  Length;
+    UINT32                  Index;
 
-	ACPI_FUNCTION_NAME(ex_dump_operand)
 
-	    /* Check if debug output enabled */
-	    if (!ACPI_IS_DEBUG_ENABLED(ACPI_LV_EXEC, _COMPONENT)) {
-		return;
-	}
+    ACPI_FUNCTION_NAME (ExDumpOperand)
 
-	if (!obj_desc) {
 
-		/* This could be a null element of a package */
+    /* Check if debug output enabled */
 
-		ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "Null Object Descriptor\n"));
-		return;
-	}
+    if (!ACPI_IS_DEBUG_ENABLED (ACPI_LV_EXEC, _COMPONENT))
+    {
+        return;
+    }
 
-	if (ACPI_GET_DESCRIPTOR_TYPE(obj_desc) == ACPI_DESC_TYPE_NAMED) {
-		ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "%p Namespace Node: ",
-				  obj_desc));
-		ACPI_DUMP_ENTRY(obj_desc, ACPI_LV_EXEC);
-		return;
-	}
+    if (!ObjDesc)
+    {
+        /* This could be a null element of a package */
 
-	if (ACPI_GET_DESCRIPTOR_TYPE(obj_desc) != ACPI_DESC_TYPE_OPERAND) {
-		ACPI_DEBUG_PRINT((ACPI_DB_EXEC,
-				  "%p is not a node or operand object: [%s]\n",
-				  obj_desc,
-				  acpi_ut_get_descriptor_name(obj_desc)));
-		ACPI_DUMP_BUFFER(obj_desc, sizeof(union acpi_operand_object));
-		return;
-	}
+        ACPI_DEBUG_PRINT ((ACPI_DB_EXEC, "Null Object Descriptor\n"));
+        return;
+    }
 
-	/* obj_desc is a valid object */
+    if (ACPI_GET_DESCRIPTOR_TYPE (ObjDesc) == ACPI_DESC_TYPE_NAMED)
+    {
+        ACPI_DEBUG_PRINT ((ACPI_DB_EXEC, "%p Namespace Node: ", ObjDesc));
+        ACPI_DUMP_ENTRY (ObjDesc, ACPI_LV_EXEC);
+        return;
+    }
 
-	if (depth > 0) {
-		ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "%*s[%u] %p ",
-				  depth, " ", depth, obj_desc));
-	} else {
-		ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "%p ", obj_desc));
-	}
+    if (ACPI_GET_DESCRIPTOR_TYPE (ObjDesc) != ACPI_DESC_TYPE_OPERAND)
+    {
+        ACPI_DEBUG_PRINT ((ACPI_DB_EXEC,
+            "%p is not a node or operand object: [%s]\n",
+            ObjDesc, AcpiUtGetDescriptorName (ObjDesc)));
+        ACPI_DUMP_BUFFER (ObjDesc, sizeof (ACPI_OPERAND_OBJECT));
+        return;
+    }
 
-	/* Decode object type */
+    /* ObjDesc is a valid object */
 
-	switch (obj_desc->common.type) {
-	case ACPI_TYPE_LOCAL_REFERENCE:
+    if (Depth > 0)
+    {
+        ACPI_DEBUG_PRINT ((ACPI_DB_EXEC, "%*s[%u] %p ",
+            Depth, " ", Depth, ObjDesc));
+    }
+    else
+    {
+        ACPI_DEBUG_PRINT ((ACPI_DB_EXEC, "%p ", ObjDesc));
+    }
 
-		acpi_os_printf("Reference: [%s] ",
-			       acpi_ut_get_reference_name(obj_desc));
+    /* Decode object type */
 
-		switch (obj_desc->reference.class) {
-		case ACPI_REFCLASS_DEBUG:
-
-			acpi_os_printf("\n");
-			break;
+    switch (ObjDesc->Common.Type)
+    {
+    case ACPI_TYPE_LOCAL_REFERENCE:
 
-		case ACPI_REFCLASS_INDEX:
-
-			acpi_os_printf("%p\n", obj_desc->reference.object);
-			break;
-
-		case ACPI_REFCLASS_TABLE:
-
-			acpi_os_printf("Table Index %X\n",
-				       obj_desc->reference.value);
-			break;
-
-		case ACPI_REFCLASS_REFOF:
-
-			acpi_os_printf("%p [%s]\n", obj_desc->reference.object,
-				       acpi_ut_get_type_name(((union
-							       acpi_operand_object
-							       *)
-							      obj_desc->
-							      reference.
-							      object)->common.
-							     type));
-			break;
-
-		case ACPI_REFCLASS_NAME:
-
-			acpi_os_printf("- [%4.4s]\n",
-				       obj_desc->reference.node->name.ascii);
-			break;
-
-		case ACPI_REFCLASS_ARG:
-		case ACPI_REFCLASS_LOCAL:
-
-			acpi_os_printf("%X\n", obj_desc->reference.value);
-			break;
-
-		default:	/* Unknown reference class */
-
-			acpi_os_printf("%2.2X\n", obj_desc->reference.class);
-			break;
-		}
-		break;
-
-	case ACPI_TYPE_BUFFER:
-
-		acpi_os_printf("Buffer length %.2X @ %p\n",
-			       obj_desc->buffer.length,
-			       obj_desc->buffer.pointer);
-
-		/* Debug only -- dump the buffer contents */
-
-		if (obj_desc->buffer.pointer) {
-			length = obj_desc->buffer.length;
-			if (length > 128) {
-				length = 128;
-			}
-
-			acpi_os_printf
-			    ("Buffer Contents: (displaying length 0x%.2X)\n",
-			     length);
-			ACPI_DUMP_BUFFER(obj_desc->buffer.pointer, length);
-		}
-		break;
-
-	case ACPI_TYPE_INTEGER:
-
-		acpi_os_printf("Integer %8.8X%8.8X\n",
-			       ACPI_FORMAT_UINT64(obj_desc->integer.value));
-		break;
-
-	case ACPI_TYPE_PACKAGE:
-
-		acpi_os_printf("Package [Len %X] ElementArray %p\n",
-			       obj_desc->package.count,
-			       obj_desc->package.elements);
-
-		/*
-		 * If elements exist, package element pointer is valid,
-		 * and debug_level exceeds 1, dump package's elements.
-		 */
-		if (obj_desc->package.count &&
-		    obj_desc->package.elements && acpi_dbg_level > 1) {
-			for (index = 0; index < obj_desc->package.count;
-			     index++) {
-				acpi_ex_dump_operand(obj_desc->package.
-						     elements[index],
-						     depth + 1);
-			}
-		}
-		break;
-
-	case ACPI_TYPE_REGION:
-
-		acpi_os_printf("Region %s (%X)",
-			       acpi_ut_get_region_name(obj_desc->region.
-						       space_id),
-			       obj_desc->region.space_id);
-
-		/*
-		 * If the address and length have not been evaluated,
-		 * don't print them.
-		 */
-		if (!(obj_desc->region.flags & AOPOBJ_DATA_VALID)) {
-			acpi_os_printf("\n");
-		} else {
-			acpi_os_printf(" base %8.8X%8.8X Length %X\n",
-				       ACPI_FORMAT_NATIVE_UINT(obj_desc->region.
-							       address),
-				       obj_desc->region.length);
-		}
-		break;
+        AcpiOsPrintf ("Reference: [%s] ", AcpiUtGetReferenceName (ObjDesc));
 
-	case ACPI_TYPE_STRING:
+        switch (ObjDesc->Reference.Class)
+        {
+        case ACPI_REFCLASS_DEBUG:
 
-		acpi_os_printf("String length %X @ %p ",
-			       obj_desc->string.length,
-			       obj_desc->string.pointer);
+            AcpiOsPrintf ("\n");
+            break;
 
-		acpi_ut_print_string(obj_desc->string.pointer, ACPI_UINT8_MAX);
-		acpi_os_printf("\n");
-		break;
+        case ACPI_REFCLASS_INDEX:
+
+            AcpiOsPrintf ("%p\n", ObjDesc->Reference.Object);
+            break;
+
+        case ACPI_REFCLASS_TABLE:
 
-	case ACPI_TYPE_LOCAL_BANK_FIELD:
+            AcpiOsPrintf ("Table Index %X\n", ObjDesc->Reference.Value);
+            break;
+
+        case ACPI_REFCLASS_REFOF:
 
-		acpi_os_printf("BankField\n");
-		break;
+            AcpiOsPrintf ("%p [%s]\n", ObjDesc->Reference.Object,
+                AcpiUtGetTypeName (((ACPI_OPERAND_OBJECT *)
+                    ObjDesc->Reference.Object)->Common.Type));
+            break;
 
-	case ACPI_TYPE_LOCAL_REGION_FIELD:
+        case ACPI_REFCLASS_NAME:
 
-		acpi_os_printf
-		    ("RegionField: Bits=%X AccWidth=%X Lock=%X Update=%X at "
-		     "byte=%X bit=%X of below:\n", obj_desc->field.bit_length,
-		     obj_desc->field.access_byte_width,
-		     obj_desc->field.field_flags & AML_FIELD_LOCK_RULE_MASK,
-		     obj_desc->field.field_flags & AML_FIELD_UPDATE_RULE_MASK,
-		     obj_desc->field.base_byte_offset,
-		     obj_desc->field.start_field_bit_offset);
+            AcpiOsPrintf ("- [%4.4s]\n", ObjDesc->Reference.Node->Name.Ascii);
+            break;
 
-		acpi_ex_dump_operand(obj_desc->field.region_obj, depth + 1);
-		break;
+        case ACPI_REFCLASS_ARG:
+        case ACPI_REFCLASS_LOCAL:
 
-	case ACPI_TYPE_LOCAL_INDEX_FIELD:
+            AcpiOsPrintf ("%X\n", ObjDesc->Reference.Value);
+            break;
 
-		acpi_os_printf("IndexField\n");
-		break;
+        default:    /* Unknown reference class */
+
+            AcpiOsPrintf ("%2.2X\n", ObjDesc->Reference.Class);
+            break;
+        }
+        break;
 
-	case ACPI_TYPE_BUFFER_FIELD:
+    case ACPI_TYPE_BUFFER:
+
+        AcpiOsPrintf ("Buffer length %.2X @ %p\n",
+            ObjDesc->Buffer.Length, ObjDesc->Buffer.Pointer);
+
+        /* Debug only -- dump the buffer contents */
+
+        if (ObjDesc->Buffer.Pointer)
+        {
+            Length = ObjDesc->Buffer.Length;
+            if (Length > 128)
+            {
+                Length = 128;
+            }
+
+            AcpiOsPrintf ("Buffer Contents: (displaying length 0x%.2X)\n",
+                Length);
+            ACPI_DUMP_BUFFER (ObjDesc->Buffer.Pointer, Length);
+        }
+        break;
+
+    case ACPI_TYPE_INTEGER:
+
+        AcpiOsPrintf ("Integer %8.8X%8.8X\n",
+            ACPI_FORMAT_UINT64 (ObjDesc->Integer.Value));
+        break;
+
+    case ACPI_TYPE_PACKAGE:
+
+        AcpiOsPrintf ("Package [Len %X] ElementArray %p\n",
+            ObjDesc->Package.Count, ObjDesc->Package.Elements);
+
+        /*
+         * If elements exist, package element pointer is valid,
+         * and debug_level exceeds 1, dump package's elements.
+         */
+        if (ObjDesc->Package.Count &&
+            ObjDesc->Package.Elements &&
+            AcpiDbgLevel > 1)
+        {
+            for (Index = 0; Index < ObjDesc->Package.Count; Index++)
+            {
+                AcpiExDumpOperand (ObjDesc->Package.Elements[Index], Depth+1);
+            }
+        }
+        break;
+
+    case ACPI_TYPE_REGION:
+
+        AcpiOsPrintf ("Region %s (%X)",
+            AcpiUtGetRegionName (ObjDesc->Region.SpaceId),
+            ObjDesc->Region.SpaceId);
+
+        /*
+         * If the address and length have not been evaluated,
+         * don't print them.
+         */
+        if (!(ObjDesc->Region.Flags & AOPOBJ_DATA_VALID))
+        {
+            AcpiOsPrintf ("\n");
+        }
+        else
+        {
+            AcpiOsPrintf (" base %8.8X%8.8X Length %X\n",
+                ACPI_FORMAT_NATIVE_UINT (ObjDesc->Region.Address),
+                ObjDesc->Region.Length);
+        }
+        break;
 
-		acpi_os_printf("BufferField: %X bits at byte %X bit %X of\n",
-			       obj_desc->buffer_field.bit_length,
-			       obj_desc->buffer_field.base_byte_offset,
-			       obj_desc->buffer_field.start_field_bit_offset);
+    case ACPI_TYPE_STRING:
+
+        AcpiOsPrintf ("String length %X @ %p ",
+            ObjDesc->String.Length,
+            ObjDesc->String.Pointer);
 
-		if (!obj_desc->buffer_field.buffer_obj) {
-			ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "*NULL*\n"));
-		} else if ((obj_desc->buffer_field.buffer_obj)->common.type !=
-			   ACPI_TYPE_BUFFER) {
-			acpi_os_printf("*not a Buffer*\n");
-		} else {
-			acpi_ex_dump_operand(obj_desc->buffer_field.buffer_obj,
-					     depth + 1);
-		}
-		break;
+        AcpiUtPrintString (ObjDesc->String.Pointer, ACPI_UINT8_MAX);
+        AcpiOsPrintf ("\n");
+        break;
 
-	case ACPI_TYPE_EVENT:
+    case ACPI_TYPE_LOCAL_BANK_FIELD:
 
-		acpi_os_printf("Event\n");
-		break;
+        AcpiOsPrintf ("BankField\n");
+        break;
 
-	case ACPI_TYPE_METHOD:
+    case ACPI_TYPE_LOCAL_REGION_FIELD:
 
-		acpi_os_printf("Method(%X) @ %p:%X\n",
-			       obj_desc->method.param_count,
-			       obj_desc->method.aml_start,
-			       obj_desc->method.aml_length);
-		break;
+        AcpiOsPrintf ("RegionField: Bits=%X AccWidth=%X Lock=%X Update=%X at "
+            "byte=%X bit=%X of below:\n",
+            ObjDesc->Field.BitLength,
+            ObjDesc->Field.AccessByteWidth,
+            ObjDesc->Field.FieldFlags & AML_FIELD_LOCK_RULE_MASK,
+            ObjDesc->Field.FieldFlags & AML_FIELD_UPDATE_RULE_MASK,
+            ObjDesc->Field.BaseByteOffset,
+            ObjDesc->Field.StartFieldBitOffset);
 
-	case ACPI_TYPE_MUTEX:
+        AcpiExDumpOperand (ObjDesc->Field.RegionObj, Depth+1);
+        break;
 
-		acpi_os_printf("Mutex\n");
-		break;
+    case ACPI_TYPE_LOCAL_INDEX_FIELD:
 
-	case ACPI_TYPE_DEVICE:
+        AcpiOsPrintf ("IndexField\n");
+        break;
 
-		acpi_os_printf("Device\n");
-		break;
+    case ACPI_TYPE_BUFFER_FIELD:
 
-	case ACPI_TYPE_POWER:
+        AcpiOsPrintf ("BufferField: %X bits at byte %X bit %X of\n",
+            ObjDesc->BufferField.BitLength,
+            ObjDesc->BufferField.BaseByteOffset,
+            ObjDesc->BufferField.StartFieldBitOffset);
 
-		acpi_os_printf("Power\n");
-		break;
+        if (!ObjDesc->BufferField.BufferObj)
+        {
+            ACPI_DEBUG_PRINT ((ACPI_DB_EXEC, "*NULL*\n"));
+        }
+        else if ((ObjDesc->BufferField.BufferObj)->Common.Type !=
+                    ACPI_TYPE_BUFFER)
+        {
+            AcpiOsPrintf ("*not a Buffer*\n");
+        }
+        else
+        {
+            AcpiExDumpOperand (ObjDesc->BufferField.BufferObj, Depth+1);
+        }
+        break;
 
-	case ACPI_TYPE_PROCESSOR:
+    case ACPI_TYPE_EVENT:
 
-		acpi_os_printf("Processor\n");
-		break;
+        AcpiOsPrintf ("Event\n");
+        break;
 
-	case ACPI_TYPE_THERMAL:
+    case ACPI_TYPE_METHOD:
 
-		acpi_os_printf("Thermal\n");
-		break;
+        AcpiOsPrintf ("Method(%X) @ %p:%X\n",
+            ObjDesc->Method.ParamCount,
+            ObjDesc->Method.AmlStart,
+            ObjDesc->Method.AmlLength);
+        break;
 
-	default:
+    case ACPI_TYPE_MUTEX:
 
-		/* Unknown Type */
+        AcpiOsPrintf ("Mutex\n");
+        break;
 
-		acpi_os_printf("Unknown Type %X\n", obj_desc->common.type);
-		break;
-	}
+    case ACPI_TYPE_DEVICE:
 
-	return;
+        AcpiOsPrintf ("Device\n");
+        break;
+
+    case ACPI_TYPE_POWER:
+
+        AcpiOsPrintf ("Power\n");
+        break;
+
+    case ACPI_TYPE_PROCESSOR:
+
+        AcpiOsPrintf ("Processor\n");
+        break;
+
+    case ACPI_TYPE_THERMAL:
+
+        AcpiOsPrintf ("Thermal\n");
+        break;
+
+    default:
+
+        /* Unknown Type */
+
+        AcpiOsPrintf ("Unknown Type %X\n", ObjDesc->Common.Type);
+        break;
+    }
+
+    return;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_dump_operands
+ * FUNCTION:    AcpiExDumpOperands
  *
- * PARAMETERS:  operands            - A list of Operand objects
- *		opcode_name	    - AML opcode name
- *		num_operands	    - Operand count for this opcode
+ * PARAMETERS:  Operands            - A list of Operand objects
+ *              OpcodeName          - AML opcode name
+ *              NumOperands         - Operand count for this opcode
  *
  * DESCRIPTION: Dump the operands associated with the opcode
  *
  ******************************************************************************/
 
 void
-acpi_ex_dump_operands(union acpi_operand_object **operands,
-		      const char *opcode_name, u32 num_operands)
+AcpiExDumpOperands (
+    ACPI_OPERAND_OBJECT     **Operands,
+    const char              *OpcodeName,
+    UINT32                  NumOperands)
 {
-	ACPI_FUNCTION_NAME(ex_dump_operands);
+    ACPI_FUNCTION_NAME (ExDumpOperands);
 
-	if (!opcode_name) {
-		opcode_name = "UNKNOWN";
-	}
 
-	ACPI_DEBUG_PRINT((ACPI_DB_EXEC,
-			  "**** Start operand dump for opcode [%s], %u operands\n",
-			  opcode_name, num_operands));
+    if (!OpcodeName)
+    {
+        OpcodeName = "UNKNOWN";
+    }
 
-	if (num_operands == 0) {
-		num_operands = 1;
-	}
+    ACPI_DEBUG_PRINT ((ACPI_DB_EXEC,
+        "**** Start operand dump for opcode [%s], %u operands\n",
+        OpcodeName, NumOperands));
 
-	/* Dump the individual operands */
+    if (NumOperands == 0)
+    {
+        NumOperands = 1;
+    }
 
-	while (num_operands) {
-		acpi_ex_dump_operand(*operands, 0);
-		operands++;
-		num_operands--;
-	}
+    /* Dump the individual operands */
 
-	ACPI_DEBUG_PRINT((ACPI_DB_EXEC,
-			  "**** End operand dump for [%s]\n", opcode_name));
-	return;
+    while (NumOperands)
+    {
+        AcpiExDumpOperand (*Operands, 0);
+        Operands++;
+        NumOperands--;
+    }
+
+    ACPI_DEBUG_PRINT ((ACPI_DB_EXEC,
+        "**** End operand dump for [%s]\n", OpcodeName));
+    return;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_out* functions
+ * FUNCTION:    AcpiExOut* functions
  *
- * PARAMETERS:  title               - Descriptive text
- *              value               - Value to be displayed
+ * PARAMETERS:  Title               - Descriptive text
+ *              Value               - Value to be displayed
  *
  * DESCRIPTION: Object dump output formatting functions. These functions
  *              reduce the number of format strings required and keeps them
@@ -930,280 +1032,311 @@ acpi_ex_dump_operands(union acpi_operand_object **operands,
  *
  ******************************************************************************/
 
-static void acpi_ex_out_string(char *title, char *value)
+static void
+AcpiExOutString (
+    char                    *Title,
+    char                    *Value)
 {
-	acpi_os_printf("%20s : %s\n", title, value);
+    AcpiOsPrintf ("%20s : %s\n", Title, Value);
 }
 
-static void acpi_ex_out_pointer(char *title, void *value)
+static void
+AcpiExOutPointer (
+    char                    *Title,
+    void                    *Value)
 {
-	acpi_os_printf("%20s : %p\n", title, value);
+    AcpiOsPrintf ("%20s : %p\n", Title, Value);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_dump_namespace_node
+ * FUNCTION:    AcpiExDumpNamespaceNode
  *
- * PARAMETERS:  node                - Descriptor to dump
- *              flags               - Force display if TRUE
+ * PARAMETERS:  Node                - Descriptor to dump
+ *              Flags               - Force display if TRUE
  *
  * DESCRIPTION: Dumps the members of the given.Node
  *
  ******************************************************************************/
 
-void acpi_ex_dump_namespace_node(struct acpi_namespace_node *node, u32 flags)
+void
+AcpiExDumpNamespaceNode (
+    ACPI_NAMESPACE_NODE     *Node,
+    UINT32                  Flags)
 {
 
-	ACPI_FUNCTION_ENTRY();
+    ACPI_FUNCTION_ENTRY ();
 
-	if (!flags) {
 
-		/* Check if debug output enabled */
+    if (!Flags)
+    {
+        /* Check if debug output enabled */
 
-		if (!ACPI_IS_DEBUG_ENABLED(ACPI_LV_OBJECTS, _COMPONENT)) {
-			return;
-		}
-	}
+        if (!ACPI_IS_DEBUG_ENABLED (ACPI_LV_OBJECTS, _COMPONENT))
+        {
+            return;
+        }
+    }
 
-	acpi_os_printf("%20s : %4.4s\n", "Name", acpi_ut_get_node_name(node));
-	acpi_os_printf("%20s : %2.2X [%s]\n", "Type",
-		       node->type, acpi_ut_get_type_name(node->type));
+    AcpiOsPrintf ("%20s : %4.4s\n", "Name", AcpiUtGetNodeName (Node));
+    AcpiOsPrintf ("%20s : %2.2X [%s]\n", "Type",
+        Node->Type, AcpiUtGetTypeName (Node->Type));
 
-	acpi_ex_dump_object(ACPI_CAST_PTR(union acpi_operand_object, node),
-			    acpi_ex_dump_node);
+    AcpiExDumpObject (ACPI_CAST_PTR (ACPI_OPERAND_OBJECT, Node),
+        AcpiExDumpNode);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_dump_reference_obj
+ * FUNCTION:    AcpiExDumpReferenceObj
  *
- * PARAMETERS:  object              - Descriptor to dump
+ * PARAMETERS:  Object              - Descriptor to dump
  *
  * DESCRIPTION: Dumps a reference object
  *
  ******************************************************************************/
 
-static void acpi_ex_dump_reference_obj(union acpi_operand_object *obj_desc)
+static void
+AcpiExDumpReferenceObj (
+    ACPI_OPERAND_OBJECT     *ObjDesc)
 {
-	struct acpi_buffer ret_buf;
-	acpi_status status;
+    ACPI_BUFFER             RetBuf;
+    ACPI_STATUS             Status;
 
-	ret_buf.length = ACPI_ALLOCATE_LOCAL_BUFFER;
 
-	if (obj_desc->reference.class == ACPI_REFCLASS_NAME) {
-		acpi_os_printf(" %p ", obj_desc->reference.node);
+    RetBuf.Length = ACPI_ALLOCATE_LOCAL_BUFFER;
 
-		status =
-		    acpi_ns_handle_to_pathname(obj_desc->reference.node,
-					       &ret_buf);
-		if (ACPI_FAILURE(status)) {
-			acpi_os_printf(" Could not convert name to pathname\n");
-		} else {
-			acpi_os_printf("%s\n", (char *)ret_buf.pointer);
-			ACPI_FREE(ret_buf.pointer);
-		}
-	} else if (obj_desc->reference.object) {
-		if (ACPI_GET_DESCRIPTOR_TYPE(obj_desc) ==
-		    ACPI_DESC_TYPE_OPERAND) {
-			acpi_os_printf(" Target: %p",
-				       obj_desc->reference.object);
-			if (obj_desc->reference.class == ACPI_REFCLASS_TABLE) {
-				acpi_os_printf(" Table Index: %X\n",
-					       obj_desc->reference.value);
-			} else {
-				acpi_os_printf(" Target: %p [%s]\n",
-					       obj_desc->reference.object,
-					       acpi_ut_get_type_name(((union
-								       acpi_operand_object
-								       *)
-								      obj_desc->
-								      reference.
-								      object)->
-								     common.
-								     type));
-			}
-		} else {
-			acpi_os_printf(" Target: %p\n",
-				       obj_desc->reference.object);
-		}
-	}
+    if (ObjDesc->Reference.Class == ACPI_REFCLASS_NAME)
+    {
+        AcpiOsPrintf (" %p ", ObjDesc->Reference.Node);
+
+        Status = AcpiNsHandleToPathname (ObjDesc->Reference.Node, &RetBuf);
+        if (ACPI_FAILURE (Status))
+        {
+            AcpiOsPrintf (" Could not convert name to pathname\n");
+        }
+        else
+        {
+           AcpiOsPrintf ("%s\n", (char *) RetBuf.Pointer);
+           ACPI_FREE (RetBuf.Pointer);
+        }
+    }
+    else if (ObjDesc->Reference.Object)
+    {
+        if (ACPI_GET_DESCRIPTOR_TYPE (ObjDesc) == ACPI_DESC_TYPE_OPERAND)
+        {
+            AcpiOsPrintf (" Target: %p", ObjDesc->Reference.Object);
+            if (ObjDesc->Reference.Class == ACPI_REFCLASS_TABLE)
+            {
+                AcpiOsPrintf (" Table Index: %X\n", ObjDesc->Reference.Value);
+            }
+            else
+            {
+                AcpiOsPrintf (" Target: %p [%s]\n", ObjDesc->Reference.Object,
+                    AcpiUtGetTypeName (((ACPI_OPERAND_OBJECT *)
+                        ObjDesc->Reference.Object)->Common.Type));
+            }
+        }
+        else
+        {
+            AcpiOsPrintf (" Target: %p\n", ObjDesc->Reference.Object);
+        }
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_dump_package_obj
+ * FUNCTION:    AcpiExDumpPackageObj
  *
- * PARAMETERS:  obj_desc            - Descriptor to dump
- *              level               - Indentation Level
- *              index               - Package index for this object
+ * PARAMETERS:  ObjDesc             - Descriptor to dump
+ *              Level               - Indentation Level
+ *              Index               - Package index for this object
  *
  * DESCRIPTION: Dumps the elements of the package
  *
  ******************************************************************************/
 
 static void
-acpi_ex_dump_package_obj(union acpi_operand_object *obj_desc,
-			 u32 level, u32 index)
+AcpiExDumpPackageObj (
+    ACPI_OPERAND_OBJECT     *ObjDesc,
+    UINT32                  Level,
+    UINT32                  Index)
 {
-	u32 i;
+    UINT32                  i;
 
-	/* Indentation and index output */
 
-	if (level > 0) {
-		for (i = 0; i < level; i++) {
-			acpi_os_printf(" ");
-		}
+    /* Indentation and index output */
 
-		acpi_os_printf("[%.2d] ", index);
-	}
+    if (Level > 0)
+    {
+        for (i = 0; i < Level; i++)
+        {
+            AcpiOsPrintf ("  ");
+        }
 
-	acpi_os_printf("%p ", obj_desc);
+        AcpiOsPrintf ("[%.2d] ", Index);
+    }
 
-	/* Null package elements are allowed */
+    AcpiOsPrintf ("%p ", ObjDesc);
 
-	if (!obj_desc) {
-		acpi_os_printf("[Null Object]\n");
-		return;
-	}
+    /* Null package elements are allowed */
 
-	/* Packages may only contain a few object types */
+    if (!ObjDesc)
+    {
+        AcpiOsPrintf ("[Null Object]\n");
+        return;
+    }
 
-	switch (obj_desc->common.type) {
-	case ACPI_TYPE_INTEGER:
+    /* Packages may only contain a few object types */
 
-		acpi_os_printf("[Integer] = %8.8X%8.8X\n",
-			       ACPI_FORMAT_UINT64(obj_desc->integer.value));
-		break;
+    switch (ObjDesc->Common.Type)
+    {
+    case ACPI_TYPE_INTEGER:
 
-	case ACPI_TYPE_STRING:
+        AcpiOsPrintf ("[Integer] = %8.8X%8.8X\n",
+            ACPI_FORMAT_UINT64 (ObjDesc->Integer.Value));
+        break;
 
-		acpi_os_printf("[String] Value: ");
-		acpi_ut_print_string(obj_desc->string.pointer, ACPI_UINT8_MAX);
-		acpi_os_printf("\n");
-		break;
+    case ACPI_TYPE_STRING:
 
-	case ACPI_TYPE_BUFFER:
+        AcpiOsPrintf ("[String]  Value: ");
+        AcpiUtPrintString (ObjDesc->String.Pointer, ACPI_UINT8_MAX);
+        AcpiOsPrintf ("\n");
+        break;
 
-		acpi_os_printf("[Buffer] Length %.2X = ",
-			       obj_desc->buffer.length);
-		if (obj_desc->buffer.length) {
-			acpi_ut_debug_dump_buffer(ACPI_CAST_PTR
-						  (u8,
-						   obj_desc->buffer.pointer),
-						  obj_desc->buffer.length,
-						  DB_DWORD_DISPLAY, _COMPONENT);
-		} else {
-			acpi_os_printf("\n");
-		}
-		break;
+    case ACPI_TYPE_BUFFER:
 
-	case ACPI_TYPE_PACKAGE:
+        AcpiOsPrintf ("[Buffer] Length %.2X = ", ObjDesc->Buffer.Length);
+        if (ObjDesc->Buffer.Length)
+        {
+            AcpiUtDebugDumpBuffer (ACPI_CAST_PTR (UINT8, ObjDesc->Buffer.Pointer),
+                ObjDesc->Buffer.Length, DB_DWORD_DISPLAY, _COMPONENT);
+        }
+        else
+        {
+            AcpiOsPrintf ("\n");
+        }
+        break;
 
-		acpi_os_printf("[Package] Contains %u Elements:\n",
-			       obj_desc->package.count);
+    case ACPI_TYPE_PACKAGE:
 
-		for (i = 0; i < obj_desc->package.count; i++) {
-			acpi_ex_dump_package_obj(obj_desc->package.elements[i],
-						 level + 1, i);
-		}
-		break;
+        AcpiOsPrintf ("[Package] Contains %u Elements:\n",
+            ObjDesc->Package.Count);
 
-	case ACPI_TYPE_LOCAL_REFERENCE:
+        for (i = 0; i < ObjDesc->Package.Count; i++)
+        {
+            AcpiExDumpPackageObj (ObjDesc->Package.Elements[i], Level+1, i);
+        }
+        break;
 
-		acpi_os_printf("[Object Reference] Type [%s] %2.2X",
-			       acpi_ut_get_reference_name(obj_desc),
-			       obj_desc->reference.class);
-		acpi_ex_dump_reference_obj(obj_desc);
-		break;
+    case ACPI_TYPE_LOCAL_REFERENCE:
 
-	default:
+        AcpiOsPrintf ("[Object Reference] Type [%s] %2.2X",
+            AcpiUtGetReferenceName (ObjDesc),
+            ObjDesc->Reference.Class);
+        AcpiExDumpReferenceObj (ObjDesc);
+        break;
 
-		acpi_os_printf("[Unknown Type] %X\n", obj_desc->common.type);
-		break;
-	}
+    default:
+
+        AcpiOsPrintf ("[Unknown Type] %X\n", ObjDesc->Common.Type);
+        break;
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_dump_object_descriptor
+ * FUNCTION:    AcpiExDumpObjectDescriptor
  *
- * PARAMETERS:  obj_desc            - Descriptor to dump
- *              flags               - Force display if TRUE
+ * PARAMETERS:  ObjDesc             - Descriptor to dump
+ *              Flags               - Force display if TRUE
  *
  * DESCRIPTION: Dumps the members of the object descriptor given.
  *
  ******************************************************************************/
 
 void
-acpi_ex_dump_object_descriptor(union acpi_operand_object *obj_desc, u32 flags)
+AcpiExDumpObjectDescriptor (
+    ACPI_OPERAND_OBJECT     *ObjDesc,
+    UINT32                  Flags)
 {
-	ACPI_FUNCTION_TRACE(ex_dump_object_descriptor);
+    ACPI_FUNCTION_TRACE (ExDumpObjectDescriptor);
 
-	if (!obj_desc) {
-		return_VOID;
-	}
 
-	if (!flags) {
+    if (!ObjDesc)
+    {
+        return_VOID;
+    }
 
-		/* Check if debug output enabled */
+    if (!Flags)
+    {
+        /* Check if debug output enabled */
 
-		if (!ACPI_IS_DEBUG_ENABLED(ACPI_LV_OBJECTS, _COMPONENT)) {
-			return_VOID;
-		}
-	}
+        if (!ACPI_IS_DEBUG_ENABLED (ACPI_LV_OBJECTS, _COMPONENT))
+        {
+            return_VOID;
+        }
+    }
 
-	if (ACPI_GET_DESCRIPTOR_TYPE(obj_desc) == ACPI_DESC_TYPE_NAMED) {
-		acpi_ex_dump_namespace_node((struct acpi_namespace_node *)
-					    obj_desc, flags);
+    if (ACPI_GET_DESCRIPTOR_TYPE (ObjDesc) == ACPI_DESC_TYPE_NAMED)
+    {
+        AcpiExDumpNamespaceNode ((ACPI_NAMESPACE_NODE *) ObjDesc, Flags);
 
-		acpi_os_printf("\nAttached Object (%p):\n",
-			       ((struct acpi_namespace_node *)obj_desc)->
-			       object);
+        AcpiOsPrintf ("\nAttached Object (%p):\n",
+            ((ACPI_NAMESPACE_NODE *) ObjDesc)->Object);
 
-		obj_desc = ((struct acpi_namespace_node *)obj_desc)->object;
-		goto dump_object;
-	}
+        ObjDesc = ((ACPI_NAMESPACE_NODE *) ObjDesc)->Object;
+        goto DumpObject;
+    }
 
-	if (ACPI_GET_DESCRIPTOR_TYPE(obj_desc) != ACPI_DESC_TYPE_OPERAND) {
-		acpi_os_printf("%p is not an ACPI operand object: [%s]\n",
-			       obj_desc, acpi_ut_get_descriptor_name(obj_desc));
-		return_VOID;
-	}
+    if (ACPI_GET_DESCRIPTOR_TYPE (ObjDesc) != ACPI_DESC_TYPE_OPERAND)
+    {
+        AcpiOsPrintf (
+            "%p is not an ACPI operand object: [%s]\n",
+            ObjDesc, AcpiUtGetDescriptorName (ObjDesc));
+        return_VOID;
+    }
 
-	/* Validate the object type */
+    /* Validate the object type */
 
-	if (obj_desc->common.type > ACPI_TYPE_LOCAL_MAX) {
-		acpi_os_printf("Not a known object type: %2.2X\n",
-			       obj_desc->common.type);
-		return_VOID;
-	}
+    if (ObjDesc->Common.Type > ACPI_TYPE_LOCAL_MAX)
+    {
+        AcpiOsPrintf ("Not a known object type: %2.2X\n",
+            ObjDesc->Common.Type);
+        return_VOID;
+    }
 
-dump_object:
 
-	/* Common Fields */
+DumpObject:
 
-	acpi_ex_dump_object(obj_desc, acpi_ex_dump_common);
+    /* Common Fields */
 
-	/* Object-specific fields */
+    AcpiExDumpObject (ObjDesc, AcpiExDumpCommon);
 
-	acpi_ex_dump_object(obj_desc, acpi_ex_dump_info[obj_desc->common.type]);
+    /* Object-specific fields */
 
-	if (obj_desc->common.type == ACPI_TYPE_REGION) {
-		obj_desc = obj_desc->common.next_object;
-		if (obj_desc->common.type > ACPI_TYPE_LOCAL_MAX) {
-			acpi_os_printf
-			    ("Secondary object is not a known object type: %2.2X\n",
-			     obj_desc->common.type);
+    AcpiExDumpObject (ObjDesc, AcpiExDumpInfo[ObjDesc->Common.Type]);
 
-			return_VOID;
-		}
+    if (ObjDesc->Common.Type == ACPI_TYPE_REGION)
+    {
+        ObjDesc = ObjDesc->Common.NextObject;
+        if (ObjDesc->Common.Type > ACPI_TYPE_LOCAL_MAX)
+        {
+            AcpiOsPrintf ("Secondary object is not a known object type: %2.2X\n",
+                ObjDesc->Common.Type);
 
-		acpi_os_printf("\nExtra attached Object (%p):\n", obj_desc);
-		acpi_ex_dump_object(obj_desc,
-				    acpi_ex_dump_info[obj_desc->common.type]);
-	}
+            return_VOID;
+        }
 
-	return_VOID;
+        AcpiOsPrintf ("\nExtra attached Object (%p):\n", ObjDesc);
+        AcpiExDumpObject (ObjDesc, AcpiExDumpInfo[ObjDesc->Common.Type]);
+    }
+
+    return_VOID;
 }
 
 #endif

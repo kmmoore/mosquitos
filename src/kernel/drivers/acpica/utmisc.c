@@ -4,82 +4,166 @@
  *
  ******************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+
+#define __UTMISC_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acnamesp.h"
 
+
 #define _COMPONENT          ACPI_UTILITIES
-ACPI_MODULE_NAME("utmisc")
+        ACPI_MODULE_NAME    ("utmisc")
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_is_pci_root_bridge
+ * FUNCTION:    AcpiUtIsPciRootBridge
  *
- * PARAMETERS:  id              - The HID/CID in string format
+ * PARAMETERS:  Id              - The HID/CID in string format
  *
  * RETURN:      TRUE if the Id is a match for a PCI/PCI-Express Root Bridge
  *
  * DESCRIPTION: Determine if the input ID is a PCI Root Bridge ID.
  *
  ******************************************************************************/
-u8 acpi_ut_is_pci_root_bridge(char *id)
+
+BOOLEAN
+AcpiUtIsPciRootBridge (
+    char                    *Id)
 {
 
-	/*
-	 * Check if this is a PCI root bridge.
-	 * ACPI 3.0+: check for a PCI Express root also.
-	 */
-	if (!(ACPI_STRCMP(id,
-			  PCI_ROOT_HID_STRING)) ||
-	    !(ACPI_STRCMP(id, PCI_EXPRESS_ROOT_HID_STRING))) {
-		return (TRUE);
-	}
+    /*
+     * Check if this is a PCI root bridge.
+     * ACPI 3.0+: check for a PCI Express root also.
+     */
+    if (!(ACPI_STRCMP (Id,
+            PCI_ROOT_HID_STRING)) ||
 
-	return (FALSE);
+        !(ACPI_STRCMP (Id,
+            PCI_EXPRESS_ROOT_HID_STRING)))
+    {
+        return (TRUE);
+    }
+
+    return (FALSE);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_is_aml_table
+ * FUNCTION:    AcpiUtIsAmlTable
  *
- * PARAMETERS:  table               - An ACPI table
+ * PARAMETERS:  Table               - An ACPI table
  *
  * RETURN:      TRUE if table contains executable AML; FALSE otherwise
  *
@@ -89,58 +173,69 @@ u8 acpi_ut_is_pci_root_bridge(char *id)
  *
  ******************************************************************************/
 
-u8 acpi_ut_is_aml_table(struct acpi_table_header *table)
+BOOLEAN
+AcpiUtIsAmlTable (
+    ACPI_TABLE_HEADER       *Table)
 {
 
-	/* These are the only tables that contain executable AML */
+    /* These are the only tables that contain executable AML */
 
-	if (ACPI_COMPARE_NAME(table->signature, ACPI_SIG_DSDT) ||
-	    ACPI_COMPARE_NAME(table->signature, ACPI_SIG_PSDT) ||
-	    ACPI_COMPARE_NAME(table->signature, ACPI_SIG_SSDT)) {
-		return (TRUE);
-	}
+    if (ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_DSDT) ||
+        ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_PSDT) ||
+        ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_SSDT))
+    {
+        return (TRUE);
+    }
 
-	return (FALSE);
+    return (FALSE);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_dword_byte_swap
+ * FUNCTION:    AcpiUtDwordByteSwap
  *
- * PARAMETERS:  value           - Value to be converted
+ * PARAMETERS:  Value           - Value to be converted
  *
- * RETURN:      u32 integer with bytes swapped
+ * RETURN:      UINT32 integer with bytes swapped
  *
  * DESCRIPTION: Convert a 32-bit value to big-endian (swap the bytes)
  *
  ******************************************************************************/
 
-u32 acpi_ut_dword_byte_swap(u32 value)
+UINT32
+AcpiUtDwordByteSwap (
+    UINT32                  Value)
 {
-	union {
-		u32 value;
-		u8 bytes[4];
-	} out;
-	union {
-		u32 value;
-		u8 bytes[4];
-	} in;
+    union
+    {
+        UINT32              Value;
+        UINT8               Bytes[4];
+    } Out;
+    union
+    {
+        UINT32              Value;
+        UINT8               Bytes[4];
+    } In;
 
-	ACPI_FUNCTION_ENTRY();
 
-	in.value = value;
+    ACPI_FUNCTION_ENTRY ();
 
-	out.bytes[0] = in.bytes[3];
-	out.bytes[1] = in.bytes[2];
-	out.bytes[2] = in.bytes[1];
-	out.bytes[3] = in.bytes[0];
 
-	return (out.value);
+    In.Value = Value;
+
+    Out.Bytes[0] = In.Bytes[3];
+    Out.Bytes[1] = In.Bytes[2];
+    Out.Bytes[2] = In.Bytes[1];
+    Out.Bytes[3] = In.Bytes[0];
+
+    return (Out.Value);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_set_integer_width
+ * FUNCTION:    AcpiUtSetIntegerWidth
  *
  * PARAMETERS:  Revision            From DSDT header
  *
@@ -153,32 +248,37 @@ u32 acpi_ut_dword_byte_swap(u32 value)
  *
  ******************************************************************************/
 
-void acpi_ut_set_integer_width(u8 revision)
+void
+AcpiUtSetIntegerWidth (
+    UINT8                   Revision)
 {
 
-	if (revision < 2) {
+    if (Revision < 2)
+    {
+        /* 32-bit case */
 
-		/* 32-bit case */
+        AcpiGbl_IntegerBitWidth    = 32;
+        AcpiGbl_IntegerNybbleWidth = 8;
+        AcpiGbl_IntegerByteWidth   = 4;
+    }
+    else
+    {
+        /* 64-bit case (ACPI 2.0+) */
 
-		acpi_gbl_integer_bit_width = 32;
-		acpi_gbl_integer_nybble_width = 8;
-		acpi_gbl_integer_byte_width = 4;
-	} else {
-		/* 64-bit case (ACPI 2.0+) */
-
-		acpi_gbl_integer_bit_width = 64;
-		acpi_gbl_integer_nybble_width = 16;
-		acpi_gbl_integer_byte_width = 8;
-	}
+        AcpiGbl_IntegerBitWidth    = 64;
+        AcpiGbl_IntegerNybbleWidth = 16;
+        AcpiGbl_IntegerByteWidth   = 8;
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_create_update_state_and_push
+ * FUNCTION:    AcpiUtCreateUpdateStateAndPush
  *
- * PARAMETERS:  object          - Object to be added to the new state
- *              action          - Increment/Decrement
- *              state_list      - List the state will be added to
+ * PARAMETERS:  Object          - Object to be added to the new state
+ *              Action          - Increment/Decrement
+ *              StateList       - List the state will be added to
  *
  * RETURN:      Status
  *
@@ -186,38 +286,44 @@ void acpi_ut_set_integer_width(u8 revision)
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ut_create_update_state_and_push(union acpi_operand_object *object,
-				     u16 action,
-				     union acpi_generic_state **state_list)
+ACPI_STATUS
+AcpiUtCreateUpdateStateAndPush (
+    ACPI_OPERAND_OBJECT     *Object,
+    UINT16                  Action,
+    ACPI_GENERIC_STATE      **StateList)
 {
-	union acpi_generic_state *state;
+    ACPI_GENERIC_STATE       *State;
 
-	ACPI_FUNCTION_ENTRY();
 
-	/* Ignore null objects; these are expected */
+    ACPI_FUNCTION_ENTRY ();
 
-	if (!object) {
-		return (AE_OK);
-	}
 
-	state = acpi_ut_create_update_state(object, action);
-	if (!state) {
-		return (AE_NO_MEMORY);
-	}
+    /* Ignore null objects; these are expected */
 
-	acpi_ut_push_generic_state(state_list, state);
-	return (AE_OK);
+    if (!Object)
+    {
+        return (AE_OK);
+    }
+
+    State = AcpiUtCreateUpdateState (Object, Action);
+    if (!State)
+    {
+        return (AE_NO_MEMORY);
+    }
+
+    AcpiUtPushGenericState (StateList, State);
+    return (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_walk_package_tree
+ * FUNCTION:    AcpiUtWalkPackageTree
  *
- * PARAMETERS:  source_object       - The package to walk
- *              target_object       - Target object (if package is being copied)
- *              walk_callback       - Called once for each package element
- *              context             - Passed to the callback function
+ * PARAMETERS:  SourceObject        - The package to walk
+ *              TargetObject        - Target object (if package is being copied)
+ *              WalkCallback        - Called once for each package element
+ *              Context             - Passed to the callback function
  *
  * RETURN:      Status
  *
@@ -225,185 +331,199 @@ acpi_ut_create_update_state_and_push(union acpi_operand_object *object,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ut_walk_package_tree(union acpi_operand_object *source_object,
-			  void *target_object,
-			  acpi_pkg_callback walk_callback, void *context)
+ACPI_STATUS
+AcpiUtWalkPackageTree (
+    ACPI_OPERAND_OBJECT     *SourceObject,
+    void                    *TargetObject,
+    ACPI_PKG_CALLBACK       WalkCallback,
+    void                    *Context)
 {
-	acpi_status status = AE_OK;
-	union acpi_generic_state *state_list = NULL;
-	union acpi_generic_state *state;
-	u32 this_index;
-	union acpi_operand_object *this_source_obj;
+    ACPI_STATUS             Status = AE_OK;
+    ACPI_GENERIC_STATE      *StateList = NULL;
+    ACPI_GENERIC_STATE      *State;
+    UINT32                  ThisIndex;
+    ACPI_OPERAND_OBJECT     *ThisSourceObj;
 
-	ACPI_FUNCTION_TRACE(ut_walk_package_tree);
 
-	state = acpi_ut_create_pkg_state(source_object, target_object, 0);
-	if (!state) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
+    ACPI_FUNCTION_TRACE (UtWalkPackageTree);
 
-	while (state) {
 
-		/* Get one element of the package */
+    State = AcpiUtCreatePkgState (SourceObject, TargetObject, 0);
+    if (!State)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-		this_index = state->pkg.index;
-		this_source_obj = (union acpi_operand_object *)
-		    state->pkg.source_object->package.elements[this_index];
+    while (State)
+    {
+        /* Get one element of the package */
 
-		/*
-		 * Check for:
-		 * 1) An uninitialized package element. It is completely
-		 *    legal to declare a package and leave it uninitialized
-		 * 2) Not an internal object - can be a namespace node instead
-		 * 3) Any type other than a package. Packages are handled in else
-		 *    case below.
-		 */
-		if ((!this_source_obj) ||
-		    (ACPI_GET_DESCRIPTOR_TYPE(this_source_obj) !=
-		     ACPI_DESC_TYPE_OPERAND)
-		    || (this_source_obj->common.type != ACPI_TYPE_PACKAGE)) {
-			status =
-			    walk_callback(ACPI_COPY_TYPE_SIMPLE,
-					  this_source_obj, state, context);
-			if (ACPI_FAILURE(status)) {
-				return_ACPI_STATUS(status);
-			}
+        ThisIndex     = State->Pkg.Index;
+        ThisSourceObj = (ACPI_OPERAND_OBJECT *)
+                        State->Pkg.SourceObject->Package.Elements[ThisIndex];
 
-			state->pkg.index++;
-			while (state->pkg.index >=
-			       state->pkg.source_object->package.count) {
-				/*
-				 * We've handled all of the objects at this level,  This means
-				 * that we have just completed a package. That package may
-				 * have contained one or more packages itself.
-				 *
-				 * Delete this state and pop the previous state (package).
-				 */
-				acpi_ut_delete_generic_state(state);
-				state = acpi_ut_pop_generic_state(&state_list);
+        /*
+         * Check for:
+         * 1) An uninitialized package element. It is completely
+         *    legal to declare a package and leave it uninitialized
+         * 2) Not an internal object - can be a namespace node instead
+         * 3) Any type other than a package. Packages are handled in else
+         *    case below.
+         */
+        if ((!ThisSourceObj) ||
+            (ACPI_GET_DESCRIPTOR_TYPE (ThisSourceObj) != ACPI_DESC_TYPE_OPERAND) ||
+            (ThisSourceObj->Common.Type != ACPI_TYPE_PACKAGE))
+        {
+            Status = WalkCallback (ACPI_COPY_TYPE_SIMPLE, ThisSourceObj,
+                                    State, Context);
+            if (ACPI_FAILURE (Status))
+            {
+                return_ACPI_STATUS (Status);
+            }
 
-				/* Finished when there are no more states */
+            State->Pkg.Index++;
+            while (State->Pkg.Index >= State->Pkg.SourceObject->Package.Count)
+            {
+                /*
+                 * We've handled all of the objects at this level,  This means
+                 * that we have just completed a package. That package may
+                 * have contained one or more packages itself.
+                 *
+                 * Delete this state and pop the previous state (package).
+                 */
+                AcpiUtDeleteGenericState (State);
+                State = AcpiUtPopGenericState (&StateList);
 
-				if (!state) {
-					/*
-					 * We have handled all of the objects in the top level
-					 * package just add the length of the package objects
-					 * and exit
-					 */
-					return_ACPI_STATUS(AE_OK);
-				}
+                /* Finished when there are no more states */
 
-				/*
-				 * Go back up a level and move the index past the just
-				 * completed package object.
-				 */
-				state->pkg.index++;
-			}
-		} else {
-			/* This is a subobject of type package */
+                if (!State)
+                {
+                    /*
+                     * We have handled all of the objects in the top level
+                     * package just add the length of the package objects
+                     * and exit
+                     */
+                    return_ACPI_STATUS (AE_OK);
+                }
 
-			status =
-			    walk_callback(ACPI_COPY_TYPE_PACKAGE,
-					  this_source_obj, state, context);
-			if (ACPI_FAILURE(status)) {
-				return_ACPI_STATUS(status);
-			}
+                /*
+                 * Go back up a level and move the index past the just
+                 * completed package object.
+                 */
+                State->Pkg.Index++;
+            }
+        }
+        else
+        {
+            /* This is a subobject of type package */
 
-			/*
-			 * Push the current state and create a new one
-			 * The callback above returned a new target package object.
-			 */
-			acpi_ut_push_generic_state(&state_list, state);
-			state = acpi_ut_create_pkg_state(this_source_obj,
-							 state->pkg.
-							 this_target_obj, 0);
-			if (!state) {
+            Status = WalkCallback (ACPI_COPY_TYPE_PACKAGE, ThisSourceObj,
+                                        State, Context);
+            if (ACPI_FAILURE (Status))
+            {
+                return_ACPI_STATUS (Status);
+            }
 
-				/* Free any stacked Update State objects */
+            /*
+             * Push the current state and create a new one
+             * The callback above returned a new target package object.
+             */
+            AcpiUtPushGenericState (&StateList, State);
+            State = AcpiUtCreatePkgState (ThisSourceObj,
+                                            State->Pkg.ThisTargetObj, 0);
+            if (!State)
+            {
+                /* Free any stacked Update State objects */
 
-				while (state_list) {
-					state =
-					    acpi_ut_pop_generic_state
-					    (&state_list);
-					acpi_ut_delete_generic_state(state);
-				}
-				return_ACPI_STATUS(AE_NO_MEMORY);
-			}
-		}
-	}
+                while (StateList)
+                {
+                    State = AcpiUtPopGenericState (&StateList);
+                    AcpiUtDeleteGenericState (State);
+                }
+                return_ACPI_STATUS (AE_NO_MEMORY);
+            }
+        }
+    }
 
-	/* We should never get here */
+    /* We should never get here */
 
-	return_ACPI_STATUS(AE_AML_INTERNAL);
+    return_ACPI_STATUS (AE_AML_INTERNAL);
 }
+
 
 #ifdef ACPI_DEBUG_OUTPUT
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_display_init_pathname
+ * FUNCTION:    AcpiUtDisplayInitPathname
  *
- * PARAMETERS:  type                - Object type of the node
- *              obj_handle          - Handle whose pathname will be displayed
- *              path                - Additional path string to be appended.
+ * PARAMETERS:  Type                - Object type of the node
+ *              ObjHandle           - Handle whose pathname will be displayed
+ *              Path                - Additional path string to be appended.
  *                                      (NULL if no extra path)
  *
- * RETURN:      acpi_status
+ * RETURN:      ACPI_STATUS
  *
  * DESCRIPTION: Display full pathname of an object, DEBUG ONLY
  *
  ******************************************************************************/
 
 void
-acpi_ut_display_init_pathname(u8 type,
-			      struct acpi_namespace_node *obj_handle,
-			      char *path)
+AcpiUtDisplayInitPathname (
+    UINT8                   Type,
+    ACPI_NAMESPACE_NODE     *ObjHandle,
+    char                    *Path)
 {
-	acpi_status status;
-	struct acpi_buffer buffer;
+    ACPI_STATUS             Status;
+    ACPI_BUFFER             Buffer;
 
-	ACPI_FUNCTION_ENTRY();
 
-	/* Only print the path if the appropriate debug level is enabled */
+    ACPI_FUNCTION_ENTRY ();
 
-	if (!(acpi_dbg_level & ACPI_LV_INIT_NAMES)) {
-		return;
-	}
 
-	/* Get the full pathname to the node */
+    /* Only print the path if the appropriate debug level is enabled */
 
-	buffer.length = ACPI_ALLOCATE_LOCAL_BUFFER;
-	status = acpi_ns_handle_to_pathname(obj_handle, &buffer);
-	if (ACPI_FAILURE(status)) {
-		return;
-	}
+    if (!(AcpiDbgLevel & ACPI_LV_INIT_NAMES))
+    {
+        return;
+    }
 
-	/* Print what we're doing */
+    /* Get the full pathname to the node */
 
-	switch (type) {
-	case ACPI_TYPE_METHOD:
+    Buffer.Length = ACPI_ALLOCATE_LOCAL_BUFFER;
+    Status = AcpiNsHandleToPathname (ObjHandle, &Buffer);
+    if (ACPI_FAILURE (Status))
+    {
+        return;
+    }
 
-		acpi_os_printf("Executing  ");
-		break;
+    /* Print what we're doing */
 
-	default:
+    switch (Type)
+    {
+    case ACPI_TYPE_METHOD:
 
-		acpi_os_printf("Initializing ");
-		break;
-	}
+        AcpiOsPrintf ("Executing    ");
+        break;
 
-	/* Print the object type and pathname */
+    default:
 
-	acpi_os_printf("%-12s %s",
-		       acpi_ut_get_type_name(type), (char *)buffer.pointer);
+        AcpiOsPrintf ("Initializing ");
+        break;
+    }
 
-	/* Extra path is used to append names like _STA, _INI, etc. */
+    /* Print the object type and pathname */
 
-	if (path) {
-		acpi_os_printf(".%s", path);
-	}
-	acpi_os_printf("\n");
+    AcpiOsPrintf ("%-12s  %s",
+        AcpiUtGetTypeName (Type), (char *) Buffer.Pointer);
 
-	ACPI_FREE(buffer.pointer);
+    /* Extra path is used to append names like _STA, _INI, etc. */
+
+    if (Path)
+    {
+        AcpiOsPrintf (".%s", Path);
+    }
+    AcpiOsPrintf ("\n");
+
+    ACPI_FREE (Buffer.Pointer);
 }
 #endif

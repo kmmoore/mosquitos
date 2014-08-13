@@ -26,7 +26,7 @@ TARGET          := ../../build/kernel
 LIBDIR          := /usr/lib
 LIBS            := 
 
-CFLAGS          := -isystem $(ACPI_INC) $(CFLAGS_COMMON) -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone
+CFLAGS          := -isystem $(ACPI_INC) $(CFLAGS_COMMON) -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone  -fno-omit-frame-pointer
 ifeq ($(ARCH),x86_64)
 	CFLAGS        += -DEFI_FUNCTION_WRAPPER
 endif
@@ -57,4 +57,4 @@ include $(DEPS)
 
 # Link
 $(TARGET): $(OBJS)
-	$(LD) $(LDFLAGS) $^ $(ACPICA_LIB) -o $@
+	$(LD) $(LDFLAGS) $^ -o $@

@@ -4,55 +4,130 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
+
+#define __UTXFACE_C__
 #define EXPORT_ACPI_INTERFACES
 
-#include <acpi/acpi.h>
+#include "acpi.h"
 #include "accommon.h"
 #include "acdebug.h"
 
 #define _COMPONENT          ACPI_UTILITIES
-ACPI_MODULE_NAME("utxface")
+        ACPI_MODULE_NAME    ("utxface")
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_terminate
+ * FUNCTION:    AcpiTerminate
  *
  * PARAMETERS:  None
  *
@@ -61,57 +136,64 @@ ACPI_MODULE_NAME("utxface")
  * DESCRIPTION: Shutdown the ACPICA subsystem and release all resources.
  *
  ******************************************************************************/
-acpi_status __init acpi_terminate(void)
+
+ACPI_STATUS
+AcpiTerminate (
+    void)
 {
-	acpi_status status;
+    ACPI_STATUS         Status;
 
-	ACPI_FUNCTION_TRACE(acpi_terminate);
 
-	/* Just exit if subsystem is already shutdown */
+    ACPI_FUNCTION_TRACE (AcpiTerminate);
 
-	if (acpi_gbl_shutdown) {
-		ACPI_ERROR((AE_INFO, "ACPI Subsystem is already terminated"));
-		return_ACPI_STATUS(AE_OK);
-	}
 
-	/* Subsystem appears active, go ahead and shut it down */
+    /* Just exit if subsystem is already shutdown */
 
-	acpi_gbl_shutdown = TRUE;
-	acpi_gbl_startup_flags = 0;
-	ACPI_DEBUG_PRINT((ACPI_DB_INFO, "Shutting down ACPI Subsystem\n"));
+    if (AcpiGbl_Shutdown)
+    {
+        ACPI_ERROR ((AE_INFO, "ACPI Subsystem is already terminated"));
+        return_ACPI_STATUS (AE_OK);
+    }
 
-	/* Terminate the AML Debugger if present */
+    /* Subsystem appears active, go ahead and shut it down */
 
-	ACPI_DEBUGGER_EXEC(acpi_gbl_db_terminate_threads = TRUE);
+    AcpiGbl_Shutdown = TRUE;
+    AcpiGbl_StartupFlags = 0;
+    ACPI_DEBUG_PRINT ((ACPI_DB_INFO, "Shutting down ACPI Subsystem\n"));
 
-	/* Shutdown and free all resources */
+    /* Terminate the AML Debugger if present */
 
-	acpi_ut_subsystem_shutdown();
+    ACPI_DEBUGGER_EXEC (AcpiGbl_DbTerminateThreads = TRUE);
 
-	/* Free the mutex objects */
+    /* Shutdown and free all resources */
 
-	acpi_ut_mutex_terminate();
+    AcpiUtSubsystemShutdown ();
+
+    /* Free the mutex objects */
+
+    AcpiUtMutexTerminate ();
+
 
 #ifdef ACPI_DEBUGGER
 
-	/* Shut down the debugger */
+    /* Shut down the debugger */
 
-	acpi_db_terminate();
+    AcpiDbTerminate ();
 #endif
 
-	/* Now we can shutdown the OS-dependent layer */
+    /* Now we can shutdown the OS-dependent layer */
 
-	status = acpi_os_terminate();
-	return_ACPI_STATUS(status);
+    Status = AcpiOsTerminate ();
+    return_ACPI_STATUS (Status);
 }
 
-ACPI_EXPORT_SYMBOL_INIT(acpi_terminate)
+ACPI_EXPORT_SYMBOL_INIT (AcpiTerminate)
+
 
 #ifndef ACPI_ASL_COMPILER
-#ifdef ACPI_FUTURE_USAGE
 /*******************************************************************************
  *
- * FUNCTION:    acpi_subsystem_status
+ * FUNCTION:    AcpiSubsystemStatus
  *
  * PARAMETERS:  None
  *
@@ -122,136 +204,159 @@ ACPI_EXPORT_SYMBOL_INIT(acpi_terminate)
  *              initialized successfully.
  *
  ******************************************************************************/
-acpi_status acpi_subsystem_status(void)
+
+ACPI_STATUS
+AcpiSubsystemStatus (
+    void)
 {
 
-	if (acpi_gbl_startup_flags & ACPI_INITIALIZED_OK) {
-		return (AE_OK);
-	} else {
-		return (AE_ERROR);
-	}
+    if (AcpiGbl_StartupFlags & ACPI_INITIALIZED_OK)
+    {
+        return (AE_OK);
+    }
+    else
+    {
+        return (AE_ERROR);
+    }
 }
 
-ACPI_EXPORT_SYMBOL(acpi_subsystem_status)
+ACPI_EXPORT_SYMBOL (AcpiSubsystemStatus)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_get_system_info
+ * FUNCTION:    AcpiGetSystemInfo
  *
- * PARAMETERS:  out_buffer      - A buffer to receive the resources for the
+ * PARAMETERS:  OutBuffer       - A buffer to receive the resources for the
  *                                device
  *
- * RETURN:      status          - the status of the call
+ * RETURN:      Status          - the status of the call
  *
  * DESCRIPTION: This function is called to get information about the current
  *              state of the ACPI subsystem. It will return system information
- *              in the out_buffer.
+ *              in the OutBuffer.
  *
  *              If the function fails an appropriate status will be returned
- *              and the value of out_buffer is undefined.
+ *              and the value of OutBuffer is undefined.
  *
  ******************************************************************************/
-acpi_status acpi_get_system_info(struct acpi_buffer * out_buffer)
+
+ACPI_STATUS
+AcpiGetSystemInfo (
+    ACPI_BUFFER             *OutBuffer)
 {
-	struct acpi_system_info *info_ptr;
-	acpi_status status;
+    ACPI_SYSTEM_INFO        *InfoPtr;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(acpi_get_system_info);
 
-	/* Parameter validation */
+    ACPI_FUNCTION_TRACE (AcpiGetSystemInfo);
 
-	status = acpi_ut_validate_buffer(out_buffer);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
 
-	/* Validate/Allocate/Clear caller buffer */
+    /* Parameter validation */
 
-	status =
-	    acpi_ut_initialize_buffer(out_buffer,
-				      sizeof(struct acpi_system_info));
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    Status = AcpiUtValidateBuffer (OutBuffer);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/*
-	 * Populate the return buffer
-	 */
-	info_ptr = (struct acpi_system_info *)out_buffer->pointer;
+    /* Validate/Allocate/Clear caller buffer */
 
-	info_ptr->acpi_ca_version = ACPI_CA_VERSION;
+    Status = AcpiUtInitializeBuffer (OutBuffer, sizeof (ACPI_SYSTEM_INFO));
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/* System flags (ACPI capabilities) */
+    /*
+     * Populate the return buffer
+     */
+    InfoPtr = (ACPI_SYSTEM_INFO *) OutBuffer->Pointer;
 
-	info_ptr->flags = ACPI_SYS_MODE_ACPI;
+    InfoPtr->AcpiCaVersion = ACPI_CA_VERSION;
 
-	/* Timer resolution - 24 or 32 bits  */
+    /* System flags (ACPI capabilities) */
 
-	if (acpi_gbl_FADT.flags & ACPI_FADT_32BIT_TIMER) {
-		info_ptr->timer_resolution = 24;
-	} else {
-		info_ptr->timer_resolution = 32;
-	}
+    InfoPtr->Flags = ACPI_SYS_MODE_ACPI;
 
-	/* Clear the reserved fields */
+    /* Timer resolution - 24 or 32 bits  */
 
-	info_ptr->reserved1 = 0;
-	info_ptr->reserved2 = 0;
+    if (AcpiGbl_FADT.Flags & ACPI_FADT_32BIT_TIMER)
+    {
+        InfoPtr->TimerResolution = 24;
+    }
+    else
+    {
+        InfoPtr->TimerResolution = 32;
+    }
 
-	/* Current debug levels */
+    /* Clear the reserved fields */
 
-	info_ptr->debug_layer = acpi_dbg_layer;
-	info_ptr->debug_level = acpi_dbg_level;
+    InfoPtr->Reserved1 = 0;
+    InfoPtr->Reserved2 = 0;
 
-	return_ACPI_STATUS(AE_OK);
+    /* Current debug levels */
+
+    InfoPtr->DebugLayer = AcpiDbgLayer;
+    InfoPtr->DebugLevel = AcpiDbgLevel;
+
+    return_ACPI_STATUS (AE_OK);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_get_system_info)
+ACPI_EXPORT_SYMBOL (AcpiGetSystemInfo)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_get_statistics
+ * FUNCTION:    AcpiGetStatistics
  *
- * PARAMETERS:  stats           - Where the statistics are returned
+ * PARAMETERS:  Stats           - Where the statistics are returned
  *
- * RETURN:      status          - the status of the call
+ * RETURN:      Status          - the status of the call
  *
  * DESCRIPTION: Get the contents of the various system counters
  *
  ******************************************************************************/
-acpi_status acpi_get_statistics(struct acpi_statistics *stats)
+
+ACPI_STATUS
+AcpiGetStatistics (
+    ACPI_STATISTICS         *Stats)
 {
-	ACPI_FUNCTION_TRACE(acpi_get_statistics);
+    ACPI_FUNCTION_TRACE (AcpiGetStatistics);
 
-	/* Parameter validation */
 
-	if (!stats) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    /* Parameter validation */
 
-	/* Various interrupt-based event counters */
+    if (!Stats)
+    {
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-	stats->sci_count = acpi_sci_count;
-	stats->gpe_count = acpi_gpe_count;
+    /* Various interrupt-based event counters */
 
-	ACPI_MEMCPY(stats->fixed_event_count, acpi_fixed_event_count,
-		    sizeof(acpi_fixed_event_count));
+    Stats->SciCount = AcpiSciCount;
+    Stats->GpeCount = AcpiGpeCount;
 
-	/* Other counters */
+    ACPI_MEMCPY (Stats->FixedEventCount, AcpiFixedEventCount,
+        sizeof (AcpiFixedEventCount));
 
-	stats->method_count = acpi_method_count;
 
-	return_ACPI_STATUS(AE_OK);
+    /* Other counters */
+
+    Stats->MethodCount = AcpiMethodCount;
+
+    return_ACPI_STATUS (AE_OK);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_get_statistics)
+ACPI_EXPORT_SYMBOL (AcpiGetStatistics)
+
 
 /*****************************************************************************
  *
- * FUNCTION:    acpi_install_initialization_handler
+ * FUNCTION:    AcpiInstallInitializationHandler
  *
- * PARAMETERS:  handler             - Callback procedure
- *              function            - Not (currently) used, see below
+ * PARAMETERS:  Handler             - Callback procedure
+ *              Function            - Not (currently) used, see below
  *
  * RETURN:      Status
  *
@@ -260,28 +365,33 @@ ACPI_EXPORT_SYMBOL(acpi_get_statistics)
  * TBD: When a second function is added, must save the Function also.
  *
  ****************************************************************************/
-acpi_status
-acpi_install_initialization_handler(acpi_init_handler handler, u32 function)
+
+ACPI_STATUS
+AcpiInstallInitializationHandler (
+    ACPI_INIT_HANDLER       Handler,
+    UINT32                  Function)
 {
 
-	if (!handler) {
-		return (AE_BAD_PARAMETER);
-	}
+    if (!Handler)
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	if (acpi_gbl_init_handler) {
-		return (AE_ALREADY_EXISTS);
-	}
+    if (AcpiGbl_InitHandler)
+    {
+        return (AE_ALREADY_EXISTS);
+    }
 
-	acpi_gbl_init_handler = handler;
-	return (AE_OK);
+    AcpiGbl_InitHandler = Handler;
+    return (AE_OK);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_install_initialization_handler)
-#endif				/*  ACPI_FUTURE_USAGE  */
+ACPI_EXPORT_SYMBOL (AcpiInstallInitializationHandler)
+
 
 /*****************************************************************************
  *
- * FUNCTION:    acpi_purge_cached_objects
+ * FUNCTION:    AcpiPurgeCachedObjects
  *
  * PARAMETERS:  None
  *
@@ -290,112 +400,137 @@ ACPI_EXPORT_SYMBOL(acpi_install_initialization_handler)
  * DESCRIPTION: Empty all caches (delete the cached objects)
  *
  ****************************************************************************/
-acpi_status acpi_purge_cached_objects(void)
+
+ACPI_STATUS
+AcpiPurgeCachedObjects (
+    void)
 {
-	ACPI_FUNCTION_TRACE(acpi_purge_cached_objects);
+    ACPI_FUNCTION_TRACE (AcpiPurgeCachedObjects);
 
-	(void)acpi_os_purge_cache(acpi_gbl_state_cache);
-	(void)acpi_os_purge_cache(acpi_gbl_operand_cache);
-	(void)acpi_os_purge_cache(acpi_gbl_ps_node_cache);
-	(void)acpi_os_purge_cache(acpi_gbl_ps_node_ext_cache);
 
-	return_ACPI_STATUS(AE_OK);
+    (void) AcpiOsPurgeCache (AcpiGbl_StateCache);
+    (void) AcpiOsPurgeCache (AcpiGbl_OperandCache);
+    (void) AcpiOsPurgeCache (AcpiGbl_PsNodeCache);
+    (void) AcpiOsPurgeCache (AcpiGbl_PsNodeExtCache);
+
+    return_ACPI_STATUS (AE_OK);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_purge_cached_objects)
+ACPI_EXPORT_SYMBOL (AcpiPurgeCachedObjects)
+
 
 /*****************************************************************************
  *
- * FUNCTION:    acpi_install_interface
+ * FUNCTION:    AcpiInstallInterface
  *
- * PARAMETERS:  interface_name      - The interface to install
+ * PARAMETERS:  InterfaceName       - The interface to install
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Install an _OSI interface to the global list
  *
  ****************************************************************************/
-acpi_status acpi_install_interface(acpi_string interface_name)
+
+ACPI_STATUS
+AcpiInstallInterface (
+    ACPI_STRING             InterfaceName)
 {
-	acpi_status status;
-	struct acpi_interface_info *interface_info;
+    ACPI_STATUS             Status;
+    ACPI_INTERFACE_INFO     *InterfaceInfo;
 
-	/* Parameter validation */
 
-	if (!interface_name || (ACPI_STRLEN(interface_name) == 0)) {
-		return (AE_BAD_PARAMETER);
-	}
+    /* Parameter validation */
 
-	status = acpi_os_acquire_mutex(acpi_gbl_osi_mutex, ACPI_WAIT_FOREVER);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
+    if (!InterfaceName || (ACPI_STRLEN (InterfaceName) == 0))
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	/* Check if the interface name is already in the global list */
+    Status = AcpiOsAcquireMutex (AcpiGbl_OsiMutex, ACPI_WAIT_FOREVER);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	interface_info = acpi_ut_get_interface(interface_name);
-	if (interface_info) {
-		/*
-		 * The interface already exists in the list. This is OK if the
-		 * interface has been marked invalid -- just clear the bit.
-		 */
-		if (interface_info->flags & ACPI_OSI_INVALID) {
-			interface_info->flags &= ~ACPI_OSI_INVALID;
-			status = AE_OK;
-		} else {
-			status = AE_ALREADY_EXISTS;
-		}
-	} else {
-		/* New interface name, install into the global list */
+    /* Check if the interface name is already in the global list */
 
-		status = acpi_ut_install_interface(interface_name);
-	}
+    InterfaceInfo = AcpiUtGetInterface (InterfaceName);
+    if (InterfaceInfo)
+    {
+        /*
+         * The interface already exists in the list. This is OK if the
+         * interface has been marked invalid -- just clear the bit.
+         */
+        if (InterfaceInfo->Flags & ACPI_OSI_INVALID)
+        {
+            InterfaceInfo->Flags &= ~ACPI_OSI_INVALID;
+            Status = AE_OK;
+        }
+        else
+        {
+            Status = AE_ALREADY_EXISTS;
+        }
+    }
+    else
+    {
+        /* New interface name, install into the global list */
 
-	acpi_os_release_mutex(acpi_gbl_osi_mutex);
-	return (status);
+        Status = AcpiUtInstallInterface (InterfaceName);
+    }
+
+    AcpiOsReleaseMutex (AcpiGbl_OsiMutex);
+    return (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_install_interface)
+ACPI_EXPORT_SYMBOL (AcpiInstallInterface)
+
 
 /*****************************************************************************
  *
- * FUNCTION:    acpi_remove_interface
+ * FUNCTION:    AcpiRemoveInterface
  *
- * PARAMETERS:  interface_name      - The interface to remove
+ * PARAMETERS:  InterfaceName       - The interface to remove
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Remove an _OSI interface from the global list
  *
  ****************************************************************************/
-acpi_status acpi_remove_interface(acpi_string interface_name)
+
+ACPI_STATUS
+AcpiRemoveInterface (
+    ACPI_STRING             InterfaceName)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	/* Parameter validation */
 
-	if (!interface_name || (ACPI_STRLEN(interface_name) == 0)) {
-		return (AE_BAD_PARAMETER);
-	}
+    /* Parameter validation */
 
-	status = acpi_os_acquire_mutex(acpi_gbl_osi_mutex, ACPI_WAIT_FOREVER);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
+    if (!InterfaceName || (ACPI_STRLEN (InterfaceName) == 0))
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	status = acpi_ut_remove_interface(interface_name);
+    Status = AcpiOsAcquireMutex (AcpiGbl_OsiMutex, ACPI_WAIT_FOREVER);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	acpi_os_release_mutex(acpi_gbl_osi_mutex);
-	return (status);
+    Status = AcpiUtRemoveInterface (InterfaceName);
+
+    AcpiOsReleaseMutex (AcpiGbl_OsiMutex);
+    return (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_remove_interface)
+ACPI_EXPORT_SYMBOL (AcpiRemoveInterface)
+
 
 /*****************************************************************************
  *
- * FUNCTION:    acpi_install_interface_handler
+ * FUNCTION:    AcpiInstallInterfaceHandler
  *
- * PARAMETERS:  handler             - The _OSI interface handler to install
+ * PARAMETERS:  Handler             - The _OSI interface handler to install
  *                                    NULL means "remove existing handler"
  *
  * RETURN:      Status
@@ -405,32 +540,41 @@ ACPI_EXPORT_SYMBOL(acpi_remove_interface)
  *              _OSI. A NULL handler simply removes any existing handler.
  *
  ****************************************************************************/
-acpi_status acpi_install_interface_handler(acpi_interface_handler handler)
+
+ACPI_STATUS
+AcpiInstallInterfaceHandler (
+    ACPI_INTERFACE_HANDLER  Handler)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	status = acpi_os_acquire_mutex(acpi_gbl_osi_mutex, ACPI_WAIT_FOREVER);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
 
-	if (handler && acpi_gbl_interface_handler) {
-		status = AE_ALREADY_EXISTS;
-	} else {
-		acpi_gbl_interface_handler = handler;
-	}
+    Status = AcpiOsAcquireMutex (AcpiGbl_OsiMutex, ACPI_WAIT_FOREVER);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	acpi_os_release_mutex(acpi_gbl_osi_mutex);
-	return (status);
+    if (Handler && AcpiGbl_InterfaceHandler)
+    {
+        Status = AE_ALREADY_EXISTS;
+    }
+    else
+    {
+        AcpiGbl_InterfaceHandler = Handler;
+    }
+
+    AcpiOsReleaseMutex (AcpiGbl_OsiMutex);
+    return (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_install_interface_handler)
+ACPI_EXPORT_SYMBOL (AcpiInstallInterfaceHandler)
+
 
 /*****************************************************************************
  *
- * FUNCTION:    acpi_update_interfaces
+ * FUNCTION:    AcpiUpdateInterfaces
  *
- * PARAMETERS:  action              - Actions to be performed during the
+ * PARAMETERS:  Action              - Actions to be performed during the
  *                                    update
  *
  * RETURN:      Status
@@ -439,29 +583,35 @@ ACPI_EXPORT_SYMBOL(acpi_install_interface_handler)
  *              string or/and feature group strings.
  *
  ****************************************************************************/
-acpi_status acpi_update_interfaces(u8 action)
+
+ACPI_STATUS
+AcpiUpdateInterfaces (
+    UINT8                   Action)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	status = acpi_os_acquire_mutex(acpi_gbl_osi_mutex, ACPI_WAIT_FOREVER);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
 
-	status = acpi_ut_update_interfaces(action);
+    Status = AcpiOsAcquireMutex (AcpiGbl_OsiMutex, ACPI_WAIT_FOREVER);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	acpi_os_release_mutex(acpi_gbl_osi_mutex);
-	return (status);
+    Status = AcpiUtUpdateInterfaces (Action);
+
+    AcpiOsReleaseMutex (AcpiGbl_OsiMutex);
+    return (Status);
 }
+
 
 /*****************************************************************************
  *
- * FUNCTION:    acpi_check_address_range
+ * FUNCTION:    AcpiCheckAddressRange
  *
- * PARAMETERS:  space_id            - Address space ID
- *              address             - Start address
- *              length              - Length
- *              warn                - TRUE if warning on overlap desired
+ * PARAMETERS:  SpaceId             - Address space ID
+ *              Address             - Start address
+ *              Length              - Length
+ *              Warn                - TRUE if warning on overlap desired
  *
  * RETURN:      Count of the number of conflicts detected.
  *
@@ -470,35 +620,42 @@ acpi_status acpi_update_interfaces(u8 action)
  *
  ****************************************************************************/
 
-u32
-acpi_check_address_range(acpi_adr_space_type space_id,
-			 acpi_physical_address address,
-			 acpi_size length, u8 warn)
+UINT32
+AcpiCheckAddressRange (
+    ACPI_ADR_SPACE_TYPE     SpaceId,
+    ACPI_PHYSICAL_ADDRESS   Address,
+    ACPI_SIZE               Length,
+    BOOLEAN                 Warn)
 {
-	u32 overlaps;
-	acpi_status status;
+    UINT32                  Overlaps;
+    ACPI_STATUS             Status;
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return (0);
-	}
 
-	overlaps = acpi_ut_check_address_range(space_id, address,
-					       (u32)length, warn);
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return (0);
+    }
 
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
-	return (overlaps);
+    Overlaps = AcpiUtCheckAddressRange (SpaceId, Address,
+        (UINT32) Length, Warn);
+
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+    return (Overlaps);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_check_address_range)
-#endif				/* !ACPI_ASL_COMPILER */
+ACPI_EXPORT_SYMBOL (AcpiCheckAddressRange)
+
+#endif /* !ACPI_ASL_COMPILER */
+
+
 /*******************************************************************************
  *
- * FUNCTION:    acpi_decode_pld_buffer
+ * FUNCTION:    AcpiDecodePldBuffer
  *
- * PARAMETERS:  in_buffer           - Buffer returned by _PLD method
- *              length              - Length of the in_buffer
- *              return_buffer       - Where the decode buffer is returned
+ * PARAMETERS:  InBuffer            - Buffer returned by _PLD method
+ *              Length              - Length of the InBuffer
+ *              ReturnBuffer        - Where the decode buffer is returned
  *
  * RETURN:      Status and the decoded _PLD buffer. User must deallocate
  *              the buffer via ACPI_FREE.
@@ -507,75 +664,81 @@ ACPI_EXPORT_SYMBOL(acpi_check_address_range)
  *              a local struct that is much more useful to an ACPI driver.
  *
  ******************************************************************************/
-acpi_status
-acpi_decode_pld_buffer(u8 *in_buffer,
-		       acpi_size length, struct acpi_pld_info ** return_buffer)
+
+ACPI_STATUS
+AcpiDecodePldBuffer (
+    UINT8                   *InBuffer,
+    ACPI_SIZE               Length,
+    ACPI_PLD_INFO           **ReturnBuffer)
 {
-	struct acpi_pld_info *pld_info;
-	u32 *buffer = ACPI_CAST_PTR(u32, in_buffer);
-	u32 dword;
+    ACPI_PLD_INFO           *PldInfo;
+    UINT32                  *Buffer = ACPI_CAST_PTR (UINT32, InBuffer);
+    UINT32                  Dword;
 
-	/* Parameter validation */
 
-	if (!in_buffer || !return_buffer || (length < 16)) {
-		return (AE_BAD_PARAMETER);
-	}
+    /* Parameter validation */
 
-	pld_info = ACPI_ALLOCATE_ZEROED(sizeof(struct acpi_pld_info));
-	if (!pld_info) {
-		return (AE_NO_MEMORY);
-	}
+    if (!InBuffer || !ReturnBuffer || (Length < 16))
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	/* First 32-bit DWord */
+    PldInfo = ACPI_ALLOCATE_ZEROED (sizeof (ACPI_PLD_INFO));
+    if (!PldInfo)
+    {
+        return (AE_NO_MEMORY);
+    }
 
-	ACPI_MOVE_32_TO_32(&dword, &buffer[0]);
-	pld_info->revision = ACPI_PLD_GET_REVISION(&dword);
-	pld_info->ignore_color = ACPI_PLD_GET_IGNORE_COLOR(&dword);
-	pld_info->color = ACPI_PLD_GET_COLOR(&dword);
+    /* First 32-bit DWord */
 
-	/* Second 32-bit DWord */
+    ACPI_MOVE_32_TO_32 (&Dword, &Buffer[0]);
+    PldInfo->Revision =             ACPI_PLD_GET_REVISION (&Dword);
+    PldInfo->IgnoreColor =          ACPI_PLD_GET_IGNORE_COLOR (&Dword);
+    PldInfo->Color =                ACPI_PLD_GET_COLOR (&Dword);
 
-	ACPI_MOVE_32_TO_32(&dword, &buffer[1]);
-	pld_info->width = ACPI_PLD_GET_WIDTH(&dword);
-	pld_info->height = ACPI_PLD_GET_HEIGHT(&dword);
+    /* Second 32-bit DWord */
 
-	/* Third 32-bit DWord */
+    ACPI_MOVE_32_TO_32 (&Dword, &Buffer[1]);
+    PldInfo->Width =                ACPI_PLD_GET_WIDTH (&Dword);
+    PldInfo->Height =               ACPI_PLD_GET_HEIGHT(&Dword);
 
-	ACPI_MOVE_32_TO_32(&dword, &buffer[2]);
-	pld_info->user_visible = ACPI_PLD_GET_USER_VISIBLE(&dword);
-	pld_info->dock = ACPI_PLD_GET_DOCK(&dword);
-	pld_info->lid = ACPI_PLD_GET_LID(&dword);
-	pld_info->panel = ACPI_PLD_GET_PANEL(&dword);
-	pld_info->vertical_position = ACPI_PLD_GET_VERTICAL(&dword);
-	pld_info->horizontal_position = ACPI_PLD_GET_HORIZONTAL(&dword);
-	pld_info->shape = ACPI_PLD_GET_SHAPE(&dword);
-	pld_info->group_orientation = ACPI_PLD_GET_ORIENTATION(&dword);
-	pld_info->group_token = ACPI_PLD_GET_TOKEN(&dword);
-	pld_info->group_position = ACPI_PLD_GET_POSITION(&dword);
-	pld_info->bay = ACPI_PLD_GET_BAY(&dword);
+    /* Third 32-bit DWord */
 
-	/* Fourth 32-bit DWord */
+    ACPI_MOVE_32_TO_32 (&Dword, &Buffer[2]);
+    PldInfo->UserVisible =          ACPI_PLD_GET_USER_VISIBLE (&Dword);
+    PldInfo->Dock =                 ACPI_PLD_GET_DOCK (&Dword);
+    PldInfo->Lid =                  ACPI_PLD_GET_LID (&Dword);
+    PldInfo->Panel =                ACPI_PLD_GET_PANEL (&Dword);
+    PldInfo->VerticalPosition =     ACPI_PLD_GET_VERTICAL (&Dword);
+    PldInfo->HorizontalPosition =   ACPI_PLD_GET_HORIZONTAL (&Dword);
+    PldInfo->Shape =                ACPI_PLD_GET_SHAPE (&Dword);
+    PldInfo->GroupOrientation =     ACPI_PLD_GET_ORIENTATION (&Dword);
+    PldInfo->GroupToken =           ACPI_PLD_GET_TOKEN (&Dword);
+    PldInfo->GroupPosition =        ACPI_PLD_GET_POSITION (&Dword);
+    PldInfo->Bay =                  ACPI_PLD_GET_BAY (&Dword);
 
-	ACPI_MOVE_32_TO_32(&dword, &buffer[3]);
-	pld_info->ejectable = ACPI_PLD_GET_EJECTABLE(&dword);
-	pld_info->ospm_eject_required = ACPI_PLD_GET_OSPM_EJECT(&dword);
-	pld_info->cabinet_number = ACPI_PLD_GET_CABINET(&dword);
-	pld_info->card_cage_number = ACPI_PLD_GET_CARD_CAGE(&dword);
-	pld_info->reference = ACPI_PLD_GET_REFERENCE(&dword);
-	pld_info->rotation = ACPI_PLD_GET_ROTATION(&dword);
-	pld_info->order = ACPI_PLD_GET_ORDER(&dword);
+    /* Fourth 32-bit DWord */
 
-	if (length >= ACPI_PLD_BUFFER_SIZE) {
+    ACPI_MOVE_32_TO_32 (&Dword, &Buffer[3]);
+    PldInfo->Ejectable =            ACPI_PLD_GET_EJECTABLE (&Dword);
+    PldInfo->OspmEjectRequired =    ACPI_PLD_GET_OSPM_EJECT (&Dword);
+    PldInfo->CabinetNumber =        ACPI_PLD_GET_CABINET (&Dword);
+    PldInfo->CardCageNumber =       ACPI_PLD_GET_CARD_CAGE (&Dword);
+    PldInfo->Reference =            ACPI_PLD_GET_REFERENCE (&Dword);
+    PldInfo->Rotation =             ACPI_PLD_GET_ROTATION (&Dword);
+    PldInfo->Order =                ACPI_PLD_GET_ORDER (&Dword);
 
-		/* Fifth 32-bit DWord (Revision 2 of _PLD) */
+    if (Length >= ACPI_PLD_BUFFER_SIZE)
+    {
+        /* Fifth 32-bit DWord (Revision 2 of _PLD) */
 
-		ACPI_MOVE_32_TO_32(&dword, &buffer[4]);
-		pld_info->vertical_offset = ACPI_PLD_GET_VERT_OFFSET(&dword);
-		pld_info->horizontal_offset = ACPI_PLD_GET_HORIZ_OFFSET(&dword);
-	}
+        ACPI_MOVE_32_TO_32 (&Dword, &Buffer[4]);
+        PldInfo->VerticalOffset =       ACPI_PLD_GET_VERT_OFFSET (&Dword);
+        PldInfo->HorizontalOffset =     ACPI_PLD_GET_HORIZ_OFFSET (&Dword);
+    }
 
-	*return_buffer = pld_info;
-	return (AE_OK);
+    *ReturnBuffer = PldInfo;
+    return (AE_OK);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_decode_pld_buffer)
+ACPI_EXPORT_SYMBOL (AcpiDecodePldBuffer)

@@ -5,58 +5,133 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#define __DSCONTROL_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "amlcode.h"
 #include "acdispat.h"
 #include "acinterp.h"
 
 #define _COMPONENT          ACPI_DISPATCHER
-ACPI_MODULE_NAME("dscontrol")
+        ACPI_MODULE_NAME    ("dscontrol")
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ds_exec_begin_control_op
+ * FUNCTION:    AcpiDsExecBeginControlOp
  *
- * PARAMETERS:  walk_list       - The list that owns the walk stack
- *              op              - The control Op
+ * PARAMETERS:  WalkList        - The list that owns the walk stack
+ *              Op              - The control Op
  *
  * RETURN:      Status
  *
@@ -64,95 +139,101 @@ ACPI_MODULE_NAME("dscontrol")
  *              execution.
  *
  ******************************************************************************/
-acpi_status
-acpi_ds_exec_begin_control_op(struct acpi_walk_state *walk_state,
-			      union acpi_parse_object *op)
+
+ACPI_STATUS
+AcpiDsExecBeginControlOp (
+    ACPI_WALK_STATE         *WalkState,
+    ACPI_PARSE_OBJECT       *Op)
 {
-	acpi_status status = AE_OK;
-	union acpi_generic_state *control_state;
+    ACPI_STATUS             Status = AE_OK;
+    ACPI_GENERIC_STATE      *ControlState;
 
-	ACPI_FUNCTION_NAME(ds_exec_begin_control_op);
 
-	ACPI_DEBUG_PRINT((ACPI_DB_DISPATCH, "Op=%p Opcode=%2.2X State=%p\n",
-			  op, op->common.aml_opcode, walk_state));
+    ACPI_FUNCTION_NAME (DsExecBeginControlOp);
 
-	switch (op->common.aml_opcode) {
-	case AML_WHILE_OP:
-		/*
-		 * If this is an additional iteration of a while loop, continue.
-		 * There is no need to allocate a new control state.
-		 */
-		if (walk_state->control_state) {
-			if (walk_state->control_state->control.
-			    aml_predicate_start ==
-			    (walk_state->parser_state.aml - 1)) {
 
-				/* Reset the state to start-of-loop */
+    ACPI_DEBUG_PRINT ((ACPI_DB_DISPATCH, "Op=%p Opcode=%2.2X State=%p\n",
+        Op, Op->Common.AmlOpcode, WalkState));
 
-				walk_state->control_state->common.state =
-				    ACPI_CONTROL_CONDITIONAL_EXECUTING;
-				break;
-			}
-		}
+    switch (Op->Common.AmlOpcode)
+    {
+    case AML_WHILE_OP:
+        /*
+         * If this is an additional iteration of a while loop, continue.
+         * There is no need to allocate a new control state.
+         */
+        if (WalkState->ControlState)
+        {
+            if (WalkState->ControlState->Control.AmlPredicateStart ==
+                (WalkState->ParserState.Aml - 1))
+            {
+                /* Reset the state to start-of-loop */
 
-		/*lint -fallthrough */
+                WalkState->ControlState->Common.State =
+                    ACPI_CONTROL_CONDITIONAL_EXECUTING;
+                break;
+            }
+        }
 
-	case AML_IF_OP:
-		/*
-		 * IF/WHILE: Create a new control state to manage these
-		 * constructs. We need to manage these as a stack, in order
-		 * to handle nesting.
-		 */
-		control_state = acpi_ut_create_control_state();
-		if (!control_state) {
-			status = AE_NO_MEMORY;
-			break;
-		}
-		/*
-		 * Save a pointer to the predicate for multiple executions
-		 * of a loop
-		 */
-		control_state->control.aml_predicate_start =
-		    walk_state->parser_state.aml - 1;
-		control_state->control.package_end =
-		    walk_state->parser_state.pkg_end;
-		control_state->control.opcode = op->common.aml_opcode;
+        /*lint -fallthrough */
 
-		/* Push the control state on this walk's control stack */
+    case AML_IF_OP:
+        /*
+         * IF/WHILE: Create a new control state to manage these
+         * constructs. We need to manage these as a stack, in order
+         * to handle nesting.
+         */
+        ControlState = AcpiUtCreateControlState ();
+        if (!ControlState)
+        {
+            Status = AE_NO_MEMORY;
+            break;
+        }
+        /*
+         * Save a pointer to the predicate for multiple executions
+         * of a loop
+         */
+        ControlState->Control.AmlPredicateStart = WalkState->ParserState.Aml - 1;
+        ControlState->Control.PackageEnd = WalkState->ParserState.PkgEnd;
+        ControlState->Control.Opcode = Op->Common.AmlOpcode;
 
-		acpi_ut_push_generic_state(&walk_state->control_state,
-					   control_state);
-		break;
 
-	case AML_ELSE_OP:
+        /* Push the control state on this walk's control stack */
 
-		/* Predicate is in the state object */
-		/* If predicate is true, the IF was executed, ignore ELSE part */
+        AcpiUtPushGenericState (&WalkState->ControlState, ControlState);
+        break;
 
-		if (walk_state->last_predicate) {
-			status = AE_CTRL_TRUE;
-		}
+    case AML_ELSE_OP:
 
-		break;
+        /* Predicate is in the state object */
+        /* If predicate is true, the IF was executed, ignore ELSE part */
 
-	case AML_RETURN_OP:
+        if (WalkState->LastPredicate)
+        {
+            Status = AE_CTRL_TRUE;
+        }
 
-		break;
+        break;
 
-	default:
+    case AML_RETURN_OP:
 
-		break;
-	}
+        break;
 
-	return (status);
+    default:
+
+        break;
+    }
+
+    return (Status);
 }
 
+
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ds_exec_end_control_op
+ * FUNCTION:    AcpiDsExecEndControlOp
  *
- * PARAMETERS:  walk_list       - The list that owns the walk stack
- *              op              - The control Op
+ * PARAMETERS:  WalkList        - The list that owns the walk stack
+ *              Op              - The control Op
  *
  * RETURN:      Status
  *
@@ -161,250 +242,247 @@ acpi_ds_exec_begin_control_op(struct acpi_walk_state *walk_state,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ds_exec_end_control_op(struct acpi_walk_state * walk_state,
-			    union acpi_parse_object * op)
+ACPI_STATUS
+AcpiDsExecEndControlOp (
+    ACPI_WALK_STATE         *WalkState,
+    ACPI_PARSE_OBJECT       *Op)
 {
-	acpi_status status = AE_OK;
-	union acpi_generic_state *control_state;
+    ACPI_STATUS             Status = AE_OK;
+    ACPI_GENERIC_STATE      *ControlState;
 
-	ACPI_FUNCTION_NAME(ds_exec_end_control_op);
 
-	switch (op->common.aml_opcode) {
-	case AML_IF_OP:
+    ACPI_FUNCTION_NAME (DsExecEndControlOp);
 
-		ACPI_DEBUG_PRINT((ACPI_DB_DISPATCH, "[IF_OP] Op=%p\n", op));
 
-		/*
-		 * Save the result of the predicate in case there is an
-		 * ELSE to come
-		 */
-		walk_state->last_predicate =
-		    (u8)walk_state->control_state->common.value;
+    switch (Op->Common.AmlOpcode)
+    {
+    case AML_IF_OP:
 
-		/*
-		 * Pop the control state that was created at the start
-		 * of the IF and free it
-		 */
-		control_state =
-		    acpi_ut_pop_generic_state(&walk_state->control_state);
-		acpi_ut_delete_generic_state(control_state);
-		break;
+        ACPI_DEBUG_PRINT ((ACPI_DB_DISPATCH, "[IF_OP] Op=%p\n", Op));
 
-	case AML_ELSE_OP:
+        /*
+         * Save the result of the predicate in case there is an
+         * ELSE to come
+         */
+        WalkState->LastPredicate =
+            (BOOLEAN) WalkState->ControlState->Common.Value;
 
-		break;
+        /*
+         * Pop the control state that was created at the start
+         * of the IF and free it
+         */
+        ControlState = AcpiUtPopGenericState (&WalkState->ControlState);
+        AcpiUtDeleteGenericState (ControlState);
+        break;
 
-	case AML_WHILE_OP:
+    case AML_ELSE_OP:
 
-		ACPI_DEBUG_PRINT((ACPI_DB_DISPATCH, "[WHILE_OP] Op=%p\n", op));
+        break;
 
-		control_state = walk_state->control_state;
-		if (control_state->common.value) {
+    case AML_WHILE_OP:
 
-			/* Predicate was true, the body of the loop was just executed */
+        ACPI_DEBUG_PRINT ((ACPI_DB_DISPATCH, "[WHILE_OP] Op=%p\n", Op));
 
-			/*
-			 * This loop counter mechanism allows the interpreter to escape
-			 * possibly infinite loops. This can occur in poorly written AML
-			 * when the hardware does not respond within a while loop and the
-			 * loop does not implement a timeout.
-			 */
-			control_state->control.loop_count++;
-			if (control_state->control.loop_count >
-			    ACPI_MAX_LOOP_ITERATIONS) {
-				status = AE_AML_INFINITE_LOOP;
-				break;
-			}
+        ControlState = WalkState->ControlState;
+        if (ControlState->Common.Value)
+        {
+            /* Predicate was true, the body of the loop was just executed */
 
-			/*
-			 * Go back and evaluate the predicate and maybe execute the loop
-			 * another time
-			 */
-			status = AE_CTRL_PENDING;
-			walk_state->aml_last_while =
-			    control_state->control.aml_predicate_start;
-			break;
-		}
+            /*
+             * This loop counter mechanism allows the interpreter to escape
+             * possibly infinite loops. This can occur in poorly written AML
+             * when the hardware does not respond within a while loop and the
+             * loop does not implement a timeout.
+             */
+            ControlState->Control.LoopCount++;
+            if (ControlState->Control.LoopCount > ACPI_MAX_LOOP_ITERATIONS)
+            {
+                Status = AE_AML_INFINITE_LOOP;
+                break;
+            }
 
-		/* Predicate was false, terminate this while loop */
+            /*
+             * Go back and evaluate the predicate and maybe execute the loop
+             * another time
+             */
+            Status = AE_CTRL_PENDING;
+            WalkState->AmlLastWhile = ControlState->Control.AmlPredicateStart;
+            break;
+        }
 
-		ACPI_DEBUG_PRINT((ACPI_DB_DISPATCH,
-				  "[WHILE_OP] termination! Op=%p\n", op));
+        /* Predicate was false, terminate this while loop */
 
-		/* Pop this control state and free it */
+        ACPI_DEBUG_PRINT ((ACPI_DB_DISPATCH,
+            "[WHILE_OP] termination! Op=%p\n",Op));
 
-		control_state =
-		    acpi_ut_pop_generic_state(&walk_state->control_state);
-		acpi_ut_delete_generic_state(control_state);
-		break;
+        /* Pop this control state and free it */
 
-	case AML_RETURN_OP:
+        ControlState = AcpiUtPopGenericState (&WalkState->ControlState);
+        AcpiUtDeleteGenericState (ControlState);
+        break;
 
-		ACPI_DEBUG_PRINT((ACPI_DB_DISPATCH,
-				  "[RETURN_OP] Op=%p Arg=%p\n", op,
-				  op->common.value.arg));
+    case AML_RETURN_OP:
 
-		/*
-		 * One optional operand -- the return value
-		 * It can be either an immediate operand or a result that
-		 * has been bubbled up the tree
-		 */
-		if (op->common.value.arg) {
+        ACPI_DEBUG_PRINT ((ACPI_DB_DISPATCH,
+            "[RETURN_OP] Op=%p Arg=%p\n",Op, Op->Common.Value.Arg));
 
-			/* Since we have a real Return(), delete any implicit return */
+        /*
+         * One optional operand -- the return value
+         * It can be either an immediate operand or a result that
+         * has been bubbled up the tree
+         */
+        if (Op->Common.Value.Arg)
+        {
+            /* Since we have a real Return(), delete any implicit return */
 
-			acpi_ds_clear_implicit_return(walk_state);
+            AcpiDsClearImplicitReturn (WalkState);
 
-			/* Return statement has an immediate operand */
+            /* Return statement has an immediate operand */
 
-			status =
-			    acpi_ds_create_operands(walk_state,
-						    op->common.value.arg);
-			if (ACPI_FAILURE(status)) {
-				return (status);
-			}
+            Status = AcpiDsCreateOperands (WalkState, Op->Common.Value.Arg);
+            if (ACPI_FAILURE (Status))
+            {
+                return (Status);
+            }
 
-			/*
-			 * If value being returned is a Reference (such as
-			 * an arg or local), resolve it now because it may
-			 * cease to exist at the end of the method.
-			 */
-			status =
-			    acpi_ex_resolve_to_value(&walk_state->operands[0],
-						     walk_state);
-			if (ACPI_FAILURE(status)) {
-				return (status);
-			}
+            /*
+             * If value being returned is a Reference (such as
+             * an arg or local), resolve it now because it may
+             * cease to exist at the end of the method.
+             */
+            Status = AcpiExResolveToValue (&WalkState->Operands [0], WalkState);
+            if (ACPI_FAILURE (Status))
+            {
+                return (Status);
+            }
 
-			/*
-			 * Get the return value and save as the last result
-			 * value. This is the only place where walk_state->return_desc
-			 * is set to anything other than zero!
-			 */
-			walk_state->return_desc = walk_state->operands[0];
-		} else if (walk_state->result_count) {
+            /*
+             * Get the return value and save as the last result
+             * value. This is the only place where WalkState->ReturnDesc
+             * is set to anything other than zero!
+             */
+            WalkState->ReturnDesc = WalkState->Operands[0];
+        }
+        else if (WalkState->ResultCount)
+        {
+            /* Since we have a real Return(), delete any implicit return */
 
-			/* Since we have a real Return(), delete any implicit return */
+            AcpiDsClearImplicitReturn (WalkState);
 
-			acpi_ds_clear_implicit_return(walk_state);
+            /*
+             * The return value has come from a previous calculation.
+             *
+             * If value being returned is a Reference (such as
+             * an arg or local), resolve it now because it may
+             * cease to exist at the end of the method.
+             *
+             * Allow references created by the Index operator to return
+             * unchanged.
+             */
+            if ((ACPI_GET_DESCRIPTOR_TYPE (WalkState->Results->Results.ObjDesc[0]) == ACPI_DESC_TYPE_OPERAND) &&
+                ((WalkState->Results->Results.ObjDesc [0])->Common.Type == ACPI_TYPE_LOCAL_REFERENCE) &&
+                ((WalkState->Results->Results.ObjDesc [0])->Reference.Class != ACPI_REFCLASS_INDEX))
+            {
+                Status = AcpiExResolveToValue (&WalkState->Results->Results.ObjDesc [0], WalkState);
+                if (ACPI_FAILURE (Status))
+                {
+                    return (Status);
+                }
+            }
 
-			/*
-			 * The return value has come from a previous calculation.
-			 *
-			 * If value being returned is a Reference (such as
-			 * an arg or local), resolve it now because it may
-			 * cease to exist at the end of the method.
-			 *
-			 * Allow references created by the Index operator to return
-			 * unchanged.
-			 */
-			if ((ACPI_GET_DESCRIPTOR_TYPE
-			     (walk_state->results->results.obj_desc[0]) ==
-			     ACPI_DESC_TYPE_OPERAND)
-			    && ((walk_state->results->results.obj_desc[0])->
-				common.type == ACPI_TYPE_LOCAL_REFERENCE)
-			    && ((walk_state->results->results.obj_desc[0])->
-				reference.class != ACPI_REFCLASS_INDEX)) {
-				status =
-				    acpi_ex_resolve_to_value(&walk_state->
-							     results->results.
-							     obj_desc[0],
-							     walk_state);
-				if (ACPI_FAILURE(status)) {
-					return (status);
-				}
-			}
+            WalkState->ReturnDesc = WalkState->Results->Results.ObjDesc [0];
+        }
+        else
+        {
+            /* No return operand */
 
-			walk_state->return_desc =
-			    walk_state->results->results.obj_desc[0];
-		} else {
-			/* No return operand */
+            if (WalkState->NumOperands)
+            {
+                AcpiUtRemoveReference (WalkState->Operands [0]);
+            }
 
-			if (walk_state->num_operands) {
-				acpi_ut_remove_reference(walk_state->
-							 operands[0]);
-			}
+            WalkState->Operands [0]     = NULL;
+            WalkState->NumOperands      = 0;
+            WalkState->ReturnDesc       = NULL;
+        }
 
-			walk_state->operands[0] = NULL;
-			walk_state->num_operands = 0;
-			walk_state->return_desc = NULL;
-		}
 
-		ACPI_DEBUG_PRINT((ACPI_DB_DISPATCH,
-				  "Completed RETURN_OP State=%p, RetVal=%p\n",
-				  walk_state, walk_state->return_desc));
+        ACPI_DEBUG_PRINT ((ACPI_DB_DISPATCH,
+            "Completed RETURN_OP State=%p, RetVal=%p\n",
+            WalkState, WalkState->ReturnDesc));
 
-		/* End the control method execution right now */
+        /* End the control method execution right now */
 
-		status = AE_CTRL_TERMINATE;
-		break;
+        Status = AE_CTRL_TERMINATE;
+        break;
 
-	case AML_NOOP_OP:
+    case AML_NOOP_OP:
 
-		/* Just do nothing! */
+        /* Just do nothing! */
 
-		break;
+        break;
 
-	case AML_BREAK_POINT_OP:
+    case AML_BREAK_POINT_OP:
 
-		/*
-		 * Set the single-step flag. This will cause the debugger (if present)
-		 * to break to the console within the AML debugger at the start of the
-		 * next AML instruction.
-		 */
-		ACPI_DEBUGGER_EXEC(acpi_gbl_cm_single_step = TRUE);
-		ACPI_DEBUGGER_EXEC(acpi_os_printf
-				   ("**break** Executed AML BreakPoint opcode\n"));
+        /*
+         * Set the single-step flag. This will cause the debugger (if present)
+         * to break to the console within the AML debugger at the start of the
+         * next AML instruction.
+         */
+        ACPI_DEBUGGER_EXEC (
+            AcpiGbl_CmSingleStep = TRUE);
+        ACPI_DEBUGGER_EXEC (
+            AcpiOsPrintf ("**break** Executed AML BreakPoint opcode\n"));
 
-		/* Call to the OSL in case OS wants a piece of the action */
+        /* Call to the OSL in case OS wants a piece of the action */
 
-		status = acpi_os_signal(ACPI_SIGNAL_BREAKPOINT,
-					"Executed AML Breakpoint opcode");
-		break;
+        Status = AcpiOsSignal (ACPI_SIGNAL_BREAKPOINT,
+                    "Executed AML Breakpoint opcode");
+        break;
 
-	case AML_BREAK_OP:
-	case AML_CONTINUE_OP:	/* ACPI 2.0 */
+    case AML_BREAK_OP:
+    case AML_CONTINUE_OP: /* ACPI 2.0 */
 
-		/* Pop and delete control states until we find a while */
+        /* Pop and delete control states until we find a while */
 
-		while (walk_state->control_state &&
-		       (walk_state->control_state->control.opcode !=
-			AML_WHILE_OP)) {
-			control_state =
-			    acpi_ut_pop_generic_state(&walk_state->
-						      control_state);
-			acpi_ut_delete_generic_state(control_state);
-		}
+        while (WalkState->ControlState &&
+                (WalkState->ControlState->Control.Opcode != AML_WHILE_OP))
+        {
+            ControlState = AcpiUtPopGenericState (&WalkState->ControlState);
+            AcpiUtDeleteGenericState (ControlState);
+        }
 
-		/* No while found? */
+        /* No while found? */
 
-		if (!walk_state->control_state) {
-			return (AE_AML_NO_WHILE);
-		}
+        if (!WalkState->ControlState)
+        {
+            return (AE_AML_NO_WHILE);
+        }
 
-		/* Was: walk_state->aml_last_while = walk_state->control_state->Control.aml_predicate_start; */
+        /* Was: WalkState->AmlLastWhile = WalkState->ControlState->Control.AmlPredicateStart; */
 
-		walk_state->aml_last_while =
-		    walk_state->control_state->control.package_end;
+        WalkState->AmlLastWhile = WalkState->ControlState->Control.PackageEnd;
 
-		/* Return status depending on opcode */
+        /* Return status depending on opcode */
 
-		if (op->common.aml_opcode == AML_BREAK_OP) {
-			status = AE_CTRL_BREAK;
-		} else {
-			status = AE_CTRL_CONTINUE;
-		}
-		break;
+        if (Op->Common.AmlOpcode == AML_BREAK_OP)
+        {
+            Status = AE_CTRL_BREAK;
+        }
+        else
+        {
+            Status = AE_CTRL_CONTINUE;
+        }
+        break;
 
-	default:
+    default:
 
-		ACPI_ERROR((AE_INFO, "Unknown control opcode=0x%X Op=%p",
-			    op->common.aml_opcode, op));
+        ACPI_ERROR ((AE_INFO, "Unknown control opcode=0x%X Op=%p",
+            Op->Common.AmlOpcode, Op));
 
-		status = AE_AML_BAD_OPCODE;
-		break;
-	}
+        Status = AE_AML_BAD_OPCODE;
+        break;
+    }
 
-	return (status);
+    return (Status);
 }

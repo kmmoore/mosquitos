@@ -4,52 +4,129 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+
+#define __EXOPARG2_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acparser.h"
 #include "acinterp.h"
 #include "acevents.h"
 #include "amlcode.h"
 
+
 #define _COMPONENT          ACPI_EXECUTER
-ACPI_MODULE_NAME("exoparg2")
+        ACPI_MODULE_NAME    ("exoparg2")
+
 
 /*!
  * Naming convention for AML interpreter execution routines.
@@ -72,11 +149,13 @@ ACPI_MODULE_NAME("exoparg2")
  * The AcpiExOpcode* functions are called via the Dispatcher component with
  * fully resolved operands.
 !*/
+
+
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_opcode_2A_0T_0R
+ * FUNCTION:    AcpiExOpcode_2A_0T_0R
  *
- * PARAMETERS:  walk_state          - Current walk state
+ * PARAMETERS:  WalkState           - Current walk state
  *
  * RETURN:      Status
  *
@@ -86,65 +165,73 @@ ACPI_MODULE_NAME("exoparg2")
  * ALLOCATION:  Deletes both operands
  *
  ******************************************************************************/
-acpi_status acpi_ex_opcode_2A_0T_0R(struct acpi_walk_state *walk_state)
+
+ACPI_STATUS
+AcpiExOpcode_2A_0T_0R (
+    ACPI_WALK_STATE         *WalkState)
 {
-	union acpi_operand_object **operand = &walk_state->operands[0];
-	struct acpi_namespace_node *node;
-	u32 value;
-	acpi_status status = AE_OK;
+    ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
+    ACPI_NAMESPACE_NODE     *Node;
+    UINT32                  Value;
+    ACPI_STATUS             Status = AE_OK;
 
-	ACPI_FUNCTION_TRACE_STR(ex_opcode_2A_0T_0R,
-				acpi_ps_get_opcode_name(walk_state->opcode));
 
-	/* Examine the opcode */
+    ACPI_FUNCTION_TRACE_STR (ExOpcode_2A_0T_0R,
+            AcpiPsGetOpcodeName (WalkState->Opcode));
 
-	switch (walk_state->opcode) {
-	case AML_NOTIFY_OP:	/* Notify (notify_object, notify_value) */
 
-		/* The first operand is a namespace node */
+    /* Examine the opcode */
 
-		node = (struct acpi_namespace_node *)operand[0];
+    switch (WalkState->Opcode)
+    {
+    case AML_NOTIFY_OP:         /* Notify (NotifyObject, NotifyValue) */
 
-		/* Second value is the notify value */
+        /* The first operand is a namespace node */
 
-		value = (u32) operand[1]->integer.value;
+        Node = (ACPI_NAMESPACE_NODE *) Operand[0];
 
-		/* Are notifies allowed on this object? */
+        /* Second value is the notify value */
 
-		if (!acpi_ev_is_notify_object(node)) {
-			ACPI_ERROR((AE_INFO,
-				    "Unexpected notify object type [%s]",
-				    acpi_ut_get_type_name(node->type)));
+        Value = (UINT32) Operand[1]->Integer.Value;
 
-			status = AE_AML_OPERAND_TYPE;
-			break;
-		}
+        /* Are notifies allowed on this object? */
 
-		/*
-		 * Dispatch the notify to the appropriate handler
-		 * NOTE: the request is queued for execution after this method
-		 * completes. The notify handlers are NOT invoked synchronously
-		 * from this thread -- because handlers may in turn run other
-		 * control methods.
-		 */
-		status = acpi_ev_queue_notify_request(node, value);
-		break;
+        if (!AcpiEvIsNotifyObject (Node))
+        {
+            ACPI_ERROR ((AE_INFO,
+                "Unexpected notify object type [%s]",
+                AcpiUtGetTypeName (Node->Type)));
 
-	default:
+            Status = AE_AML_OPERAND_TYPE;
+            break;
+        }
 
-		ACPI_ERROR((AE_INFO, "Unknown AML opcode 0x%X",
-			    walk_state->opcode));
-		status = AE_AML_BAD_OPCODE;
-	}
+        /*
+         * Dispatch the notify to the appropriate handler
+         * NOTE: the request is queued for execution after this method
+         * completes. The notify handlers are NOT invoked synchronously
+         * from this thread -- because handlers may in turn run other
+         * control methods.
+         */
+        Status = AcpiEvQueueNotifyRequest (Node, Value);
+        break;
 
-	return_ACPI_STATUS(status);
+    default:
+
+        ACPI_ERROR ((AE_INFO, "Unknown AML opcode 0x%X",
+            WalkState->Opcode));
+        Status = AE_AML_BAD_OPCODE;
+    }
+
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_opcode_2A_2T_1R
+ * FUNCTION:    AcpiExOpcode_2A_2T_1R
  *
- * PARAMETERS:  walk_state          - Current walk state
+ * PARAMETERS:  WalkState           - Current walk state
  *
  * RETURN:      Status
  *
@@ -153,96 +240,106 @@ acpi_status acpi_ex_opcode_2A_0T_0R(struct acpi_walk_state *walk_state)
  *
  ******************************************************************************/
 
-acpi_status acpi_ex_opcode_2A_2T_1R(struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExOpcode_2A_2T_1R (
+    ACPI_WALK_STATE         *WalkState)
 {
-	union acpi_operand_object **operand = &walk_state->operands[0];
-	union acpi_operand_object *return_desc1 = NULL;
-	union acpi_operand_object *return_desc2 = NULL;
-	acpi_status status;
+    ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
+    ACPI_OPERAND_OBJECT     *ReturnDesc1 = NULL;
+    ACPI_OPERAND_OBJECT     *ReturnDesc2 = NULL;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE_STR(ex_opcode_2A_2T_1R,
-				acpi_ps_get_opcode_name(walk_state->opcode));
 
-	/* Execute the opcode */
+    ACPI_FUNCTION_TRACE_STR (ExOpcode_2A_2T_1R,
+        AcpiPsGetOpcodeName (WalkState->Opcode));
 
-	switch (walk_state->opcode) {
-	case AML_DIVIDE_OP:
 
-		/* Divide (Dividend, Divisor, remainder_result quotient_result) */
+    /* Execute the opcode */
 
-		return_desc1 =
-		    acpi_ut_create_internal_object(ACPI_TYPE_INTEGER);
-		if (!return_desc1) {
-			status = AE_NO_MEMORY;
-			goto cleanup;
-		}
+    switch (WalkState->Opcode)
+    {
+    case AML_DIVIDE_OP:
 
-		return_desc2 =
-		    acpi_ut_create_internal_object(ACPI_TYPE_INTEGER);
-		if (!return_desc2) {
-			status = AE_NO_MEMORY;
-			goto cleanup;
-		}
+        /* Divide (Dividend, Divisor, RemainderResult QuotientResult) */
 
-		/* Quotient to return_desc1, remainder to return_desc2 */
+        ReturnDesc1 = AcpiUtCreateInternalObject (ACPI_TYPE_INTEGER);
+        if (!ReturnDesc1)
+        {
+            Status = AE_NO_MEMORY;
+            goto Cleanup;
+        }
 
-		status = acpi_ut_divide(operand[0]->integer.value,
-					operand[1]->integer.value,
-					&return_desc1->integer.value,
-					&return_desc2->integer.value);
-		if (ACPI_FAILURE(status)) {
-			goto cleanup;
-		}
-		break;
+        ReturnDesc2 = AcpiUtCreateInternalObject (ACPI_TYPE_INTEGER);
+        if (!ReturnDesc2)
+        {
+            Status = AE_NO_MEMORY;
+            goto Cleanup;
+        }
 
-	default:
+        /* Quotient to ReturnDesc1, remainder to ReturnDesc2 */
 
-		ACPI_ERROR((AE_INFO, "Unknown AML opcode 0x%X",
-			    walk_state->opcode));
-		status = AE_AML_BAD_OPCODE;
-		goto cleanup;
-	}
+        Status = AcpiUtDivide (Operand[0]->Integer.Value,
+                               Operand[1]->Integer.Value,
+                               &ReturnDesc1->Integer.Value,
+                               &ReturnDesc2->Integer.Value);
+        if (ACPI_FAILURE (Status))
+        {
+            goto Cleanup;
+        }
+        break;
 
-	/* Store the results to the target reference operands */
+    default:
 
-	status = acpi_ex_store(return_desc2, operand[2], walk_state);
-	if (ACPI_FAILURE(status)) {
-		goto cleanup;
-	}
+        ACPI_ERROR ((AE_INFO, "Unknown AML opcode 0x%X",
+            WalkState->Opcode));
+        Status = AE_AML_BAD_OPCODE;
+        goto Cleanup;
+    }
 
-	status = acpi_ex_store(return_desc1, operand[3], walk_state);
-	if (ACPI_FAILURE(status)) {
-		goto cleanup;
-	}
+    /* Store the results to the target reference operands */
 
-cleanup:
-	/*
-	 * Since the remainder is not returned indirectly, remove a reference to
-	 * it. Only the quotient is returned indirectly.
-	 */
-	acpi_ut_remove_reference(return_desc2);
+    Status = AcpiExStore (ReturnDesc2, Operand[2], WalkState);
+    if (ACPI_FAILURE (Status))
+    {
+        goto Cleanup;
+    }
 
-	if (ACPI_FAILURE(status)) {
+    Status = AcpiExStore (ReturnDesc1, Operand[3], WalkState);
+    if (ACPI_FAILURE (Status))
+    {
+        goto Cleanup;
+    }
 
-		/* Delete the return object */
+Cleanup:
+    /*
+     * Since the remainder is not returned indirectly, remove a reference to
+     * it. Only the quotient is returned indirectly.
+     */
+    AcpiUtRemoveReference (ReturnDesc2);
 
-		acpi_ut_remove_reference(return_desc1);
-	}
+    if (ACPI_FAILURE (Status))
+    {
+        /* Delete the return object */
 
-	/* Save return object (the remainder) on success */
+        AcpiUtRemoveReference (ReturnDesc1);
+    }
 
-	else {
-		walk_state->result_obj = return_desc1;
-	}
+    /* Save return object (the remainder) on success */
 
-	return_ACPI_STATUS(status);
+    else
+    {
+        WalkState->ResultObj = ReturnDesc1;
+    }
+
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_opcode_2A_1T_1R
+ * FUNCTION:    AcpiExOpcode_2A_1T_1R
  *
- * PARAMETERS:  walk_state          - Current walk state
+ * PARAMETERS:  WalkState           - Current walk state
  *
  * RETURN:      Status
  *
@@ -251,234 +348,251 @@ cleanup:
  *
  ******************************************************************************/
 
-acpi_status acpi_ex_opcode_2A_1T_1R(struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExOpcode_2A_1T_1R (
+    ACPI_WALK_STATE         *WalkState)
 {
-	union acpi_operand_object **operand = &walk_state->operands[0];
-	union acpi_operand_object *return_desc = NULL;
-	u64 index;
-	acpi_status status = AE_OK;
-	acpi_size length = 0;
+    ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
+    ACPI_OPERAND_OBJECT     *ReturnDesc = NULL;
+    UINT64                  Index;
+    ACPI_STATUS             Status = AE_OK;
+    ACPI_SIZE               Length = 0;
 
-	ACPI_FUNCTION_TRACE_STR(ex_opcode_2A_1T_1R,
-				acpi_ps_get_opcode_name(walk_state->opcode));
 
-	/* Execute the opcode */
+    ACPI_FUNCTION_TRACE_STR (ExOpcode_2A_1T_1R,
+        AcpiPsGetOpcodeName (WalkState->Opcode));
 
-	if (walk_state->op_info->flags & AML_MATH) {
 
-		/* All simple math opcodes (add, etc.) */
+    /* Execute the opcode */
 
-		return_desc = acpi_ut_create_internal_object(ACPI_TYPE_INTEGER);
-		if (!return_desc) {
-			status = AE_NO_MEMORY;
-			goto cleanup;
-		}
+    if (WalkState->OpInfo->Flags & AML_MATH)
+    {
+        /* All simple math opcodes (add, etc.) */
 
-		return_desc->integer.value =
-		    acpi_ex_do_math_op(walk_state->opcode,
-				       operand[0]->integer.value,
-				       operand[1]->integer.value);
-		goto store_result_to_target;
-	}
+        ReturnDesc = AcpiUtCreateInternalObject (ACPI_TYPE_INTEGER);
+        if (!ReturnDesc)
+        {
+            Status = AE_NO_MEMORY;
+            goto Cleanup;
+        }
 
-	switch (walk_state->opcode) {
-	case AML_MOD_OP:	/* Mod (Dividend, Divisor, remainder_result (ACPI 2.0) */
+        ReturnDesc->Integer.Value = AcpiExDoMathOp (WalkState->Opcode,
+                                                Operand[0]->Integer.Value,
+                                                Operand[1]->Integer.Value);
+        goto StoreResultToTarget;
+    }
 
-		return_desc = acpi_ut_create_internal_object(ACPI_TYPE_INTEGER);
-		if (!return_desc) {
-			status = AE_NO_MEMORY;
-			goto cleanup;
-		}
+    switch (WalkState->Opcode)
+    {
+    case AML_MOD_OP: /* Mod (Dividend, Divisor, RemainderResult (ACPI 2.0) */
 
-		/* return_desc will contain the remainder */
+        ReturnDesc = AcpiUtCreateInternalObject (ACPI_TYPE_INTEGER);
+        if (!ReturnDesc)
+        {
+            Status = AE_NO_MEMORY;
+            goto Cleanup;
+        }
 
-		status = acpi_ut_divide(operand[0]->integer.value,
-					operand[1]->integer.value,
-					NULL, &return_desc->integer.value);
-		break;
+        /* ReturnDesc will contain the remainder */
 
-	case AML_CONCAT_OP:	/* Concatenate (Data1, Data2, Result) */
+        Status = AcpiUtDivide (Operand[0]->Integer.Value,
+                               Operand[1]->Integer.Value,
+                               NULL,
+                               &ReturnDesc->Integer.Value);
+        break;
 
-		status = acpi_ex_do_concatenate(operand[0], operand[1],
-						&return_desc, walk_state);
-		break;
+    case AML_CONCAT_OP: /* Concatenate (Data1, Data2, Result) */
 
-	case AML_TO_STRING_OP:	/* to_string (Buffer, Length, Result) (ACPI 2.0) */
-		/*
-		 * Input object is guaranteed to be a buffer at this point (it may have
-		 * been converted.)  Copy the raw buffer data to a new object of
-		 * type String.
-		 */
+        Status = AcpiExDoConcatenate (Operand[0], Operand[1],
+                    &ReturnDesc, WalkState);
+        break;
 
-		/*
-		 * Get the length of the new string. It is the smallest of:
-		 * 1) Length of the input buffer
-		 * 2) Max length as specified in the to_string operator
-		 * 3) Length of input buffer up to a zero byte (null terminator)
-		 *
-		 * NOTE: A length of zero is ok, and will create a zero-length, null
-		 *       terminated string.
-		 */
-		while ((length < operand[0]->buffer.length) &&
-		       (length < operand[1]->integer.value) &&
-		       (operand[0]->buffer.pointer[length])) {
-			length++;
-		}
+    case AML_TO_STRING_OP: /* ToString (Buffer, Length, Result) (ACPI 2.0) */
+        /*
+         * Input object is guaranteed to be a buffer at this point (it may have
+         * been converted.)  Copy the raw buffer data to a new object of
+         * type String.
+         */
 
-		/* Allocate a new string object */
+        /*
+         * Get the length of the new string. It is the smallest of:
+         * 1) Length of the input buffer
+         * 2) Max length as specified in the ToString operator
+         * 3) Length of input buffer up to a zero byte (null terminator)
+         *
+         * NOTE: A length of zero is ok, and will create a zero-length, null
+         *       terminated string.
+         */
+        while ((Length < Operand[0]->Buffer.Length) &&
+               (Length < Operand[1]->Integer.Value) &&
+               (Operand[0]->Buffer.Pointer[Length]))
+        {
+            Length++;
+        }
 
-		return_desc = acpi_ut_create_string_object(length);
-		if (!return_desc) {
-			status = AE_NO_MEMORY;
-			goto cleanup;
-		}
+        /* Allocate a new string object */
 
-		/*
-		 * Copy the raw buffer data with no transform.
-		 * (NULL terminated already)
-		 */
-		ACPI_MEMCPY(return_desc->string.pointer,
-			    operand[0]->buffer.pointer, length);
-		break;
+        ReturnDesc = AcpiUtCreateStringObject (Length);
+        if (!ReturnDesc)
+        {
+            Status = AE_NO_MEMORY;
+            goto Cleanup;
+        }
 
-	case AML_CONCAT_RES_OP:
+        /*
+         * Copy the raw buffer data with no transform.
+         * (NULL terminated already)
+         */
+        ACPI_MEMCPY (ReturnDesc->String.Pointer,
+            Operand[0]->Buffer.Pointer, Length);
+        break;
 
-		/* concatenate_res_template (Buffer, Buffer, Result) (ACPI 2.0) */
+    case AML_CONCAT_RES_OP:
 
-		status = acpi_ex_concat_template(operand[0], operand[1],
-						 &return_desc, walk_state);
-		break;
+        /* ConcatenateResTemplate (Buffer, Buffer, Result) (ACPI 2.0) */
 
-	case AML_INDEX_OP:	/* Index (Source Index Result) */
+        Status = AcpiExConcatTemplate (Operand[0], Operand[1],
+                    &ReturnDesc, WalkState);
+        break;
 
-		/* Create the internal return object */
+    case AML_INDEX_OP:              /* Index (Source Index Result) */
 
-		return_desc =
-		    acpi_ut_create_internal_object(ACPI_TYPE_LOCAL_REFERENCE);
-		if (!return_desc) {
-			status = AE_NO_MEMORY;
-			goto cleanup;
-		}
+        /* Create the internal return object */
 
-		/* Initialize the Index reference object */
+        ReturnDesc = AcpiUtCreateInternalObject (ACPI_TYPE_LOCAL_REFERENCE);
+        if (!ReturnDesc)
+        {
+            Status = AE_NO_MEMORY;
+            goto Cleanup;
+        }
 
-		index = operand[1]->integer.value;
-		return_desc->reference.value = (u32) index;
-		return_desc->reference.class = ACPI_REFCLASS_INDEX;
+        /* Initialize the Index reference object */
 
-		/*
-		 * At this point, the Source operand is a String, Buffer, or Package.
-		 * Verify that the index is within range.
-		 */
-		switch ((operand[0])->common.type) {
-		case ACPI_TYPE_STRING:
+        Index = Operand[1]->Integer.Value;
+        ReturnDesc->Reference.Value = (UINT32) Index;
+        ReturnDesc->Reference.Class = ACPI_REFCLASS_INDEX;
 
-			if (index >= operand[0]->string.length) {
-				length = operand[0]->string.length;
-				status = AE_AML_STRING_LIMIT;
-			}
+        /*
+         * At this point, the Source operand is a String, Buffer, or Package.
+         * Verify that the index is within range.
+         */
+        switch ((Operand[0])->Common.Type)
+        {
+        case ACPI_TYPE_STRING:
 
-			return_desc->reference.target_type =
-			    ACPI_TYPE_BUFFER_FIELD;
-			break;
+            if (Index >= Operand[0]->String.Length)
+            {
+                Length = Operand[0]->String.Length;
+                Status = AE_AML_STRING_LIMIT;
+            }
 
-		case ACPI_TYPE_BUFFER:
+            ReturnDesc->Reference.TargetType = ACPI_TYPE_BUFFER_FIELD;
+            break;
 
-			if (index >= operand[0]->buffer.length) {
-				length = operand[0]->buffer.length;
-				status = AE_AML_BUFFER_LIMIT;
-			}
+        case ACPI_TYPE_BUFFER:
 
-			return_desc->reference.target_type =
-			    ACPI_TYPE_BUFFER_FIELD;
-			break;
+            if (Index >= Operand[0]->Buffer.Length)
+            {
+                Length = Operand[0]->Buffer.Length;
+                Status = AE_AML_BUFFER_LIMIT;
+            }
 
-		case ACPI_TYPE_PACKAGE:
+            ReturnDesc->Reference.TargetType = ACPI_TYPE_BUFFER_FIELD;
+            break;
 
-			if (index >= operand[0]->package.count) {
-				length = operand[0]->package.count;
-				status = AE_AML_PACKAGE_LIMIT;
-			}
+        case ACPI_TYPE_PACKAGE:
 
-			return_desc->reference.target_type = ACPI_TYPE_PACKAGE;
-			return_desc->reference.where =
-			    &operand[0]->package.elements[index];
-			break;
+            if (Index >= Operand[0]->Package.Count)
+            {
+                Length = Operand[0]->Package.Count;
+                Status = AE_AML_PACKAGE_LIMIT;
+            }
 
-		default:
+            ReturnDesc->Reference.TargetType = ACPI_TYPE_PACKAGE;
+            ReturnDesc->Reference.Where = &Operand[0]->Package.Elements [Index];
+            break;
 
-			status = AE_AML_INTERNAL;
-			goto cleanup;
-		}
+        default:
 
-		/* Failure means that the Index was beyond the end of the object */
+            Status = AE_AML_INTERNAL;
+            goto Cleanup;
+        }
 
-		if (ACPI_FAILURE(status)) {
-			ACPI_EXCEPTION((AE_INFO, status,
-					"Index (0x%X%8.8X) is beyond end of object (length 0x%X)",
-					ACPI_FORMAT_UINT64(index),
-					(u32)length));
-			goto cleanup;
-		}
+        /* Failure means that the Index was beyond the end of the object */
 
-		/*
-		 * Save the target object and add a reference to it for the life
-		 * of the index
-		 */
-		return_desc->reference.object = operand[0];
-		acpi_ut_add_reference(operand[0]);
+        if (ACPI_FAILURE (Status))
+        {
+            ACPI_EXCEPTION ((AE_INFO, Status,
+                "Index (0x%X%8.8X) is beyond end of object (length 0x%X)",
+                ACPI_FORMAT_UINT64 (Index), (UINT32) Length));
+            goto Cleanup;
+        }
 
-		/* Store the reference to the Target */
+        /*
+         * Save the target object and add a reference to it for the life
+         * of the index
+         */
+        ReturnDesc->Reference.Object = Operand[0];
+        AcpiUtAddReference (Operand[0]);
 
-		status = acpi_ex_store(return_desc, operand[2], walk_state);
+        /* Store the reference to the Target */
 
-		/* Return the reference */
+        Status = AcpiExStore (ReturnDesc, Operand[2], WalkState);
 
-		walk_state->result_obj = return_desc;
-		goto cleanup;
+        /* Return the reference */
 
-	default:
+        WalkState->ResultObj = ReturnDesc;
+        goto Cleanup;
 
-		ACPI_ERROR((AE_INFO, "Unknown AML opcode 0x%X",
-			    walk_state->opcode));
-		status = AE_AML_BAD_OPCODE;
-		break;
-	}
+    default:
 
-store_result_to_target:
+        ACPI_ERROR ((AE_INFO, "Unknown AML opcode 0x%X",
+            WalkState->Opcode));
+        Status = AE_AML_BAD_OPCODE;
+        break;
+    }
 
-	if (ACPI_SUCCESS(status)) {
-		/*
-		 * Store the result of the operation (which is now in return_desc) into
-		 * the Target descriptor.
-		 */
-		status = acpi_ex_store(return_desc, operand[2], walk_state);
-		if (ACPI_FAILURE(status)) {
-			goto cleanup;
-		}
 
-		if (!walk_state->result_obj) {
-			walk_state->result_obj = return_desc;
-		}
-	}
+StoreResultToTarget:
 
-cleanup:
+    if (ACPI_SUCCESS (Status))
+    {
+        /*
+         * Store the result of the operation (which is now in ReturnDesc) into
+         * the Target descriptor.
+         */
+        Status = AcpiExStore (ReturnDesc, Operand[2], WalkState);
+        if (ACPI_FAILURE (Status))
+        {
+            goto Cleanup;
+        }
 
-	/* Delete return object on error */
+        if (!WalkState->ResultObj)
+        {
+            WalkState->ResultObj = ReturnDesc;
+        }
+    }
 
-	if (ACPI_FAILURE(status)) {
-		acpi_ut_remove_reference(return_desc);
-		walk_state->result_obj = NULL;
-	}
 
-	return_ACPI_STATUS(status);
+Cleanup:
+
+    /* Delete return object on error */
+
+    if (ACPI_FAILURE (Status))
+    {
+        AcpiUtRemoveReference (ReturnDesc);
+        WalkState->ResultObj = NULL;
+    }
+
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_opcode_2A_0T_1R
+ * FUNCTION:    AcpiExOpcode_2A_0T_1R
  *
- * PARAMETERS:  walk_state          - Current walk state
+ * PARAMETERS:  WalkState           - Current walk state
  *
  * RETURN:      Status
  *
@@ -486,95 +600,106 @@ cleanup:
  *
  ******************************************************************************/
 
-acpi_status acpi_ex_opcode_2A_0T_1R(struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExOpcode_2A_0T_1R (
+    ACPI_WALK_STATE         *WalkState)
 {
-	union acpi_operand_object **operand = &walk_state->operands[0];
-	union acpi_operand_object *return_desc = NULL;
-	acpi_status status = AE_OK;
-	u8 logical_result = FALSE;
+    ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
+    ACPI_OPERAND_OBJECT     *ReturnDesc = NULL;
+    ACPI_STATUS             Status = AE_OK;
+    BOOLEAN                 LogicalResult = FALSE;
 
-	ACPI_FUNCTION_TRACE_STR(ex_opcode_2A_0T_1R,
-				acpi_ps_get_opcode_name(walk_state->opcode));
 
-	/* Create the internal return object */
+    ACPI_FUNCTION_TRACE_STR (ExOpcode_2A_0T_1R,
+        AcpiPsGetOpcodeName (WalkState->Opcode));
 
-	return_desc = acpi_ut_create_internal_object(ACPI_TYPE_INTEGER);
-	if (!return_desc) {
-		status = AE_NO_MEMORY;
-		goto cleanup;
-	}
 
-	/* Execute the Opcode */
+    /* Create the internal return object */
 
-	if (walk_state->op_info->flags & AML_LOGICAL_NUMERIC) {
+    ReturnDesc = AcpiUtCreateInternalObject (ACPI_TYPE_INTEGER);
+    if (!ReturnDesc)
+    {
+        Status = AE_NO_MEMORY;
+        goto Cleanup;
+    }
 
-		/* logical_op (Operand0, Operand1) */
+    /* Execute the Opcode */
 
-		status = acpi_ex_do_logical_numeric_op(walk_state->opcode,
-						       operand[0]->integer.
-						       value,
-						       operand[1]->integer.
-						       value, &logical_result);
-		goto store_logical_result;
-	} else if (walk_state->op_info->flags & AML_LOGICAL) {
+    if (WalkState->OpInfo->Flags & AML_LOGICAL_NUMERIC)
+    {
+        /* LogicalOp  (Operand0, Operand1) */
 
-		/* logical_op (Operand0, Operand1) */
+        Status = AcpiExDoLogicalNumericOp (WalkState->Opcode,
+                        Operand[0]->Integer.Value, Operand[1]->Integer.Value,
+                        &LogicalResult);
+        goto StoreLogicalResult;
+    }
+    else if (WalkState->OpInfo->Flags & AML_LOGICAL)
+    {
+        /* LogicalOp  (Operand0, Operand1) */
 
-		status = acpi_ex_do_logical_op(walk_state->opcode, operand[0],
-					       operand[1], &logical_result);
-		goto store_logical_result;
-	}
+        Status = AcpiExDoLogicalOp (WalkState->Opcode, Operand[0],
+                    Operand[1], &LogicalResult);
+        goto StoreLogicalResult;
+    }
 
-	switch (walk_state->opcode) {
-	case AML_ACQUIRE_OP:	/* Acquire (mutex_object, Timeout) */
+    switch (WalkState->Opcode)
+    {
+    case AML_ACQUIRE_OP:            /* Acquire (MutexObject, Timeout) */
 
-		status =
-		    acpi_ex_acquire_mutex(operand[1], operand[0], walk_state);
-		if (status == AE_TIME) {
-			logical_result = TRUE;	/* TRUE = Acquire timed out */
-			status = AE_OK;
-		}
-		break;
+        Status = AcpiExAcquireMutex (Operand[1], Operand[0], WalkState);
+        if (Status == AE_TIME)
+        {
+            LogicalResult = TRUE;       /* TRUE = Acquire timed out */
+            Status = AE_OK;
+        }
+        break;
 
-	case AML_WAIT_OP:	/* Wait (event_object, Timeout) */
 
-		status = acpi_ex_system_wait_event(operand[1], operand[0]);
-		if (status == AE_TIME) {
-			logical_result = TRUE;	/* TRUE, Wait timed out */
-			status = AE_OK;
-		}
-		break;
+    case AML_WAIT_OP:               /* Wait (EventObject, Timeout) */
 
-	default:
+        Status = AcpiExSystemWaitEvent (Operand[1], Operand[0]);
+        if (Status == AE_TIME)
+        {
+            LogicalResult = TRUE;       /* TRUE, Wait timed out */
+            Status = AE_OK;
+        }
+        break;
 
-		ACPI_ERROR((AE_INFO, "Unknown AML opcode 0x%X",
-			    walk_state->opcode));
-		status = AE_AML_BAD_OPCODE;
-		goto cleanup;
-	}
+    default:
 
-store_logical_result:
-	/*
-	 * Set return value to according to logical_result. logical TRUE (all ones)
-	 * Default is FALSE (zero)
-	 */
-	if (logical_result) {
-		return_desc->integer.value = ACPI_UINT64_MAX;
-	}
+        ACPI_ERROR ((AE_INFO, "Unknown AML opcode 0x%X",
+            WalkState->Opcode));
+        Status = AE_AML_BAD_OPCODE;
+        goto Cleanup;
+    }
 
-cleanup:
 
-	/* Delete return object on error */
+StoreLogicalResult:
+    /*
+     * Set return value to according to LogicalResult. logical TRUE (all ones)
+     * Default is FALSE (zero)
+     */
+    if (LogicalResult)
+    {
+        ReturnDesc->Integer.Value = ACPI_UINT64_MAX;
+    }
 
-	if (ACPI_FAILURE(status)) {
-		acpi_ut_remove_reference(return_desc);
-	}
+Cleanup:
 
-	/* Save return object on success */
+    /* Delete return object on error */
 
-	else {
-		walk_state->result_obj = return_desc;
-	}
+    if (ACPI_FAILURE (Status))
+    {
+        AcpiUtRemoveReference (ReturnDesc);
+    }
 
-	return_ACPI_STATUS(status);
+    /* Save return object on success */
+
+    else
+    {
+        WalkState->ResultObj = ReturnDesc;
+    }
+
+    return_ACPI_STATUS (Status);
 }

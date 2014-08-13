@@ -4,51 +4,128 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
 
-#include <acpi/acpi.h>
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
+
+#define __EXOPARG3_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acinterp.h"
 #include "acparser.h"
 #include "amlcode.h"
 
+
 #define _COMPONENT          ACPI_EXECUTER
-ACPI_MODULE_NAME("exoparg3")
+        ACPI_MODULE_NAME    ("exoparg3")
+
 
 /*!
  * Naming convention for AML interpreter execution routines.
@@ -71,69 +148,80 @@ ACPI_MODULE_NAME("exoparg3")
  * The AcpiExOpcode* functions are called via the Dispatcher component with
  * fully resolved operands.
 !*/
+
+
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_opcode_3A_0T_0R
+ * FUNCTION:    AcpiExOpcode_3A_0T_0R
  *
- * PARAMETERS:  walk_state          - Current walk state
+ * PARAMETERS:  WalkState           - Current walk state
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Execute Triadic operator (3 operands)
  *
  ******************************************************************************/
-acpi_status acpi_ex_opcode_3A_0T_0R(struct acpi_walk_state *walk_state)
+
+ACPI_STATUS
+AcpiExOpcode_3A_0T_0R (
+    ACPI_WALK_STATE         *WalkState)
 {
-	union acpi_operand_object **operand = &walk_state->operands[0];
-	struct acpi_signal_fatal_info *fatal;
-	acpi_status status = AE_OK;
+    ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
+    ACPI_SIGNAL_FATAL_INFO  *Fatal;
+    ACPI_STATUS             Status = AE_OK;
 
-	ACPI_FUNCTION_TRACE_STR(ex_opcode_3A_0T_0R,
-				acpi_ps_get_opcode_name(walk_state->opcode));
 
-	switch (walk_state->opcode) {
-	case AML_FATAL_OP:	/* Fatal (fatal_type fatal_code fatal_arg) */
+    ACPI_FUNCTION_TRACE_STR (ExOpcode_3A_0T_0R,
+        AcpiPsGetOpcodeName (WalkState->Opcode));
 
-		ACPI_DEBUG_PRINT((ACPI_DB_INFO,
-				  "FatalOp: Type %X Code %X Arg %X <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",
-				  (u32) operand[0]->integer.value,
-				  (u32) operand[1]->integer.value,
-				  (u32) operand[2]->integer.value));
 
-		fatal = ACPI_ALLOCATE(sizeof(struct acpi_signal_fatal_info));
-		if (fatal) {
-			fatal->type = (u32) operand[0]->integer.value;
-			fatal->code = (u32) operand[1]->integer.value;
-			fatal->argument = (u32) operand[2]->integer.value;
-		}
+    switch (WalkState->Opcode)
+    {
+    case AML_FATAL_OP:          /* Fatal (FatalType  FatalCode  FatalArg) */
 
-		/* Always signal the OS! */
+        ACPI_DEBUG_PRINT ((ACPI_DB_INFO,
+            "FatalOp: Type %X Code %X Arg %X <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n",
+            (UINT32) Operand[0]->Integer.Value,
+            (UINT32) Operand[1]->Integer.Value,
+            (UINT32) Operand[2]->Integer.Value));
 
-		status = acpi_os_signal(ACPI_SIGNAL_FATAL, fatal);
+        Fatal = ACPI_ALLOCATE (sizeof (ACPI_SIGNAL_FATAL_INFO));
+        if (Fatal)
+        {
+            Fatal->Type     = (UINT32) Operand[0]->Integer.Value;
+            Fatal->Code     = (UINT32) Operand[1]->Integer.Value;
+            Fatal->Argument = (UINT32) Operand[2]->Integer.Value;
+        }
 
-		/* Might return while OS is shutting down, just continue */
+        /* Always signal the OS! */
 
-		ACPI_FREE(fatal);
-		break;
+        Status = AcpiOsSignal (ACPI_SIGNAL_FATAL, Fatal);
 
-	default:
+        /* Might return while OS is shutting down, just continue */
 
-		ACPI_ERROR((AE_INFO, "Unknown AML opcode 0x%X",
-			    walk_state->opcode));
-		status = AE_AML_BAD_OPCODE;
-		goto cleanup;
-	}
+        ACPI_FREE (Fatal);
+        break;
 
-cleanup:
+    default:
 
-	return_ACPI_STATUS(status);
+        ACPI_ERROR ((AE_INFO, "Unknown AML opcode 0x%X",
+            WalkState->Opcode));
+        Status = AE_AML_BAD_OPCODE;
+        goto Cleanup;
+    }
+
+
+Cleanup:
+
+    return_ACPI_STATUS (Status);
 }
 
+
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_opcode_3A_1T_1R
+ * FUNCTION:    AcpiExOpcode_3A_1T_1R
  *
- * PARAMETERS:  walk_state          - Current walk state
+ * PARAMETERS:  WalkState           - Current walk state
  *
  * RETURN:      Status
  *
@@ -141,130 +229,143 @@ cleanup:
  *
  ******************************************************************************/
 
-acpi_status acpi_ex_opcode_3A_1T_1R(struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExOpcode_3A_1T_1R (
+    ACPI_WALK_STATE         *WalkState)
 {
-	union acpi_operand_object **operand = &walk_state->operands[0];
-	union acpi_operand_object *return_desc = NULL;
-	char *buffer = NULL;
-	acpi_status status = AE_OK;
-	u64 index;
-	acpi_size length;
+    ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
+    ACPI_OPERAND_OBJECT     *ReturnDesc = NULL;
+    char                    *Buffer = NULL;
+    ACPI_STATUS             Status = AE_OK;
+    UINT64                  Index;
+    ACPI_SIZE               Length;
 
-	ACPI_FUNCTION_TRACE_STR(ex_opcode_3A_1T_1R,
-				acpi_ps_get_opcode_name(walk_state->opcode));
 
-	switch (walk_state->opcode) {
-	case AML_MID_OP:	/* Mid (Source[0], Index[1], Length[2], Result[3]) */
-		/*
-		 * Create the return object. The Source operand is guaranteed to be
-		 * either a String or a Buffer, so just use its type.
-		 */
-		return_desc = acpi_ut_create_internal_object((operand[0])->
-							     common.type);
-		if (!return_desc) {
-			status = AE_NO_MEMORY;
-			goto cleanup;
-		}
+    ACPI_FUNCTION_TRACE_STR (ExOpcode_3A_1T_1R,
+        AcpiPsGetOpcodeName (WalkState->Opcode));
 
-		/* Get the Integer values from the objects */
 
-		index = operand[1]->integer.value;
-		length = (acpi_size) operand[2]->integer.value;
+    switch (WalkState->Opcode)
+    {
+    case AML_MID_OP:    /* Mid (Source[0], Index[1], Length[2], Result[3]) */
+        /*
+         * Create the return object. The Source operand is guaranteed to be
+         * either a String or a Buffer, so just use its type.
+         */
+        ReturnDesc = AcpiUtCreateInternalObject (
+                        (Operand[0])->Common.Type);
+        if (!ReturnDesc)
+        {
+            Status = AE_NO_MEMORY;
+            goto Cleanup;
+        }
 
-		/*
-		 * If the index is beyond the length of the String/Buffer, or if the
-		 * requested length is zero, return a zero-length String/Buffer
-		 */
-		if (index >= operand[0]->string.length) {
-			length = 0;
-		}
+        /* Get the Integer values from the objects */
 
-		/* Truncate request if larger than the actual String/Buffer */
+        Index = Operand[1]->Integer.Value;
+        Length = (ACPI_SIZE) Operand[2]->Integer.Value;
 
-		else if ((index + length) > operand[0]->string.length) {
-			length = (acpi_size) operand[0]->string.length -
-			    (acpi_size) index;
-		}
+        /*
+         * If the index is beyond the length of the String/Buffer, or if the
+         * requested length is zero, return a zero-length String/Buffer
+         */
+        if (Index >= Operand[0]->String.Length)
+        {
+            Length = 0;
+        }
 
-		/* Strings always have a sub-pointer, not so for buffers */
+        /* Truncate request if larger than the actual String/Buffer */
 
-		switch ((operand[0])->common.type) {
-		case ACPI_TYPE_STRING:
+        else if ((Index + Length) > Operand[0]->String.Length)
+        {
+            Length = (ACPI_SIZE) Operand[0]->String.Length -
+                        (ACPI_SIZE) Index;
+        }
 
-			/* Always allocate a new buffer for the String */
+        /* Strings always have a sub-pointer, not so for buffers */
 
-			buffer = ACPI_ALLOCATE_ZEROED((acpi_size) length + 1);
-			if (!buffer) {
-				status = AE_NO_MEMORY;
-				goto cleanup;
-			}
-			break;
+        switch ((Operand[0])->Common.Type)
+        {
+        case ACPI_TYPE_STRING:
 
-		case ACPI_TYPE_BUFFER:
+            /* Always allocate a new buffer for the String */
 
-			/* If the requested length is zero, don't allocate a buffer */
+            Buffer = ACPI_ALLOCATE_ZEROED ((ACPI_SIZE) Length + 1);
+            if (!Buffer)
+            {
+                Status = AE_NO_MEMORY;
+                goto Cleanup;
+            }
+            break;
 
-			if (length > 0) {
+        case ACPI_TYPE_BUFFER:
 
-				/* Allocate a new buffer for the Buffer */
+            /* If the requested length is zero, don't allocate a buffer */
 
-				buffer = ACPI_ALLOCATE_ZEROED(length);
-				if (!buffer) {
-					status = AE_NO_MEMORY;
-					goto cleanup;
-				}
-			}
-			break;
+            if (Length > 0)
+            {
+                /* Allocate a new buffer for the Buffer */
 
-		default:	/* Should not happen */
+                Buffer = ACPI_ALLOCATE_ZEROED (Length);
+                if (!Buffer)
+                {
+                    Status = AE_NO_MEMORY;
+                    goto Cleanup;
+                }
+            }
+            break;
 
-			status = AE_AML_OPERAND_TYPE;
-			goto cleanup;
-		}
+        default:                        /* Should not happen */
 
-		if (buffer) {
+            Status = AE_AML_OPERAND_TYPE;
+            goto Cleanup;
+        }
 
-			/* We have a buffer, copy the portion requested */
+        if (Buffer)
+        {
+            /* We have a buffer, copy the portion requested */
 
-			ACPI_MEMCPY(buffer, operand[0]->string.pointer + index,
-				    length);
-		}
+            ACPI_MEMCPY (Buffer, Operand[0]->String.Pointer + Index,
+                         Length);
+        }
 
-		/* Set the length of the new String/Buffer */
+        /* Set the length of the new String/Buffer */
 
-		return_desc->string.pointer = buffer;
-		return_desc->string.length = (u32) length;
+        ReturnDesc->String.Pointer = Buffer;
+        ReturnDesc->String.Length = (UINT32) Length;
 
-		/* Mark buffer initialized */
+        /* Mark buffer initialized */
 
-		return_desc->buffer.flags |= AOPOBJ_DATA_VALID;
-		break;
+        ReturnDesc->Buffer.Flags |= AOPOBJ_DATA_VALID;
+        break;
 
-	default:
+    default:
 
-		ACPI_ERROR((AE_INFO, "Unknown AML opcode 0x%X",
-			    walk_state->opcode));
-		status = AE_AML_BAD_OPCODE;
-		goto cleanup;
-	}
+        ACPI_ERROR ((AE_INFO, "Unknown AML opcode 0x%X",
+            WalkState->Opcode));
+        Status = AE_AML_BAD_OPCODE;
+        goto Cleanup;
+    }
 
-	/* Store the result in the target */
+    /* Store the result in the target */
 
-	status = acpi_ex_store(return_desc, operand[3], walk_state);
+    Status = AcpiExStore (ReturnDesc, Operand[3], WalkState);
 
-cleanup:
+Cleanup:
 
-	/* Delete return object on error */
+    /* Delete return object on error */
 
-	if (ACPI_FAILURE(status) || walk_state->result_obj) {
-		acpi_ut_remove_reference(return_desc);
-		walk_state->result_obj = NULL;
-	}
+    if (ACPI_FAILURE (Status) || WalkState->ResultObj)
+    {
+        AcpiUtRemoveReference (ReturnDesc);
+        WalkState->ResultObj = NULL;
+    }
 
-	/* Set the return object and exit */
+    /* Set the return object and exit */
 
-	else {
-		walk_state->result_obj = return_desc;
-	}
-	return_ACPI_STATUS(status);
+    else
+    {
+        WalkState->ResultObj = ReturnDesc;
+    }
+    return_ACPI_STATUS (Status);
 }

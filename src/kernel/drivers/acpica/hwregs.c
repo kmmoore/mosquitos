@@ -5,250 +5,353 @@
  *
  ******************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#define __HWREGS_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acevents.h"
 
 #define _COMPONENT          ACPI_HARDWARE
-ACPI_MODULE_NAME("hwregs")
+        ACPI_MODULE_NAME    ("hwregs")
+
 
 #if (!ACPI_REDUCED_HARDWARE)
+
 /* Local Prototypes */
-static acpi_status
-acpi_hw_read_multiple(u32 *value,
-		      struct acpi_generic_address *register_a,
-		      struct acpi_generic_address *register_b);
 
-static acpi_status
-acpi_hw_write_multiple(u32 value,
-		       struct acpi_generic_address *register_a,
-		       struct acpi_generic_address *register_b);
+static ACPI_STATUS
+AcpiHwReadMultiple (
+    UINT32                  *Value,
+    ACPI_GENERIC_ADDRESS    *RegisterA,
+    ACPI_GENERIC_ADDRESS    *RegisterB);
 
-#endif				/* !ACPI_REDUCED_HARDWARE */
+static ACPI_STATUS
+AcpiHwWriteMultiple (
+    UINT32                  Value,
+    ACPI_GENERIC_ADDRESS    *RegisterA,
+    ACPI_GENERIC_ADDRESS    *RegisterB);
+
+#endif /* !ACPI_REDUCED_HARDWARE */
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_hw_validate_register
+ * FUNCTION:    AcpiHwValidateRegister
  *
- * PARAMETERS:  reg                 - GAS register structure
- *              max_bit_width       - Max bit_width supported (32 or 64)
- *              address             - Pointer to where the gas->address
+ * PARAMETERS:  Reg                 - GAS register structure
+ *              MaxBitWidth         - Max BitWidth supported (32 or 64)
+ *              Address             - Pointer to where the gas->address
  *                                    is returned
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Validate the contents of a GAS register. Checks the GAS
- *              pointer, Address, space_id, bit_width, and bit_offset.
+ *              pointer, Address, SpaceId, BitWidth, and BitOffset.
  *
  ******************************************************************************/
 
-acpi_status
-acpi_hw_validate_register(struct acpi_generic_address *reg,
-			  u8 max_bit_width, u64 *address)
+ACPI_STATUS
+AcpiHwValidateRegister (
+    ACPI_GENERIC_ADDRESS    *Reg,
+    UINT8                   MaxBitWidth,
+    UINT64                  *Address)
 {
 
-	/* Must have a valid pointer to a GAS structure */
+    /* Must have a valid pointer to a GAS structure */
 
-	if (!reg) {
-		return (AE_BAD_PARAMETER);
-	}
+    if (!Reg)
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	/*
-	 * Copy the target address. This handles possible alignment issues.
-	 * Address must not be null. A null address also indicates an optional
-	 * ACPI register that is not supported, so no error message.
-	 */
-	ACPI_MOVE_64_TO_64(address, &reg->address);
-	if (!(*address)) {
-		return (AE_BAD_ADDRESS);
-	}
+    /*
+     * Copy the target address. This handles possible alignment issues.
+     * Address must not be null. A null address also indicates an optional
+     * ACPI register that is not supported, so no error message.
+     */
+    ACPI_MOVE_64_TO_64 (Address, &Reg->Address);
+    if (!(*Address))
+    {
+        return (AE_BAD_ADDRESS);
+    }
 
-	/* Validate the space_ID */
+    /* Validate the SpaceID */
 
-	if ((reg->space_id != ACPI_ADR_SPACE_SYSTEM_MEMORY) &&
-	    (reg->space_id != ACPI_ADR_SPACE_SYSTEM_IO)) {
-		ACPI_ERROR((AE_INFO,
-			    "Unsupported address space: 0x%X", reg->space_id));
-		return (AE_SUPPORT);
-	}
+    if ((Reg->SpaceId != ACPI_ADR_SPACE_SYSTEM_MEMORY) &&
+        (Reg->SpaceId != ACPI_ADR_SPACE_SYSTEM_IO))
+    {
+        ACPI_ERROR ((AE_INFO,
+            "Unsupported address space: 0x%X", Reg->SpaceId));
+        return (AE_SUPPORT);
+    }
 
-	/* Validate the bit_width */
+    /* Validate the BitWidth */
 
-	if ((reg->bit_width != 8) &&
-	    (reg->bit_width != 16) &&
-	    (reg->bit_width != 32) && (reg->bit_width != max_bit_width)) {
-		ACPI_ERROR((AE_INFO,
-			    "Unsupported register bit width: 0x%X",
-			    reg->bit_width));
-		return (AE_SUPPORT);
-	}
+    if ((Reg->BitWidth != 8) &&
+        (Reg->BitWidth != 16) &&
+        (Reg->BitWidth != 32) &&
+        (Reg->BitWidth != MaxBitWidth))
+    {
+        ACPI_ERROR ((AE_INFO,
+            "Unsupported register bit width: 0x%X", Reg->BitWidth));
+        return (AE_SUPPORT);
+    }
 
-	/* Validate the bit_offset. Just a warning for now. */
+    /* Validate the BitOffset. Just a warning for now. */
 
-	if (reg->bit_offset != 0) {
-		ACPI_WARNING((AE_INFO,
-			      "Unsupported register bit offset: 0x%X",
-			      reg->bit_offset));
-	}
+    if (Reg->BitOffset != 0)
+    {
+        ACPI_WARNING ((AE_INFO,
+            "Unsupported register bit offset: 0x%X", Reg->BitOffset));
+    }
 
-	return (AE_OK);
+    return (AE_OK);
 }
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_hw_read
+ * FUNCTION:    AcpiHwRead
  *
- * PARAMETERS:  value               - Where the value is returned
- *              reg                 - GAS register structure
+ * PARAMETERS:  Value               - Where the value is returned
+ *              Reg                 - GAS register structure
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Read from either memory or IO space. This is a 32-bit max
- *              version of acpi_read, used internally since the overhead of
+ *              version of AcpiRead, used internally since the overhead of
  *              64-bit values is not needed.
  *
- * LIMITATIONS: <These limitations also apply to acpi_hw_write>
- *      bit_width must be exactly 8, 16, or 32.
- *      space_ID must be system_memory or system_IO.
- *      bit_offset and access_width are currently ignored, as there has
+ * LIMITATIONS: <These limitations also apply to AcpiHwWrite>
+ *      BitWidth must be exactly 8, 16, or 32.
+ *      SpaceID must be SystemMemory or SystemIO.
+ *      BitOffset and AccessWidth are currently ignored, as there has
  *          not been a need to implement these.
  *
  ******************************************************************************/
 
-acpi_status acpi_hw_read(u32 *value, struct acpi_generic_address *reg)
+ACPI_STATUS
+AcpiHwRead (
+    UINT32                  *Value,
+    ACPI_GENERIC_ADDRESS    *Reg)
 {
-	u64 address;
-	u64 value64;
-	acpi_status status;
+    UINT64                  Address;
+    UINT64                  Value64;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_NAME(hw_read);
 
-	/* Validate contents of the GAS register */
+    ACPI_FUNCTION_NAME (HwRead);
 
-	status = acpi_hw_validate_register(reg, 32, &address);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
 
-	/* Initialize entire 32-bit return value to zero */
+    /* Validate contents of the GAS register */
 
-	*value = 0;
+    Status = AcpiHwValidateRegister (Reg, 32, &Address);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	/*
-	 * Two address spaces supported: Memory or IO. PCI_Config is
-	 * not supported here because the GAS structure is insufficient
-	 */
-	if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-		status = acpi_os_read_memory((acpi_physical_address)
-					     address, &value64, reg->bit_width);
+    /* Initialize entire 32-bit return value to zero */
 
-		*value = (u32)value64;
-	} else {		/* ACPI_ADR_SPACE_SYSTEM_IO, validated earlier */
+    *Value = 0;
 
-		status = acpi_hw_read_port((acpi_io_address)
-					   address, value, reg->bit_width);
-	}
+    /*
+     * Two address spaces supported: Memory or IO. PCI_Config is
+     * not supported here because the GAS structure is insufficient
+     */
+    if (Reg->SpaceId == ACPI_ADR_SPACE_SYSTEM_MEMORY)
+    {
+        Status = AcpiOsReadMemory ((ACPI_PHYSICAL_ADDRESS)
+                    Address, &Value64, Reg->BitWidth);
 
-	ACPI_DEBUG_PRINT((ACPI_DB_IO,
-			  "Read:  %8.8X width %2d from %8.8X%8.8X (%s)\n",
-			  *value, reg->bit_width, ACPI_FORMAT_UINT64(address),
-			  acpi_ut_get_region_name(reg->space_id)));
+        *Value = (UINT32) Value64;
+    }
+    else /* ACPI_ADR_SPACE_SYSTEM_IO, validated earlier */
+    {
+        Status = AcpiHwReadPort ((ACPI_IO_ADDRESS)
+                    Address, Value, Reg->BitWidth);
+    }
 
-	return (status);
+    ACPI_DEBUG_PRINT ((ACPI_DB_IO,
+        "Read:  %8.8X width %2d from %8.8X%8.8X (%s)\n",
+        *Value, Reg->BitWidth, ACPI_FORMAT_UINT64 (Address),
+        AcpiUtGetRegionName (Reg->SpaceId)));
+
+    return (Status);
 }
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_hw_write
+ * FUNCTION:    AcpiHwWrite
  *
- * PARAMETERS:  value               - Value to be written
- *              reg                 - GAS register structure
+ * PARAMETERS:  Value               - Value to be written
+ *              Reg                 - GAS register structure
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Write to either memory or IO space. This is a 32-bit max
- *              version of acpi_write, used internally since the overhead of
+ *              version of AcpiWrite, used internally since the overhead of
  *              64-bit values is not needed.
  *
  ******************************************************************************/
 
-acpi_status acpi_hw_write(u32 value, struct acpi_generic_address *reg)
+ACPI_STATUS
+AcpiHwWrite (
+    UINT32                  Value,
+    ACPI_GENERIC_ADDRESS    *Reg)
 {
-	u64 address;
-	acpi_status status;
+    UINT64                  Address;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_NAME(hw_write);
 
-	/* Validate contents of the GAS register */
+    ACPI_FUNCTION_NAME (HwWrite);
 
-	status = acpi_hw_validate_register(reg, 32, &address);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
 
-	/*
-	 * Two address spaces supported: Memory or IO. PCI_Config is
-	 * not supported here because the GAS structure is insufficient
-	 */
-	if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-		status = acpi_os_write_memory((acpi_physical_address)
-					      address, (u64)value,
-					      reg->bit_width);
-	} else {		/* ACPI_ADR_SPACE_SYSTEM_IO, validated earlier */
+    /* Validate contents of the GAS register */
 
-		status = acpi_hw_write_port((acpi_io_address)
-					    address, value, reg->bit_width);
-	}
+    Status = AcpiHwValidateRegister (Reg, 32, &Address);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	ACPI_DEBUG_PRINT((ACPI_DB_IO,
-			  "Wrote: %8.8X width %2d   to %8.8X%8.8X (%s)\n",
-			  value, reg->bit_width, ACPI_FORMAT_UINT64(address),
-			  acpi_ut_get_region_name(reg->space_id)));
+    /*
+     * Two address spaces supported: Memory or IO. PCI_Config is
+     * not supported here because the GAS structure is insufficient
+     */
+    if (Reg->SpaceId == ACPI_ADR_SPACE_SYSTEM_MEMORY)
+    {
+        Status = AcpiOsWriteMemory ((ACPI_PHYSICAL_ADDRESS)
+                    Address, (UINT64) Value, Reg->BitWidth);
+    }
+    else /* ACPI_ADR_SPACE_SYSTEM_IO, validated earlier */
+    {
+        Status = AcpiHwWritePort ((ACPI_IO_ADDRESS)
+                    Address, Value, Reg->BitWidth);
+    }
 
-	return (status);
+    ACPI_DEBUG_PRINT ((ACPI_DB_IO,
+        "Wrote: %8.8X width %2d   to %8.8X%8.8X (%s)\n",
+        Value, Reg->BitWidth, ACPI_FORMAT_UINT64 (Address),
+        AcpiUtGetRegionName (Reg->SpaceId)));
+
+    return (Status);
 }
+
 
 #if (!ACPI_REDUCED_HARDWARE)
 /*******************************************************************************
  *
- * FUNCTION:    acpi_hw_clear_acpi_status
+ * FUNCTION:    AcpiHwClearAcpiStatus
  *
  * PARAMETERS:  None
  *
@@ -258,68 +361,79 @@ acpi_status acpi_hw_write(u32 value, struct acpi_generic_address *reg)
  *
  ******************************************************************************/
 
-acpi_status acpi_hw_clear_acpi_status(void)
+ACPI_STATUS
+AcpiHwClearAcpiStatus (
+    void)
 {
-	acpi_status status;
-	acpi_cpu_flags lock_flags = 0;
+    ACPI_STATUS             Status;
+    ACPI_CPU_FLAGS          LockFlags = 0;
 
-	ACPI_FUNCTION_TRACE(hw_clear_acpi_status);
 
-	ACPI_DEBUG_PRINT((ACPI_DB_IO, "About to write %04X to %8.8X%8.8X\n",
-			  ACPI_BITMASK_ALL_FIXED_STATUS,
-			  ACPI_FORMAT_UINT64(acpi_gbl_xpm1a_status.address)));
+    ACPI_FUNCTION_TRACE (HwClearAcpiStatus);
 
-	lock_flags = acpi_os_acquire_lock(acpi_gbl_hardware_lock);
 
-	/* Clear the fixed events in PM1 A/B */
+    ACPI_DEBUG_PRINT ((ACPI_DB_IO, "About to write %04X to %8.8X%8.8X\n",
+        ACPI_BITMASK_ALL_FIXED_STATUS,
+        ACPI_FORMAT_UINT64 (AcpiGbl_XPm1aStatus.Address)));
 
-	status = acpi_hw_register_write(ACPI_REGISTER_PM1_STATUS,
-					ACPI_BITMASK_ALL_FIXED_STATUS);
+    LockFlags = AcpiOsAcquireLock (AcpiGbl_HardwareLock);
 
-	acpi_os_release_lock(acpi_gbl_hardware_lock, lock_flags);
+    /* Clear the fixed events in PM1 A/B */
 
-	if (ACPI_FAILURE(status))
-		goto exit;
+    Status = AcpiHwRegisterWrite (ACPI_REGISTER_PM1_STATUS,
+                ACPI_BITMASK_ALL_FIXED_STATUS);
 
-	/* Clear the GPE Bits in all GPE registers in all GPE blocks */
+    AcpiOsReleaseLock (AcpiGbl_HardwareLock, LockFlags);
 
-	status = acpi_ev_walk_gpe_list(acpi_hw_clear_gpe_block, NULL);
+    if (ACPI_FAILURE (Status))
+    {
+        goto Exit;
+    }
 
-exit:
-	return_ACPI_STATUS(status);
+    /* Clear the GPE Bits in all GPE registers in all GPE blocks */
+
+    Status = AcpiEvWalkGpeList (AcpiHwClearGpeBlock, NULL);
+
+Exit:
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_hw_get_bit_register_info
+ * FUNCTION:    AcpiHwGetBitRegisterInfo
  *
- * PARAMETERS:  register_id         - Index of ACPI Register to access
+ * PARAMETERS:  RegisterId          - Index of ACPI Register to access
  *
  * RETURN:      The bitmask to be used when accessing the register
  *
- * DESCRIPTION: Map register_id into a register bitmask.
+ * DESCRIPTION: Map RegisterId into a register bitmask.
  *
  ******************************************************************************/
 
-struct acpi_bit_register_info *acpi_hw_get_bit_register_info(u32 register_id)
+ACPI_BIT_REGISTER_INFO *
+AcpiHwGetBitRegisterInfo (
+    UINT32                  RegisterId)
 {
-	ACPI_FUNCTION_ENTRY();
+    ACPI_FUNCTION_ENTRY ();
 
-	if (register_id > ACPI_BITREG_MAX) {
-		ACPI_ERROR((AE_INFO, "Invalid BitRegister ID: 0x%X",
-			    register_id));
-		return (NULL);
-	}
 
-	return (&acpi_gbl_bit_register_info[register_id]);
+    if (RegisterId > ACPI_BITREG_MAX)
+    {
+        ACPI_ERROR ((AE_INFO, "Invalid BitRegister ID: 0x%X", RegisterId));
+        return (NULL);
+    }
+
+    return (&AcpiGbl_BitRegisterInfo[RegisterId]);
 }
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_hw_write_pm1_control
+ * FUNCTION:    AcpiHwWritePm1Control
  *
- * PARAMETERS:  pm1a_control        - Value to be written to PM1A control
- *              pm1b_control        - Value to be written to PM1B control
+ * PARAMETERS:  Pm1aControl         - Value to be written to PM1A control
+ *              Pm1bControl         - Value to be written to PM1B control
  *
  * RETURN:      Status
  *
@@ -331,113 +445,124 @@ struct acpi_bit_register_info *acpi_hw_get_bit_register_info(u32 register_id)
  *
  ******************************************************************************/
 
-acpi_status acpi_hw_write_pm1_control(u32 pm1a_control, u32 pm1b_control)
+ACPI_STATUS
+AcpiHwWritePm1Control (
+    UINT32                  Pm1aControl,
+    UINT32                  Pm1bControl)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(hw_write_pm1_control);
 
-	status =
-	    acpi_hw_write(pm1a_control, &acpi_gbl_FADT.xpm1a_control_block);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    ACPI_FUNCTION_TRACE (HwWritePm1Control);
 
-	if (acpi_gbl_FADT.xpm1b_control_block.address) {
-		status =
-		    acpi_hw_write(pm1b_control,
-				  &acpi_gbl_FADT.xpm1b_control_block);
-	}
-	return_ACPI_STATUS(status);
+
+    Status = AcpiHwWrite (Pm1aControl, &AcpiGbl_FADT.XPm1aControlBlock);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
+
+    if (AcpiGbl_FADT.XPm1bControlBlock.Address)
+    {
+        Status = AcpiHwWrite (Pm1bControl, &AcpiGbl_FADT.XPm1bControlBlock);
+    }
+    return_ACPI_STATUS (Status);
 }
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_hw_register_read
+ * FUNCTION:    AcpiHwRegisterRead
  *
- * PARAMETERS:  register_id         - ACPI Register ID
- *              return_value        - Where the register value is returned
+ * PARAMETERS:  RegisterId          - ACPI Register ID
+ *              ReturnValue         - Where the register value is returned
  *
  * RETURN:      Status and the value read.
  *
  * DESCRIPTION: Read from the specified ACPI register
  *
  ******************************************************************************/
-acpi_status acpi_hw_register_read(u32 register_id, u32 *return_value)
+
+ACPI_STATUS
+AcpiHwRegisterRead (
+    UINT32                  RegisterId,
+    UINT32                  *ReturnValue)
 {
-	u32 value = 0;
-	acpi_status status;
+    UINT32                  Value = 0;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(hw_register_read);
 
-	switch (register_id) {
-	case ACPI_REGISTER_PM1_STATUS:	/* PM1 A/B: 16-bit access each */
+    ACPI_FUNCTION_TRACE (HwRegisterRead);
 
-		status = acpi_hw_read_multiple(&value,
-					       &acpi_gbl_xpm1a_status,
-					       &acpi_gbl_xpm1b_status);
-		break;
 
-	case ACPI_REGISTER_PM1_ENABLE:	/* PM1 A/B: 16-bit access each */
+    switch (RegisterId)
+    {
+    case ACPI_REGISTER_PM1_STATUS:           /* PM1 A/B: 16-bit access each */
 
-		status = acpi_hw_read_multiple(&value,
-					       &acpi_gbl_xpm1a_enable,
-					       &acpi_gbl_xpm1b_enable);
-		break;
+        Status = AcpiHwReadMultiple (&Value,
+                    &AcpiGbl_XPm1aStatus,
+                    &AcpiGbl_XPm1bStatus);
+        break;
 
-	case ACPI_REGISTER_PM1_CONTROL:	/* PM1 A/B: 16-bit access each */
+    case ACPI_REGISTER_PM1_ENABLE:           /* PM1 A/B: 16-bit access each */
 
-		status = acpi_hw_read_multiple(&value,
-					       &acpi_gbl_FADT.
-					       xpm1a_control_block,
-					       &acpi_gbl_FADT.
-					       xpm1b_control_block);
+        Status = AcpiHwReadMultiple (&Value,
+                    &AcpiGbl_XPm1aEnable,
+                    &AcpiGbl_XPm1bEnable);
+        break;
 
-		/*
-		 * Zero the write-only bits. From the ACPI specification, "Hardware
-		 * Write-Only Bits": "Upon reads to registers with write-only bits,
-		 * software masks out all write-only bits."
-		 */
-		value &= ~ACPI_PM1_CONTROL_WRITEONLY_BITS;
-		break;
+    case ACPI_REGISTER_PM1_CONTROL:          /* PM1 A/B: 16-bit access each */
 
-	case ACPI_REGISTER_PM2_CONTROL:	/* 8-bit access */
+        Status = AcpiHwReadMultiple (&Value,
+                    &AcpiGbl_FADT.XPm1aControlBlock,
+                    &AcpiGbl_FADT.XPm1bControlBlock);
 
-		status =
-		    acpi_hw_read(&value, &acpi_gbl_FADT.xpm2_control_block);
-		break;
+        /*
+         * Zero the write-only bits. From the ACPI specification, "Hardware
+         * Write-Only Bits": "Upon reads to registers with write-only bits,
+         * software masks out all write-only bits."
+         */
+        Value &= ~ACPI_PM1_CONTROL_WRITEONLY_BITS;
+        break;
 
-	case ACPI_REGISTER_PM_TIMER:	/* 32-bit access */
+    case ACPI_REGISTER_PM2_CONTROL:          /* 8-bit access */
 
-		status = acpi_hw_read(&value, &acpi_gbl_FADT.xpm_timer_block);
-		break;
+        Status = AcpiHwRead (&Value, &AcpiGbl_FADT.XPm2ControlBlock);
+        break;
 
-	case ACPI_REGISTER_SMI_COMMAND_BLOCK:	/* 8-bit access */
+    case ACPI_REGISTER_PM_TIMER:             /* 32-bit access */
 
-		status =
-		    acpi_hw_read_port(acpi_gbl_FADT.smi_command, &value, 8);
-		break;
+        Status = AcpiHwRead (&Value, &AcpiGbl_FADT.XPmTimerBlock);
+        break;
 
-	default:
+    case ACPI_REGISTER_SMI_COMMAND_BLOCK:    /* 8-bit access */
 
-		ACPI_ERROR((AE_INFO, "Unknown Register ID: 0x%X", register_id));
-		status = AE_BAD_PARAMETER;
-		break;
-	}
+        Status = AcpiHwReadPort (AcpiGbl_FADT.SmiCommand, &Value, 8);
+        break;
 
-	if (ACPI_SUCCESS(status)) {
-		*return_value = value;
-	}
+    default:
 
-	return_ACPI_STATUS(status);
+        ACPI_ERROR ((AE_INFO, "Unknown Register ID: 0x%X",
+            RegisterId));
+        Status = AE_BAD_PARAMETER;
+        break;
+    }
+
+    if (ACPI_SUCCESS (Status))
+    {
+        *ReturnValue = Value;
+    }
+
+    return_ACPI_STATUS (Status);
 }
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_hw_register_write
+ * FUNCTION:    AcpiHwRegisterWrite
  *
- * PARAMETERS:  register_id         - ACPI Register ID
- *              value               - The value to write
+ * PARAMETERS:  RegisterId          - ACPI Register ID
+ *              Value               - The value to write
  *
  * RETURN:      Status
  *
@@ -458,119 +583,119 @@ acpi_status acpi_hw_register_read(u32 register_id, u32 *return_value)
  *
  ******************************************************************************/
 
-acpi_status acpi_hw_register_write(u32 register_id, u32 value)
+ACPI_STATUS
+AcpiHwRegisterWrite (
+    UINT32                  RegisterId,
+    UINT32                  Value)
 {
-	acpi_status status;
-	u32 read_value;
+    ACPI_STATUS             Status;
+    UINT32                  ReadValue;
 
-	ACPI_FUNCTION_TRACE(hw_register_write);
 
-	switch (register_id) {
-	case ACPI_REGISTER_PM1_STATUS:	/* PM1 A/B: 16-bit access each */
-		/*
-		 * Handle the "ignored" bit in PM1 Status. According to the ACPI
-		 * specification, ignored bits are to be preserved when writing.
-		 * Normally, this would mean a read/modify/write sequence. However,
-		 * preserving a bit in the status register is different. Writing a
-		 * one clears the status, and writing a zero preserves the status.
-		 * Therefore, we must always write zero to the ignored bit.
-		 *
-		 * This behavior is clarified in the ACPI 4.0 specification.
-		 */
-		value &= ~ACPI_PM1_STATUS_PRESERVED_BITS;
+    ACPI_FUNCTION_TRACE (HwRegisterWrite);
 
-		status = acpi_hw_write_multiple(value,
-						&acpi_gbl_xpm1a_status,
-						&acpi_gbl_xpm1b_status);
-		break;
 
-	case ACPI_REGISTER_PM1_ENABLE:	/* PM1 A/B: 16-bit access each */
+    switch (RegisterId)
+    {
+    case ACPI_REGISTER_PM1_STATUS:           /* PM1 A/B: 16-bit access each */
+        /*
+         * Handle the "ignored" bit in PM1 Status. According to the ACPI
+         * specification, ignored bits are to be preserved when writing.
+         * Normally, this would mean a read/modify/write sequence. However,
+         * preserving a bit in the status register is different. Writing a
+         * one clears the status, and writing a zero preserves the status.
+         * Therefore, we must always write zero to the ignored bit.
+         *
+         * This behavior is clarified in the ACPI 4.0 specification.
+         */
+        Value &= ~ACPI_PM1_STATUS_PRESERVED_BITS;
 
-		status = acpi_hw_write_multiple(value,
-						&acpi_gbl_xpm1a_enable,
-						&acpi_gbl_xpm1b_enable);
-		break;
+        Status = AcpiHwWriteMultiple (Value,
+                    &AcpiGbl_XPm1aStatus,
+                    &AcpiGbl_XPm1bStatus);
+        break;
 
-	case ACPI_REGISTER_PM1_CONTROL:	/* PM1 A/B: 16-bit access each */
-		/*
-		 * Perform a read first to preserve certain bits (per ACPI spec)
-		 * Note: This includes SCI_EN, we never want to change this bit
-		 */
-		status = acpi_hw_read_multiple(&read_value,
-					       &acpi_gbl_FADT.
-					       xpm1a_control_block,
-					       &acpi_gbl_FADT.
-					       xpm1b_control_block);
-		if (ACPI_FAILURE(status)) {
-			goto exit;
-		}
+    case ACPI_REGISTER_PM1_ENABLE:           /* PM1 A/B: 16-bit access each */
 
-		/* Insert the bits to be preserved */
+        Status = AcpiHwWriteMultiple (Value,
+                    &AcpiGbl_XPm1aEnable,
+                    &AcpiGbl_XPm1bEnable);
+        break;
 
-		ACPI_INSERT_BITS(value, ACPI_PM1_CONTROL_PRESERVED_BITS,
-				 read_value);
+    case ACPI_REGISTER_PM1_CONTROL:          /* PM1 A/B: 16-bit access each */
+        /*
+         * Perform a read first to preserve certain bits (per ACPI spec)
+         * Note: This includes SCI_EN, we never want to change this bit
+         */
+        Status = AcpiHwReadMultiple (&ReadValue,
+                    &AcpiGbl_FADT.XPm1aControlBlock,
+                    &AcpiGbl_FADT.XPm1bControlBlock);
+        if (ACPI_FAILURE (Status))
+        {
+            goto Exit;
+        }
 
-		/* Now we can write the data */
+        /* Insert the bits to be preserved */
 
-		status = acpi_hw_write_multiple(value,
-						&acpi_gbl_FADT.
-						xpm1a_control_block,
-						&acpi_gbl_FADT.
-						xpm1b_control_block);
-		break;
+        ACPI_INSERT_BITS (Value, ACPI_PM1_CONTROL_PRESERVED_BITS, ReadValue);
 
-	case ACPI_REGISTER_PM2_CONTROL:	/* 8-bit access */
-		/*
-		 * For control registers, all reserved bits must be preserved,
-		 * as per the ACPI spec.
-		 */
-		status =
-		    acpi_hw_read(&read_value,
-				 &acpi_gbl_FADT.xpm2_control_block);
-		if (ACPI_FAILURE(status)) {
-			goto exit;
-		}
+        /* Now we can write the data */
 
-		/* Insert the bits to be preserved */
+        Status = AcpiHwWriteMultiple (Value,
+                    &AcpiGbl_FADT.XPm1aControlBlock,
+                    &AcpiGbl_FADT.XPm1bControlBlock);
+        break;
 
-		ACPI_INSERT_BITS(value, ACPI_PM2_CONTROL_PRESERVED_BITS,
-				 read_value);
+    case ACPI_REGISTER_PM2_CONTROL:          /* 8-bit access */
+        /*
+         * For control registers, all reserved bits must be preserved,
+         * as per the ACPI spec.
+         */
+        Status = AcpiHwRead (&ReadValue, &AcpiGbl_FADT.XPm2ControlBlock);
+        if (ACPI_FAILURE (Status))
+        {
+            goto Exit;
+        }
 
-		status =
-		    acpi_hw_write(value, &acpi_gbl_FADT.xpm2_control_block);
-		break;
+        /* Insert the bits to be preserved */
 
-	case ACPI_REGISTER_PM_TIMER:	/* 32-bit access */
+        ACPI_INSERT_BITS (Value, ACPI_PM2_CONTROL_PRESERVED_BITS, ReadValue);
 
-		status = acpi_hw_write(value, &acpi_gbl_FADT.xpm_timer_block);
-		break;
+        Status = AcpiHwWrite (Value, &AcpiGbl_FADT.XPm2ControlBlock);
+        break;
 
-	case ACPI_REGISTER_SMI_COMMAND_BLOCK:	/* 8-bit access */
+    case ACPI_REGISTER_PM_TIMER:             /* 32-bit access */
 
-		/* SMI_CMD is currently always in IO space */
+        Status = AcpiHwWrite (Value, &AcpiGbl_FADT.XPmTimerBlock);
+        break;
 
-		status =
-		    acpi_hw_write_port(acpi_gbl_FADT.smi_command, value, 8);
-		break;
+    case ACPI_REGISTER_SMI_COMMAND_BLOCK:    /* 8-bit access */
 
-	default:
+        /* SMI_CMD is currently always in IO space */
 
-		ACPI_ERROR((AE_INFO, "Unknown Register ID: 0x%X", register_id));
-		status = AE_BAD_PARAMETER;
-		break;
-	}
+        Status = AcpiHwWritePort (AcpiGbl_FADT.SmiCommand, Value, 8);
+        break;
 
-exit:
-	return_ACPI_STATUS(status);
+    default:
+
+        ACPI_ERROR ((AE_INFO, "Unknown Register ID: 0x%X",
+            RegisterId));
+        Status = AE_BAD_PARAMETER;
+        break;
+    }
+
+Exit:
+    return_ACPI_STATUS (Status);
 }
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_hw_read_multiple
+ * FUNCTION:    AcpiHwReadMultiple
  *
- * PARAMETERS:  value               - Where the register value is returned
- *              register_a           - First ACPI register (required)
- *              register_b           - Second ACPI register (optional)
+ * PARAMETERS:  Value               - Where the register value is returned
+ *              RegisterA           - First ACPI register (required)
+ *              RegisterB           - Second ACPI register (optional)
  *
  * RETURN:      Status
  *
@@ -578,52 +703,58 @@ exit:
  *
  ******************************************************************************/
 
-static acpi_status
-acpi_hw_read_multiple(u32 *value,
-		      struct acpi_generic_address *register_a,
-		      struct acpi_generic_address *register_b)
+static ACPI_STATUS
+AcpiHwReadMultiple (
+    UINT32                  *Value,
+    ACPI_GENERIC_ADDRESS    *RegisterA,
+    ACPI_GENERIC_ADDRESS    *RegisterB)
 {
-	u32 value_a = 0;
-	u32 value_b = 0;
-	acpi_status status;
+    UINT32                  ValueA = 0;
+    UINT32                  ValueB = 0;
+    ACPI_STATUS             Status;
 
-	/* The first register is always required */
 
-	status = acpi_hw_read(&value_a, register_a);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
+    /* The first register is always required */
 
-	/* Second register is optional */
+    Status = AcpiHwRead (&ValueA, RegisterA);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	if (register_b->address) {
-		status = acpi_hw_read(&value_b, register_b);
-		if (ACPI_FAILURE(status)) {
-			return (status);
-		}
-	}
+    /* Second register is optional */
 
-	/*
-	 * OR the two return values together. No shifting or masking is necessary,
-	 * because of how the PM1 registers are defined in the ACPI specification:
-	 *
-	 * "Although the bits can be split between the two register blocks (each
-	 * register block has a unique pointer within the FADT), the bit positions
-	 * are maintained. The register block with unimplemented bits (that is,
-	 * those implemented in the other register block) always returns zeros,
-	 * and writes have no side effects"
-	 */
-	*value = (value_a | value_b);
-	return (AE_OK);
+    if (RegisterB->Address)
+    {
+        Status = AcpiHwRead (&ValueB, RegisterB);
+        if (ACPI_FAILURE (Status))
+        {
+            return (Status);
+        }
+    }
+
+    /*
+     * OR the two return values together. No shifting or masking is necessary,
+     * because of how the PM1 registers are defined in the ACPI specification:
+     *
+     * "Although the bits can be split between the two register blocks (each
+     * register block has a unique pointer within the FADT), the bit positions
+     * are maintained. The register block with unimplemented bits (that is,
+     * those implemented in the other register block) always returns zeros,
+     * and writes have no side effects"
+     */
+    *Value = (ValueA | ValueB);
+    return (AE_OK);
 }
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_hw_write_multiple
+ * FUNCTION:    AcpiHwWriteMultiple
  *
- * PARAMETERS:  value               - The value to write
- *              register_a           - First ACPI register (required)
- *              register_b           - Second ACPI register (optional)
+ * PARAMETERS:  Value               - The value to write
+ *              RegisterA           - First ACPI register (required)
+ *              RegisterB           - Second ACPI register (optional)
  *
  * RETURN:      Status
  *
@@ -631,37 +762,41 @@ acpi_hw_read_multiple(u32 *value,
  *
  ******************************************************************************/
 
-static acpi_status
-acpi_hw_write_multiple(u32 value,
-		       struct acpi_generic_address *register_a,
-		       struct acpi_generic_address *register_b)
+static ACPI_STATUS
+AcpiHwWriteMultiple (
+    UINT32                  Value,
+    ACPI_GENERIC_ADDRESS    *RegisterA,
+    ACPI_GENERIC_ADDRESS    *RegisterB)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	/* The first register is always required */
 
-	status = acpi_hw_write(value, register_a);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
+    /* The first register is always required */
 
-	/*
-	 * Second register is optional
-	 *
-	 * No bit shifting or clearing is necessary, because of how the PM1
-	 * registers are defined in the ACPI specification:
-	 *
-	 * "Although the bits can be split between the two register blocks (each
-	 * register block has a unique pointer within the FADT), the bit positions
-	 * are maintained. The register block with unimplemented bits (that is,
-	 * those implemented in the other register block) always returns zeros,
-	 * and writes have no side effects"
-	 */
-	if (register_b->address) {
-		status = acpi_hw_write(value, register_b);
-	}
+    Status = AcpiHwWrite (Value, RegisterA);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	return (status);
+    /*
+     * Second register is optional
+     *
+     * No bit shifting or clearing is necessary, because of how the PM1
+     * registers are defined in the ACPI specification:
+     *
+     * "Although the bits can be split between the two register blocks (each
+     * register block has a unique pointer within the FADT), the bit positions
+     * are maintained. The register block with unimplemented bits (that is,
+     * those implemented in the other register block) always returns zeros,
+     * and writes have no side effects"
+     */
+    if (RegisterB->Address)
+    {
+        Status = AcpiHwWrite (Value, RegisterB);
+    }
+
+    return (Status);
 }
 
-#endif				/* !ACPI_REDUCED_HARDWARE */
+#endif /* !ACPI_REDUCED_HARDWARE */

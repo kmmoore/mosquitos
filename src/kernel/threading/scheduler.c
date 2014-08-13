@@ -49,7 +49,7 @@ static void calibrate_apic_timer() {
   text_output_printf("Done - frequency: %dHz\n", scheduler_data.apic_timer_frequency);
 }
 
-void setup_scheduler_timer() {
+static void setup_scheduler_timer() {
   uint32_t period = scheduler_data.apic_timer_frequency * SCHEDULER_TIME_SLICE_MS / 1000;
   apic_setup_local_timer(SCHEDULER_TIMER_DIVIDER, SCHEDULER_TIMER_IV, APIC_TIMER_PERIODIC, period);
   apic_set_local_timer_masked(false);

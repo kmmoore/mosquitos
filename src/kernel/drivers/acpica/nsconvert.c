@@ -5,44 +5,118 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#define __NSCONVERT_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acnamesp.h"
 #include "acinterp.h"
@@ -50,78 +124,86 @@
 #include "amlresrc.h"
 
 #define _COMPONENT          ACPI_NAMESPACE
-ACPI_MODULE_NAME("nsconvert")
+        ACPI_MODULE_NAME    ("nsconvert")
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_convert_to_integer
+ * FUNCTION:    AcpiNsConvertToInteger
  *
- * PARAMETERS:  original_object     - Object to be converted
- *              return_object       - Where the new converted object is returned
+ * PARAMETERS:  OriginalObject      - Object to be converted
+ *              ReturnObject        - Where the new converted object is returned
  *
  * RETURN:      Status. AE_OK if conversion was successful.
  *
  * DESCRIPTION: Attempt to convert a String/Buffer object to an Integer.
  *
  ******************************************************************************/
-acpi_status
-acpi_ns_convert_to_integer(union acpi_operand_object *original_object,
-			   union acpi_operand_object **return_object)
+
+ACPI_STATUS
+AcpiNsConvertToInteger (
+    ACPI_OPERAND_OBJECT     *OriginalObject,
+    ACPI_OPERAND_OBJECT     **ReturnObject)
 {
-	union acpi_operand_object *new_object;
-	acpi_status status;
-	u64 value = 0;
-	u32 i;
+    ACPI_OPERAND_OBJECT     *NewObject;
+    ACPI_STATUS             Status;
+    UINT64                  Value = 0;
+    UINT32                  i;
 
-	switch (original_object->common.type) {
-	case ACPI_TYPE_STRING:
 
-		/* String-to-Integer conversion */
+    switch (OriginalObject->Common.Type)
+    {
+    case ACPI_TYPE_STRING:
 
-		status = acpi_ut_strtoul64(original_object->string.pointer,
-					   ACPI_ANY_BASE, &value);
-		if (ACPI_FAILURE(status)) {
-			return (status);
-		}
-		break;
+        /* String-to-Integer conversion */
 
-	case ACPI_TYPE_BUFFER:
+        Status = AcpiUtStrtoul64 (OriginalObject->String.Pointer,
+                    ACPI_ANY_BASE, &Value);
+        if (ACPI_FAILURE (Status))
+        {
+            return (Status);
+        }
+        break;
 
-		/* Buffer-to-Integer conversion. Max buffer size is 64 bits. */
+    case ACPI_TYPE_BUFFER:
 
-		if (original_object->buffer.length > 8) {
-			return (AE_AML_OPERAND_TYPE);
-		}
+        /* Buffer-to-Integer conversion. Max buffer size is 64 bits. */
 
-		/* Extract each buffer byte to create the integer */
+        if (OriginalObject->Buffer.Length > 8)
+        {
+            return (AE_AML_OPERAND_TYPE);
+        }
 
-		for (i = 0; i < original_object->buffer.length; i++) {
-			value |=
-			    ((u64)original_object->buffer.
-			     pointer[i] << (i * 8));
-		}
-		break;
+        /* Extract each buffer byte to create the integer */
 
-	default:
+        for (i = 0; i < OriginalObject->Buffer.Length; i++)
+        {
+            Value |= ((UINT64) OriginalObject->Buffer.Pointer[i] << (i * 8));
+        }
+        break;
 
-		return (AE_AML_OPERAND_TYPE);
-	}
+    default:
 
-	new_object = acpi_ut_create_integer_object(value);
-	if (!new_object) {
-		return (AE_NO_MEMORY);
-	}
+        return (AE_AML_OPERAND_TYPE);
+    }
 
-	*return_object = new_object;
-	return (AE_OK);
+    NewObject = AcpiUtCreateIntegerObject (Value);
+    if (!NewObject)
+    {
+        return (AE_NO_MEMORY);
+    }
+
+    *ReturnObject = NewObject;
+    return (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_convert_to_string
+ * FUNCTION:    AcpiNsConvertToString
  *
- * PARAMETERS:  original_object     - Object to be converted
- *              return_object       - Where the new converted object is returned
+ * PARAMETERS:  OriginalObject      - Object to be converted
+ *              ReturnObject        - Where the new converted object is returned
  *
  * RETURN:      Status. AE_OK if conversion was successful.
  *
@@ -129,83 +211,91 @@ acpi_ns_convert_to_integer(union acpi_operand_object *original_object,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ns_convert_to_string(union acpi_operand_object *original_object,
-			  union acpi_operand_object **return_object)
+ACPI_STATUS
+AcpiNsConvertToString (
+    ACPI_OPERAND_OBJECT     *OriginalObject,
+    ACPI_OPERAND_OBJECT     **ReturnObject)
 {
-	union acpi_operand_object *new_object;
-	acpi_size length;
-	acpi_status status;
+    ACPI_OPERAND_OBJECT     *NewObject;
+    ACPI_SIZE               Length;
+    ACPI_STATUS             Status;
 
-	switch (original_object->common.type) {
-	case ACPI_TYPE_INTEGER:
-		/*
-		 * Integer-to-String conversion. Commonly, convert
-		 * an integer of value 0 to a NULL string. The last element of
-		 * _BIF and _BIX packages occasionally need this fix.
-		 */
-		if (original_object->integer.value == 0) {
 
-			/* Allocate a new NULL string object */
+    switch (OriginalObject->Common.Type)
+    {
+    case ACPI_TYPE_INTEGER:
+        /*
+         * Integer-to-String conversion. Commonly, convert
+         * an integer of value 0 to a NULL string. The last element of
+         * _BIF and _BIX packages occasionally need this fix.
+         */
+        if (OriginalObject->Integer.Value == 0)
+        {
+            /* Allocate a new NULL string object */
 
-			new_object = acpi_ut_create_string_object(0);
-			if (!new_object) {
-				return (AE_NO_MEMORY);
-			}
-		} else {
-			status =
-			    acpi_ex_convert_to_string(original_object,
-						      &new_object,
-						      ACPI_IMPLICIT_CONVERT_HEX);
-			if (ACPI_FAILURE(status)) {
-				return (status);
-			}
-		}
-		break;
+            NewObject = AcpiUtCreateStringObject (0);
+            if (!NewObject)
+            {
+                return (AE_NO_MEMORY);
+            }
+        }
+        else
+        {
+            Status = AcpiExConvertToString (OriginalObject, &NewObject,
+                        ACPI_IMPLICIT_CONVERT_HEX);
+            if (ACPI_FAILURE (Status))
+            {
+                return (Status);
+            }
+        }
+        break;
 
-	case ACPI_TYPE_BUFFER:
-		/*
-		 * Buffer-to-String conversion. Use a to_string
-		 * conversion, no transform performed on the buffer data. The best
-		 * example of this is the _BIF method, where the string data from
-		 * the battery is often (incorrectly) returned as buffer object(s).
-		 */
-		length = 0;
-		while ((length < original_object->buffer.length) &&
-		       (original_object->buffer.pointer[length])) {
-			length++;
-		}
+    case ACPI_TYPE_BUFFER:
+        /*
+         * Buffer-to-String conversion. Use a ToString
+         * conversion, no transform performed on the buffer data. The best
+         * example of this is the _BIF method, where the string data from
+         * the battery is often (incorrectly) returned as buffer object(s).
+         */
+        Length = 0;
+        while ((Length < OriginalObject->Buffer.Length) &&
+                (OriginalObject->Buffer.Pointer[Length]))
+        {
+            Length++;
+        }
 
-		/* Allocate a new string object */
+        /* Allocate a new string object */
 
-		new_object = acpi_ut_create_string_object(length);
-		if (!new_object) {
-			return (AE_NO_MEMORY);
-		}
+        NewObject = AcpiUtCreateStringObject (Length);
+        if (!NewObject)
+        {
+            return (AE_NO_MEMORY);
+        }
 
-		/*
-		 * Copy the raw buffer data with no transform. String is already NULL
-		 * terminated at Length+1.
-		 */
-		ACPI_MEMCPY(new_object->string.pointer,
-			    original_object->buffer.pointer, length);
-		break;
+        /*
+         * Copy the raw buffer data with no transform. String is already NULL
+         * terminated at Length+1.
+         */
+        ACPI_MEMCPY (NewObject->String.Pointer,
+            OriginalObject->Buffer.Pointer, Length);
+        break;
 
-	default:
+    default:
 
-		return (AE_AML_OPERAND_TYPE);
-	}
+        return (AE_AML_OPERAND_TYPE);
+    }
 
-	*return_object = new_object;
-	return (AE_OK);
+    *ReturnObject = NewObject;
+    return (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_convert_to_buffer
+ * FUNCTION:    AcpiNsConvertToBuffer
  *
- * PARAMETERS:  original_object     - Object to be converted
- *              return_object       - Where the new converted object is returned
+ * PARAMETERS:  OriginalObject      - Object to be converted
+ *              ReturnObject        - Where the new converted object is returned
  *
  * RETURN:      Status. AE_OK if conversion was successful.
  *
@@ -213,103 +303,109 @@ acpi_ns_convert_to_string(union acpi_operand_object *original_object,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ns_convert_to_buffer(union acpi_operand_object *original_object,
-			  union acpi_operand_object **return_object)
+ACPI_STATUS
+AcpiNsConvertToBuffer (
+    ACPI_OPERAND_OBJECT     *OriginalObject,
+    ACPI_OPERAND_OBJECT     **ReturnObject)
 {
-	union acpi_operand_object *new_object;
-	acpi_status status;
-	union acpi_operand_object **elements;
-	u32 *dword_buffer;
-	u32 count;
-	u32 i;
+    ACPI_OPERAND_OBJECT     *NewObject;
+    ACPI_STATUS             Status;
+    ACPI_OPERAND_OBJECT     **Elements;
+    UINT32                  *DwordBuffer;
+    UINT32                  Count;
+    UINT32                  i;
 
-	switch (original_object->common.type) {
-	case ACPI_TYPE_INTEGER:
-		/*
-		 * Integer-to-Buffer conversion.
-		 * Convert the Integer to a packed-byte buffer. _MAT and other
-		 * objects need this sometimes, if a read has been performed on a
-		 * Field object that is less than or equal to the global integer
-		 * size (32 or 64 bits).
-		 */
-		status =
-		    acpi_ex_convert_to_buffer(original_object, &new_object);
-		if (ACPI_FAILURE(status)) {
-			return (status);
-		}
-		break;
 
-	case ACPI_TYPE_STRING:
+    switch (OriginalObject->Common.Type)
+    {
+    case ACPI_TYPE_INTEGER:
+        /*
+         * Integer-to-Buffer conversion.
+         * Convert the Integer to a packed-byte buffer. _MAT and other
+         * objects need this sometimes, if a read has been performed on a
+         * Field object that is less than or equal to the global integer
+         * size (32 or 64 bits).
+         */
+        Status = AcpiExConvertToBuffer (OriginalObject, &NewObject);
+        if (ACPI_FAILURE (Status))
+        {
+            return (Status);
+        }
+        break;
 
-		/* String-to-Buffer conversion. Simple data copy */
+    case ACPI_TYPE_STRING:
 
-		new_object =
-		    acpi_ut_create_buffer_object(original_object->string.
-						 length);
-		if (!new_object) {
-			return (AE_NO_MEMORY);
-		}
+        /* String-to-Buffer conversion. Simple data copy */
 
-		ACPI_MEMCPY(new_object->buffer.pointer,
-			    original_object->string.pointer,
-			    original_object->string.length);
-		break;
+        NewObject = AcpiUtCreateBufferObject (OriginalObject->String.Length);
+        if (!NewObject)
+        {
+            return (AE_NO_MEMORY);
+        }
 
-	case ACPI_TYPE_PACKAGE:
-		/*
-		 * This case is often seen for predefined names that must return a
-		 * Buffer object with multiple DWORD integers within. For example,
-		 * _FDE and _GTM. The Package can be converted to a Buffer.
-		 */
+        ACPI_MEMCPY (NewObject->Buffer.Pointer,
+            OriginalObject->String.Pointer, OriginalObject->String.Length);
+        break;
 
-		/* All elements of the Package must be integers */
+    case ACPI_TYPE_PACKAGE:
+        /*
+         * This case is often seen for predefined names that must return a
+         * Buffer object with multiple DWORD integers within. For example,
+         * _FDE and _GTM. The Package can be converted to a Buffer.
+         */
 
-		elements = original_object->package.elements;
-		count = original_object->package.count;
+        /* All elements of the Package must be integers */
 
-		for (i = 0; i < count; i++) {
-			if ((!*elements) ||
-			    ((*elements)->common.type != ACPI_TYPE_INTEGER)) {
-				return (AE_AML_OPERAND_TYPE);
-			}
-			elements++;
-		}
+        Elements = OriginalObject->Package.Elements;
+        Count = OriginalObject->Package.Count;
 
-		/* Create the new buffer object to replace the Package */
+        for (i = 0; i < Count; i++)
+        {
+            if ((!*Elements) ||
+                ((*Elements)->Common.Type != ACPI_TYPE_INTEGER))
+            {
+                return (AE_AML_OPERAND_TYPE);
+            }
+            Elements++;
+        }
 
-		new_object = acpi_ut_create_buffer_object(ACPI_MUL_4(count));
-		if (!new_object) {
-			return (AE_NO_MEMORY);
-		}
+        /* Create the new buffer object to replace the Package */
 
-		/* Copy the package elements (integers) to the buffer as DWORDs */
+        NewObject = AcpiUtCreateBufferObject (ACPI_MUL_4 (Count));
+        if (!NewObject)
+        {
+            return (AE_NO_MEMORY);
+        }
 
-		elements = original_object->package.elements;
-		dword_buffer = ACPI_CAST_PTR(u32, new_object->buffer.pointer);
+        /* Copy the package elements (integers) to the buffer as DWORDs */
 
-		for (i = 0; i < count; i++) {
-			*dword_buffer = (u32)(*elements)->integer.value;
-			dword_buffer++;
-			elements++;
-		}
-		break;
+        Elements = OriginalObject->Package.Elements;
+        DwordBuffer = ACPI_CAST_PTR (UINT32, NewObject->Buffer.Pointer);
 
-	default:
+        for (i = 0; i < Count; i++)
+        {
+            *DwordBuffer = (UINT32) (*Elements)->Integer.Value;
+            DwordBuffer++;
+            Elements++;
+        }
+        break;
 
-		return (AE_AML_OPERAND_TYPE);
-	}
+    default:
 
-	*return_object = new_object;
-	return (AE_OK);
+        return (AE_AML_OPERAND_TYPE);
+    }
+
+    *ReturnObject = NewObject;
+    return (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_convert_to_unicode
+ * FUNCTION:    AcpiNsConvertToUnicode
  *
- * PARAMETERS:  original_object     - ASCII String Object to be converted
- *              return_object       - Where the new converted object is returned
+ * PARAMETERS:  OriginalObject      - ASCII String Object to be converted
+ *              ReturnObject        - Where the new converted object is returned
  *
  * RETURN:      Status. AE_OK if conversion was successful.
  *
@@ -317,130 +413,144 @@ acpi_ns_convert_to_buffer(union acpi_operand_object *original_object,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ns_convert_to_unicode(union acpi_operand_object *original_object,
-			   union acpi_operand_object **return_object)
+ACPI_STATUS
+AcpiNsConvertToUnicode (
+    ACPI_OPERAND_OBJECT     *OriginalObject,
+    ACPI_OPERAND_OBJECT     **ReturnObject)
 {
-	union acpi_operand_object *new_object;
-	char *ascii_string;
-	u16 *unicode_buffer;
-	u32 unicode_length;
-	u32 i;
+    ACPI_OPERAND_OBJECT     *NewObject;
+    char                    *AsciiString;
+    UINT16                  *UnicodeBuffer;
+    UINT32                  UnicodeLength;
+    UINT32                  i;
 
-	if (!original_object) {
-		return (AE_OK);
-	}
 
-	/* If a Buffer was returned, it must be at least two bytes long */
+    if (!OriginalObject)
+    {
+        return (AE_OK);
+    }
 
-	if (original_object->common.type == ACPI_TYPE_BUFFER) {
-		if (original_object->buffer.length < 2) {
-			return (AE_AML_OPERAND_VALUE);
-		}
+    /* If a Buffer was returned, it must be at least two bytes long */
 
-		*return_object = NULL;
-		return (AE_OK);
-	}
+    if (OriginalObject->Common.Type == ACPI_TYPE_BUFFER)
+    {
+        if (OriginalObject->Buffer.Length < 2)
+        {
+            return (AE_AML_OPERAND_VALUE);
+        }
 
-	/*
-	 * The original object is an ASCII string. Convert this string to
-	 * a unicode buffer.
-	 */
-	ascii_string = original_object->string.pointer;
-	unicode_length = (original_object->string.length * 2) + 2;
+        *ReturnObject = NULL;
+        return (AE_OK);
+    }
 
-	/* Create a new buffer object for the Unicode data */
+    /*
+     * The original object is an ASCII string. Convert this string to
+     * a unicode buffer.
+     */
+    AsciiString = OriginalObject->String.Pointer;
+    UnicodeLength = (OriginalObject->String.Length * 2) + 2;
 
-	new_object = acpi_ut_create_buffer_object(unicode_length);
-	if (!new_object) {
-		return (AE_NO_MEMORY);
-	}
+    /* Create a new buffer object for the Unicode data */
 
-	unicode_buffer = ACPI_CAST_PTR(u16, new_object->buffer.pointer);
+    NewObject = AcpiUtCreateBufferObject (UnicodeLength);
+    if (!NewObject)
+    {
+        return (AE_NO_MEMORY);
+    }
 
-	/* Convert ASCII to Unicode */
+    UnicodeBuffer = ACPI_CAST_PTR (UINT16, NewObject->Buffer.Pointer);
 
-	for (i = 0; i < original_object->string.length; i++) {
-		unicode_buffer[i] = (u16)ascii_string[i];
-	}
+    /* Convert ASCII to Unicode */
 
-	*return_object = new_object;
-	return (AE_OK);
+    for (i = 0; i < OriginalObject->String.Length; i++)
+    {
+        UnicodeBuffer[i] = (UINT16) AsciiString[i];
+    }
+
+    *ReturnObject = NewObject;
+    return (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_convert_to_resource
+ * FUNCTION:    AcpiNsConvertToResource
  *
- * PARAMETERS:  original_object     - Object to be converted
- *              return_object       - Where the new converted object is returned
+ * PARAMETERS:  OriginalObject      - Object to be converted
+ *              ReturnObject        - Where the new converted object is returned
  *
  * RETURN:      Status. AE_OK if conversion was successful
  *
- * DESCRIPTION: Attempt to convert a Integer object to a resource_template
+ * DESCRIPTION: Attempt to convert a Integer object to a ResourceTemplate
  *              Buffer.
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ns_convert_to_resource(union acpi_operand_object *original_object,
-			    union acpi_operand_object **return_object)
+ACPI_STATUS
+AcpiNsConvertToResource (
+    ACPI_OPERAND_OBJECT     *OriginalObject,
+    ACPI_OPERAND_OBJECT     **ReturnObject)
 {
-	union acpi_operand_object *new_object;
-	u8 *buffer;
+    ACPI_OPERAND_OBJECT     *NewObject;
+    UINT8                   *Buffer;
 
-	/*
-	 * We can fix the following cases for an expected resource template:
-	 * 1. No return value (interpreter slack mode is disabled)
-	 * 2. A "Return (Zero)" statement
-	 * 3. A "Return empty buffer" statement
-	 *
-	 * We will return a buffer containing a single end_tag
-	 * resource descriptor.
-	 */
-	if (original_object) {
-		switch (original_object->common.type) {
-		case ACPI_TYPE_INTEGER:
 
-			/* We can only repair an Integer==0 */
+    /*
+     * We can fix the following cases for an expected resource template:
+     * 1. No return value (interpreter slack mode is disabled)
+     * 2. A "Return (Zero)" statement
+     * 3. A "Return empty buffer" statement
+     *
+     * We will return a buffer containing a single EndTag
+     * resource descriptor.
+     */
+    if (OriginalObject)
+    {
+        switch (OriginalObject->Common.Type)
+        {
+        case ACPI_TYPE_INTEGER:
 
-			if (original_object->integer.value) {
-				return (AE_AML_OPERAND_TYPE);
-			}
-			break;
+            /* We can only repair an Integer==0 */
 
-		case ACPI_TYPE_BUFFER:
+            if (OriginalObject->Integer.Value)
+            {
+                return (AE_AML_OPERAND_TYPE);
+            }
+            break;
 
-			if (original_object->buffer.length) {
+        case ACPI_TYPE_BUFFER:
 
-				/* Additional checks can be added in the future */
+            if (OriginalObject->Buffer.Length)
+            {
+                /* Additional checks can be added in the future */
 
-				*return_object = NULL;
-				return (AE_OK);
-			}
-			break;
+                *ReturnObject = NULL;
+                return (AE_OK);
+            }
+            break;
 
-		case ACPI_TYPE_STRING:
-		default:
+        case ACPI_TYPE_STRING:
+        default:
 
-			return (AE_AML_OPERAND_TYPE);
-		}
-	}
+            return (AE_AML_OPERAND_TYPE);
+        }
+    }
 
-	/* Create the new buffer object for the resource descriptor */
+    /* Create the new buffer object for the resource descriptor */
 
-	new_object = acpi_ut_create_buffer_object(2);
-	if (!new_object) {
-		return (AE_NO_MEMORY);
-	}
+    NewObject = AcpiUtCreateBufferObject (2);
+    if (!NewObject)
+    {
+        return (AE_NO_MEMORY);
+    }
 
-	buffer = ACPI_CAST_PTR(u8, new_object->buffer.pointer);
+    Buffer = ACPI_CAST_PTR (UINT8, NewObject->Buffer.Pointer);
 
-	/* Initialize the Buffer with a single end_tag descriptor */
+    /* Initialize the Buffer with a single EndTag descriptor */
 
-	buffer[0] = (ACPI_RESOURCE_NAME_END_TAG | ASL_RDESC_END_TAG_SIZE);
-	buffer[1] = 0x00;
+    Buffer[0] = (ACPI_RESOURCE_NAME_END_TAG | ASL_RDESC_END_TAG_SIZE);
+    Buffer[1] = 0x00;
 
-	*return_object = new_object;
-	return (AE_OK);
+    *ReturnObject = NewObject;
+    return (AE_OK);
 }

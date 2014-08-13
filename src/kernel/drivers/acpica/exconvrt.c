@@ -4,63 +4,145 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+
+#define __EXCONVRT_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acinterp.h"
 #include "amlcode.h"
 
+
 #define _COMPONENT          ACPI_EXECUTER
-ACPI_MODULE_NAME("exconvrt")
+        ACPI_MODULE_NAME    ("exconvrt")
 
 /* Local prototypes */
-static u32
-acpi_ex_convert_to_ascii(u64 integer, u16 base, u8 *string, u8 max_length);
+
+static UINT32
+AcpiExConvertToAscii (
+    UINT64                  Integer,
+    UINT16                  Base,
+    UINT8                   *String,
+    UINT8                   MaxLength);
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_convert_to_integer
+ * FUNCTION:    AcpiExConvertToInteger
  *
- * PARAMETERS:  obj_desc        - Object to be converted. Must be an
+ * PARAMETERS:  ObjDesc         - Object to be converted. Must be an
  *                                Integer, Buffer, or String
- *              result_desc     - Where the new Integer object is returned
- *              flags           - Used for string conversion
+ *              ResultDesc      - Where the new Integer object is returned
+ *              Flags           - Used for string conversion
  *
  * RETURN:      Status
  *
@@ -68,127 +150,139 @@ acpi_ex_convert_to_ascii(u64 integer, u16 base, u8 *string, u8 max_length);
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ex_convert_to_integer(union acpi_operand_object *obj_desc,
-			   union acpi_operand_object **result_desc, u32 flags)
+ACPI_STATUS
+AcpiExConvertToInteger (
+    ACPI_OPERAND_OBJECT     *ObjDesc,
+    ACPI_OPERAND_OBJECT     **ResultDesc,
+    UINT32                  Flags)
 {
-	union acpi_operand_object *return_desc;
-	u8 *pointer;
-	u64 result;
-	u32 i;
-	u32 count;
-	acpi_status status;
+    ACPI_OPERAND_OBJECT     *ReturnDesc;
+    UINT8                   *Pointer;
+    UINT64                  Result;
+    UINT32                  i;
+    UINT32                  Count;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE_PTR(ex_convert_to_integer, obj_desc);
 
-	switch (obj_desc->common.type) {
-	case ACPI_TYPE_INTEGER:
+    ACPI_FUNCTION_TRACE_PTR (ExConvertToInteger, ObjDesc);
 
-		/* No conversion necessary */
 
-		*result_desc = obj_desc;
-		return_ACPI_STATUS(AE_OK);
+    switch (ObjDesc->Common.Type)
+    {
+    case ACPI_TYPE_INTEGER:
 
-	case ACPI_TYPE_BUFFER:
-	case ACPI_TYPE_STRING:
+        /* No conversion necessary */
 
-		/* Note: Takes advantage of common buffer/string fields */
+        *ResultDesc = ObjDesc;
+        return_ACPI_STATUS (AE_OK);
 
-		pointer = obj_desc->buffer.pointer;
-		count = obj_desc->buffer.length;
-		break;
+    case ACPI_TYPE_BUFFER:
+    case ACPI_TYPE_STRING:
 
-	default:
+        /* Note: Takes advantage of common buffer/string fields */
 
-		return_ACPI_STATUS(AE_TYPE);
-	}
+        Pointer = ObjDesc->Buffer.Pointer;
+        Count   = ObjDesc->Buffer.Length;
+        break;
 
-	/*
-	 * Convert the buffer/string to an integer. Note that both buffers and
-	 * strings are treated as raw data - we don't convert ascii to hex for
-	 * strings.
-	 *
-	 * There are two terminating conditions for the loop:
-	 * 1) The size of an integer has been reached, or
-	 * 2) The end of the buffer or string has been reached
-	 */
-	result = 0;
+    default:
 
-	/* String conversion is different than Buffer conversion */
+        return_ACPI_STATUS (AE_TYPE);
+    }
 
-	switch (obj_desc->common.type) {
-	case ACPI_TYPE_STRING:
-		/*
-		 * Convert string to an integer - for most cases, the string must be
-		 * hexadecimal as per the ACPI specification. The only exception (as
-		 * of ACPI 3.0) is that the to_integer() operator allows both decimal
-		 * and hexadecimal strings (hex prefixed with "0x").
-		 */
-		status = acpi_ut_strtoul64((char *)pointer, flags, &result);
-		if (ACPI_FAILURE(status)) {
-			return_ACPI_STATUS(status);
-		}
-		break;
+    /*
+     * Convert the buffer/string to an integer. Note that both buffers and
+     * strings are treated as raw data - we don't convert ascii to hex for
+     * strings.
+     *
+     * There are two terminating conditions for the loop:
+     * 1) The size of an integer has been reached, or
+     * 2) The end of the buffer or string has been reached
+     */
+    Result = 0;
 
-	case ACPI_TYPE_BUFFER:
+    /* String conversion is different than Buffer conversion */
 
-		/* Check for zero-length buffer */
+    switch (ObjDesc->Common.Type)
+    {
+    case ACPI_TYPE_STRING:
+        /*
+         * Convert string to an integer - for most cases, the string must be
+         * hexadecimal as per the ACPI specification. The only exception (as
+         * of ACPI 3.0) is that the ToInteger() operator allows both decimal
+         * and hexadecimal strings (hex prefixed with "0x").
+         */
+        Status = AcpiUtStrtoul64 ((char *) Pointer, Flags, &Result);
+        if (ACPI_FAILURE (Status))
+        {
+            return_ACPI_STATUS (Status);
+        }
+        break;
 
-		if (!count) {
-			return_ACPI_STATUS(AE_AML_BUFFER_LIMIT);
-		}
+    case ACPI_TYPE_BUFFER:
 
-		/* Transfer no more than an integer's worth of data */
+        /* Check for zero-length buffer */
 
-		if (count > acpi_gbl_integer_byte_width) {
-			count = acpi_gbl_integer_byte_width;
-		}
+        if (!Count)
+        {
+            return_ACPI_STATUS (AE_AML_BUFFER_LIMIT);
+        }
 
-		/*
-		 * Convert buffer to an integer - we simply grab enough raw data
-		 * from the buffer to fill an integer
-		 */
-		for (i = 0; i < count; i++) {
-			/*
-			 * Get next byte and shift it into the Result.
-			 * Little endian is used, meaning that the first byte of the buffer
-			 * is the LSB of the integer
-			 */
-			result |= (((u64) pointer[i]) << (i * 8));
-		}
-		break;
+        /* Transfer no more than an integer's worth of data */
 
-	default:
+        if (Count > AcpiGbl_IntegerByteWidth)
+        {
+            Count = AcpiGbl_IntegerByteWidth;
+        }
 
-		/* No other types can get here */
+        /*
+         * Convert buffer to an integer - we simply grab enough raw data
+         * from the buffer to fill an integer
+         */
+        for (i = 0; i < Count; i++)
+        {
+            /*
+             * Get next byte and shift it into the Result.
+             * Little endian is used, meaning that the first byte of the buffer
+             * is the LSB of the integer
+             */
+            Result |= (((UINT64) Pointer[i]) << (i * 8));
+        }
+        break;
 
-		break;
-	}
+    default:
 
-	/* Create a new integer */
+        /* No other types can get here */
 
-	return_desc = acpi_ut_create_integer_object(result);
-	if (!return_desc) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
+        break;
+    }
 
-	ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "Converted value: %8.8X%8.8X\n",
-			  ACPI_FORMAT_UINT64(result)));
+    /* Create a new integer */
 
-	/* Save the Result */
+    ReturnDesc = AcpiUtCreateIntegerObject (Result);
+    if (!ReturnDesc)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	(void)acpi_ex_truncate_for32bit_table(return_desc);
-	*result_desc = return_desc;
-	return_ACPI_STATUS(AE_OK);
+    ACPI_DEBUG_PRINT ((ACPI_DB_EXEC, "Converted value: %8.8X%8.8X\n",
+        ACPI_FORMAT_UINT64 (Result)));
+
+    /* Save the Result */
+
+    (void) AcpiExTruncateFor32bitTable (ReturnDesc);
+    *ResultDesc = ReturnDesc;
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_convert_to_buffer
+ * FUNCTION:    AcpiExConvertToBuffer
  *
- * PARAMETERS:  obj_desc        - Object to be converted. Must be an
+ * PARAMETERS:  ObjDesc         - Object to be converted. Must be an
  *                                Integer, Buffer, or String
- *              result_desc     - Where the new buffer object is returned
+ *              ResultDesc      - Where the new buffer object is returned
  *
  * RETURN:      Status
  *
@@ -196,86 +290,92 @@ acpi_ex_convert_to_integer(union acpi_operand_object *obj_desc,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ex_convert_to_buffer(union acpi_operand_object *obj_desc,
-			  union acpi_operand_object **result_desc)
+ACPI_STATUS
+AcpiExConvertToBuffer (
+    ACPI_OPERAND_OBJECT     *ObjDesc,
+    ACPI_OPERAND_OBJECT     **ResultDesc)
 {
-	union acpi_operand_object *return_desc;
-	u8 *new_buf;
+    ACPI_OPERAND_OBJECT     *ReturnDesc;
+    UINT8                   *NewBuf;
 
-	ACPI_FUNCTION_TRACE_PTR(ex_convert_to_buffer, obj_desc);
 
-	switch (obj_desc->common.type) {
-	case ACPI_TYPE_BUFFER:
+    ACPI_FUNCTION_TRACE_PTR (ExConvertToBuffer, ObjDesc);
 
-		/* No conversion necessary */
 
-		*result_desc = obj_desc;
-		return_ACPI_STATUS(AE_OK);
+    switch (ObjDesc->Common.Type)
+    {
+    case ACPI_TYPE_BUFFER:
 
-	case ACPI_TYPE_INTEGER:
-		/*
-		 * Create a new Buffer object.
-		 * Need enough space for one integer
-		 */
-		return_desc =
-		    acpi_ut_create_buffer_object(acpi_gbl_integer_byte_width);
-		if (!return_desc) {
-			return_ACPI_STATUS(AE_NO_MEMORY);
-		}
+        /* No conversion necessary */
 
-		/* Copy the integer to the buffer, LSB first */
+        *ResultDesc = ObjDesc;
+        return_ACPI_STATUS (AE_OK);
 
-		new_buf = return_desc->buffer.pointer;
-		ACPI_MEMCPY(new_buf,
-			    &obj_desc->integer.value,
-			    acpi_gbl_integer_byte_width);
-		break;
 
-	case ACPI_TYPE_STRING:
-		/*
-		 * Create a new Buffer object
-		 * Size will be the string length
-		 *
-		 * NOTE: Add one to the string length to include the null terminator.
-		 * The ACPI spec is unclear on this subject, but there is existing
-		 * ASL/AML code that depends on the null being transferred to the new
-		 * buffer.
-		 */
-		return_desc = acpi_ut_create_buffer_object((acpi_size)
-							   obj_desc->string.
-							   length + 1);
-		if (!return_desc) {
-			return_ACPI_STATUS(AE_NO_MEMORY);
-		}
+    case ACPI_TYPE_INTEGER:
+        /*
+         * Create a new Buffer object.
+         * Need enough space for one integer
+         */
+        ReturnDesc = AcpiUtCreateBufferObject (AcpiGbl_IntegerByteWidth);
+        if (!ReturnDesc)
+        {
+            return_ACPI_STATUS (AE_NO_MEMORY);
+        }
 
-		/* Copy the string to the buffer */
+        /* Copy the integer to the buffer, LSB first */
 
-		new_buf = return_desc->buffer.pointer;
-		ACPI_STRNCPY((char *)new_buf, (char *)obj_desc->string.pointer,
-			     obj_desc->string.length);
-		break;
+        NewBuf = ReturnDesc->Buffer.Pointer;
+        ACPI_MEMCPY (NewBuf,
+                        &ObjDesc->Integer.Value,
+                        AcpiGbl_IntegerByteWidth);
+        break;
 
-	default:
+    case ACPI_TYPE_STRING:
+        /*
+         * Create a new Buffer object
+         * Size will be the string length
+         *
+         * NOTE: Add one to the string length to include the null terminator.
+         * The ACPI spec is unclear on this subject, but there is existing
+         * ASL/AML code that depends on the null being transferred to the new
+         * buffer.
+         */
+        ReturnDesc = AcpiUtCreateBufferObject (
+                        (ACPI_SIZE) ObjDesc->String.Length + 1);
+        if (!ReturnDesc)
+        {
+            return_ACPI_STATUS (AE_NO_MEMORY);
+        }
 
-		return_ACPI_STATUS(AE_TYPE);
-	}
+        /* Copy the string to the buffer */
 
-	/* Mark buffer initialized */
+        NewBuf = ReturnDesc->Buffer.Pointer;
+        ACPI_STRNCPY ((char *) NewBuf, (char *) ObjDesc->String.Pointer,
+            ObjDesc->String.Length);
+        break;
 
-	return_desc->common.flags |= AOPOBJ_DATA_VALID;
-	*result_desc = return_desc;
-	return_ACPI_STATUS(AE_OK);
+    default:
+
+        return_ACPI_STATUS (AE_TYPE);
+    }
+
+    /* Mark buffer initialized */
+
+    ReturnDesc->Common.Flags |= AOPOBJ_DATA_VALID;
+    *ResultDesc = ReturnDesc;
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_convert_to_ascii
+ * FUNCTION:    AcpiExConvertToAscii
  *
- * PARAMETERS:  integer         - Value to be converted
- *              base            - ACPI_STRING_DECIMAL or ACPI_STRING_HEX
- *              string          - Where the string is returned
- *              data_width      - Size of data item to be converted, in bytes
+ * PARAMETERS:  Integer         - Value to be converted
+ *              Base            - ACPI_STRING_DECIMAL or ACPI_STRING_HEX
+ *              String          - Where the string is returned
+ *              DataWidth       - Size of data item to be converted, in bytes
  *
  * RETURN:      Actual string length
  *
@@ -283,112 +383,122 @@ acpi_ex_convert_to_buffer(union acpi_operand_object *obj_desc,
  *
  ******************************************************************************/
 
-static u32
-acpi_ex_convert_to_ascii(u64 integer, u16 base, u8 *string, u8 data_width)
+static UINT32
+AcpiExConvertToAscii (
+    UINT64                  Integer,
+    UINT16                  Base,
+    UINT8                   *String,
+    UINT8                   DataWidth)
 {
-	u64 digit;
-	u32 i;
-	u32 j;
-	u32 k = 0;
-	u32 hex_length;
-	u32 decimal_length;
-	u32 remainder;
-	u8 supress_zeros;
+    UINT64                  Digit;
+    UINT32                  i;
+    UINT32                  j;
+    UINT32                  k = 0;
+    UINT32                  HexLength;
+    UINT32                  DecimalLength;
+    UINT32                  Remainder;
+    BOOLEAN                 SupressZeros;
 
-	ACPI_FUNCTION_ENTRY();
 
-	switch (base) {
-	case 10:
+    ACPI_FUNCTION_ENTRY ();
 
-		/* Setup max length for the decimal number */
 
-		switch (data_width) {
-		case 1:
+    switch (Base)
+    {
+    case 10:
 
-			decimal_length = ACPI_MAX8_DECIMAL_DIGITS;
-			break;
+        /* Setup max length for the decimal number */
 
-		case 4:
+        switch (DataWidth)
+        {
+        case 1:
 
-			decimal_length = ACPI_MAX32_DECIMAL_DIGITS;
-			break;
+            DecimalLength = ACPI_MAX8_DECIMAL_DIGITS;
+            break;
 
-		case 8:
-		default:
+        case 4:
 
-			decimal_length = ACPI_MAX64_DECIMAL_DIGITS;
-			break;
-		}
+            DecimalLength = ACPI_MAX32_DECIMAL_DIGITS;
+            break;
 
-		supress_zeros = TRUE;	/* No leading zeros */
-		remainder = 0;
+        case 8:
+        default:
 
-		for (i = decimal_length; i > 0; i--) {
+            DecimalLength = ACPI_MAX64_DECIMAL_DIGITS;
+            break;
+        }
 
-			/* Divide by nth factor of 10 */
+        SupressZeros = TRUE;     /* No leading zeros */
+        Remainder = 0;
 
-			digit = integer;
-			for (j = 0; j < i; j++) {
-				(void)acpi_ut_short_divide(digit, 10, &digit,
-							   &remainder);
-			}
+        for (i = DecimalLength; i > 0; i--)
+        {
+            /* Divide by nth factor of 10 */
 
-			/* Handle leading zeros */
+            Digit = Integer;
+            for (j = 0; j < i; j++)
+            {
+                (void) AcpiUtShortDivide (Digit, 10, &Digit, &Remainder);
+            }
 
-			if (remainder != 0) {
-				supress_zeros = FALSE;
-			}
+            /* Handle leading zeros */
 
-			if (!supress_zeros) {
-				string[k] = (u8) (ACPI_ASCII_ZERO + remainder);
-				k++;
-			}
-		}
-		break;
+            if (Remainder != 0)
+            {
+                SupressZeros = FALSE;
+            }
 
-	case 16:
+            if (!SupressZeros)
+            {
+                String[k] = (UINT8) (ACPI_ASCII_ZERO + Remainder);
+                k++;
+            }
+        }
+        break;
 
-		/* hex_length: 2 ascii hex chars per data byte */
+    case 16:
 
-		hex_length = ACPI_MUL_2(data_width);
-		for (i = 0, j = (hex_length - 1); i < hex_length; i++, j--) {
+        /* HexLength: 2 ascii hex chars per data byte */
 
-			/* Get one hex digit, most significant digits first */
+        HexLength = ACPI_MUL_2 (DataWidth);
+        for (i = 0, j = (HexLength-1); i < HexLength; i++, j--)
+        {
+            /* Get one hex digit, most significant digits first */
 
-			string[k] =
-			    (u8) acpi_ut_hex_to_ascii_char(integer,
-							   ACPI_MUL_4(j));
-			k++;
-		}
-		break;
+            String[k] = (UINT8) AcpiUtHexToAsciiChar (Integer, ACPI_MUL_4 (j));
+            k++;
+        }
+        break;
 
-	default:
-		return (0);
-	}
+    default:
+        return (0);
+    }
 
-	/*
-	 * Since leading zeros are suppressed, we must check for the case where
-	 * the integer equals 0
-	 *
-	 * Finally, null terminate the string and return the length
-	 */
-	if (!k) {
-		string[0] = ACPI_ASCII_ZERO;
-		k = 1;
-	}
+    /*
+     * Since leading zeros are suppressed, we must check for the case where
+     * the integer equals 0
+     *
+     * Finally, null terminate the string and return the length
+     */
+    if (!k)
+    {
+        String [0] = ACPI_ASCII_ZERO;
+        k = 1;
+    }
 
-	string[k] = 0;
-	return ((u32) k);
+    String [k] = 0;
+    return ((UINT32) k);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_convert_to_string
+ * FUNCTION:    AcpiExConvertToString
  *
- * PARAMETERS:  obj_desc        - Object to be converted. Must be an
+ * PARAMETERS:  ObjDesc         - Object to be converted. Must be an
  *                                Integer, Buffer, or String
- *              result_desc     - Where the string object is returned
- *              type            - String flags (base and conversion type)
+ *              ResultDesc      - Where the string object is returned
+ *              Type            - String flags (base and conversion type)
  *
  * RETURN:      Status
  *
@@ -396,175 +506,190 @@ acpi_ex_convert_to_ascii(u64 integer, u16 base, u8 *string, u8 data_width)
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ex_convert_to_string(union acpi_operand_object * obj_desc,
-			  union acpi_operand_object ** result_desc, u32 type)
+ACPI_STATUS
+AcpiExConvertToString (
+    ACPI_OPERAND_OBJECT     *ObjDesc,
+    ACPI_OPERAND_OBJECT     **ResultDesc,
+    UINT32                  Type)
 {
-	union acpi_operand_object *return_desc;
-	u8 *new_buf;
-	u32 i;
-	u32 string_length = 0;
-	u16 base = 16;
-	u8 separator = ',';
+    ACPI_OPERAND_OBJECT     *ReturnDesc;
+    UINT8                   *NewBuf;
+    UINT32                  i;
+    UINT32                  StringLength = 0;
+    UINT16                  Base = 16;
+    UINT8                   Separator = ',';
 
-	ACPI_FUNCTION_TRACE_PTR(ex_convert_to_string, obj_desc);
 
-	switch (obj_desc->common.type) {
-	case ACPI_TYPE_STRING:
+    ACPI_FUNCTION_TRACE_PTR (ExConvertToString, ObjDesc);
 
-		/* No conversion necessary */
 
-		*result_desc = obj_desc;
-		return_ACPI_STATUS(AE_OK);
+    switch (ObjDesc->Common.Type)
+    {
+    case ACPI_TYPE_STRING:
 
-	case ACPI_TYPE_INTEGER:
+        /* No conversion necessary */
 
-		switch (type) {
-		case ACPI_EXPLICIT_CONVERT_DECIMAL:
+        *ResultDesc = ObjDesc;
+        return_ACPI_STATUS (AE_OK);
 
-			/* Make room for maximum decimal number */
+    case ACPI_TYPE_INTEGER:
 
-			string_length = ACPI_MAX_DECIMAL_DIGITS;
-			base = 10;
-			break;
+        switch (Type)
+        {
+        case ACPI_EXPLICIT_CONVERT_DECIMAL:
 
-		default:
+            /* Make room for maximum decimal number */
 
-			/* Two hex string characters for each integer byte */
+            StringLength = ACPI_MAX_DECIMAL_DIGITS;
+            Base = 10;
+            break;
 
-			string_length = ACPI_MUL_2(acpi_gbl_integer_byte_width);
-			break;
-		}
+        default:
 
-		/*
-		 * Create a new String
-		 * Need enough space for one ASCII integer (plus null terminator)
-		 */
-		return_desc =
-		    acpi_ut_create_string_object((acpi_size) string_length);
-		if (!return_desc) {
-			return_ACPI_STATUS(AE_NO_MEMORY);
-		}
+            /* Two hex string characters for each integer byte */
 
-		new_buf = return_desc->buffer.pointer;
+            StringLength = ACPI_MUL_2 (AcpiGbl_IntegerByteWidth);
+            break;
+        }
 
-		/* Convert integer to string */
+        /*
+         * Create a new String
+         * Need enough space for one ASCII integer (plus null terminator)
+         */
+        ReturnDesc = AcpiUtCreateStringObject ((ACPI_SIZE) StringLength);
+        if (!ReturnDesc)
+        {
+            return_ACPI_STATUS (AE_NO_MEMORY);
+        }
 
-		string_length =
-		    acpi_ex_convert_to_ascii(obj_desc->integer.value, base,
-					     new_buf,
-					     acpi_gbl_integer_byte_width);
+        NewBuf = ReturnDesc->Buffer.Pointer;
 
-		/* Null terminate at the correct place */
+        /* Convert integer to string */
 
-		return_desc->string.length = string_length;
-		new_buf[string_length] = 0;
-		break;
+        StringLength = AcpiExConvertToAscii (ObjDesc->Integer.Value, Base,
+                            NewBuf, AcpiGbl_IntegerByteWidth);
 
-	case ACPI_TYPE_BUFFER:
+        /* Null terminate at the correct place */
 
-		/* Setup string length, base, and separator */
+        ReturnDesc->String.Length = StringLength;
+        NewBuf [StringLength] = 0;
+        break;
 
-		switch (type) {
-		case ACPI_EXPLICIT_CONVERT_DECIMAL:	/* Used by to_decimal_string */
-			/*
-			 * From ACPI: "If Data is a buffer, it is converted to a string of
-			 * decimal values separated by commas."
-			 */
-			base = 10;
+    case ACPI_TYPE_BUFFER:
 
-			/*
-			 * Calculate the final string length. Individual string values
-			 * are variable length (include separator for each)
-			 */
-			for (i = 0; i < obj_desc->buffer.length; i++) {
-				if (obj_desc->buffer.pointer[i] >= 100) {
-					string_length += 4;
-				} else if (obj_desc->buffer.pointer[i] >= 10) {
-					string_length += 3;
-				} else {
-					string_length += 2;
-				}
-			}
-			break;
+        /* Setup string length, base, and separator */
 
-		case ACPI_IMPLICIT_CONVERT_HEX:
-			/*
-			 * From the ACPI spec:
-			 *"The entire contents of the buffer are converted to a string of
-			 * two-character hexadecimal numbers, each separated by a space."
-			 */
-			separator = ' ';
-			string_length = (obj_desc->buffer.length * 3);
-			break;
+        switch (Type)
+        {
+        case ACPI_EXPLICIT_CONVERT_DECIMAL: /* Used by ToDecimalString */
+            /*
+             * From ACPI: "If Data is a buffer, it is converted to a string of
+             * decimal values separated by commas."
+             */
+            Base = 10;
 
-		case ACPI_EXPLICIT_CONVERT_HEX:	/* Used by to_hex_string */
-			/*
-			 * From ACPI: "If Data is a buffer, it is converted to a string of
-			 * hexadecimal values separated by commas."
-			 */
-			string_length = (obj_desc->buffer.length * 3);
-			break;
+            /*
+             * Calculate the final string length. Individual string values
+             * are variable length (include separator for each)
+             */
+            for (i = 0; i < ObjDesc->Buffer.Length; i++)
+            {
+                if (ObjDesc->Buffer.Pointer[i] >= 100)
+                {
+                    StringLength += 4;
+                }
+                else if (ObjDesc->Buffer.Pointer[i] >= 10)
+                {
+                    StringLength += 3;
+                }
+                else
+                {
+                    StringLength += 2;
+                }
+            }
+            break;
 
-		default:
-			return_ACPI_STATUS(AE_BAD_PARAMETER);
-		}
+        case ACPI_IMPLICIT_CONVERT_HEX:
+            /*
+             * From the ACPI spec:
+             *"The entire contents of the buffer are converted to a string of
+             * two-character hexadecimal numbers, each separated by a space."
+             */
+            Separator = ' ';
+            StringLength = (ObjDesc->Buffer.Length * 3);
+            break;
 
-		/*
-		 * Create a new string object and string buffer
-		 * (-1 because of extra separator included in string_length from above)
-		 * Allow creation of zero-length strings from zero-length buffers.
-		 */
-		if (string_length) {
-			string_length--;
-		}
+        case ACPI_EXPLICIT_CONVERT_HEX:     /* Used by ToHexString */
+            /*
+             * From ACPI: "If Data is a buffer, it is converted to a string of
+             * hexadecimal values separated by commas."
+             */
+            StringLength = (ObjDesc->Buffer.Length * 3);
+            break;
 
-		return_desc =
-		    acpi_ut_create_string_object((acpi_size) string_length);
-		if (!return_desc) {
-			return_ACPI_STATUS(AE_NO_MEMORY);
-		}
+        default:
+            return_ACPI_STATUS (AE_BAD_PARAMETER);
+        }
 
-		new_buf = return_desc->buffer.pointer;
+        /*
+         * Create a new string object and string buffer
+         * (-1 because of extra separator included in StringLength from above)
+         * Allow creation of zero-length strings from zero-length buffers.
+         */
+        if (StringLength)
+        {
+            StringLength--;
+        }
 
-		/*
-		 * Convert buffer bytes to hex or decimal values
-		 * (separated by commas or spaces)
-		 */
-		for (i = 0; i < obj_desc->buffer.length; i++) {
-			new_buf += acpi_ex_convert_to_ascii((u64) obj_desc->
-							    buffer.pointer[i],
-							    base, new_buf, 1);
-			*new_buf++ = separator;	/* each separated by a comma or space */
-		}
+        ReturnDesc = AcpiUtCreateStringObject ((ACPI_SIZE) StringLength);
+        if (!ReturnDesc)
+        {
+            return_ACPI_STATUS (AE_NO_MEMORY);
+        }
 
-		/*
-		 * Null terminate the string
-		 * (overwrites final comma/space from above)
-		 */
-		if (obj_desc->buffer.length) {
-			new_buf--;
-		}
-		*new_buf = 0;
-		break;
+        NewBuf = ReturnDesc->Buffer.Pointer;
 
-	default:
+        /*
+         * Convert buffer bytes to hex or decimal values
+         * (separated by commas or spaces)
+         */
+        for (i = 0; i < ObjDesc->Buffer.Length; i++)
+        {
+            NewBuf += AcpiExConvertToAscii (
+                        (UINT64) ObjDesc->Buffer.Pointer[i], Base,
+                        NewBuf, 1);
+            *NewBuf++ = Separator; /* each separated by a comma or space */
+        }
 
-		return_ACPI_STATUS(AE_TYPE);
-	}
+        /*
+         * Null terminate the string
+         * (overwrites final comma/space from above)
+         */
+        if (ObjDesc->Buffer.Length)
+        {
+            NewBuf--;
+        }
+        *NewBuf = 0;
+        break;
 
-	*result_desc = return_desc;
-	return_ACPI_STATUS(AE_OK);
+    default:
+
+        return_ACPI_STATUS (AE_TYPE);
+    }
+
+    *ResultDesc = ReturnDesc;
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_convert_to_target_type
+ * FUNCTION:    AcpiExConvertToTargetType
  *
- * PARAMETERS:  destination_type    - Current type of the destination
- *              source_desc         - Source object to be converted.
- *              result_desc         - Where the converted object is returned
- *              walk_state          - Current method state
+ * PARAMETERS:  DestinationType     - Current type of the destination
+ *              SourceDesc          - Source object to be converted.
+ *              ResultDesc          - Where the converted object is returned
+ *              WalkState           - Current method state
  *
  * RETURN:      Status
  *
@@ -572,123 +697,123 @@ acpi_ex_convert_to_string(union acpi_operand_object * obj_desc,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ex_convert_to_target_type(acpi_object_type destination_type,
-			       union acpi_operand_object *source_desc,
-			       union acpi_operand_object **result_desc,
-			       struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExConvertToTargetType (
+    ACPI_OBJECT_TYPE        DestinationType,
+    ACPI_OPERAND_OBJECT     *SourceDesc,
+    ACPI_OPERAND_OBJECT     **ResultDesc,
+    ACPI_WALK_STATE         *WalkState)
 {
-	acpi_status status = AE_OK;
+    ACPI_STATUS             Status = AE_OK;
 
-	ACPI_FUNCTION_TRACE(ex_convert_to_target_type);
 
-	/* Default behavior */
+    ACPI_FUNCTION_TRACE (ExConvertToTargetType);
 
-	*result_desc = source_desc;
 
-	/*
-	 * If required by the target,
-	 * perform implicit conversion on the source before we store it.
-	 */
-	switch (GET_CURRENT_ARG_TYPE(walk_state->op_info->runtime_args)) {
-	case ARGI_SIMPLE_TARGET:
-	case ARGI_FIXED_TARGET:
-	case ARGI_INTEGER_REF:	/* Handles Increment, Decrement cases */
+    /* Default behavior */
 
-		switch (destination_type) {
-		case ACPI_TYPE_LOCAL_REGION_FIELD:
-			/*
-			 * Named field can always handle conversions
-			 */
-			break;
+    *ResultDesc = SourceDesc;
 
-		default:
+    /*
+     * If required by the target,
+     * perform implicit conversion on the source before we store it.
+     */
+    switch (GET_CURRENT_ARG_TYPE (WalkState->OpInfo->RuntimeArgs))
+    {
+    case ARGI_SIMPLE_TARGET:
+    case ARGI_FIXED_TARGET:
+    case ARGI_INTEGER_REF:      /* Handles Increment, Decrement cases */
 
-			/* No conversion allowed for these types */
+        switch (DestinationType)
+        {
+        case ACPI_TYPE_LOCAL_REGION_FIELD:
+            /*
+             * Named field can always handle conversions
+             */
+            break;
 
-			if (destination_type != source_desc->common.type) {
-				ACPI_DEBUG_PRINT((ACPI_DB_INFO,
-						  "Explicit operator, will store (%s) over existing type (%s)\n",
-						  acpi_ut_get_object_type_name
-						  (source_desc),
-						  acpi_ut_get_type_name
-						  (destination_type)));
-				status = AE_TYPE;
-			}
-		}
-		break;
+        default:
 
-	case ARGI_TARGETREF:
+            /* No conversion allowed for these types */
 
-		switch (destination_type) {
-		case ACPI_TYPE_INTEGER:
-		case ACPI_TYPE_BUFFER_FIELD:
-		case ACPI_TYPE_LOCAL_BANK_FIELD:
-		case ACPI_TYPE_LOCAL_INDEX_FIELD:
-			/*
-			 * These types require an Integer operand. We can convert
-			 * a Buffer or a String to an Integer if necessary.
-			 */
-			status =
-			    acpi_ex_convert_to_integer(source_desc, result_desc,
-						       16);
-			break;
+            if (DestinationType != SourceDesc->Common.Type)
+            {
+                ACPI_DEBUG_PRINT ((ACPI_DB_INFO,
+                    "Explicit operator, will store (%s) over existing type (%s)\n",
+                    AcpiUtGetObjectTypeName (SourceDesc),
+                    AcpiUtGetTypeName (DestinationType)));
+                Status = AE_TYPE;
+            }
+        }
+        break;
 
-		case ACPI_TYPE_STRING:
-			/*
-			 * The operand must be a String. We can convert an
-			 * Integer or Buffer if necessary
-			 */
-			status =
-			    acpi_ex_convert_to_string(source_desc, result_desc,
-						      ACPI_IMPLICIT_CONVERT_HEX);
-			break;
+    case ARGI_TARGETREF:
 
-		case ACPI_TYPE_BUFFER:
-			/*
-			 * The operand must be a Buffer. We can convert an
-			 * Integer or String if necessary
-			 */
-			status =
-			    acpi_ex_convert_to_buffer(source_desc, result_desc);
-			break;
+        switch (DestinationType)
+        {
+        case ACPI_TYPE_INTEGER:
+        case ACPI_TYPE_BUFFER_FIELD:
+        case ACPI_TYPE_LOCAL_BANK_FIELD:
+        case ACPI_TYPE_LOCAL_INDEX_FIELD:
+            /*
+             * These types require an Integer operand. We can convert
+             * a Buffer or a String to an Integer if necessary.
+             */
+            Status = AcpiExConvertToInteger (SourceDesc, ResultDesc,
+                        16);
+            break;
 
-		default:
+        case ACPI_TYPE_STRING:
+            /*
+             * The operand must be a String. We can convert an
+             * Integer or Buffer if necessary
+             */
+            Status = AcpiExConvertToString (SourceDesc, ResultDesc,
+                        ACPI_IMPLICIT_CONVERT_HEX);
+            break;
 
-			ACPI_ERROR((AE_INFO,
-				    "Bad destination type during conversion: 0x%X",
-				    destination_type));
-			status = AE_AML_INTERNAL;
-			break;
-		}
-		break;
+        case ACPI_TYPE_BUFFER:
+            /*
+             * The operand must be a Buffer. We can convert an
+             * Integer or String if necessary
+             */
+            Status = AcpiExConvertToBuffer (SourceDesc, ResultDesc);
+            break;
 
-	case ARGI_REFERENCE:
-		/*
-		 * create_xxxx_field cases - we are storing the field object into the name
-		 */
-		break;
+        default:
 
-	default:
+            ACPI_ERROR ((AE_INFO, "Bad destination type during conversion: 0x%X",
+                DestinationType));
+            Status = AE_AML_INTERNAL;
+            break;
+        }
+        break;
 
-		ACPI_ERROR((AE_INFO,
-			    "Unknown Target type ID 0x%X AmlOpcode 0x%X DestType %s",
-			    GET_CURRENT_ARG_TYPE(walk_state->op_info->
-						 runtime_args),
-			    walk_state->opcode,
-			    acpi_ut_get_type_name(destination_type)));
-		status = AE_AML_INTERNAL;
-	}
+    case ARGI_REFERENCE:
+        /*
+         * CreateXxxxField cases - we are storing the field object into the name
+         */
+        break;
 
-	/*
-	 * Source-to-Target conversion semantics:
-	 *
-	 * If conversion to the target type cannot be performed, then simply
-	 * overwrite the target with the new object and type.
-	 */
-	if (status == AE_TYPE) {
-		status = AE_OK;
-	}
+    default:
 
-	return_ACPI_STATUS(status);
+        ACPI_ERROR ((AE_INFO,
+            "Unknown Target type ID 0x%X AmlOpcode 0x%X DestType %s",
+            GET_CURRENT_ARG_TYPE (WalkState->OpInfo->RuntimeArgs),
+            WalkState->Opcode, AcpiUtGetTypeName (DestinationType)));
+        Status = AE_AML_INTERNAL;
+    }
+
+    /*
+     * Source-to-Target conversion semantics:
+     *
+     * If conversion to the target type cannot be performed, then simply
+     * overwrite the target with the new object and type.
+     */
+    if (Status == AE_TYPE)
+    {
+        Status = AE_OK;
+    }
+
+    return_ACPI_STATUS (Status);
 }

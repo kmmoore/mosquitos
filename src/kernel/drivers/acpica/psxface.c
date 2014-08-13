@@ -4,69 +4,152 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#define __PSXFACE_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acparser.h"
 #include "acdispat.h"
 #include "acinterp.h"
 #include "actables.h"
 
+
 #define _COMPONENT          ACPI_PARSER
-ACPI_MODULE_NAME("psxface")
+        ACPI_MODULE_NAME    ("psxface")
 
 /* Local Prototypes */
-static void acpi_ps_start_trace(struct acpi_evaluate_info *info);
-
-static void acpi_ps_stop_trace(struct acpi_evaluate_info *info);
 
 static void
-acpi_ps_update_parameter_list(struct acpi_evaluate_info *info, u16 action);
+AcpiPsStartTrace (
+    ACPI_EVALUATE_INFO      *Info);
+
+static void
+AcpiPsStopTrace (
+    ACPI_EVALUATE_INFO      *Info);
+
+static void
+AcpiPsUpdateParameterList (
+    ACPI_EVALUATE_INFO      *Info,
+    UINT16                  Action);
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_debug_trace
+ * FUNCTION:    AcpiDebugTrace
  *
- * PARAMETERS:  method_name     - Valid ACPI name string
- *              debug_level     - Optional level mask. 0 to use default
- *              debug_layer     - Optional layer mask. 0 to use default
- *              flags           - bit 1: one shot(1) or persistent(0)
+ * PARAMETERS:  MethodName      - Valid ACPI name string
+ *              DebugLevel      - Optional level mask. 0 to use default
+ *              DebugLayer      - Optional layer mask. 0 to use default
+ *              Flags           - bit 1: one shot(1) or persistent(0)
  *
  * RETURN:      Status
  *
@@ -75,37 +158,46 @@ acpi_ps_update_parameter_list(struct acpi_evaluate_info *info, u16 action);
  *
  ******************************************************************************/
 
-acpi_status
-acpi_debug_trace(char *name, u32 debug_level, u32 debug_layer, u32 flags)
+ACPI_STATUS
+AcpiDebugTrace (
+    char                    *Name,
+    UINT32                  DebugLevel,
+    UINT32                  DebugLayer,
+    UINT32                  Flags)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
 
-	/* TBDs: Validate name, allow full path or just nameseg */
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	acpi_gbl_trace_method_name = *ACPI_CAST_PTR(u32, name);
-	acpi_gbl_trace_flags = flags;
+    /* TBDs: Validate name, allow full path or just nameseg */
 
-	if (debug_level) {
-		acpi_gbl_trace_dbg_level = debug_level;
-	}
-	if (debug_layer) {
-		acpi_gbl_trace_dbg_layer = debug_layer;
-	}
+    AcpiGbl_TraceMethodName = *ACPI_CAST_PTR (UINT32, Name);
+    AcpiGbl_TraceFlags = Flags;
 
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
-	return (AE_OK);
+    if (DebugLevel)
+    {
+        AcpiGbl_TraceDbgLevel = DebugLevel;
+    }
+    if (DebugLayer)
+    {
+        AcpiGbl_TraceDbgLayer = DebugLayer;
+    }
+
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+    return (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ps_start_trace
+ * FUNCTION:    AcpiPsStartTrace
  *
- * PARAMETERS:  info        - Method info struct
+ * PARAMETERS:  Info        - Method info struct
  *
  * RETURN:      None
  *
@@ -113,44 +205,54 @@ acpi_debug_trace(char *name, u32 debug_level, u32 debug_layer, u32 flags)
  *
  ******************************************************************************/
 
-static void acpi_ps_start_trace(struct acpi_evaluate_info *info)
+static void
+AcpiPsStartTrace (
+    ACPI_EVALUATE_INFO      *Info)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_ENTRY();
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return;
-	}
+    ACPI_FUNCTION_ENTRY ();
 
-	if ((!acpi_gbl_trace_method_name) ||
-	    (acpi_gbl_trace_method_name != info->node->name.integer)) {
-		goto exit;
-	}
 
-	acpi_gbl_original_dbg_level = acpi_dbg_level;
-	acpi_gbl_original_dbg_layer = acpi_dbg_layer;
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return;
+    }
 
-	acpi_dbg_level = 0x00FFFFFF;
-	acpi_dbg_layer = ACPI_UINT32_MAX;
+    if ((!AcpiGbl_TraceMethodName) ||
+        (AcpiGbl_TraceMethodName != Info->Node->Name.Integer))
+    {
+        goto Exit;
+    }
 
-	if (acpi_gbl_trace_dbg_level) {
-		acpi_dbg_level = acpi_gbl_trace_dbg_level;
-	}
-	if (acpi_gbl_trace_dbg_layer) {
-		acpi_dbg_layer = acpi_gbl_trace_dbg_layer;
-	}
+    AcpiGbl_OriginalDbgLevel = AcpiDbgLevel;
+    AcpiGbl_OriginalDbgLayer = AcpiDbgLayer;
 
-exit:
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
+    AcpiDbgLevel = 0x00FFFFFF;
+    AcpiDbgLayer = ACPI_UINT32_MAX;
+
+    if (AcpiGbl_TraceDbgLevel)
+    {
+        AcpiDbgLevel = AcpiGbl_TraceDbgLevel;
+    }
+    if (AcpiGbl_TraceDbgLayer)
+    {
+        AcpiDbgLayer = AcpiGbl_TraceDbgLayer;
+    }
+
+
+Exit:
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ps_stop_trace
+ * FUNCTION:    AcpiPsStopTrace
  *
- * PARAMETERS:  info        - Method info struct
+ * PARAMETERS:  Info        - Method info struct
  *
  * RETURN:      None
  *
@@ -158,53 +260,61 @@ exit:
  *
  ******************************************************************************/
 
-static void acpi_ps_stop_trace(struct acpi_evaluate_info *info)
+static void
+AcpiPsStopTrace (
+    ACPI_EVALUATE_INFO      *Info)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_ENTRY();
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return;
-	}
+    ACPI_FUNCTION_ENTRY ();
 
-	if ((!acpi_gbl_trace_method_name) ||
-	    (acpi_gbl_trace_method_name != info->node->name.integer)) {
-		goto exit;
-	}
 
-	/* Disable further tracing if type is one-shot */
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return;
+    }
 
-	if (acpi_gbl_trace_flags & 1) {
-		acpi_gbl_trace_method_name = 0;
-		acpi_gbl_trace_dbg_level = 0;
-		acpi_gbl_trace_dbg_layer = 0;
-	}
+    if ((!AcpiGbl_TraceMethodName) ||
+        (AcpiGbl_TraceMethodName != Info->Node->Name.Integer))
+    {
+        goto Exit;
+    }
 
-	acpi_dbg_level = acpi_gbl_original_dbg_level;
-	acpi_dbg_layer = acpi_gbl_original_dbg_layer;
+    /* Disable further tracing if type is one-shot */
 
-exit:
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
+    if (AcpiGbl_TraceFlags & 1)
+    {
+        AcpiGbl_TraceMethodName = 0;
+        AcpiGbl_TraceDbgLevel = 0;
+        AcpiGbl_TraceDbgLayer = 0;
+    }
+
+    AcpiDbgLevel = AcpiGbl_OriginalDbgLevel;
+    AcpiDbgLayer = AcpiGbl_OriginalDbgLayer;
+
+Exit:
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ps_execute_method
+ * FUNCTION:    AcpiPsExecuteMethod
  *
- * PARAMETERS:  info            - Method info block, contains:
- *                  node            - Method Node to execute
- *                  obj_desc        - Method object
- *                  parameters      - List of parameters to pass to the method,
+ * PARAMETERS:  Info            - Method info block, contains:
+ *                  Node            - Method Node to execute
+ *                  ObjDesc         - Method object
+ *                  Parameters      - List of parameters to pass to the method,
  *                                    terminated by NULL. Params itself may be
  *                                    NULL if no parameters are being passed.
- *                  return_object   - Where to put method's return value (if
+ *                  ReturnObject    - Where to put method's return value (if
  *                                    any). If NULL, no value is returned.
- *                  parameter_type  - Type of Parameter list
- *                  return_object   - Where to put method's return value (if
+ *                  ParameterType   - Type of Parameter list
+ *                  ReturnObject    - Where to put method's return value (if
  *                                    any). If NULL, no value is returned.
- *                  pass_number     - Parse or execute pass
+ *                  PassNumber      - Parse or execute pass
  *
  * RETURN:      Status
  *
@@ -212,156 +322,167 @@ exit:
  *
  ******************************************************************************/
 
-acpi_status acpi_ps_execute_method(struct acpi_evaluate_info *info)
+ACPI_STATUS
+AcpiPsExecuteMethod (
+    ACPI_EVALUATE_INFO      *Info)
 {
-	acpi_status status;
-	union acpi_parse_object *op;
-	struct acpi_walk_state *walk_state;
+    ACPI_STATUS             Status;
+    ACPI_PARSE_OBJECT       *Op;
+    ACPI_WALK_STATE         *WalkState;
 
-	ACPI_FUNCTION_TRACE(ps_execute_method);
 
-	/* Quick validation of DSDT header */
+    ACPI_FUNCTION_TRACE (PsExecuteMethod);
 
-	acpi_tb_check_dsdt_header();
 
-	/* Validate the Info and method Node */
+    /* Quick validation of DSDT header */
 
-	if (!info || !info->node) {
-		return_ACPI_STATUS(AE_NULL_ENTRY);
-	}
+    AcpiTbCheckDsdtHeader ();
 
-	/* Init for new method, wait on concurrency semaphore */
+    /* Validate the Info and method Node */
 
-	status =
-	    acpi_ds_begin_method_execution(info->node, info->obj_desc, NULL);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    if (!Info || !Info->Node)
+    {
+        return_ACPI_STATUS (AE_NULL_ENTRY);
+    }
 
-	/*
-	 * The caller "owns" the parameters, so give each one an extra reference
-	 */
-	acpi_ps_update_parameter_list(info, REF_INCREMENT);
+    /* Init for new method, wait on concurrency semaphore */
 
-	/* Begin tracing if requested */
+    Status = AcpiDsBeginMethodExecution (Info->Node, Info->ObjDesc, NULL);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	acpi_ps_start_trace(info);
+    /*
+     * The caller "owns" the parameters, so give each one an extra reference
+     */
+    AcpiPsUpdateParameterList (Info, REF_INCREMENT);
 
-	/*
-	 * Execute the method. Performs parse simultaneously
-	 */
-	ACPI_DEBUG_PRINT((ACPI_DB_PARSE,
-			  "**** Begin Method Parse/Execute [%4.4s] **** Node=%p Obj=%p\n",
-			  info->node->name.ascii, info->node, info->obj_desc));
+    /* Begin tracing if requested */
 
-	/* Create and init a Root Node */
+    AcpiPsStartTrace (Info);
 
-	op = acpi_ps_create_scope_op();
-	if (!op) {
-		status = AE_NO_MEMORY;
-		goto cleanup;
-	}
+    /*
+     * Execute the method. Performs parse simultaneously
+     */
+    ACPI_DEBUG_PRINT ((ACPI_DB_PARSE,
+        "**** Begin Method Parse/Execute [%4.4s] **** Node=%p Obj=%p\n",
+        Info->Node->Name.Ascii, Info->Node, Info->ObjDesc));
 
-	/* Create and initialize a new walk state */
+    /* Create and init a Root Node */
 
-	info->pass_number = ACPI_IMODE_EXECUTE;
-	walk_state =
-	    acpi_ds_create_walk_state(info->obj_desc->method.owner_id, NULL,
-				      NULL, NULL);
-	if (!walk_state) {
-		status = AE_NO_MEMORY;
-		goto cleanup;
-	}
+    Op = AcpiPsCreateScopeOp ();
+    if (!Op)
+    {
+        Status = AE_NO_MEMORY;
+        goto Cleanup;
+    }
 
-	status = acpi_ds_init_aml_walk(walk_state, op, info->node,
-				       info->obj_desc->method.aml_start,
-				       info->obj_desc->method.aml_length, info,
-				       info->pass_number);
-	if (ACPI_FAILURE(status)) {
-		acpi_ds_delete_walk_state(walk_state);
-		goto cleanup;
-	}
+    /* Create and initialize a new walk state */
 
-	if (info->obj_desc->method.info_flags & ACPI_METHOD_MODULE_LEVEL) {
-		walk_state->parse_flags |= ACPI_PARSE_MODULE_LEVEL;
-	}
+    Info->PassNumber = ACPI_IMODE_EXECUTE;
+    WalkState = AcpiDsCreateWalkState (
+                    Info->ObjDesc->Method.OwnerId, NULL, NULL, NULL);
+    if (!WalkState)
+    {
+        Status = AE_NO_MEMORY;
+        goto Cleanup;
+    }
 
-	/* Invoke an internal method if necessary */
+    Status = AcpiDsInitAmlWalk (WalkState, Op, Info->Node,
+                Info->ObjDesc->Method.AmlStart,
+                Info->ObjDesc->Method.AmlLength, Info, Info->PassNumber);
+    if (ACPI_FAILURE (Status))
+    {
+        AcpiDsDeleteWalkState (WalkState);
+        goto Cleanup;
+    }
 
-	if (info->obj_desc->method.info_flags & ACPI_METHOD_INTERNAL_ONLY) {
-		status =
-		    info->obj_desc->method.dispatch.implementation(walk_state);
-		info->return_object = walk_state->return_desc;
+    if (Info->ObjDesc->Method.InfoFlags & ACPI_METHOD_MODULE_LEVEL)
+    {
+        WalkState->ParseFlags |= ACPI_PARSE_MODULE_LEVEL;
+    }
 
-		/* Cleanup states */
+    /* Invoke an internal method if necessary */
 
-		acpi_ds_scope_stack_clear(walk_state);
-		acpi_ps_cleanup_scope(&walk_state->parser_state);
-		acpi_ds_terminate_control_method(walk_state->method_desc,
-						 walk_state);
-		acpi_ds_delete_walk_state(walk_state);
-		goto cleanup;
-	}
+    if (Info->ObjDesc->Method.InfoFlags & ACPI_METHOD_INTERNAL_ONLY)
+    {
+        Status = Info->ObjDesc->Method.Dispatch.Implementation (WalkState);
+        Info->ReturnObject = WalkState->ReturnDesc;
 
-	/*
-	 * Start method evaluation with an implicit return of zero.
-	 * This is done for Windows compatibility.
-	 */
-	if (acpi_gbl_enable_interpreter_slack) {
-		walk_state->implicit_return_obj =
-		    acpi_ut_create_integer_object((u64) 0);
-		if (!walk_state->implicit_return_obj) {
-			status = AE_NO_MEMORY;
-			acpi_ds_delete_walk_state(walk_state);
-			goto cleanup;
-		}
-	}
+        /* Cleanup states */
 
-	/* Parse the AML */
+        AcpiDsScopeStackClear (WalkState);
+        AcpiPsCleanupScope (&WalkState->ParserState);
+        AcpiDsTerminateControlMethod (WalkState->MethodDesc, WalkState);
+        AcpiDsDeleteWalkState (WalkState);
+        goto Cleanup;
+    }
 
-	status = acpi_ps_parse_aml(walk_state);
+    /*
+     * Start method evaluation with an implicit return of zero.
+     * This is done for Windows compatibility.
+     */
+    if (AcpiGbl_EnableInterpreterSlack)
+    {
+        WalkState->ImplicitReturnObj =
+            AcpiUtCreateIntegerObject ((UINT64) 0);
+        if (!WalkState->ImplicitReturnObj)
+        {
+            Status = AE_NO_MEMORY;
+            AcpiDsDeleteWalkState (WalkState);
+            goto Cleanup;
+        }
+    }
 
-	/* walk_state was deleted by parse_aml */
+    /* Parse the AML */
 
-cleanup:
-	acpi_ps_delete_parse_tree(op);
+    Status = AcpiPsParseAml (WalkState);
 
-	/* End optional tracing */
+    /* WalkState was deleted by ParseAml */
 
-	acpi_ps_stop_trace(info);
+Cleanup:
+    AcpiPsDeleteParseTree (Op);
 
-	/* Take away the extra reference that we gave the parameters above */
+    /* End optional tracing */
 
-	acpi_ps_update_parameter_list(info, REF_DECREMENT);
+    AcpiPsStopTrace (Info);
 
-	/* Exit now if error above */
+    /* Take away the extra reference that we gave the parameters above */
 
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    AcpiPsUpdateParameterList (Info, REF_DECREMENT);
 
-	/*
-	 * If the method has returned an object, signal this to the caller with
-	 * a control exception code
-	 */
-	if (info->return_object) {
-		ACPI_DEBUG_PRINT((ACPI_DB_PARSE, "Method returned ObjDesc=%p\n",
-				  info->return_object));
-		ACPI_DUMP_STACK_ENTRY(info->return_object);
+    /* Exit now if error above */
 
-		status = AE_CTRL_RETURN_VALUE;
-	}
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	return_ACPI_STATUS(status);
+    /*
+     * If the method has returned an object, signal this to the caller with
+     * a control exception code
+     */
+    if (Info->ReturnObject)
+    {
+        ACPI_DEBUG_PRINT ((ACPI_DB_PARSE, "Method returned ObjDesc=%p\n",
+            Info->ReturnObject));
+        ACPI_DUMP_STACK_ENTRY (Info->ReturnObject);
+
+        Status = AE_CTRL_RETURN_VALUE;
+    }
+
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ps_update_parameter_list
+ * FUNCTION:    AcpiPsUpdateParameterList
  *
- * PARAMETERS:  info            - See struct acpi_evaluate_info
- *                                (Used: parameter_type and Parameters)
- *              action          - Add or Remove reference
+ * PARAMETERS:  Info            - See ACPI_EVALUATE_INFO
+ *                                (Used: ParameterType and Parameters)
+ *              Action          - Add or Remove reference
  *
  * RETURN:      Status
  *
@@ -370,21 +491,22 @@ cleanup:
  ******************************************************************************/
 
 static void
-acpi_ps_update_parameter_list(struct acpi_evaluate_info *info, u16 action)
+AcpiPsUpdateParameterList (
+    ACPI_EVALUATE_INFO      *Info,
+    UINT16                  Action)
 {
-	u32 i;
+    UINT32                  i;
 
-	if (info->parameters) {
 
-		/* Update reference count for each parameter */
+    if (Info->Parameters)
+    {
+        /* Update reference count for each parameter */
 
-		for (i = 0; info->parameters[i]; i++) {
+        for (i = 0; Info->Parameters[i]; i++)
+        {
+            /* Ignore errors, just do them all */
 
-			/* Ignore errors, just do them all */
-
-			(void)acpi_ut_update_object_reference(info->
-							      parameters[i],
-							      action);
-		}
-	}
+            (void) AcpiUtUpdateObjectReference (Info->Parameters[i], Action);
+        }
+    }
 }

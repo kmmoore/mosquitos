@@ -5,63 +5,140 @@
  *
  ******************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+
+#define __NSOBJECT_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acnamesp.h"
 
+
 #define _COMPONENT          ACPI_NAMESPACE
-ACPI_MODULE_NAME("nsobject")
+        ACPI_MODULE_NAME    ("nsobject")
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_attach_object
+ * FUNCTION:    AcpiNsAttachObject
  *
- * PARAMETERS:  node                - Parent Node
- *              object              - Object to be attached
- *              type                - Type of object, or ACPI_TYPE_ANY if not
+ * PARAMETERS:  Node                - Parent Node
+ *              Object              - Object to be attached
+ *              Type                - Type of object, or ACPI_TYPE_ANY if not
  *                                    known
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Record the given object as the value associated with the
- *              name whose acpi_handle is passed. If Object is NULL
+ *              name whose ACPI_HANDLE is passed. If Object is NULL
  *              and Type is ACPI_TYPE_ANY, set the name as having no value.
  *              Note: Future may require that the Node->Flags field be passed
  *              as a parameter.
@@ -69,129 +146,142 @@ ACPI_MODULE_NAME("nsobject")
  * MUTEX:       Assumes namespace is locked
  *
  ******************************************************************************/
-acpi_status
-acpi_ns_attach_object(struct acpi_namespace_node *node,
-		      union acpi_operand_object *object, acpi_object_type type)
+
+ACPI_STATUS
+AcpiNsAttachObject (
+    ACPI_NAMESPACE_NODE     *Node,
+    ACPI_OPERAND_OBJECT     *Object,
+    ACPI_OBJECT_TYPE        Type)
 {
-	union acpi_operand_object *obj_desc;
-	union acpi_operand_object *last_obj_desc;
-	acpi_object_type object_type = ACPI_TYPE_ANY;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
+    ACPI_OPERAND_OBJECT     *LastObjDesc;
+    ACPI_OBJECT_TYPE        ObjectType = ACPI_TYPE_ANY;
 
-	ACPI_FUNCTION_TRACE(ns_attach_object);
 
-	/*
-	 * Parameter validation
-	 */
-	if (!node) {
+    ACPI_FUNCTION_TRACE (NsAttachObject);
 
-		/* Invalid handle */
 
-		ACPI_ERROR((AE_INFO, "Null NamedObj handle"));
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    /*
+     * Parameter validation
+     */
+    if (!Node)
+    {
+        /* Invalid handle */
 
-	if (!object && (ACPI_TYPE_ANY != type)) {
+        ACPI_ERROR ((AE_INFO, "Null NamedObj handle"));
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-		/* Null object */
+    if (!Object && (ACPI_TYPE_ANY != Type))
+    {
+        /* Null object */
 
-		ACPI_ERROR((AE_INFO,
-			    "Null object, but type not ACPI_TYPE_ANY"));
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+        ACPI_ERROR ((AE_INFO,
+            "Null object, but type not ACPI_TYPE_ANY"));
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-	if (ACPI_GET_DESCRIPTOR_TYPE(node) != ACPI_DESC_TYPE_NAMED) {
+    if (ACPI_GET_DESCRIPTOR_TYPE (Node) != ACPI_DESC_TYPE_NAMED)
+    {
+        /* Not a name handle */
 
-		/* Not a name handle */
+        ACPI_ERROR ((AE_INFO, "Invalid handle %p [%s]",
+            Node, AcpiUtGetDescriptorName (Node)));
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-		ACPI_ERROR((AE_INFO, "Invalid handle %p [%s]",
-			    node, acpi_ut_get_descriptor_name(node)));
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    /* Check if this object is already attached */
 
-	/* Check if this object is already attached */
+    if (Node->Object == Object)
+    {
+        ACPI_DEBUG_PRINT ((ACPI_DB_EXEC,
+            "Obj %p already installed in NameObj %p\n",
+            Object, Node));
 
-	if (node->object == object) {
-		ACPI_DEBUG_PRINT((ACPI_DB_EXEC,
-				  "Obj %p already installed in NameObj %p\n",
-				  object, node));
+        return_ACPI_STATUS (AE_OK);
+    }
 
-		return_ACPI_STATUS(AE_OK);
-	}
+    /* If null object, we will just install it */
 
-	/* If null object, we will just install it */
+    if (!Object)
+    {
+        ObjDesc    = NULL;
+        ObjectType = ACPI_TYPE_ANY;
+    }
 
-	if (!object) {
-		obj_desc = NULL;
-		object_type = ACPI_TYPE_ANY;
-	}
+    /*
+     * If the source object is a namespace Node with an attached object,
+     * we will use that (attached) object
+     */
+    else if ((ACPI_GET_DESCRIPTOR_TYPE (Object) == ACPI_DESC_TYPE_NAMED) &&
+            ((ACPI_NAMESPACE_NODE *) Object)->Object)
+    {
+        /*
+         * Value passed is a name handle and that name has a
+         * non-null value. Use that name's value and type.
+         */
+        ObjDesc    = ((ACPI_NAMESPACE_NODE *) Object)->Object;
+        ObjectType = ((ACPI_NAMESPACE_NODE *) Object)->Type;
+    }
 
-	/*
-	 * If the source object is a namespace Node with an attached object,
-	 * we will use that (attached) object
-	 */
-	else if ((ACPI_GET_DESCRIPTOR_TYPE(object) == ACPI_DESC_TYPE_NAMED) &&
-		 ((struct acpi_namespace_node *)object)->object) {
-		/*
-		 * Value passed is a name handle and that name has a
-		 * non-null value. Use that name's value and type.
-		 */
-		obj_desc = ((struct acpi_namespace_node *)object)->object;
-		object_type = ((struct acpi_namespace_node *)object)->type;
-	}
+    /*
+     * Otherwise, we will use the parameter object, but we must type
+     * it first
+     */
+    else
+    {
+        ObjDesc = (ACPI_OPERAND_OBJECT  *) Object;
 
-	/*
-	 * Otherwise, we will use the parameter object, but we must type
-	 * it first
-	 */
-	else {
-		obj_desc = (union acpi_operand_object *)object;
+        /* Use the given type */
 
-		/* Use the given type */
+        ObjectType = Type;
+    }
 
-		object_type = type;
-	}
+    ACPI_DEBUG_PRINT ((ACPI_DB_EXEC, "Installing %p into Node %p [%4.4s]\n",
+        ObjDesc, Node, AcpiUtGetNodeName (Node)));
 
-	ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "Installing %p into Node %p [%4.4s]\n",
-			  obj_desc, node, acpi_ut_get_node_name(node)));
+    /* Detach an existing attached object if present */
 
-	/* Detach an existing attached object if present */
+    if (Node->Object)
+    {
+        AcpiNsDetachObject (Node);
+    }
 
-	if (node->object) {
-		acpi_ns_detach_object(node);
-	}
+    if (ObjDesc)
+    {
+        /*
+         * Must increment the new value's reference count
+         * (if it is an internal object)
+         */
+        AcpiUtAddReference (ObjDesc);
 
-	if (obj_desc) {
-		/*
-		 * Must increment the new value's reference count
-		 * (if it is an internal object)
-		 */
-		acpi_ut_add_reference(obj_desc);
+        /*
+         * Handle objects with multiple descriptors - walk
+         * to the end of the descriptor list
+         */
+        LastObjDesc = ObjDesc;
+        while (LastObjDesc->Common.NextObject)
+        {
+            LastObjDesc = LastObjDesc->Common.NextObject;
+        }
 
-		/*
-		 * Handle objects with multiple descriptors - walk
-		 * to the end of the descriptor list
-		 */
-		last_obj_desc = obj_desc;
-		while (last_obj_desc->common.next_object) {
-			last_obj_desc = last_obj_desc->common.next_object;
-		}
+        /* Install the object at the front of the object list */
 
-		/* Install the object at the front of the object list */
+        LastObjDesc->Common.NextObject = Node->Object;
+    }
 
-		last_obj_desc->common.next_object = node->object;
-	}
+    Node->Type     = (UINT8) ObjectType;
+    Node->Object   = ObjDesc;
 
-	node->type = (u8) object_type;
-	node->object = obj_desc;
-
-	return_ACPI_STATUS(AE_OK);
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_detach_object
+ * FUNCTION:    AcpiNsDetachObject
  *
- * PARAMETERS:  node           - A Namespace node whose object will be detached
+ * PARAMETERS:  Node           - A Namespace node whose object will be detached
  *
  * RETURN:      None.
  *
@@ -201,62 +291,81 @@ acpi_ns_attach_object(struct acpi_namespace_node *node,
  *
  ******************************************************************************/
 
-void acpi_ns_detach_object(struct acpi_namespace_node *node)
+void
+AcpiNsDetachObject (
+    ACPI_NAMESPACE_NODE     *Node)
 {
-	union acpi_operand_object *obj_desc;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
 
-	ACPI_FUNCTION_TRACE(ns_detach_object);
 
-	obj_desc = node->object;
+    ACPI_FUNCTION_TRACE (NsDetachObject);
 
-	if (!obj_desc || (obj_desc->common.type == ACPI_TYPE_LOCAL_DATA)) {
-		return_VOID;
-	}
 
-	if (node->flags & ANOBJ_ALLOCATED_BUFFER) {
+    ObjDesc = Node->Object;
 
-		/* Free the dynamic aml buffer */
+    if (!ObjDesc ||
+        (ObjDesc->Common.Type == ACPI_TYPE_LOCAL_DATA))
+    {
+        return_VOID;
+    }
 
-		if (obj_desc->common.type == ACPI_TYPE_METHOD) {
-			ACPI_FREE(obj_desc->method.aml_start);
-		}
-	}
+    if (Node->Flags & ANOBJ_ALLOCATED_BUFFER)
+    {
+        /* Free the dynamic aml buffer */
 
-	/* Clear the Node entry in all cases */
+        if (ObjDesc->Common.Type == ACPI_TYPE_METHOD)
+        {
+            ACPI_FREE (ObjDesc->Method.AmlStart);
+        }
+    }
 
-	node->object = NULL;
-	if (ACPI_GET_DESCRIPTOR_TYPE(obj_desc) == ACPI_DESC_TYPE_OPERAND) {
+    /* Clear the Node entry in all cases */
 
-		/* Unlink object from front of possible object list */
+    Node->Object = NULL;
+    if (ACPI_GET_DESCRIPTOR_TYPE (ObjDesc) == ACPI_DESC_TYPE_OPERAND)
+    {
+        /* Unlink object from front of possible object list */
 
-		node->object = obj_desc->common.next_object;
+        Node->Object = ObjDesc->Common.NextObject;
 
-		/* Handle possible 2-descriptor object */
+        /* Handle possible 2-descriptor object */
 
-		if (node->object &&
-		    (node->object->common.type != ACPI_TYPE_LOCAL_DATA)) {
-			node->object = node->object->common.next_object;
-		}
-	}
+        if (Node->Object &&
+           (Node->Object->Common.Type != ACPI_TYPE_LOCAL_DATA))
+        {
+            Node->Object = Node->Object->Common.NextObject;
+        }
 
-	/* Reset the node type to untyped */
+        /*
+         * Detach the object from any data objects (which are still held by
+         * the namespace node)
+         */
+        if (ObjDesc->Common.NextObject &&
+           ((ObjDesc->Common.NextObject)->Common.Type == ACPI_TYPE_LOCAL_DATA))
+        {
+           ObjDesc->Common.NextObject = NULL;
+        }
+    }
 
-	node->type = ACPI_TYPE_ANY;
+    /* Reset the node type to untyped */
 
-	ACPI_DEBUG_PRINT((ACPI_DB_NAMES, "Node %p [%4.4s] Object %p\n",
-			  node, acpi_ut_get_node_name(node), obj_desc));
+    Node->Type = ACPI_TYPE_ANY;
 
-	/* Remove one reference on the object (and all subobjects) */
+    ACPI_DEBUG_PRINT ((ACPI_DB_NAMES, "Node %p [%4.4s] Object %p\n",
+        Node, AcpiUtGetNodeName (Node), ObjDesc));
 
-	acpi_ut_remove_reference(obj_desc);
-	return_VOID;
+    /* Remove one reference on the object (and all subobjects) */
+
+    AcpiUtRemoveReference (ObjDesc);
+    return_VOID;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_get_attached_object
+ * FUNCTION:    AcpiNsGetAttachedObject
  *
- * PARAMETERS:  node             - Namespace node
+ * PARAMETERS:  Node             - Namespace node
  *
  * RETURN:      Current value of the object field from the Node whose
  *              handle is passed
@@ -265,33 +374,36 @@ void acpi_ns_detach_object(struct acpi_namespace_node *node)
  *
  ******************************************************************************/
 
-union acpi_operand_object *acpi_ns_get_attached_object(struct
-						       acpi_namespace_node
-						       *node)
+ACPI_OPERAND_OBJECT *
+AcpiNsGetAttachedObject (
+    ACPI_NAMESPACE_NODE     *Node)
 {
-	ACPI_FUNCTION_TRACE_PTR(ns_get_attached_object, node);
+    ACPI_FUNCTION_TRACE_PTR (NsGetAttachedObject, Node);
 
-	if (!node) {
-		ACPI_WARNING((AE_INFO, "Null Node ptr"));
-		return_PTR(NULL);
-	}
 
-	if (!node->object ||
-	    ((ACPI_GET_DESCRIPTOR_TYPE(node->object) != ACPI_DESC_TYPE_OPERAND)
-	     && (ACPI_GET_DESCRIPTOR_TYPE(node->object) !=
-		 ACPI_DESC_TYPE_NAMED))
-	    || ((node->object)->common.type == ACPI_TYPE_LOCAL_DATA)) {
-		return_PTR(NULL);
-	}
+    if (!Node)
+    {
+        ACPI_WARNING ((AE_INFO, "Null Node ptr"));
+        return_PTR (NULL);
+    }
 
-	return_PTR(node->object);
+    if (!Node->Object ||
+            ((ACPI_GET_DESCRIPTOR_TYPE (Node->Object) != ACPI_DESC_TYPE_OPERAND) &&
+             (ACPI_GET_DESCRIPTOR_TYPE (Node->Object) != ACPI_DESC_TYPE_NAMED))  ||
+        ((Node->Object)->Common.Type == ACPI_TYPE_LOCAL_DATA))
+    {
+        return_PTR (NULL);
+    }
+
+    return_PTR (Node->Object);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_get_secondary_object
+ * FUNCTION:    AcpiNsGetSecondaryObject
  *
- * PARAMETERS:  node             - Namespace node
+ * PARAMETERS:  Node             - Namespace node
  *
  * RETURN:      Current value of the object field from the Node whose
  *              handle is passed.
@@ -300,30 +412,32 @@ union acpi_operand_object *acpi_ns_get_attached_object(struct
  *
  ******************************************************************************/
 
-union acpi_operand_object *acpi_ns_get_secondary_object(union
-							acpi_operand_object
-							*obj_desc)
+ACPI_OPERAND_OBJECT *
+AcpiNsGetSecondaryObject (
+    ACPI_OPERAND_OBJECT     *ObjDesc)
 {
-	ACPI_FUNCTION_TRACE_PTR(ns_get_secondary_object, obj_desc);
+    ACPI_FUNCTION_TRACE_PTR (NsGetSecondaryObject, ObjDesc);
 
-	if ((!obj_desc) ||
-	    (obj_desc->common.type == ACPI_TYPE_LOCAL_DATA) ||
-	    (!obj_desc->common.next_object) ||
-	    ((obj_desc->common.next_object)->common.type ==
-	     ACPI_TYPE_LOCAL_DATA)) {
-		return_PTR(NULL);
-	}
 
-	return_PTR(obj_desc->common.next_object);
+    if ((!ObjDesc)                                     ||
+        (ObjDesc->Common.Type== ACPI_TYPE_LOCAL_DATA)  ||
+        (!ObjDesc->Common.NextObject)                  ||
+        ((ObjDesc->Common.NextObject)->Common.Type == ACPI_TYPE_LOCAL_DATA))
+    {
+        return_PTR (NULL);
+    }
+
+    return_PTR (ObjDesc->Common.NextObject);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_attach_data
+ * FUNCTION:    AcpiNsAttachData
  *
- * PARAMETERS:  node            - Namespace node
- *              handler         - Handler to be associated with the data
- *              data            - Data to be attached
+ * PARAMETERS:  Node            - Namespace node
+ *              Handler         - Handler to be associated with the data
+ *              Data            - Data to be attached
  *
  * RETURN:      Status
  *
@@ -331,55 +445,65 @@ union acpi_operand_object *acpi_ns_get_secondary_object(union
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ns_attach_data(struct acpi_namespace_node *node,
-		    acpi_object_handler handler, void *data)
+ACPI_STATUS
+AcpiNsAttachData (
+    ACPI_NAMESPACE_NODE     *Node,
+    ACPI_OBJECT_HANDLER     Handler,
+    void                    *Data)
 {
-	union acpi_operand_object *prev_obj_desc;
-	union acpi_operand_object *obj_desc;
-	union acpi_operand_object *data_desc;
+    ACPI_OPERAND_OBJECT     *PrevObjDesc;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
+    ACPI_OPERAND_OBJECT     *DataDesc;
 
-	/* We only allow one attachment per handler */
 
-	prev_obj_desc = NULL;
-	obj_desc = node->object;
-	while (obj_desc) {
-		if ((obj_desc->common.type == ACPI_TYPE_LOCAL_DATA) &&
-		    (obj_desc->data.handler == handler)) {
-			return (AE_ALREADY_EXISTS);
-		}
+    /* We only allow one attachment per handler */
 
-		prev_obj_desc = obj_desc;
-		obj_desc = obj_desc->common.next_object;
-	}
+    PrevObjDesc = NULL;
+    ObjDesc = Node->Object;
+    while (ObjDesc)
+    {
+        if ((ObjDesc->Common.Type == ACPI_TYPE_LOCAL_DATA) &&
+            (ObjDesc->Data.Handler == Handler))
+        {
+            return (AE_ALREADY_EXISTS);
+        }
 
-	/* Create an internal object for the data */
+        PrevObjDesc = ObjDesc;
+        ObjDesc = ObjDesc->Common.NextObject;
+    }
 
-	data_desc = acpi_ut_create_internal_object(ACPI_TYPE_LOCAL_DATA);
-	if (!data_desc) {
-		return (AE_NO_MEMORY);
-	}
+    /* Create an internal object for the data */
 
-	data_desc->data.handler = handler;
-	data_desc->data.pointer = data;
+    DataDesc = AcpiUtCreateInternalObject (ACPI_TYPE_LOCAL_DATA);
+    if (!DataDesc)
+    {
+        return (AE_NO_MEMORY);
+    }
 
-	/* Install the data object */
+    DataDesc->Data.Handler = Handler;
+    DataDesc->Data.Pointer = Data;
 
-	if (prev_obj_desc) {
-		prev_obj_desc->common.next_object = data_desc;
-	} else {
-		node->object = data_desc;
-	}
+    /* Install the data object */
 
-	return (AE_OK);
+    if (PrevObjDesc)
+    {
+        PrevObjDesc->Common.NextObject = DataDesc;
+    }
+    else
+    {
+        Node->Object = DataDesc;
+    }
+
+    return (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_detach_data
+ * FUNCTION:    AcpiNsDetachData
  *
- * PARAMETERS:  node            - Namespace node
- *              handler         - Handler associated with the data
+ * PARAMETERS:  Node            - Namespace node
+ *              Handler         - Handler associated with the data
  *
  * RETURN:      Status
  *
@@ -388,43 +512,50 @@ acpi_ns_attach_data(struct acpi_namespace_node *node,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ns_detach_data(struct acpi_namespace_node * node,
-		    acpi_object_handler handler)
+ACPI_STATUS
+AcpiNsDetachData (
+    ACPI_NAMESPACE_NODE     *Node,
+    ACPI_OBJECT_HANDLER     Handler)
 {
-	union acpi_operand_object *obj_desc;
-	union acpi_operand_object *prev_obj_desc;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
+    ACPI_OPERAND_OBJECT     *PrevObjDesc;
 
-	prev_obj_desc = NULL;
-	obj_desc = node->object;
-	while (obj_desc) {
-		if ((obj_desc->common.type == ACPI_TYPE_LOCAL_DATA) &&
-		    (obj_desc->data.handler == handler)) {
-			if (prev_obj_desc) {
-				prev_obj_desc->common.next_object =
-				    obj_desc->common.next_object;
-			} else {
-				node->object = obj_desc->common.next_object;
-			}
 
-			acpi_ut_remove_reference(obj_desc);
-			return (AE_OK);
-		}
+    PrevObjDesc = NULL;
+    ObjDesc = Node->Object;
+    while (ObjDesc)
+    {
+        if ((ObjDesc->Common.Type == ACPI_TYPE_LOCAL_DATA) &&
+            (ObjDesc->Data.Handler == Handler))
+        {
+            if (PrevObjDesc)
+            {
+                PrevObjDesc->Common.NextObject = ObjDesc->Common.NextObject;
+            }
+            else
+            {
+                Node->Object = ObjDesc->Common.NextObject;
+            }
 
-		prev_obj_desc = obj_desc;
-		obj_desc = obj_desc->common.next_object;
-	}
+            AcpiUtRemoveReference (ObjDesc);
+            return (AE_OK);
+        }
 
-	return (AE_NOT_FOUND);
+        PrevObjDesc = ObjDesc;
+        ObjDesc = ObjDesc->Common.NextObject;
+    }
+
+    return (AE_NOT_FOUND);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_get_attached_data
+ * FUNCTION:    AcpiNsGetAttachedData
  *
- * PARAMETERS:  node            - Namespace node
- *              handler         - Handler associated with the data
- *              data            - Where the data is returned
+ * PARAMETERS:  Node            - Namespace node
+ *              Handler         - Handler associated with the data
+ *              Data            - Where the data is returned
  *
  * RETURN:      Status
  *
@@ -433,22 +564,27 @@ acpi_ns_detach_data(struct acpi_namespace_node * node,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ns_get_attached_data(struct acpi_namespace_node * node,
-			  acpi_object_handler handler, void **data)
+ACPI_STATUS
+AcpiNsGetAttachedData (
+    ACPI_NAMESPACE_NODE     *Node,
+    ACPI_OBJECT_HANDLER     Handler,
+    void                    **Data)
 {
-	union acpi_operand_object *obj_desc;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
 
-	obj_desc = node->object;
-	while (obj_desc) {
-		if ((obj_desc->common.type == ACPI_TYPE_LOCAL_DATA) &&
-		    (obj_desc->data.handler == handler)) {
-			*data = obj_desc->data.pointer;
-			return (AE_OK);
-		}
 
-		obj_desc = obj_desc->common.next_object;
-	}
+    ObjDesc = Node->Object;
+    while (ObjDesc)
+    {
+        if ((ObjDesc->Common.Type == ACPI_TYPE_LOCAL_DATA) &&
+            (ObjDesc->Data.Handler == Handler))
+        {
+            *Data = ObjDesc->Data.Pointer;
+            return (AE_OK);
+        }
 
-	return (AE_NOT_FOUND);
+        ObjDesc = ObjDesc->Common.NextObject;
+    }
+
+    return (AE_NOT_FOUND);
 }

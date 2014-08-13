@@ -4,72 +4,153 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#define __UTOBJECT_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acnamesp.h"
 
+
 #define _COMPONENT          ACPI_UTILITIES
-ACPI_MODULE_NAME("utobject")
+        ACPI_MODULE_NAME    ("utobject")
 
 /* Local prototypes */
-static acpi_status
-acpi_ut_get_simple_object_size(union acpi_operand_object *obj,
-			       acpi_size * obj_length);
 
-static acpi_status
-acpi_ut_get_package_object_size(union acpi_operand_object *obj,
-				acpi_size * obj_length);
+static ACPI_STATUS
+AcpiUtGetSimpleObjectSize (
+    ACPI_OPERAND_OBJECT     *Obj,
+    ACPI_SIZE               *ObjLength);
 
-static acpi_status
-acpi_ut_get_element_length(u8 object_type,
-			   union acpi_operand_object *source_object,
-			   union acpi_generic_state *state, void *context);
+static ACPI_STATUS
+AcpiUtGetPackageObjectSize (
+    ACPI_OPERAND_OBJECT     *Obj,
+    ACPI_SIZE               *ObjLength);
+
+static ACPI_STATUS
+AcpiUtGetElementLength (
+    UINT8                   ObjectType,
+    ACPI_OPERAND_OBJECT     *SourceObject,
+    ACPI_GENERIC_STATE      *State,
+    void                    *Context);
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_create_internal_object_dbg
+ * FUNCTION:    AcpiUtCreateInternalObjectDbg
  *
- * PARAMETERS:  module_name         - Source file name of caller
- *              line_number         - Line number of caller
- *              component_id        - Component type of caller
- *              type                - ACPI Type of the new object
+ * PARAMETERS:  ModuleName          - Source file name of caller
+ *              LineNumber          - Line number of caller
+ *              ComponentId         - Component type of caller
+ *              Type                - ACPI Type of the new object
  *
  * RETURN:      A new internal object, null on failure
  *
@@ -83,75 +164,78 @@ acpi_ut_get_element_length(u8 object_type,
  *
  ******************************************************************************/
 
-union acpi_operand_object *acpi_ut_create_internal_object_dbg(const char
-							      *module_name,
-							      u32 line_number,
-							      u32 component_id,
-							      acpi_object_type
-							      type)
+ACPI_OPERAND_OBJECT  *
+AcpiUtCreateInternalObjectDbg (
+    const char              *ModuleName,
+    UINT32                  LineNumber,
+    UINT32                  ComponentId,
+    ACPI_OBJECT_TYPE        Type)
 {
-	union acpi_operand_object *object;
-	union acpi_operand_object *second_object;
+    ACPI_OPERAND_OBJECT     *Object;
+    ACPI_OPERAND_OBJECT     *SecondObject;
 
-	ACPI_FUNCTION_TRACE_STR(ut_create_internal_object_dbg,
-				acpi_ut_get_type_name(type));
 
-	/* Allocate the raw object descriptor */
+    ACPI_FUNCTION_TRACE_STR (UtCreateInternalObjectDbg,
+        AcpiUtGetTypeName (Type));
 
-	object =
-	    acpi_ut_allocate_object_desc_dbg(module_name, line_number,
-					     component_id);
-	if (!object) {
-		return_PTR(NULL);
-	}
 
-	switch (type) {
-	case ACPI_TYPE_REGION:
-	case ACPI_TYPE_BUFFER_FIELD:
-	case ACPI_TYPE_LOCAL_BANK_FIELD:
+    /* Allocate the raw object descriptor */
 
-		/* These types require a secondary object */
+    Object = AcpiUtAllocateObjectDescDbg (ModuleName, LineNumber, ComponentId);
+    if (!Object)
+    {
+        return_PTR (NULL);
+    }
 
-		second_object = acpi_ut_allocate_object_desc_dbg(module_name,
-								 line_number,
-								 component_id);
-		if (!second_object) {
-			acpi_ut_delete_object_desc(object);
-			return_PTR(NULL);
-		}
+    switch (Type)
+    {
+    case ACPI_TYPE_REGION:
+    case ACPI_TYPE_BUFFER_FIELD:
+    case ACPI_TYPE_LOCAL_BANK_FIELD:
 
-		second_object->common.type = ACPI_TYPE_LOCAL_EXTRA;
-		second_object->common.reference_count = 1;
+        /* These types require a secondary object */
 
-		/* Link the second object to the first */
+        SecondObject = AcpiUtAllocateObjectDescDbg (ModuleName,
+                            LineNumber, ComponentId);
+        if (!SecondObject)
+        {
+            AcpiUtDeleteObjectDesc (Object);
+            return_PTR (NULL);
+        }
 
-		object->common.next_object = second_object;
-		break;
+        SecondObject->Common.Type = ACPI_TYPE_LOCAL_EXTRA;
+        SecondObject->Common.ReferenceCount = 1;
 
-	default:
+        /* Link the second object to the first */
 
-		/* All others have no secondary object */
-		break;
-	}
+        Object->Common.NextObject = SecondObject;
+        break;
 
-	/* Save the object type in the object descriptor */
+    default:
 
-	object->common.type = (u8) type;
+        /* All others have no secondary object */
+        break;
+    }
 
-	/* Init the reference count */
+    /* Save the object type in the object descriptor */
 
-	object->common.reference_count = 1;
+    Object->Common.Type = (UINT8) Type;
 
-	/* Any per-type initialization should go here */
+    /* Init the reference count */
 
-	return_PTR(object);
+    Object->Common.ReferenceCount = 1;
+
+    /* Any per-type initialization should go here */
+
+    return_PTR (Object);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_create_package_object
+ * FUNCTION:    AcpiUtCreatePackageObject
  *
- * PARAMETERS:  count               - Number of package elements
+ * PARAMETERS:  Count               - Number of package elements
  *
  * RETURN:      Pointer to a new Package object, null on failure
  *
@@ -159,41 +243,48 @@ union acpi_operand_object *acpi_ut_create_internal_object_dbg(const char
  *
  ******************************************************************************/
 
-union acpi_operand_object *acpi_ut_create_package_object(u32 count)
+ACPI_OPERAND_OBJECT *
+AcpiUtCreatePackageObject (
+    UINT32                  Count)
 {
-	union acpi_operand_object *package_desc;
-	union acpi_operand_object **package_elements;
+    ACPI_OPERAND_OBJECT     *PackageDesc;
+    ACPI_OPERAND_OBJECT     **PackageElements;
 
-	ACPI_FUNCTION_TRACE_U32(ut_create_package_object, count);
 
-	/* Create a new Package object */
+    ACPI_FUNCTION_TRACE_U32 (UtCreatePackageObject, Count);
 
-	package_desc = acpi_ut_create_internal_object(ACPI_TYPE_PACKAGE);
-	if (!package_desc) {
-		return_PTR(NULL);
-	}
 
-	/*
-	 * Create the element array. Count+1 allows the array to be null
-	 * terminated.
-	 */
-	package_elements = ACPI_ALLOCATE_ZEROED(((acpi_size) count +
-						 1) * sizeof(void *));
-	if (!package_elements) {
-		ACPI_FREE(package_desc);
-		return_PTR(NULL);
-	}
+    /* Create a new Package object */
 
-	package_desc->package.count = count;
-	package_desc->package.elements = package_elements;
-	return_PTR(package_desc);
+    PackageDesc = AcpiUtCreateInternalObject (ACPI_TYPE_PACKAGE);
+    if (!PackageDesc)
+    {
+        return_PTR (NULL);
+    }
+
+    /*
+     * Create the element array. Count+1 allows the array to be null
+     * terminated.
+     */
+    PackageElements = ACPI_ALLOCATE_ZEROED (
+                        ((ACPI_SIZE) Count + 1) * sizeof (void *));
+    if (!PackageElements)
+    {
+        ACPI_FREE (PackageDesc);
+        return_PTR (NULL);
+    }
+
+    PackageDesc->Package.Count = Count;
+    PackageDesc->Package.Elements = PackageElements;
+    return_PTR (PackageDesc);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_create_integer_object
+ * FUNCTION:    AcpiUtCreateIntegerObject
  *
- * PARAMETERS:  initial_value       - Initial value for the integer
+ * PARAMETERS:  InitialValue        - Initial value for the integer
  *
  * RETURN:      Pointer to a new Integer object, null on failure
  *
@@ -201,28 +292,34 @@ union acpi_operand_object *acpi_ut_create_package_object(u32 count)
  *
  ******************************************************************************/
 
-union acpi_operand_object *acpi_ut_create_integer_object(u64 initial_value)
+ACPI_OPERAND_OBJECT *
+AcpiUtCreateIntegerObject (
+    UINT64                  InitialValue)
 {
-	union acpi_operand_object *integer_desc;
+    ACPI_OPERAND_OBJECT     *IntegerDesc;
 
-	ACPI_FUNCTION_TRACE(ut_create_integer_object);
 
-	/* Create and initialize a new integer object */
+    ACPI_FUNCTION_TRACE (UtCreateIntegerObject);
 
-	integer_desc = acpi_ut_create_internal_object(ACPI_TYPE_INTEGER);
-	if (!integer_desc) {
-		return_PTR(NULL);
-	}
 
-	integer_desc->integer.value = initial_value;
-	return_PTR(integer_desc);
+    /* Create and initialize a new integer object */
+
+    IntegerDesc = AcpiUtCreateInternalObject (ACPI_TYPE_INTEGER);
+    if (!IntegerDesc)
+    {
+        return_PTR (NULL);
+    }
+
+    IntegerDesc->Integer.Value = InitialValue;
+    return_PTR (IntegerDesc);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_create_buffer_object
+ * FUNCTION:    AcpiUtCreateBufferObject
  *
- * PARAMETERS:  buffer_size            - Size of buffer to be created
+ * PARAMETERS:  BufferSize             - Size of buffer to be created
  *
  * RETURN:      Pointer to a new Buffer object, null on failure
  *
@@ -230,51 +327,58 @@ union acpi_operand_object *acpi_ut_create_integer_object(u64 initial_value)
  *
  ******************************************************************************/
 
-union acpi_operand_object *acpi_ut_create_buffer_object(acpi_size buffer_size)
+ACPI_OPERAND_OBJECT *
+AcpiUtCreateBufferObject (
+    ACPI_SIZE               BufferSize)
 {
-	union acpi_operand_object *buffer_desc;
-	u8 *buffer = NULL;
+    ACPI_OPERAND_OBJECT     *BufferDesc;
+    UINT8                   *Buffer = NULL;
 
-	ACPI_FUNCTION_TRACE_U32(ut_create_buffer_object, buffer_size);
 
-	/* Create a new Buffer object */
+    ACPI_FUNCTION_TRACE_U32 (UtCreateBufferObject, BufferSize);
 
-	buffer_desc = acpi_ut_create_internal_object(ACPI_TYPE_BUFFER);
-	if (!buffer_desc) {
-		return_PTR(NULL);
-	}
 
-	/* Create an actual buffer only if size > 0 */
+    /* Create a new Buffer object */
 
-	if (buffer_size > 0) {
+    BufferDesc = AcpiUtCreateInternalObject (ACPI_TYPE_BUFFER);
+    if (!BufferDesc)
+    {
+        return_PTR (NULL);
+    }
 
-		/* Allocate the actual buffer */
+    /* Create an actual buffer only if size > 0 */
 
-		buffer = ACPI_ALLOCATE_ZEROED(buffer_size);
-		if (!buffer) {
-			ACPI_ERROR((AE_INFO, "Could not allocate size %u",
-				    (u32) buffer_size));
-			acpi_ut_remove_reference(buffer_desc);
-			return_PTR(NULL);
-		}
-	}
+    if (BufferSize > 0)
+    {
+        /* Allocate the actual buffer */
 
-	/* Complete buffer object initialization */
+        Buffer = ACPI_ALLOCATE_ZEROED (BufferSize);
+        if (!Buffer)
+        {
+            ACPI_ERROR ((AE_INFO, "Could not allocate size %u",
+                (UINT32) BufferSize));
+            AcpiUtRemoveReference (BufferDesc);
+            return_PTR (NULL);
+        }
+    }
 
-	buffer_desc->buffer.flags |= AOPOBJ_DATA_VALID;
-	buffer_desc->buffer.pointer = buffer;
-	buffer_desc->buffer.length = (u32) buffer_size;
+    /* Complete buffer object initialization */
 
-	/* Return the new buffer descriptor */
+    BufferDesc->Buffer.Flags |= AOPOBJ_DATA_VALID;
+    BufferDesc->Buffer.Pointer = Buffer;
+    BufferDesc->Buffer.Length = (UINT32) BufferSize;
 
-	return_PTR(buffer_desc);
+    /* Return the new buffer descriptor */
+
+    return_PTR (BufferDesc);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_create_string_object
+ * FUNCTION:    AcpiUtCreateStringObject
  *
- * PARAMETERS:  string_size         - Size of string to be created. Does not
+ * PARAMETERS:  StringSize          - Size of string to be created. Does not
  *                                    include NULL terminator, this is added
  *                                    automatically.
  *
@@ -284,93 +388,106 @@ union acpi_operand_object *acpi_ut_create_buffer_object(acpi_size buffer_size)
  *
  ******************************************************************************/
 
-union acpi_operand_object *acpi_ut_create_string_object(acpi_size string_size)
+ACPI_OPERAND_OBJECT *
+AcpiUtCreateStringObject (
+    ACPI_SIZE               StringSize)
 {
-	union acpi_operand_object *string_desc;
-	char *string;
+    ACPI_OPERAND_OBJECT     *StringDesc;
+    char                    *String;
 
-	ACPI_FUNCTION_TRACE_U32(ut_create_string_object, string_size);
 
-	/* Create a new String object */
+    ACPI_FUNCTION_TRACE_U32 (UtCreateStringObject, StringSize);
 
-	string_desc = acpi_ut_create_internal_object(ACPI_TYPE_STRING);
-	if (!string_desc) {
-		return_PTR(NULL);
-	}
 
-	/*
-	 * Allocate the actual string buffer -- (Size + 1) for NULL terminator.
-	 * NOTE: Zero-length strings are NULL terminated
-	 */
-	string = ACPI_ALLOCATE_ZEROED(string_size + 1);
-	if (!string) {
-		ACPI_ERROR((AE_INFO, "Could not allocate size %u",
-			    (u32) string_size));
-		acpi_ut_remove_reference(string_desc);
-		return_PTR(NULL);
-	}
+    /* Create a new String object */
 
-	/* Complete string object initialization */
+    StringDesc = AcpiUtCreateInternalObject (ACPI_TYPE_STRING);
+    if (!StringDesc)
+    {
+        return_PTR (NULL);
+    }
 
-	string_desc->string.pointer = string;
-	string_desc->string.length = (u32) string_size;
+    /*
+     * Allocate the actual string buffer -- (Size + 1) for NULL terminator.
+     * NOTE: Zero-length strings are NULL terminated
+     */
+    String = ACPI_ALLOCATE_ZEROED (StringSize + 1);
+    if (!String)
+    {
+        ACPI_ERROR ((AE_INFO, "Could not allocate size %u",
+            (UINT32) StringSize));
+        AcpiUtRemoveReference (StringDesc);
+        return_PTR (NULL);
+    }
 
-	/* Return the new string descriptor */
+    /* Complete string object initialization */
 
-	return_PTR(string_desc);
+    StringDesc->String.Pointer = String;
+    StringDesc->String.Length = (UINT32) StringSize;
+
+    /* Return the new string descriptor */
+
+    return_PTR (StringDesc);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_valid_internal_object
+ * FUNCTION:    AcpiUtValidInternalObject
  *
- * PARAMETERS:  object              - Object to be validated
+ * PARAMETERS:  Object              - Object to be validated
  *
  * RETURN:      TRUE if object is valid, FALSE otherwise
  *
- * DESCRIPTION: Validate a pointer to be of type union acpi_operand_object
+ * DESCRIPTION: Validate a pointer to be of type ACPI_OPERAND_OBJECT
  *
  ******************************************************************************/
 
-u8 acpi_ut_valid_internal_object(void *object)
+BOOLEAN
+AcpiUtValidInternalObject (
+    void                    *Object)
 {
 
-	ACPI_FUNCTION_NAME(ut_valid_internal_object);
+    ACPI_FUNCTION_NAME (UtValidInternalObject);
 
-	/* Check for a null pointer */
 
-	if (!object) {
-		ACPI_DEBUG_PRINT((ACPI_DB_EXEC, "**** Null Object Ptr\n"));
-		return (FALSE);
-	}
+    /* Check for a null pointer */
 
-	/* Check the descriptor type field */
+    if (!Object)
+    {
+        ACPI_DEBUG_PRINT ((ACPI_DB_EXEC, "**** Null Object Ptr\n"));
+        return (FALSE);
+    }
 
-	switch (ACPI_GET_DESCRIPTOR_TYPE(object)) {
-	case ACPI_DESC_TYPE_OPERAND:
+    /* Check the descriptor type field */
 
-		/* The object appears to be a valid union acpi_operand_object */
+    switch (ACPI_GET_DESCRIPTOR_TYPE (Object))
+    {
+    case ACPI_DESC_TYPE_OPERAND:
 
-		return (TRUE);
+        /* The object appears to be a valid ACPI_OPERAND_OBJECT */
 
-	default:
+        return (TRUE);
 
-		ACPI_DEBUG_PRINT((ACPI_DB_EXEC,
-				  "%p is not an ACPI operand obj [%s]\n",
-				  object, acpi_ut_get_descriptor_name(object)));
-		break;
-	}
+    default:
 
-	return (FALSE);
+        ACPI_DEBUG_PRINT ((ACPI_DB_EXEC,
+                "%p is not an ACPI operand obj [%s]\n",
+                Object, AcpiUtGetDescriptorName (Object)));
+        break;
+    }
+
+    return (FALSE);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_allocate_object_desc_dbg
+ * FUNCTION:    AcpiUtAllocateObjectDescDbg
  *
- * PARAMETERS:  module_name         - Caller's module name (for error output)
- *              line_number         - Caller's line number (for error output)
- *              component_id        - Caller's component ID (for error output)
+ * PARAMETERS:  ModuleName          - Caller's module name (for error output)
+ *              LineNumber          - Caller's line number (for error output)
+ *              ComponentId         - Caller's component ID (for error output)
  *
  * RETURN:      Pointer to newly allocated object descriptor. Null on error
  *
@@ -379,36 +496,43 @@ u8 acpi_ut_valid_internal_object(void *object)
  *
  ******************************************************************************/
 
-void *acpi_ut_allocate_object_desc_dbg(const char *module_name,
-				       u32 line_number, u32 component_id)
+void *
+AcpiUtAllocateObjectDescDbg (
+    const char              *ModuleName,
+    UINT32                  LineNumber,
+    UINT32                  ComponentId)
 {
-	union acpi_operand_object *object;
+    ACPI_OPERAND_OBJECT     *Object;
 
-	ACPI_FUNCTION_TRACE(ut_allocate_object_desc_dbg);
 
-	object = acpi_os_acquire_object(acpi_gbl_operand_cache);
-	if (!object) {
-		ACPI_ERROR((module_name, line_number,
-			    "Could not allocate an object descriptor"));
+    ACPI_FUNCTION_TRACE (UtAllocateObjectDescDbg);
 
-		return_PTR(NULL);
-	}
 
-	/* Mark the descriptor type */
+    Object = AcpiOsAcquireObject (AcpiGbl_OperandCache);
+    if (!Object)
+    {
+        ACPI_ERROR ((ModuleName, LineNumber,
+            "Could not allocate an object descriptor"));
 
-	ACPI_SET_DESCRIPTOR_TYPE(object, ACPI_DESC_TYPE_OPERAND);
+        return_PTR (NULL);
+    }
 
-	ACPI_DEBUG_PRINT((ACPI_DB_ALLOCATIONS, "%p Size %X\n",
-			  object, (u32) sizeof(union acpi_operand_object)));
+    /* Mark the descriptor type */
 
-	return_PTR(object);
+    ACPI_SET_DESCRIPTOR_TYPE (Object, ACPI_DESC_TYPE_OPERAND);
+
+    ACPI_DEBUG_PRINT ((ACPI_DB_ALLOCATIONS, "%p Size %X\n",
+            Object, (UINT32) sizeof (ACPI_OPERAND_OBJECT)));
+
+    return_PTR (Object);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_delete_object_desc
+ * FUNCTION:    AcpiUtDeleteObjectDesc
  *
- * PARAMETERS:  object          - An Acpi internal object to be deleted
+ * PARAMETERS:  Object          - An Acpi internal object to be deleted
  *
  * RETURN:      None.
  *
@@ -416,29 +540,34 @@ void *acpi_ut_allocate_object_desc_dbg(const char *module_name,
  *
  ******************************************************************************/
 
-void acpi_ut_delete_object_desc(union acpi_operand_object *object)
+void
+AcpiUtDeleteObjectDesc (
+    ACPI_OPERAND_OBJECT     *Object)
 {
-	ACPI_FUNCTION_TRACE_PTR(ut_delete_object_desc, object);
+    ACPI_FUNCTION_TRACE_PTR (UtDeleteObjectDesc, Object);
 
-	/* Object must be of type union acpi_operand_object */
 
-	if (ACPI_GET_DESCRIPTOR_TYPE(object) != ACPI_DESC_TYPE_OPERAND) {
-		ACPI_ERROR((AE_INFO,
-			    "%p is not an ACPI Operand object [%s]", object,
-			    acpi_ut_get_descriptor_name(object)));
-		return_VOID;
-	}
+    /* Object must be of type ACPI_OPERAND_OBJECT */
 
-	(void)acpi_os_release_object(acpi_gbl_operand_cache, object);
-	return_VOID;
+    if (ACPI_GET_DESCRIPTOR_TYPE (Object) != ACPI_DESC_TYPE_OPERAND)
+    {
+        ACPI_ERROR ((AE_INFO,
+            "%p is not an ACPI Operand object [%s]", Object,
+            AcpiUtGetDescriptorName (Object)));
+        return_VOID;
+    }
+
+    (void) AcpiOsReleaseObject (AcpiGbl_OperandCache, Object);
+    return_VOID;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_get_simple_object_size
+ * FUNCTION:    AcpiUtGetSimpleObjectSize
  *
- * PARAMETERS:  internal_object    - An ACPI operand object
- *              obj_length         - Where the length is returned
+ * PARAMETERS:  InternalObject     - An ACPI operand object
+ *              ObjLength          - Where the length is returned
  *
  * RETURN:      Status
  *
@@ -450,125 +579,129 @@ void acpi_ut_delete_object_desc(union acpi_operand_object *object)
  *
  ******************************************************************************/
 
-static acpi_status
-acpi_ut_get_simple_object_size(union acpi_operand_object *internal_object,
-			       acpi_size * obj_length)
+static ACPI_STATUS
+AcpiUtGetSimpleObjectSize (
+    ACPI_OPERAND_OBJECT     *InternalObject,
+    ACPI_SIZE               *ObjLength)
 {
-	acpi_size length;
-	acpi_size size;
-	acpi_status status = AE_OK;
+    ACPI_SIZE               Length;
+    ACPI_SIZE               Size;
+    ACPI_STATUS             Status = AE_OK;
 
-	ACPI_FUNCTION_TRACE_PTR(ut_get_simple_object_size, internal_object);
 
-	/* Start with the length of the (external) Acpi object */
+    ACPI_FUNCTION_TRACE_PTR (UtGetSimpleObjectSize, InternalObject);
 
-	length = sizeof(union acpi_object);
 
-	/* A NULL object is allowed, can be a legal uninitialized package element */
+    /* Start with the length of the (external) Acpi object */
 
-	if (!internal_object) {
-	/*
-		 * Object is NULL, just return the length of union acpi_object
-		 * (A NULL union acpi_object is an object of all zeroes.)
-	 */
-		*obj_length = ACPI_ROUND_UP_TO_NATIVE_WORD(length);
-		return_ACPI_STATUS(AE_OK);
-	}
+    Length = sizeof (ACPI_OBJECT);
 
-	/* A Namespace Node should never appear here */
+    /* A NULL object is allowed, can be a legal uninitialized package element */
 
-	if (ACPI_GET_DESCRIPTOR_TYPE(internal_object) == ACPI_DESC_TYPE_NAMED) {
+    if (!InternalObject)
+    {
+        /*
+         * Object is NULL, just return the length of ACPI_OBJECT
+         * (A NULL ACPI_OBJECT is an object of all zeroes.)
+         */
+        *ObjLength = ACPI_ROUND_UP_TO_NATIVE_WORD (Length);
+        return_ACPI_STATUS (AE_OK);
+    }
 
-		/* A namespace node should never get here */
+    /* A Namespace Node should never appear here */
 
-		return_ACPI_STATUS(AE_AML_INTERNAL);
-	}
+    if (ACPI_GET_DESCRIPTOR_TYPE (InternalObject) == ACPI_DESC_TYPE_NAMED)
+    {
+        /* A namespace node should never get here */
 
-	/*
-	 * The final length depends on the object type
-	 * Strings and Buffers are packed right up against the parent object and
-	 * must be accessed bytewise or there may be alignment problems on
-	 * certain processors
-	 */
-	switch (internal_object->common.type) {
-	case ACPI_TYPE_STRING:
+        return_ACPI_STATUS (AE_AML_INTERNAL);
+    }
 
-		length += (acpi_size) internal_object->string.length + 1;
-		break;
+    /*
+     * The final length depends on the object type
+     * Strings and Buffers are packed right up against the parent object and
+     * must be accessed bytewise or there may be alignment problems on
+     * certain processors
+     */
+    switch (InternalObject->Common.Type)
+    {
+    case ACPI_TYPE_STRING:
 
-	case ACPI_TYPE_BUFFER:
+        Length += (ACPI_SIZE) InternalObject->String.Length + 1;
+        break;
 
-		length += (acpi_size) internal_object->buffer.length;
-		break;
+    case ACPI_TYPE_BUFFER:
 
-	case ACPI_TYPE_INTEGER:
-	case ACPI_TYPE_PROCESSOR:
-	case ACPI_TYPE_POWER:
+        Length += (ACPI_SIZE) InternalObject->Buffer.Length;
+        break;
 
-		/* No extra data for these types */
+    case ACPI_TYPE_INTEGER:
+    case ACPI_TYPE_PROCESSOR:
+    case ACPI_TYPE_POWER:
 
-		break;
+        /* No extra data for these types */
 
-	case ACPI_TYPE_LOCAL_REFERENCE:
+        break;
 
-		switch (internal_object->reference.class) {
-		case ACPI_REFCLASS_NAME:
-			/*
-			 * Get the actual length of the full pathname to this object.
-			 * The reference will be converted to the pathname to the object
-			 */
-			size =
-			    acpi_ns_get_pathname_length(internal_object->
-							reference.node);
-			if (!size) {
-				return_ACPI_STATUS(AE_BAD_PARAMETER);
-			}
+    case ACPI_TYPE_LOCAL_REFERENCE:
 
-			length += ACPI_ROUND_UP_TO_NATIVE_WORD(size);
-			break;
+        switch (InternalObject->Reference.Class)
+        {
+        case ACPI_REFCLASS_NAME:
+            /*
+             * Get the actual length of the full pathname to this object.
+             * The reference will be converted to the pathname to the object
+             */
+            Size = AcpiNsGetPathnameLength (InternalObject->Reference.Node);
+            if (!Size)
+            {
+                return_ACPI_STATUS (AE_BAD_PARAMETER);
+            }
 
-		default:
-			/*
-			 * No other reference opcodes are supported.
-			 * Notably, Locals and Args are not supported, but this may be
-			 * required eventually.
-			 */
-			ACPI_ERROR((AE_INFO,
-				    "Cannot convert to external object - "
-				    "unsupported Reference Class [%s] 0x%X in object %p",
-				    acpi_ut_get_reference_name(internal_object),
-				    internal_object->reference.class,
-				    internal_object));
-			status = AE_TYPE;
-			break;
-		}
-		break;
+            Length += ACPI_ROUND_UP_TO_NATIVE_WORD (Size);
+            break;
 
-	default:
+        default:
+            /*
+             * No other reference opcodes are supported.
+             * Notably, Locals and Args are not supported, but this may be
+             * required eventually.
+             */
+            ACPI_ERROR ((AE_INFO, "Cannot convert to external object - "
+                "unsupported Reference Class [%s] 0x%X in object %p",
+                AcpiUtGetReferenceName (InternalObject),
+                InternalObject->Reference.Class, InternalObject));
+            Status = AE_TYPE;
+            break;
+        }
+        break;
 
-		ACPI_ERROR((AE_INFO, "Cannot convert to external object - "
-			    "unsupported type [%s] 0x%X in object %p",
-			    acpi_ut_get_object_type_name(internal_object),
-			    internal_object->common.type, internal_object));
-		status = AE_TYPE;
-		break;
-	}
+    default:
 
-	/*
-	 * Account for the space required by the object rounded up to the next
-	 * multiple of the machine word size. This keeps each object aligned
-	 * on a machine word boundary. (preventing alignment faults on some
-	 * machines.)
-	 */
-	*obj_length = ACPI_ROUND_UP_TO_NATIVE_WORD(length);
-	return_ACPI_STATUS(status);
+        ACPI_ERROR ((AE_INFO, "Cannot convert to external object - "
+            "unsupported type [%s] 0x%X in object %p",
+            AcpiUtGetObjectTypeName (InternalObject),
+            InternalObject->Common.Type, InternalObject));
+        Status = AE_TYPE;
+        break;
+    }
+
+    /*
+     * Account for the space required by the object rounded up to the next
+     * multiple of the machine word size. This keeps each object aligned
+     * on a machine word boundary. (preventing alignment faults on some
+     * machines.)
+     */
+    *ObjLength = ACPI_ROUND_UP_TO_NATIVE_WORD (Length);
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_get_element_length
+ * FUNCTION:    AcpiUtGetElementLength
  *
- * PARAMETERS:  acpi_pkg_callback
+ * PARAMETERS:  ACPI_PKG_CALLBACK
  *
  * RETURN:      Status
  *
@@ -576,55 +709,59 @@ acpi_ut_get_simple_object_size(union acpi_operand_object *internal_object,
  *
  ******************************************************************************/
 
-static acpi_status
-acpi_ut_get_element_length(u8 object_type,
-			   union acpi_operand_object *source_object,
-			   union acpi_generic_state *state, void *context)
+static ACPI_STATUS
+AcpiUtGetElementLength (
+    UINT8                   ObjectType,
+    ACPI_OPERAND_OBJECT     *SourceObject,
+    ACPI_GENERIC_STATE      *State,
+    void                    *Context)
 {
-	acpi_status status = AE_OK;
-	struct acpi_pkg_info *info = (struct acpi_pkg_info *)context;
-	acpi_size object_space;
+    ACPI_STATUS             Status = AE_OK;
+    ACPI_PKG_INFO           *Info = (ACPI_PKG_INFO *) Context;
+    ACPI_SIZE               ObjectSpace;
 
-	switch (object_type) {
-	case ACPI_COPY_TYPE_SIMPLE:
-		/*
-		 * Simple object - just get the size (Null object/entry is handled
-		 * here also) and sum it into the running package length
-		 */
-		status =
-		    acpi_ut_get_simple_object_size(source_object,
-						   &object_space);
-		if (ACPI_FAILURE(status)) {
-			return (status);
-		}
 
-		info->length += object_space;
-		break;
+    switch (ObjectType)
+    {
+    case ACPI_COPY_TYPE_SIMPLE:
+        /*
+         * Simple object - just get the size (Null object/entry is handled
+         * here also) and sum it into the running package length
+         */
+        Status = AcpiUtGetSimpleObjectSize (SourceObject, &ObjectSpace);
+        if (ACPI_FAILURE (Status))
+        {
+            return (Status);
+        }
 
-	case ACPI_COPY_TYPE_PACKAGE:
+        Info->Length += ObjectSpace;
+        break;
 
-		/* Package object - nothing much to do here, let the walk handle it */
+    case ACPI_COPY_TYPE_PACKAGE:
 
-		info->num_packages++;
-		state->pkg.this_target_obj = NULL;
-		break;
+        /* Package object - nothing much to do here, let the walk handle it */
 
-	default:
+        Info->NumPackages++;
+        State->Pkg.ThisTargetObj = NULL;
+        break;
 
-		/* No other types allowed */
+    default:
 
-		return (AE_BAD_PARAMETER);
-	}
+        /* No other types allowed */
 
-	return (status);
+        return (AE_BAD_PARAMETER);
+    }
+
+    return (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_get_package_object_size
+ * FUNCTION:    AcpiUtGetPackageObjectSize
  *
- * PARAMETERS:  internal_object     - An ACPI internal object
- *              obj_length          - Where the length is returned
+ * PARAMETERS:  InternalObject      - An ACPI internal object
+ *              ObjLength           - Where the length is returned
  *
  * RETURN:      Status
  *
@@ -636,45 +773,50 @@ acpi_ut_get_element_length(u8 object_type,
  *
  ******************************************************************************/
 
-static acpi_status
-acpi_ut_get_package_object_size(union acpi_operand_object *internal_object,
-				acpi_size * obj_length)
+static ACPI_STATUS
+AcpiUtGetPackageObjectSize (
+    ACPI_OPERAND_OBJECT     *InternalObject,
+    ACPI_SIZE               *ObjLength)
 {
-	acpi_status status;
-	struct acpi_pkg_info info;
+    ACPI_STATUS             Status;
+    ACPI_PKG_INFO           Info;
 
-	ACPI_FUNCTION_TRACE_PTR(ut_get_package_object_size, internal_object);
 
-	info.length = 0;
-	info.object_space = 0;
-	info.num_packages = 1;
+    ACPI_FUNCTION_TRACE_PTR (UtGetPackageObjectSize, InternalObject);
 
-	status = acpi_ut_walk_package_tree(internal_object, NULL,
-					   acpi_ut_get_element_length, &info);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
 
-	/*
-	 * We have handled all of the objects in all levels of the package.
-	 * just add the length of the package objects themselves.
-	 * Round up to the next machine word.
-	 */
-	info.length += ACPI_ROUND_UP_TO_NATIVE_WORD(sizeof(union acpi_object)) *
-	    (acpi_size) info.num_packages;
+    Info.Length      = 0;
+    Info.ObjectSpace = 0;
+    Info.NumPackages = 1;
 
-	/* Return the total package length */
+    Status = AcpiUtWalkPackageTree (InternalObject, NULL,
+        AcpiUtGetElementLength, &Info);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	*obj_length = info.length;
-	return_ACPI_STATUS(status);
+    /*
+     * We have handled all of the objects in all levels of the package.
+     * just add the length of the package objects themselves.
+     * Round up to the next machine word.
+     */
+    Info.Length += ACPI_ROUND_UP_TO_NATIVE_WORD (sizeof (ACPI_OBJECT)) *
+                    (ACPI_SIZE) Info.NumPackages;
+
+    /* Return the total package length */
+
+    *ObjLength = Info.Length;
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_get_object_size
+ * FUNCTION:    AcpiUtGetObjectSize
  *
- * PARAMETERS:  internal_object     - An ACPI internal object
- *              obj_length          - Where the length will be returned
+ * PARAMETERS:  InternalObject      - An ACPI internal object
+ *              ObjLength           - Where the length will be returned
  *
  * RETURN:      Status
  *
@@ -683,24 +825,26 @@ acpi_ut_get_package_object_size(union acpi_operand_object *internal_object,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ut_get_object_size(union acpi_operand_object *internal_object,
-			acpi_size * obj_length)
+ACPI_STATUS
+AcpiUtGetObjectSize (
+    ACPI_OPERAND_OBJECT     *InternalObject,
+    ACPI_SIZE               *ObjLength)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_ENTRY();
 
-	if ((ACPI_GET_DESCRIPTOR_TYPE(internal_object) ==
-	     ACPI_DESC_TYPE_OPERAND)
-	    && (internal_object->common.type == ACPI_TYPE_PACKAGE)) {
-		status =
-		    acpi_ut_get_package_object_size(internal_object,
-						    obj_length);
-	} else {
-		status =
-		    acpi_ut_get_simple_object_size(internal_object, obj_length);
-	}
+    ACPI_FUNCTION_ENTRY ();
 
-	return (status);
+
+    if ((ACPI_GET_DESCRIPTOR_TYPE (InternalObject) == ACPI_DESC_TYPE_OPERAND) &&
+        (InternalObject->Common.Type == ACPI_TYPE_PACKAGE))
+    {
+        Status = AcpiUtGetPackageObjectSize (InternalObject, ObjLength);
+    }
+    else
+    {
+        Status = AcpiUtGetSimpleObjectSize (InternalObject, ObjLength);
+    }
+
+    return (Status);
 }

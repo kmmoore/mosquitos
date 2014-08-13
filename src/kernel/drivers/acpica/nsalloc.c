@@ -4,95 +4,180 @@
  *
  ******************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+
+#define __NSALLOC_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acnamesp.h"
 
+
 #define _COMPONENT          ACPI_NAMESPACE
-ACPI_MODULE_NAME("nsalloc")
+        ACPI_MODULE_NAME    ("nsalloc")
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_create_node
+ * FUNCTION:    AcpiNsCreateNode
  *
- * PARAMETERS:  name            - Name of the new node (4 char ACPI name)
+ * PARAMETERS:  Name            - Name of the new node (4 char ACPI name)
  *
  * RETURN:      New namespace node (Null on failure)
  *
  * DESCRIPTION: Create a namespace node
  *
  ******************************************************************************/
-struct acpi_namespace_node *acpi_ns_create_node(u32 name)
+
+ACPI_NAMESPACE_NODE *
+AcpiNsCreateNode (
+    UINT32                  Name)
 {
-	struct acpi_namespace_node *node;
+    ACPI_NAMESPACE_NODE     *Node;
 #ifdef ACPI_DBG_TRACK_ALLOCATIONS
-	u32 temp;
+    UINT32                  Temp;
 #endif
 
-	ACPI_FUNCTION_TRACE(ns_create_node);
 
-	node = acpi_os_acquire_object(acpi_gbl_namespace_cache);
-	if (!node) {
-		return_PTR(NULL);
-	}
+    ACPI_FUNCTION_TRACE (NsCreateNode);
 
-	ACPI_MEM_TRACKING(acpi_gbl_ns_node_list->total_allocated++);
+
+    Node = AcpiOsAcquireObject (AcpiGbl_NamespaceCache);
+    if (!Node)
+    {
+        return_PTR (NULL);
+    }
+
+    ACPI_MEM_TRACKING (AcpiGbl_NsNodeList->TotalAllocated++);
 
 #ifdef ACPI_DBG_TRACK_ALLOCATIONS
-	temp = acpi_gbl_ns_node_list->total_allocated -
-	    acpi_gbl_ns_node_list->total_freed;
-	if (temp > acpi_gbl_ns_node_list->max_occupied) {
-		acpi_gbl_ns_node_list->max_occupied = temp;
-	}
+        Temp = AcpiGbl_NsNodeList->TotalAllocated -
+                AcpiGbl_NsNodeList->TotalFreed;
+        if (Temp > AcpiGbl_NsNodeList->MaxOccupied)
+        {
+            AcpiGbl_NsNodeList->MaxOccupied = Temp;
+        }
 #endif
 
-	node->name.integer = name;
-	ACPI_SET_DESCRIPTOR_TYPE(node, ACPI_DESC_TYPE_NAMED);
-	return_PTR(node);
+    Node->Name.Integer = Name;
+    ACPI_SET_DESCRIPTOR_TYPE (Node, ACPI_DESC_TYPE_NAMED);
+    return_PTR (Node);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_delete_node
+ * FUNCTION:    AcpiNsDeleteNode
  *
- * PARAMETERS:  node            - Node to be deleted
+ * PARAMETERS:  Node            - Node to be deleted
  *
  * RETURN:      None
  *
@@ -103,57 +188,65 @@ struct acpi_namespace_node *acpi_ns_create_node(u32 name)
  *
  ******************************************************************************/
 
-void acpi_ns_delete_node(struct acpi_namespace_node *node)
+void
+AcpiNsDeleteNode (
+    ACPI_NAMESPACE_NODE     *Node)
 {
-	union acpi_operand_object *obj_desc;
-	union acpi_operand_object *next_desc;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
+    ACPI_OPERAND_OBJECT     *NextDesc;
 
-	ACPI_FUNCTION_NAME(ns_delete_node);
 
-	/* Detach an object if there is one */
+    ACPI_FUNCTION_NAME (NsDeleteNode);
 
-	acpi_ns_detach_object(node);
 
-	/*
-	 * Delete an attached data object list if present (objects that were
-	 * attached via acpi_attach_data). Note: After any normal object is
-	 * detached above, the only possible remaining object(s) are data
-	 * objects, in a linked list.
-	 */
-	obj_desc = node->object;
-	while (obj_desc && (obj_desc->common.type == ACPI_TYPE_LOCAL_DATA)) {
+    /* Detach an object if there is one */
 
-		/* Invoke the attached data deletion handler if present */
+    AcpiNsDetachObject (Node);
 
-		if (obj_desc->data.handler) {
-			obj_desc->data.handler(node, obj_desc->data.pointer);
-		}
+    /*
+     * Delete an attached data object list if present (objects that were
+     * attached via AcpiAttachData). Note: After any normal object is
+     * detached above, the only possible remaining object(s) are data
+     * objects, in a linked list.
+     */
+    ObjDesc = Node->Object;
+    while (ObjDesc &&
+        (ObjDesc->Common.Type == ACPI_TYPE_LOCAL_DATA))
+    {
+        /* Invoke the attached data deletion handler if present */
 
-		next_desc = obj_desc->common.next_object;
-		acpi_ut_remove_reference(obj_desc);
-		obj_desc = next_desc;
-	}
+        if (ObjDesc->Data.Handler)
+        {
+            ObjDesc->Data.Handler (Node, ObjDesc->Data.Pointer);
+        }
 
-	/* Special case for the statically allocated root node */
+        NextDesc = ObjDesc->Common.NextObject;
+        AcpiUtRemoveReference (ObjDesc);
+        ObjDesc = NextDesc;
+    }
 
-	if (node == acpi_gbl_root_node) {
-		return;
-	}
+    /* Special case for the statically allocated root node */
 
-	/* Now we can delete the node */
+    if (Node == AcpiGbl_RootNode)
+    {
+        return;
+    }
 
-	(void)acpi_os_release_object(acpi_gbl_namespace_cache, node);
+    /* Now we can delete the node */
 
-	ACPI_MEM_TRACKING(acpi_gbl_ns_node_list->total_freed++);
-	ACPI_DEBUG_PRINT((ACPI_DB_ALLOCATIONS, "Node %p, Remaining %X\n",
-			  node, acpi_gbl_current_node_count));
+    (void) AcpiOsReleaseObject (AcpiGbl_NamespaceCache, Node);
+
+    ACPI_MEM_TRACKING (AcpiGbl_NsNodeList->TotalFreed++);
+    ACPI_DEBUG_PRINT ((ACPI_DB_ALLOCATIONS, "Node %p, Remaining %X\n",
+        Node, AcpiGbl_CurrentNodeCount));
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_remove_node
+ * FUNCTION:    AcpiNsRemoveNode
  *
- * PARAMETERS:  node            - Node to be removed/deleted
+ * PARAMETERS:  Node            - Node to be removed/deleted
  *
  * RETURN:      None
  *
@@ -161,53 +254,61 @@ void acpi_ns_delete_node(struct acpi_namespace_node *node)
  *
  ******************************************************************************/
 
-void acpi_ns_remove_node(struct acpi_namespace_node *node)
+void
+AcpiNsRemoveNode (
+    ACPI_NAMESPACE_NODE     *Node)
 {
-	struct acpi_namespace_node *parent_node;
-	struct acpi_namespace_node *prev_node;
-	struct acpi_namespace_node *next_node;
+    ACPI_NAMESPACE_NODE     *ParentNode;
+    ACPI_NAMESPACE_NODE     *PrevNode;
+    ACPI_NAMESPACE_NODE     *NextNode;
 
-	ACPI_FUNCTION_TRACE_PTR(ns_remove_node, node);
 
-	parent_node = node->parent;
+    ACPI_FUNCTION_TRACE_PTR (NsRemoveNode, Node);
 
-	prev_node = NULL;
-	next_node = parent_node->child;
 
-	/* Find the node that is the previous peer in the parent's child list */
+    ParentNode = Node->Parent;
 
-	while (next_node != node) {
-		prev_node = next_node;
-		next_node = next_node->peer;
-	}
+    PrevNode = NULL;
+    NextNode = ParentNode->Child;
 
-	if (prev_node) {
+    /* Find the node that is the previous peer in the parent's child list */
 
-		/* Node is not first child, unlink it */
+    while (NextNode != Node)
+    {
+        PrevNode = NextNode;
+        NextNode = NextNode->Peer;
+    }
 
-		prev_node->peer = node->peer;
-	} else {
-		/*
-		 * Node is first child (has no previous peer).
-		 * Link peer list to parent
-		 */
-		parent_node->child = node->peer;
-	}
+    if (PrevNode)
+    {
+        /* Node is not first child, unlink it */
 
-	/* Delete the node and any attached objects */
+        PrevNode->Peer = Node->Peer;
+    }
+    else
+    {
+        /*
+         * Node is first child (has no previous peer).
+         * Link peer list to parent
+         */
+        ParentNode->Child = Node->Peer;
+    }
 
-	acpi_ns_delete_node(node);
-	return_VOID;
+    /* Delete the node and any attached objects */
+
+    AcpiNsDeleteNode (Node);
+    return_VOID;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_install_node
+ * FUNCTION:    AcpiNsInstallNode
  *
- * PARAMETERS:  walk_state      - Current state of the walk
- *              parent_node     - The parent of the new Node
- *              node            - The new Node to install
- *              type            - ACPI object type of the new Node
+ * PARAMETERS:  WalkState       - Current state of the walk
+ *              ParentNode      - The parent of the new Node
+ *              Node            - The new Node to install
+ *              Type            - ACPI object type of the new Node
  *
  * RETURN:      None
  *
@@ -220,74 +321,83 @@ void acpi_ns_remove_node(struct acpi_namespace_node *node)
  *
  ******************************************************************************/
 
-void acpi_ns_install_node(struct acpi_walk_state *walk_state, struct acpi_namespace_node *parent_node,	/* Parent */
-			  struct acpi_namespace_node *node,	/* New Child */
-			  acpi_object_type type)
+void
+AcpiNsInstallNode (
+    ACPI_WALK_STATE         *WalkState,
+    ACPI_NAMESPACE_NODE     *ParentNode,    /* Parent */
+    ACPI_NAMESPACE_NODE     *Node,          /* New Child*/
+    ACPI_OBJECT_TYPE        Type)
 {
-	acpi_owner_id owner_id = 0;
-	struct acpi_namespace_node *child_node;
+    ACPI_OWNER_ID           OwnerId = 0;
+    ACPI_NAMESPACE_NODE     *ChildNode;
 
-	ACPI_FUNCTION_TRACE(ns_install_node);
 
-	if (walk_state) {
-		/*
-		 * Get the owner ID from the Walk state. The owner ID is used to
-		 * track table deletion and deletion of objects created by methods.
-		 */
-		owner_id = walk_state->owner_id;
+    ACPI_FUNCTION_TRACE (NsInstallNode);
 
-		if ((walk_state->method_desc) &&
-		    (parent_node != walk_state->method_node)) {
-			/*
-			 * A method is creating a new node that is not a child of the
-			 * method (it is non-local). Mark the executing method as having
-			 * modified the namespace. This is used for cleanup when the
-			 * method exits.
-			 */
-			walk_state->method_desc->method.info_flags |=
-			    ACPI_METHOD_MODIFIED_NAMESPACE;
-		}
-	}
 
-	/* Link the new entry into the parent and existing children */
+    if (WalkState)
+    {
+        /*
+         * Get the owner ID from the Walk state. The owner ID is used to
+         * track table deletion and deletion of objects created by methods.
+         */
+        OwnerId = WalkState->OwnerId;
 
-	node->peer = NULL;
-	node->parent = parent_node;
-	child_node = parent_node->child;
+        if ((WalkState->MethodDesc) &&
+            (ParentNode != WalkState->MethodNode))
+        {
+            /*
+             * A method is creating a new node that is not a child of the
+             * method (it is non-local). Mark the executing method as having
+             * modified the namespace. This is used for cleanup when the
+             * method exits.
+             */
+            WalkState->MethodDesc->Method.InfoFlags |= ACPI_METHOD_MODIFIED_NAMESPACE;
+        }
+    }
 
-	if (!child_node) {
-		parent_node->child = node;
-	} else {
-		/* Add node to the end of the peer list */
+    /* Link the new entry into the parent and existing children */
 
-		while (child_node->peer) {
-			child_node = child_node->peer;
-		}
+    Node->Peer = NULL;
+    Node->Parent = ParentNode;
+    ChildNode = ParentNode->Child;
 
-		child_node->peer = node;
-	}
+    if (!ChildNode)
+    {
+        ParentNode->Child = Node;
+    }
+    else
+    {
+        /* Add node to the end of the peer list */
 
-	/* Init the new entry */
+        while (ChildNode->Peer)
+        {
+            ChildNode = ChildNode->Peer;
+        }
 
-	node->owner_id = owner_id;
-	node->type = (u8) type;
+        ChildNode->Peer = Node;
+    }
 
-	ACPI_DEBUG_PRINT((ACPI_DB_NAMES,
-			  "%4.4s (%s) [Node %p Owner %X] added to %4.4s (%s) [Node %p]\n",
-			  acpi_ut_get_node_name(node),
-			  acpi_ut_get_type_name(node->type), node, owner_id,
-			  acpi_ut_get_node_name(parent_node),
-			  acpi_ut_get_type_name(parent_node->type),
-			  parent_node));
+    /* Init the new entry */
 
-	return_VOID;
+    Node->OwnerId = OwnerId;
+    Node->Type = (UINT8) Type;
+
+    ACPI_DEBUG_PRINT ((ACPI_DB_NAMES,
+        "%4.4s (%s) [Node %p Owner %X] added to %4.4s (%s) [Node %p]\n",
+        AcpiUtGetNodeName (Node), AcpiUtGetTypeName (Node->Type), Node, OwnerId,
+        AcpiUtGetNodeName (ParentNode), AcpiUtGetTypeName (ParentNode->Type),
+        ParentNode));
+
+    return_VOID;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_delete_children
+ * FUNCTION:    AcpiNsDeleteChildren
  *
- * PARAMETERS:  parent_node     - Delete this objects children
+ * PARAMETERS:  ParentNode      - Delete this objects children
  *
  * RETURN:      None.
  *
@@ -296,49 +406,56 @@ void acpi_ns_install_node(struct acpi_walk_state *walk_state, struct acpi_namesp
  *
  ******************************************************************************/
 
-void acpi_ns_delete_children(struct acpi_namespace_node *parent_node)
+void
+AcpiNsDeleteChildren (
+    ACPI_NAMESPACE_NODE     *ParentNode)
 {
-	struct acpi_namespace_node *next_node;
-	struct acpi_namespace_node *node_to_delete;
+    ACPI_NAMESPACE_NODE     *NextNode;
+    ACPI_NAMESPACE_NODE     *NodeToDelete;
 
-	ACPI_FUNCTION_TRACE_PTR(ns_delete_children, parent_node);
 
-	if (!parent_node) {
-		return_VOID;
-	}
+    ACPI_FUNCTION_TRACE_PTR (NsDeleteChildren, ParentNode);
 
-	/* Deallocate all children at this level */
 
-	next_node = parent_node->child;
-	while (next_node) {
+    if (!ParentNode)
+    {
+        return_VOID;
+    }
 
-		/* Grandchildren should have all been deleted already */
+    /* Deallocate all children at this level */
 
-		if (next_node->child) {
-			ACPI_ERROR((AE_INFO, "Found a grandchild! P=%p C=%p",
-				    parent_node, next_node));
-		}
+    NextNode = ParentNode->Child;
+    while (NextNode)
+    {
+        /* Grandchildren should have all been deleted already */
 
-		/*
-		 * Delete this child node and move on to the next child in the list.
-		 * No need to unlink the node since we are deleting the entire branch.
-		 */
-		node_to_delete = next_node;
-		next_node = next_node->peer;
-		acpi_ns_delete_node(node_to_delete);
-	};
+        if (NextNode->Child)
+        {
+            ACPI_ERROR ((AE_INFO, "Found a grandchild! P=%p C=%p",
+                ParentNode, NextNode));
+        }
 
-	/* Clear the parent's child pointer */
+        /*
+         * Delete this child node and move on to the next child in the list.
+         * No need to unlink the node since we are deleting the entire branch.
+         */
+        NodeToDelete = NextNode;
+        NextNode = NextNode->Peer;
+        AcpiNsDeleteNode (NodeToDelete);
+    };
 
-	parent_node->child = NULL;
-	return_VOID;
+    /* Clear the parent's child pointer */
+
+    ParentNode->Child = NULL;
+    return_VOID;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_delete_namespace_subtree
+ * FUNCTION:    AcpiNsDeleteNamespaceSubtree
  *
- * PARAMETERS:  parent_node     - Root of the subtree to be deleted
+ * PARAMETERS:  ParentNode      - Root of the subtree to be deleted
  *
  * RETURN:      None.
  *
@@ -347,83 +464,93 @@ void acpi_ns_delete_children(struct acpi_namespace_node *parent_node)
  *
  ******************************************************************************/
 
-void acpi_ns_delete_namespace_subtree(struct acpi_namespace_node *parent_node)
+void
+AcpiNsDeleteNamespaceSubtree (
+    ACPI_NAMESPACE_NODE     *ParentNode)
 {
-	struct acpi_namespace_node *child_node = NULL;
-	u32 level = 1;
-	acpi_status status;
+    ACPI_NAMESPACE_NODE     *ChildNode = NULL;
+    UINT32                  Level = 1;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(ns_delete_namespace_subtree);
 
-	if (!parent_node) {
-		return_VOID;
-	}
+    ACPI_FUNCTION_TRACE (NsDeleteNamespaceSubtree);
 
-	/* Lock namespace for possible update */
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return_VOID;
-	}
+    if (!ParentNode)
+    {
+        return_VOID;
+    }
 
-	/*
-	 * Traverse the tree of objects until we bubble back up
-	 * to where we started.
-	 */
-	while (level > 0) {
+    /* Lock namespace for possible update */
 
-		/* Get the next node in this scope (NULL if none) */
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return_VOID;
+    }
 
-		child_node = acpi_ns_get_next_node(parent_node, child_node);
-		if (child_node) {
+    /*
+     * Traverse the tree of objects until we bubble back up
+     * to where we started.
+     */
+    while (Level > 0)
+    {
+        /* Get the next node in this scope (NULL if none) */
 
-			/* Found a child node - detach any attached object */
+        ChildNode = AcpiNsGetNextNode (ParentNode, ChildNode);
+        if (ChildNode)
+        {
+            /* Found a child node - detach any attached object */
 
-			acpi_ns_detach_object(child_node);
+            AcpiNsDetachObject (ChildNode);
 
-			/* Check if this node has any children */
+            /* Check if this node has any children */
 
-			if (child_node->child) {
-				/*
-				 * There is at least one child of this node,
-				 * visit the node
-				 */
-				level++;
-				parent_node = child_node;
-				child_node = NULL;
-			}
-		} else {
-			/*
-			 * No more children of this parent node.
-			 * Move up to the grandparent.
-			 */
-			level--;
+            if (ChildNode->Child)
+            {
+                /*
+                 * There is at least one child of this node,
+                 * visit the node
+                 */
+                Level++;
+                ParentNode = ChildNode;
+                ChildNode  = NULL;
+            }
+        }
+        else
+        {
+            /*
+             * No more children of this parent node.
+             * Move up to the grandparent.
+             */
+            Level--;
 
-			/*
-			 * Now delete all of the children of this parent
-			 * all at the same time.
-			 */
-			acpi_ns_delete_children(parent_node);
+            /*
+             * Now delete all of the children of this parent
+             * all at the same time.
+             */
+            AcpiNsDeleteChildren (ParentNode);
 
-			/* New "last child" is this parent node */
+            /* New "last child" is this parent node */
 
-			child_node = parent_node;
+            ChildNode = ParentNode;
 
-			/* Move up the tree to the grandparent */
+            /* Move up the tree to the grandparent */
 
-			parent_node = parent_node->parent;
-		}
-	}
+            ParentNode = ParentNode->Parent;
+        }
+    }
 
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
-	return_VOID;
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+    return_VOID;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ns_delete_namespace_by_owner
+ * FUNCTION:    AcpiNsDeleteNamespaceByOwner
  *
- * PARAMETERS:  owner_id    - All nodes with this owner will be deleted
+ * PARAMETERS:  OwnerId     - All nodes with this owner will be deleted
  *
  * RETURN:      Status
  *
@@ -435,92 +562,108 @@ void acpi_ns_delete_namespace_subtree(struct acpi_namespace_node *parent_node)
  *
  ******************************************************************************/
 
-void acpi_ns_delete_namespace_by_owner(acpi_owner_id owner_id)
+void
+AcpiNsDeleteNamespaceByOwner (
+    ACPI_OWNER_ID            OwnerId)
 {
-	struct acpi_namespace_node *child_node;
-	struct acpi_namespace_node *deletion_node;
-	struct acpi_namespace_node *parent_node;
-	u32 level;
-	acpi_status status;
+    ACPI_NAMESPACE_NODE     *ChildNode;
+    ACPI_NAMESPACE_NODE     *DeletionNode;
+    ACPI_NAMESPACE_NODE     *ParentNode;
+    UINT32                  Level;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE_U32(ns_delete_namespace_by_owner, owner_id);
 
-	if (owner_id == 0) {
-		return_VOID;
-	}
+    ACPI_FUNCTION_TRACE_U32 (NsDeleteNamespaceByOwner, OwnerId);
 
-	/* Lock namespace for possible update */
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return_VOID;
-	}
+    if (OwnerId == 0)
+    {
+        return_VOID;
+    }
 
-	deletion_node = NULL;
-	parent_node = acpi_gbl_root_node;
-	child_node = NULL;
-	level = 1;
+    /* Lock namespace for possible update */
 
-	/*
-	 * Traverse the tree of nodes until we bubble back up
-	 * to where we started.
-	 */
-	while (level > 0) {
-		/*
-		 * Get the next child of this parent node. When child_node is NULL,
-		 * the first child of the parent is returned
-		 */
-		child_node = acpi_ns_get_next_node(parent_node, child_node);
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return_VOID;
+    }
 
-		if (deletion_node) {
-			acpi_ns_delete_children(deletion_node);
-			acpi_ns_remove_node(deletion_node);
-			deletion_node = NULL;
-		}
+    DeletionNode = NULL;
+    ParentNode = AcpiGbl_RootNode;
+    ChildNode = NULL;
+    Level = 1;
 
-		if (child_node) {
-			if (child_node->owner_id == owner_id) {
+    /*
+     * Traverse the tree of nodes until we bubble back up
+     * to where we started.
+     */
+    while (Level > 0)
+    {
+        /*
+         * Get the next child of this parent node. When ChildNode is NULL,
+         * the first child of the parent is returned
+         */
+        ChildNode = AcpiNsGetNextNode (ParentNode, ChildNode);
 
-				/* Found a matching child node - detach any attached object */
+        if (DeletionNode)
+        {
+            AcpiNsDeleteChildren (DeletionNode);
+            AcpiNsRemoveNode (DeletionNode);
+            DeletionNode = NULL;
+        }
 
-				acpi_ns_detach_object(child_node);
-			}
+        if (ChildNode)
+        {
+            if (ChildNode->OwnerId == OwnerId)
+            {
+                /* Found a matching child node - detach any attached object */
 
-			/* Check if this node has any children */
+                AcpiNsDetachObject (ChildNode);
+            }
 
-			if (child_node->child) {
-				/*
-				 * There is at least one child of this node,
-				 * visit the node
-				 */
-				level++;
-				parent_node = child_node;
-				child_node = NULL;
-			} else if (child_node->owner_id == owner_id) {
-				deletion_node = child_node;
-			}
-		} else {
-			/*
-			 * No more children of this parent node.
-			 * Move up to the grandparent.
-			 */
-			level--;
-			if (level != 0) {
-				if (parent_node->owner_id == owner_id) {
-					deletion_node = parent_node;
-				}
-			}
+            /* Check if this node has any children */
 
-			/* New "last child" is this parent node */
+            if (ChildNode->Child)
+            {
+                /*
+                 * There is at least one child of this node,
+                 * visit the node
+                 */
+                Level++;
+                ParentNode = ChildNode;
+                ChildNode  = NULL;
+            }
+            else if (ChildNode->OwnerId == OwnerId)
+            {
+                DeletionNode = ChildNode;
+            }
+        }
+        else
+        {
+            /*
+             * No more children of this parent node.
+             * Move up to the grandparent.
+             */
+            Level--;
+            if (Level != 0)
+            {
+                if (ParentNode->OwnerId == OwnerId)
+                {
+                    DeletionNode = ParentNode;
+                }
+            }
 
-			child_node = parent_node;
+            /* New "last child" is this parent node */
 
-			/* Move up the tree to the grandparent */
+            ChildNode = ParentNode;
 
-			parent_node = parent_node->parent;
-		}
-	}
+            /* Move up the tree to the grandparent */
 
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
-	return_VOID;
+            ParentNode = ParentNode->Parent;
+        }
+    }
+
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+    return_VOID;
 }

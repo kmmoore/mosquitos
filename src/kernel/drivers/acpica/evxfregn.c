@@ -5,291 +5,382 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
+#define __EVXFREGN_C__
 #define EXPORT_ACPI_INTERFACES
 
-#include <acpi/acpi.h>
+#include "acpi.h"
 #include "accommon.h"
 #include "acnamesp.h"
 #include "acevents.h"
 
 #define _COMPONENT          ACPI_EVENTS
-ACPI_MODULE_NAME("evxfregn")
+        ACPI_MODULE_NAME    ("evxfregn")
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_install_address_space_handler
+ * FUNCTION:    AcpiInstallAddressSpaceHandler
  *
- * PARAMETERS:  device          - Handle for the device
- *              space_id        - The address space ID
- *              handler         - Address of the handler
- *              setup           - Address of the setup function
- *              context         - Value passed to the handler on each access
+ * PARAMETERS:  Device          - Handle for the device
+ *              SpaceId         - The address space ID
+ *              Handler         - Address of the handler
+ *              Setup           - Address of the setup function
+ *              Context         - Value passed to the handler on each access
  *
  * RETURN:      Status
  *
- * DESCRIPTION: Install a handler for all op_regions of a given space_id.
+ * DESCRIPTION: Install a handler for all OpRegions of a given SpaceId.
  *
- * NOTE: This function should only be called after acpi_enable_subsystem has
+ * NOTE: This function should only be called after AcpiEnableSubsystem has
  * been called. This is because any _REG methods associated with the Space ID
  * are executed here, and these methods can only be safely executed after
  * the default handlers have been installed and the hardware has been
- * initialized (via acpi_enable_subsystem.)
+ * initialized (via AcpiEnableSubsystem.)
  *
  ******************************************************************************/
-acpi_status
-acpi_install_address_space_handler(acpi_handle device,
-				   acpi_adr_space_type space_id,
-				   acpi_adr_space_handler handler,
-				   acpi_adr_space_setup setup, void *context)
+
+ACPI_STATUS
+AcpiInstallAddressSpaceHandler (
+    ACPI_HANDLE             Device,
+    ACPI_ADR_SPACE_TYPE     SpaceId,
+    ACPI_ADR_SPACE_HANDLER  Handler,
+    ACPI_ADR_SPACE_SETUP    Setup,
+    void                    *Context)
 {
-	struct acpi_namespace_node *node;
-	acpi_status status;
+    ACPI_NAMESPACE_NODE     *Node;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(acpi_install_address_space_handler);
 
-	/* Parameter validation */
+    ACPI_FUNCTION_TRACE (AcpiInstallAddressSpaceHandler);
 
-	if (!device) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    /* Parameter validation */
 
-	/* Convert and validate the device handle */
+    if (!Device)
+    {
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-	node = acpi_ns_validate_handle(device);
-	if (!node) {
-		status = AE_BAD_PARAMETER;
-		goto unlock_and_exit;
-	}
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/* Install the handler for all Regions for this Space ID */
+    /* Convert and validate the device handle */
 
-	status =
-	    acpi_ev_install_space_handler(node, space_id, handler, setup,
-					  context);
-	if (ACPI_FAILURE(status)) {
-		goto unlock_and_exit;
-	}
+    Node = AcpiNsValidateHandle (Device);
+    if (!Node)
+    {
+        Status = AE_BAD_PARAMETER;
+        goto UnlockAndExit;
+    }
 
-	/*
-	 * For the default space_IDs, (the IDs for which there are default region handlers
-	 * installed) Only execute the _REG methods if the global initialization _REG
-	 * methods have already been run (via acpi_initialize_objects). In other words,
-	 * we will defer the execution of the _REG methods for these space_IDs until
-	 * execution of acpi_initialize_objects. This is done because we need the handlers
-	 * for the default spaces (mem/io/pci/table) to be installed before we can run
-	 * any control methods (or _REG methods). There is known BIOS code that depends
-	 * on this.
-	 *
-	 * For all other space_IDs, we can safely execute the _REG methods immediately.
-	 * This means that for IDs like embedded_controller, this function should be called
-	 * only after acpi_enable_subsystem has been called.
-	 */
-	switch (space_id) {
-	case ACPI_ADR_SPACE_SYSTEM_MEMORY:
-	case ACPI_ADR_SPACE_SYSTEM_IO:
-	case ACPI_ADR_SPACE_PCI_CONFIG:
-	case ACPI_ADR_SPACE_DATA_TABLE:
+    /* Install the handler for all Regions for this Space ID */
 
-		if (!acpi_gbl_reg_methods_executed) {
+    Status = AcpiEvInstallSpaceHandler (Node, SpaceId, Handler, Setup, Context);
+    if (ACPI_FAILURE (Status))
+    {
+        goto UnlockAndExit;
+    }
 
-			/* We will defer execution of the _REG methods for this space */
-			goto unlock_and_exit;
-		}
-		break;
+    /*
+     * For the default SpaceIDs, (the IDs for which there are default region handlers
+     * installed) Only execute the _REG methods if the global initialization _REG
+     * methods have already been run (via AcpiInitializeObjects). In other words,
+     * we will defer the execution of the _REG methods for these SpaceIDs until
+     * execution of AcpiInitializeObjects. This is done because we need the handlers
+     * for the default spaces (mem/io/pci/table) to be installed before we can run
+     * any control methods (or _REG methods). There is known BIOS code that depends
+     * on this.
+     *
+     * For all other SpaceIDs, we can safely execute the _REG methods immediately.
+     * This means that for IDs like EmbeddedController, this function should be called
+     * only after AcpiEnableSubsystem has been called.
+     */
+    switch (SpaceId)
+    {
+    case ACPI_ADR_SPACE_SYSTEM_MEMORY:
+    case ACPI_ADR_SPACE_SYSTEM_IO:
+    case ACPI_ADR_SPACE_PCI_CONFIG:
+    case ACPI_ADR_SPACE_DATA_TABLE:
 
-	default:
+        if (!AcpiGbl_RegMethodsExecuted)
+        {
+            /* We will defer execution of the _REG methods for this space */
+            goto UnlockAndExit;
+        }
+        break;
 
-		break;
-	}
+    default:
 
-	/* Run all _REG methods for this address space */
+        break;
+    }
 
-	status = acpi_ev_execute_reg_methods(node, space_id);
+    /* Run all _REG methods for this address space */
 
-unlock_and_exit:
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
-	return_ACPI_STATUS(status);
+    Status = AcpiEvExecuteRegMethods (Node, SpaceId);
+
+
+UnlockAndExit:
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+    return_ACPI_STATUS (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_install_address_space_handler)
+ACPI_EXPORT_SYMBOL (AcpiInstallAddressSpaceHandler)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_remove_address_space_handler
+ * FUNCTION:    AcpiRemoveAddressSpaceHandler
  *
- * PARAMETERS:  device          - Handle for the device
- *              space_id        - The address space ID
- *              handler         - Address of the handler
+ * PARAMETERS:  Device          - Handle for the device
+ *              SpaceId         - The address space ID
+ *              Handler         - Address of the handler
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Remove a previously installed handler.
  *
  ******************************************************************************/
-acpi_status
-acpi_remove_address_space_handler(acpi_handle device,
-				  acpi_adr_space_type space_id,
-				  acpi_adr_space_handler handler)
+
+ACPI_STATUS
+AcpiRemoveAddressSpaceHandler (
+    ACPI_HANDLE             Device,
+    ACPI_ADR_SPACE_TYPE     SpaceId,
+    ACPI_ADR_SPACE_HANDLER  Handler)
 {
-	union acpi_operand_object *obj_desc;
-	union acpi_operand_object *handler_obj;
-	union acpi_operand_object *region_obj;
-	union acpi_operand_object **last_obj_ptr;
-	struct acpi_namespace_node *node;
-	acpi_status status;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
+    ACPI_OPERAND_OBJECT     *HandlerObj;
+    ACPI_OPERAND_OBJECT     *RegionObj;
+    ACPI_OPERAND_OBJECT     **LastObjPtr;
+    ACPI_NAMESPACE_NODE     *Node;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(acpi_remove_address_space_handler);
 
-	/* Parameter validation */
+    ACPI_FUNCTION_TRACE (AcpiRemoveAddressSpaceHandler);
 
-	if (!device) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    /* Parameter validation */
 
-	/* Convert and validate the device handle */
+    if (!Device)
+    {
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-	node = acpi_ns_validate_handle(device);
-	if (!node ||
-	    ((node->type != ACPI_TYPE_DEVICE) &&
-	     (node->type != ACPI_TYPE_PROCESSOR) &&
-	     (node->type != ACPI_TYPE_THERMAL) &&
-	     (node != acpi_gbl_root_node))) {
-		status = AE_BAD_PARAMETER;
-		goto unlock_and_exit;
-	}
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/* Make sure the internal object exists */
+    /* Convert and validate the device handle */
 
-	obj_desc = acpi_ns_get_attached_object(node);
-	if (!obj_desc) {
-		status = AE_NOT_EXIST;
-		goto unlock_and_exit;
-	}
+    Node = AcpiNsValidateHandle (Device);
+    if (!Node ||
+        ((Node->Type != ACPI_TYPE_DEVICE)    &&
+         (Node->Type != ACPI_TYPE_PROCESSOR) &&
+         (Node->Type != ACPI_TYPE_THERMAL)   &&
+         (Node != AcpiGbl_RootNode)))
+    {
+        Status = AE_BAD_PARAMETER;
+        goto UnlockAndExit;
+    }
 
-	/* Find the address handler the user requested */
+    /* Make sure the internal object exists */
 
-	handler_obj = obj_desc->device.handler;
-	last_obj_ptr = &obj_desc->device.handler;
-	while (handler_obj) {
+    ObjDesc = AcpiNsGetAttachedObject (Node);
+    if (!ObjDesc)
+    {
+        Status = AE_NOT_EXIST;
+        goto UnlockAndExit;
+    }
 
-		/* We have a handler, see if user requested this one */
+    /* Find the address handler the user requested */
 
-		if (handler_obj->address_space.space_id == space_id) {
+    HandlerObj = ObjDesc->Device.Handler;
+    LastObjPtr = &ObjDesc->Device.Handler;
+    while (HandlerObj)
+    {
+        /* We have a handler, see if user requested this one */
 
-			/* Handler must be the same as the installed handler */
+        if (HandlerObj->AddressSpace.SpaceId == SpaceId)
+        {
+            /* Handler must be the same as the installed handler */
 
-			if (handler_obj->address_space.handler != handler) {
-				status = AE_BAD_PARAMETER;
-				goto unlock_and_exit;
-			}
+            if (HandlerObj->AddressSpace.Handler != Handler)
+            {
+                Status = AE_BAD_PARAMETER;
+                goto UnlockAndExit;
+            }
 
-			/* Matched space_id, first dereference this in the Regions */
+            /* Matched SpaceId, first dereference this in the Regions */
 
-			ACPI_DEBUG_PRINT((ACPI_DB_OPREGION,
-					  "Removing address handler %p(%p) for region %s "
-					  "on Device %p(%p)\n",
-					  handler_obj, handler,
-					  acpi_ut_get_region_name(space_id),
-					  node, obj_desc));
+            ACPI_DEBUG_PRINT ((ACPI_DB_OPREGION,
+                "Removing address handler %p(%p) for region %s "
+                "on Device %p(%p)\n",
+                HandlerObj, Handler, AcpiUtGetRegionName (SpaceId),
+                Node, ObjDesc));
 
-			region_obj = handler_obj->address_space.region_list;
+            RegionObj = HandlerObj->AddressSpace.RegionList;
 
-			/* Walk the handler's region list */
+            /* Walk the handler's region list */
 
-			while (region_obj) {
-				/*
-				 * First disassociate the handler from the region.
-				 *
-				 * NOTE: this doesn't mean that the region goes away
-				 * The region is just inaccessible as indicated to
-				 * the _REG method
-				 */
-				acpi_ev_detach_region(region_obj, TRUE);
+            while (RegionObj)
+            {
+                /*
+                 * First disassociate the handler from the region.
+                 *
+                 * NOTE: this doesn't mean that the region goes away
+                 * The region is just inaccessible as indicated to
+                 * the _REG method
+                 */
+                AcpiEvDetachRegion (RegionObj, TRUE);
 
-				/*
-				 * Walk the list: Just grab the head because the
-				 * detach_region removed the previous head.
-				 */
-				region_obj =
-				    handler_obj->address_space.region_list;
+                /*
+                 * Walk the list: Just grab the head because the
+                 * DetachRegion removed the previous head.
+                 */
+                RegionObj = HandlerObj->AddressSpace.RegionList;
 
-			}
+            }
 
-			/* Remove this Handler object from the list */
+            /* Remove this Handler object from the list */
 
-			*last_obj_ptr = handler_obj->address_space.next;
+            *LastObjPtr = HandlerObj->AddressSpace.Next;
 
-			/* Now we can delete the handler object */
+            /* Now we can delete the handler object */
 
-			acpi_ut_remove_reference(handler_obj);
-			goto unlock_and_exit;
-		}
+            AcpiUtRemoveReference (HandlerObj);
+            goto UnlockAndExit;
+        }
 
-		/* Walk the linked list of handlers */
+        /* Walk the linked list of handlers */
 
-		last_obj_ptr = &handler_obj->address_space.next;
-		handler_obj = handler_obj->address_space.next;
-	}
+        LastObjPtr = &HandlerObj->AddressSpace.Next;
+        HandlerObj = HandlerObj->AddressSpace.Next;
+    }
 
-	/* The handler does not exist */
+    /* The handler does not exist */
 
-	ACPI_DEBUG_PRINT((ACPI_DB_OPREGION,
-			  "Unable to remove address handler %p for %s(%X), DevNode %p, obj %p\n",
-			  handler, acpi_ut_get_region_name(space_id), space_id,
-			  node, obj_desc));
+    ACPI_DEBUG_PRINT ((ACPI_DB_OPREGION,
+        "Unable to remove address handler %p for %s(%X), DevNode %p, obj %p\n",
+        Handler, AcpiUtGetRegionName (SpaceId), SpaceId, Node, ObjDesc));
 
-	status = AE_NOT_EXIST;
+    Status = AE_NOT_EXIST;
 
-unlock_and_exit:
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
-	return_ACPI_STATUS(status);
+UnlockAndExit:
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+    return_ACPI_STATUS (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_remove_address_space_handler)
+ACPI_EXPORT_SYMBOL (AcpiRemoveAddressSpaceHandler)

@@ -4,159 +4,239 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
 
-#include <acpi/acpi.h>
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
+
+#define __EXCREATE_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acinterp.h"
 #include "amlcode.h"
 #include "acnamesp.h"
 
+
 #define _COMPONENT          ACPI_EXECUTER
-ACPI_MODULE_NAME("excreate")
+        ACPI_MODULE_NAME    ("excreate")
+
+
 #ifndef ACPI_NO_METHOD_EXECUTION
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_create_alias
+ * FUNCTION:    AcpiExCreateAlias
  *
- * PARAMETERS:  walk_state           - Current state, contains operands
+ * PARAMETERS:  WalkState            - Current state, contains operands
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Create a new named alias
  *
  ******************************************************************************/
-acpi_status acpi_ex_create_alias(struct acpi_walk_state *walk_state)
+
+ACPI_STATUS
+AcpiExCreateAlias (
+    ACPI_WALK_STATE         *WalkState)
 {
-	struct acpi_namespace_node *target_node;
-	struct acpi_namespace_node *alias_node;
-	acpi_status status = AE_OK;
+    ACPI_NAMESPACE_NODE     *TargetNode;
+    ACPI_NAMESPACE_NODE     *AliasNode;
+    ACPI_STATUS             Status = AE_OK;
 
-	ACPI_FUNCTION_TRACE(ex_create_alias);
 
-	/* Get the source/alias operands (both namespace nodes) */
+    ACPI_FUNCTION_TRACE (ExCreateAlias);
 
-	alias_node = (struct acpi_namespace_node *)walk_state->operands[0];
-	target_node = (struct acpi_namespace_node *)walk_state->operands[1];
 
-	if ((target_node->type == ACPI_TYPE_LOCAL_ALIAS) ||
-	    (target_node->type == ACPI_TYPE_LOCAL_METHOD_ALIAS)) {
-		/*
-		 * Dereference an existing alias so that we don't create a chain
-		 * of aliases. With this code, we guarantee that an alias is
-		 * always exactly one level of indirection away from the
-		 * actual aliased name.
-		 */
-		target_node =
-		    ACPI_CAST_PTR(struct acpi_namespace_node,
-				  target_node->object);
-	}
+    /* Get the source/alias operands (both namespace nodes) */
 
-	/*
-	 * For objects that can never change (i.e., the NS node will
-	 * permanently point to the same object), we can simply attach
-	 * the object to the new NS node. For other objects (such as
-	 * Integers, buffers, etc.), we have to point the Alias node
-	 * to the original Node.
-	 */
-	switch (target_node->type) {
+    AliasNode =  (ACPI_NAMESPACE_NODE *) WalkState->Operands[0];
+    TargetNode = (ACPI_NAMESPACE_NODE *) WalkState->Operands[1];
 
-		/* For these types, the sub-object can change dynamically via a Store */
+    if ((TargetNode->Type == ACPI_TYPE_LOCAL_ALIAS)  ||
+        (TargetNode->Type == ACPI_TYPE_LOCAL_METHOD_ALIAS))
+    {
+        /*
+         * Dereference an existing alias so that we don't create a chain
+         * of aliases. With this code, we guarantee that an alias is
+         * always exactly one level of indirection away from the
+         * actual aliased name.
+         */
+        TargetNode = ACPI_CAST_PTR (ACPI_NAMESPACE_NODE, TargetNode->Object);
+    }
 
-	case ACPI_TYPE_INTEGER:
-	case ACPI_TYPE_STRING:
-	case ACPI_TYPE_BUFFER:
-	case ACPI_TYPE_PACKAGE:
-	case ACPI_TYPE_BUFFER_FIELD:
-		/*
-		 * These types open a new scope, so we need the NS node in order to access
-		 * any children.
-		 */
-	case ACPI_TYPE_DEVICE:
-	case ACPI_TYPE_POWER:
-	case ACPI_TYPE_PROCESSOR:
-	case ACPI_TYPE_THERMAL:
-	case ACPI_TYPE_LOCAL_SCOPE:
-		/*
-		 * The new alias has the type ALIAS and points to the original
-		 * NS node, not the object itself.
-		 */
-		alias_node->type = ACPI_TYPE_LOCAL_ALIAS;
-		alias_node->object =
-		    ACPI_CAST_PTR(union acpi_operand_object, target_node);
-		break;
+    /*
+     * For objects that can never change (i.e., the NS node will
+     * permanently point to the same object), we can simply attach
+     * the object to the new NS node. For other objects (such as
+     * Integers, buffers, etc.), we have to point the Alias node
+     * to the original Node.
+     */
+    switch (TargetNode->Type)
+    {
 
-	case ACPI_TYPE_METHOD:
-		/*
-		 * Control method aliases need to be differentiated
-		 */
-		alias_node->type = ACPI_TYPE_LOCAL_METHOD_ALIAS;
-		alias_node->object =
-		    ACPI_CAST_PTR(union acpi_operand_object, target_node);
-		break;
+    /* For these types, the sub-object can change dynamically via a Store */
 
-	default:
+    case ACPI_TYPE_INTEGER:
+    case ACPI_TYPE_STRING:
+    case ACPI_TYPE_BUFFER:
+    case ACPI_TYPE_PACKAGE:
+    case ACPI_TYPE_BUFFER_FIELD:
+    /*
+     * These types open a new scope, so we need the NS node in order to access
+     * any children.
+     */
+    case ACPI_TYPE_DEVICE:
+    case ACPI_TYPE_POWER:
+    case ACPI_TYPE_PROCESSOR:
+    case ACPI_TYPE_THERMAL:
+    case ACPI_TYPE_LOCAL_SCOPE:
+        /*
+         * The new alias has the type ALIAS and points to the original
+         * NS node, not the object itself.
+         */
+        AliasNode->Type = ACPI_TYPE_LOCAL_ALIAS;
+        AliasNode->Object = ACPI_CAST_PTR (ACPI_OPERAND_OBJECT, TargetNode);
+        break;
 
-		/* Attach the original source object to the new Alias Node */
+    case ACPI_TYPE_METHOD:
+        /*
+         * Control method aliases need to be differentiated
+         */
+        AliasNode->Type = ACPI_TYPE_LOCAL_METHOD_ALIAS;
+        AliasNode->Object = ACPI_CAST_PTR (ACPI_OPERAND_OBJECT, TargetNode);
+        break;
 
-		/*
-		 * The new alias assumes the type of the target, and it points
-		 * to the same object. The reference count of the object has an
-		 * additional reference to prevent deletion out from under either the
-		 * target node or the alias Node
-		 */
-		status = acpi_ns_attach_object(alias_node,
-					       acpi_ns_get_attached_object
-					       (target_node),
-					       target_node->type);
-		break;
-	}
+    default:
 
-	/* Since both operands are Nodes, we don't need to delete them */
+        /* Attach the original source object to the new Alias Node */
 
-	return_ACPI_STATUS(status);
+        /*
+         * The new alias assumes the type of the target, and it points
+         * to the same object. The reference count of the object has an
+         * additional reference to prevent deletion out from under either the
+         * target node or the alias Node
+         */
+        Status = AcpiNsAttachObject (AliasNode,
+                    AcpiNsGetAttachedObject (TargetNode), TargetNode->Type);
+        break;
+    }
+
+    /* Since both operands are Nodes, we don't need to delete them */
+
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_create_event
+ * FUNCTION:    AcpiExCreateEvent
  *
- * PARAMETERS:  walk_state          - Current state
+ * PARAMETERS:  WalkState           - Current state
  *
  * RETURN:      Status
  *
@@ -164,107 +244,118 @@ acpi_status acpi_ex_create_alias(struct acpi_walk_state *walk_state)
  *
  ******************************************************************************/
 
-acpi_status acpi_ex_create_event(struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExCreateEvent (
+    ACPI_WALK_STATE         *WalkState)
 {
-	acpi_status status;
-	union acpi_operand_object *obj_desc;
+    ACPI_STATUS             Status;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
 
-	ACPI_FUNCTION_TRACE(ex_create_event);
 
-	obj_desc = acpi_ut_create_internal_object(ACPI_TYPE_EVENT);
-	if (!obj_desc) {
-		status = AE_NO_MEMORY;
-		goto cleanup;
-	}
+    ACPI_FUNCTION_TRACE (ExCreateEvent);
 
-	/*
-	 * Create the actual OS semaphore, with zero initial units -- meaning
-	 * that the event is created in an unsignalled state
-	 */
-	status = acpi_os_create_semaphore(ACPI_NO_UNIT_LIMIT, 0,
-					  &obj_desc->event.os_semaphore);
-	if (ACPI_FAILURE(status)) {
-		goto cleanup;
-	}
 
-	/* Attach object to the Node */
+    ObjDesc = AcpiUtCreateInternalObject (ACPI_TYPE_EVENT);
+    if (!ObjDesc)
+    {
+        Status = AE_NO_MEMORY;
+        goto Cleanup;
+    }
 
-	status =
-	    acpi_ns_attach_object((struct acpi_namespace_node *)walk_state->
-				  operands[0], obj_desc, ACPI_TYPE_EVENT);
+    /*
+     * Create the actual OS semaphore, with zero initial units -- meaning
+     * that the event is created in an unsignalled state
+     */
+    Status = AcpiOsCreateSemaphore (ACPI_NO_UNIT_LIMIT, 0,
+                &ObjDesc->Event.OsSemaphore);
+    if (ACPI_FAILURE (Status))
+    {
+        goto Cleanup;
+    }
 
-cleanup:
-	/*
-	 * Remove local reference to the object (on error, will cause deletion
-	 * of both object and semaphore if present.)
-	 */
-	acpi_ut_remove_reference(obj_desc);
-	return_ACPI_STATUS(status);
+    /* Attach object to the Node */
+
+    Status = AcpiNsAttachObject ((ACPI_NAMESPACE_NODE *) WalkState->Operands[0],
+                ObjDesc, ACPI_TYPE_EVENT);
+
+Cleanup:
+    /*
+     * Remove local reference to the object (on error, will cause deletion
+     * of both object and semaphore if present.)
+     */
+    AcpiUtRemoveReference (ObjDesc);
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_create_mutex
+ * FUNCTION:    AcpiExCreateMutex
  *
- * PARAMETERS:  walk_state          - Current state
+ * PARAMETERS:  WalkState           - Current state
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Create a new mutex object
  *
- *              Mutex (Name[0], sync_level[1])
+ *              Mutex (Name[0], SyncLevel[1])
  *
  ******************************************************************************/
 
-acpi_status acpi_ex_create_mutex(struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExCreateMutex (
+    ACPI_WALK_STATE         *WalkState)
 {
-	acpi_status status = AE_OK;
-	union acpi_operand_object *obj_desc;
+    ACPI_STATUS             Status = AE_OK;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
 
-	ACPI_FUNCTION_TRACE_PTR(ex_create_mutex, ACPI_WALK_OPERANDS);
 
-	/* Create the new mutex object */
+    ACPI_FUNCTION_TRACE_PTR (ExCreateMutex, ACPI_WALK_OPERANDS);
 
-	obj_desc = acpi_ut_create_internal_object(ACPI_TYPE_MUTEX);
-	if (!obj_desc) {
-		status = AE_NO_MEMORY;
-		goto cleanup;
-	}
 
-	/* Create the actual OS Mutex */
+    /* Create the new mutex object */
 
-	status = acpi_os_create_mutex(&obj_desc->mutex.os_mutex);
-	if (ACPI_FAILURE(status)) {
-		goto cleanup;
-	}
+    ObjDesc = AcpiUtCreateInternalObject (ACPI_TYPE_MUTEX);
+    if (!ObjDesc)
+    {
+        Status = AE_NO_MEMORY;
+        goto Cleanup;
+    }
 
-	/* Init object and attach to NS node */
+    /* Create the actual OS Mutex */
 
-	obj_desc->mutex.sync_level = (u8)walk_state->operands[1]->integer.value;
-	obj_desc->mutex.node =
-	    (struct acpi_namespace_node *)walk_state->operands[0];
+    Status = AcpiOsCreateMutex (&ObjDesc->Mutex.OsMutex);
+    if (ACPI_FAILURE (Status))
+    {
+        goto Cleanup;
+    }
 
-	status =
-	    acpi_ns_attach_object(obj_desc->mutex.node, obj_desc,
-				  ACPI_TYPE_MUTEX);
+    /* Init object and attach to NS node */
 
-cleanup:
-	/*
-	 * Remove local reference to the object (on error, will cause deletion
-	 * of both object and semaphore if present.)
-	 */
-	acpi_ut_remove_reference(obj_desc);
-	return_ACPI_STATUS(status);
+    ObjDesc->Mutex.SyncLevel = (UINT8) WalkState->Operands[1]->Integer.Value;
+    ObjDesc->Mutex.Node = (ACPI_NAMESPACE_NODE *) WalkState->Operands[0];
+
+    Status = AcpiNsAttachObject (ObjDesc->Mutex.Node, ObjDesc, ACPI_TYPE_MUTEX);
+
+
+Cleanup:
+    /*
+     * Remove local reference to the object (on error, will cause deletion
+     * of both object and semaphore if present.)
+     */
+    AcpiUtRemoveReference (ObjDesc);
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_create_region
+ * FUNCTION:    AcpiExCreateRegion
  *
- * PARAMETERS:  aml_start           - Pointer to the region declaration AML
- *              aml_length          - Max length of the declaration AML
- *              space_id            - Address space ID for the region
- *              walk_state          - Current state
+ * PARAMETERS:  AmlStart            - Pointer to the region declaration AML
+ *              AmlLength           - Max length of the declaration AML
+ *              SpaceId             - Address space ID for the region
+ *              WalkState           - Current state
  *
  * RETURN:      Status
  *
@@ -272,190 +363,209 @@ cleanup:
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ex_create_region(u8 * aml_start,
-		      u32 aml_length,
-		      u8 space_id, struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExCreateRegion (
+    UINT8                   *AmlStart,
+    UINT32                  AmlLength,
+    UINT8                   SpaceId,
+    ACPI_WALK_STATE         *WalkState)
 {
-	acpi_status status;
-	union acpi_operand_object *obj_desc;
-	struct acpi_namespace_node *node;
-	union acpi_operand_object *region_obj2;
+    ACPI_STATUS             Status;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
+    ACPI_NAMESPACE_NODE     *Node;
+    ACPI_OPERAND_OBJECT     *RegionObj2;
 
-	ACPI_FUNCTION_TRACE(ex_create_region);
 
-	/* Get the Namespace Node */
+    ACPI_FUNCTION_TRACE (ExCreateRegion);
 
-	node = walk_state->op->common.node;
 
-	/*
-	 * If the region object is already attached to this node,
-	 * just return
-	 */
-	if (acpi_ns_get_attached_object(node)) {
-		return_ACPI_STATUS(AE_OK);
-	}
+    /* Get the Namespace Node */
 
-	/*
-	 * Space ID must be one of the predefined IDs, or in the user-defined
-	 * range
-	 */
-	if (!acpi_is_valid_space_id(space_id)) {
-		/*
-		 * Print an error message, but continue. We don't want to abort
-		 * a table load for this exception. Instead, if the region is
-		 * actually used at runtime, abort the executing method.
-		 */
-		ACPI_ERROR((AE_INFO,
-			    "Invalid/unknown Address Space ID: 0x%2.2X",
-			    space_id));
-	}
+    Node = WalkState->Op->Common.Node;
 
-	ACPI_DEBUG_PRINT((ACPI_DB_LOAD, "Region Type - %s (0x%X)\n",
-			  acpi_ut_get_region_name(space_id), space_id));
+    /*
+     * If the region object is already attached to this node,
+     * just return
+     */
+    if (AcpiNsGetAttachedObject (Node))
+    {
+        return_ACPI_STATUS (AE_OK);
+    }
 
-	/* Create the region descriptor */
+    /*
+     * Space ID must be one of the predefined IDs, or in the user-defined
+     * range
+     */
+    if (!AcpiIsValidSpaceId (SpaceId))
+    {
+        /*
+         * Print an error message, but continue. We don't want to abort
+         * a table load for this exception. Instead, if the region is
+         * actually used at runtime, abort the executing method.
+         */
+        ACPI_ERROR ((AE_INFO, "Invalid/unknown Address Space ID: 0x%2.2X", SpaceId));
+    }
 
-	obj_desc = acpi_ut_create_internal_object(ACPI_TYPE_REGION);
-	if (!obj_desc) {
-		status = AE_NO_MEMORY;
-		goto cleanup;
-	}
+    ACPI_DEBUG_PRINT ((ACPI_DB_LOAD, "Region Type - %s (0x%X)\n",
+        AcpiUtGetRegionName (SpaceId), SpaceId));
 
-	/*
-	 * Remember location in AML stream of address & length
-	 * operands since they need to be evaluated at run time.
-	 */
-	region_obj2 = obj_desc->common.next_object;
-	region_obj2->extra.aml_start = aml_start;
-	region_obj2->extra.aml_length = aml_length;
-	if (walk_state->scope_info) {
-		region_obj2->extra.scope_node =
-		    walk_state->scope_info->scope.node;
-	} else {
-		region_obj2->extra.scope_node = node;
-	}
+    /* Create the region descriptor */
 
-	/* Init the region from the operands */
+    ObjDesc = AcpiUtCreateInternalObject (ACPI_TYPE_REGION);
+    if (!ObjDesc)
+    {
+        Status = AE_NO_MEMORY;
+        goto Cleanup;
+    }
 
-	obj_desc->region.space_id = space_id;
-	obj_desc->region.address = 0;
-	obj_desc->region.length = 0;
-	obj_desc->region.node = node;
+    /*
+     * Remember location in AML stream of address & length
+     * operands since they need to be evaluated at run time.
+     */
+    RegionObj2 = ObjDesc->Common.NextObject;
+    RegionObj2->Extra.AmlStart = AmlStart;
+    RegionObj2->Extra.AmlLength = AmlLength;
+    if (WalkState->ScopeInfo)
+    {
+        RegionObj2->Extra.ScopeNode = WalkState->ScopeInfo->Scope.Node;
+    }
+    else
+    {
+        RegionObj2->Extra.ScopeNode = Node;
+    }
 
-	/* Install the new region object in the parent Node */
+    /* Init the region from the operands */
 
-	status = acpi_ns_attach_object(node, obj_desc, ACPI_TYPE_REGION);
+    ObjDesc->Region.SpaceId = SpaceId;
+    ObjDesc->Region.Address = 0;
+    ObjDesc->Region.Length = 0;
+    ObjDesc->Region.Node = Node;
 
-cleanup:
+    /* Install the new region object in the parent Node */
 
-	/* Remove local reference to the object */
+    Status = AcpiNsAttachObject (Node, ObjDesc, ACPI_TYPE_REGION);
 
-	acpi_ut_remove_reference(obj_desc);
-	return_ACPI_STATUS(status);
+
+Cleanup:
+
+    /* Remove local reference to the object */
+
+    AcpiUtRemoveReference (ObjDesc);
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_create_processor
+ * FUNCTION:    AcpiExCreateProcessor
  *
- * PARAMETERS:  walk_state          - Current state
+ * PARAMETERS:  WalkState           - Current state
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Create a new processor object and populate the fields
  *
- *              Processor (Name[0], cpu_ID[1], pblock_addr[2], pblock_length[3])
+ *              Processor (Name[0], CpuID[1], PblockAddr[2], PblockLength[3])
  *
  ******************************************************************************/
 
-acpi_status acpi_ex_create_processor(struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExCreateProcessor (
+    ACPI_WALK_STATE         *WalkState)
 {
-	union acpi_operand_object **operand = &walk_state->operands[0];
-	union acpi_operand_object *obj_desc;
-	acpi_status status;
+    ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
+    ACPI_OPERAND_OBJECT     *ObjDesc;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE_PTR(ex_create_processor, walk_state);
 
-	/* Create the processor object */
+    ACPI_FUNCTION_TRACE_PTR (ExCreateProcessor, WalkState);
 
-	obj_desc = acpi_ut_create_internal_object(ACPI_TYPE_PROCESSOR);
-	if (!obj_desc) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
 
-	/* Initialize the processor object from the operands */
+    /* Create the processor object */
 
-	obj_desc->processor.proc_id = (u8) operand[1]->integer.value;
-	obj_desc->processor.length = (u8) operand[3]->integer.value;
-	obj_desc->processor.address =
-	    (acpi_io_address) operand[2]->integer.value;
+    ObjDesc = AcpiUtCreateInternalObject (ACPI_TYPE_PROCESSOR);
+    if (!ObjDesc)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	/* Install the processor object in the parent Node */
+    /* Initialize the processor object from the operands */
 
-	status = acpi_ns_attach_object((struct acpi_namespace_node *)operand[0],
-				       obj_desc, ACPI_TYPE_PROCESSOR);
+    ObjDesc->Processor.ProcId = (UINT8) Operand[1]->Integer.Value;
+    ObjDesc->Processor.Length = (UINT8) Operand[3]->Integer.Value;
+    ObjDesc->Processor.Address = (ACPI_IO_ADDRESS) Operand[2]->Integer.Value;
 
-	/* Remove local reference to the object */
+    /* Install the processor object in the parent Node */
 
-	acpi_ut_remove_reference(obj_desc);
-	return_ACPI_STATUS(status);
+    Status = AcpiNsAttachObject ((ACPI_NAMESPACE_NODE *) Operand[0],
+                    ObjDesc, ACPI_TYPE_PROCESSOR);
+
+    /* Remove local reference to the object */
+
+    AcpiUtRemoveReference (ObjDesc);
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_create_power_resource
+ * FUNCTION:    AcpiExCreatePowerResource
  *
- * PARAMETERS:  walk_state          - Current state
+ * PARAMETERS:  WalkState           - Current state
  *
  * RETURN:      Status
  *
- * DESCRIPTION: Create a new power_resource object and populate the fields
+ * DESCRIPTION: Create a new PowerResource object and populate the fields
  *
- *              power_resource (Name[0], system_level[1], resource_order[2])
+ *              PowerResource (Name[0], SystemLevel[1], ResourceOrder[2])
  *
  ******************************************************************************/
 
-acpi_status acpi_ex_create_power_resource(struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExCreatePowerResource (
+    ACPI_WALK_STATE         *WalkState)
 {
-	union acpi_operand_object **operand = &walk_state->operands[0];
-	acpi_status status;
-	union acpi_operand_object *obj_desc;
+    ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
+    ACPI_STATUS             Status;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
 
-	ACPI_FUNCTION_TRACE_PTR(ex_create_power_resource, walk_state);
 
-	/* Create the power resource object */
+    ACPI_FUNCTION_TRACE_PTR (ExCreatePowerResource, WalkState);
 
-	obj_desc = acpi_ut_create_internal_object(ACPI_TYPE_POWER);
-	if (!obj_desc) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
 
-	/* Initialize the power object from the operands */
+    /* Create the power resource object */
 
-	obj_desc->power_resource.system_level = (u8) operand[1]->integer.value;
-	obj_desc->power_resource.resource_order =
-	    (u16) operand[2]->integer.value;
+    ObjDesc = AcpiUtCreateInternalObject (ACPI_TYPE_POWER);
+    if (!ObjDesc)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	/* Install the  power resource object in the parent Node */
+    /* Initialize the power object from the operands */
 
-	status = acpi_ns_attach_object((struct acpi_namespace_node *)operand[0],
-				       obj_desc, ACPI_TYPE_POWER);
+    ObjDesc->PowerResource.SystemLevel = (UINT8) Operand[1]->Integer.Value;
+    ObjDesc->PowerResource.ResourceOrder = (UINT16) Operand[2]->Integer.Value;
 
-	/* Remove local reference to the object */
+    /* Install the  power resource object in the parent Node */
 
-	acpi_ut_remove_reference(obj_desc);
-	return_ACPI_STATUS(status);
+    Status = AcpiNsAttachObject ((ACPI_NAMESPACE_NODE *) Operand[0],
+                    ObjDesc, ACPI_TYPE_POWER);
+
+    /* Remove local reference to the object */
+
+    AcpiUtRemoveReference (ObjDesc);
+    return_ACPI_STATUS (Status);
 }
 #endif
 
+
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ex_create_method
+ * FUNCTION:    AcpiExCreateMethod
  *
- * PARAMETERS:  aml_start       - First byte of the method's AML
- *              aml_length      - AML byte count for this method
- *              walk_state      - Current state
+ * PARAMETERS:  AmlStart        - First byte of the method's AML
+ *              AmlLength       - AML byte count for this method
+ *              WalkState       - Current state
  *
  * RETURN:      Status
  *
@@ -463,66 +573,70 @@ acpi_status acpi_ex_create_power_resource(struct acpi_walk_state *walk_state)
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ex_create_method(u8 * aml_start,
-		      u32 aml_length, struct acpi_walk_state *walk_state)
+ACPI_STATUS
+AcpiExCreateMethod (
+    UINT8                   *AmlStart,
+    UINT32                  AmlLength,
+    ACPI_WALK_STATE         *WalkState)
 {
-	union acpi_operand_object **operand = &walk_state->operands[0];
-	union acpi_operand_object *obj_desc;
-	acpi_status status;
-	u8 method_flags;
+    ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
+    ACPI_OPERAND_OBJECT     *ObjDesc;
+    ACPI_STATUS             Status;
+    UINT8                   MethodFlags;
 
-	ACPI_FUNCTION_TRACE_PTR(ex_create_method, walk_state);
 
-	/* Create a new method object */
+    ACPI_FUNCTION_TRACE_PTR (ExCreateMethod, WalkState);
 
-	obj_desc = acpi_ut_create_internal_object(ACPI_TYPE_METHOD);
-	if (!obj_desc) {
-		status = AE_NO_MEMORY;
-		goto exit;
-	}
 
-	/* Save the method's AML pointer and length  */
+    /* Create a new method object */
 
-	obj_desc->method.aml_start = aml_start;
-	obj_desc->method.aml_length = aml_length;
+    ObjDesc = AcpiUtCreateInternalObject (ACPI_TYPE_METHOD);
+    if (!ObjDesc)
+    {
+       Status = AE_NO_MEMORY;
+       goto Exit;
+    }
 
-	/*
-	 * Disassemble the method flags. Split off the arg_count, Serialized
-	 * flag, and sync_level for efficiency.
-	 */
-	method_flags = (u8) operand[1]->integer.value;
+    /* Save the method's AML pointer and length  */
 
-	obj_desc->method.param_count =
-	    (u8) (method_flags & AML_METHOD_ARG_COUNT);
+    ObjDesc->Method.AmlStart = AmlStart;
+    ObjDesc->Method.AmlLength = AmlLength;
 
-	/*
-	 * Get the sync_level. If method is serialized, a mutex will be
-	 * created for this method when it is parsed.
-	 */
-	if (method_flags & AML_METHOD_SERIALIZED) {
-		obj_desc->method.info_flags = ACPI_METHOD_SERIALIZED;
+    /*
+     * Disassemble the method flags. Split off the ArgCount, Serialized
+     * flag, and SyncLevel for efficiency.
+     */
+    MethodFlags = (UINT8) Operand[1]->Integer.Value;
+    ObjDesc->Method.ParamCount = (UINT8) (MethodFlags & AML_METHOD_ARG_COUNT);
 
-		/*
-		 * ACPI 1.0: sync_level = 0
-		 * ACPI 2.0: sync_level = sync_level in method declaration
-		 */
-		obj_desc->method.sync_level = (u8)
-		    ((method_flags & AML_METHOD_SYNC_LEVEL) >> 4);
-	}
+    /*
+     * Get the SyncLevel. If method is serialized, a mutex will be
+     * created for this method when it is parsed.
+     */
+    if (MethodFlags & AML_METHOD_SERIALIZED)
+    {
+        ObjDesc->Method.InfoFlags = ACPI_METHOD_SERIALIZED;
 
-	/* Attach the new object to the method Node */
+        /*
+         * ACPI 1.0: SyncLevel = 0
+         * ACPI 2.0: SyncLevel = SyncLevel in method declaration
+         */
+        ObjDesc->Method.SyncLevel = (UINT8)
+            ((MethodFlags & AML_METHOD_SYNC_LEVEL) >> 4);
+    }
 
-	status = acpi_ns_attach_object((struct acpi_namespace_node *)operand[0],
-				       obj_desc, ACPI_TYPE_METHOD);
+    /* Attach the new object to the method Node */
 
-	/* Remove local reference to the object */
+    Status = AcpiNsAttachObject ((ACPI_NAMESPACE_NODE *) Operand[0],
+                    ObjDesc, ACPI_TYPE_METHOD);
 
-	acpi_ut_remove_reference(obj_desc);
+    /* Remove local reference to the object */
 
-exit:
-	/* Remove a reference to the operand */
+    AcpiUtRemoveReference (ObjDesc);
 
-	acpi_ut_remove_reference(operand[1]);
-	return_ACPI_STATUS(status);
+Exit:
+    /* Remove a reference to the operand */
+
+    AcpiUtRemoveReference (Operand[1]);
+    return_ACPI_STATUS (Status);
 }

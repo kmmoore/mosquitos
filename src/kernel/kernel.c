@@ -38,6 +38,7 @@ void * thread1_main(void *p) {
   Semaphore *sema = (Semaphore *)p;
   text_output_printf("[1] Started!\n");
   text_output_printf("[1] Spawning thread 2...\n");
+  timer_thread_stall(100);
 
   KernelThread *t2 = thread_create(thread2_main, NULL, 31, 2);
   thread_start(t2);
@@ -68,14 +69,22 @@ void kernel_main(KernelInfo info) {
 
   vm_init(info.memory_map, info.mem_map_size, info.mem_map_descriptor_size);
 
+  // Now that interrupt/exception handlers are set up, we can enable interrupts
+  sti();
+
   // pci_init();
   // sata_init();
 
   timer_init();
+  vm_print_free_list();
   keyboard_controller_init();
 
-  // Now that interrupt/exception handlers are set up, we can enable interrupts
-  sti();
+  void * page = vm_pmap(0x200000, 2);
+  text_output_printf("0x%x\n", page);
+  vm_print_free_list();
+  vm_pfree(page, 2);
+  vm_print_free_list();
+  // while(1) __asm__ ("hlt");
 
   // Set up scheduler
   scheduler_init();
@@ -87,6 +96,7 @@ void kernel_main(KernelInfo info) {
   thread_start(t1);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call
+  while(1) __asm__ ("hlt");
 
   assert(false); // We should never get here
 }

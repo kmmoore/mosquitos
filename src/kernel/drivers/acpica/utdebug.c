@@ -4,63 +4,141 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
+#define __UTDEBUG_C__
 #define EXPORT_ACPI_INTERFACES
 
-#include <acpi/acpi.h>
+#include "acpi.h"
 #include "accommon.h"
 
 #define _COMPONENT          ACPI_UTILITIES
-ACPI_MODULE_NAME("utdebug")
+        ACPI_MODULE_NAME    ("utdebug")
+
 
 #ifdef ACPI_DEBUG_OUTPUT
-static acpi_thread_id acpi_gbl_prev_thread_id = (acpi_thread_id) 0xFFFFFFFF;
-static char *acpi_gbl_fn_entry_str = "----Entry";
-static char *acpi_gbl_fn_exit_str = "----Exit-";
+
+static ACPI_THREAD_ID       AcpiGbl_PrevThreadId = (ACPI_THREAD_ID) 0xFFFFFFFF;
+static char                 *AcpiGbl_FnEntryStr = "----Entry";
+static char                 *AcpiGbl_FnExitStr  = "----Exit-";
 
 /* Local prototypes */
 
-static const char *acpi_ut_trim_function_name(const char *function_name);
+static const char *
+AcpiUtTrimFunctionName (
+    const char              *FunctionName);
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_init_stack_ptr_trace
+ * FUNCTION:    AcpiUtInitStackPtrTrace
  *
  * PARAMETERS:  None
  *
@@ -70,16 +148,20 @@ static const char *acpi_ut_trim_function_name(const char *function_name);
  *
  ******************************************************************************/
 
-void acpi_ut_init_stack_ptr_trace(void)
+void
+AcpiUtInitStackPtrTrace (
+    void)
 {
-	acpi_size current_sp;
+    ACPI_SIZE               CurrentSp;
 
-	acpi_gbl_entry_stack_pointer = &current_sp;
+
+    AcpiGbl_EntryStackPointer = &CurrentSp;
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_track_stack_ptr
+ * FUNCTION:    AcpiUtTrackStackPtr
  *
  * PARAMETERS:  None
  *
@@ -89,24 +171,30 @@ void acpi_ut_init_stack_ptr_trace(void)
  *
  ******************************************************************************/
 
-void acpi_ut_track_stack_ptr(void)
+void
+AcpiUtTrackStackPtr (
+    void)
 {
-	acpi_size current_sp;
+    ACPI_SIZE               CurrentSp;
 
-	if (&current_sp < acpi_gbl_lowest_stack_pointer) {
-		acpi_gbl_lowest_stack_pointer = &current_sp;
-	}
 
-	if (acpi_gbl_nesting_level > acpi_gbl_deepest_nesting) {
-		acpi_gbl_deepest_nesting = acpi_gbl_nesting_level;
-	}
+    if (&CurrentSp < AcpiGbl_LowestStackPointer)
+    {
+        AcpiGbl_LowestStackPointer = &CurrentSp;
+    }
+
+    if (AcpiGbl_NestingLevel > AcpiGbl_DeepestNesting)
+    {
+        AcpiGbl_DeepestNesting = AcpiGbl_NestingLevel;
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_trim_function_name
+ * FUNCTION:    AcpiUtTrimFunctionName
  *
- * PARAMETERS:  function_name       - Ascii string containing a procedure name
+ * PARAMETERS:  FunctionName        - Ascii string containing a procedure name
  *
  * RETURN:      Updated pointer to the function name
  *
@@ -116,38 +204,41 @@ void acpi_ut_track_stack_ptr(void)
  *
  ******************************************************************************/
 
-static const char *acpi_ut_trim_function_name(const char *function_name)
+static const char *
+AcpiUtTrimFunctionName (
+    const char              *FunctionName)
 {
 
-	/* All Function names are longer than 4 chars, check is safe */
+    /* All Function names are longer than 4 chars, check is safe */
 
-	if (*(ACPI_CAST_PTR(u32, function_name)) == ACPI_PREFIX_MIXED) {
+    if (*(ACPI_CAST_PTR (UINT32, FunctionName)) == ACPI_PREFIX_MIXED)
+    {
+        /* This is the case where the original source has not been modified */
 
-		/* This is the case where the original source has not been modified */
+        return (FunctionName + 4);
+    }
 
-		return (function_name + 4);
-	}
+    if (*(ACPI_CAST_PTR (UINT32, FunctionName)) == ACPI_PREFIX_LOWER)
+    {
+        /* This is the case where the source has been 'linuxized' */
 
-	if (*(ACPI_CAST_PTR(u32, function_name)) == ACPI_PREFIX_LOWER) {
+        return (FunctionName + 5);
+    }
 
-		/* This is the case where the source has been 'linuxized' */
-
-		return (function_name + 5);
-	}
-
-	return (function_name);
+    return (FunctionName);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_debug_print
+ * FUNCTION:    AcpiDebugPrint
  *
- * PARAMETERS:  requested_debug_level - Requested debug print level
- *              line_number         - Caller's line number (for error output)
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
- *              format              - Printf format field
+ * PARAMETERS:  RequestedDebugLevel - Requested debug print level
+ *              LineNumber          - Caller's line number (for error output)
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
+ *              Format              - Printf format field
  *              ...                 - Optional printf arguments
  *
  * RETURN:      None
@@ -157,407 +248,493 @@ static const char *acpi_ut_trim_function_name(const char *function_name)
  *
  ******************************************************************************/
 
-void ACPI_INTERNAL_VAR_XFACE
-acpi_debug_print(u32 requested_debug_level,
-		 u32 line_number,
-		 const char *function_name,
-		 const char *module_name,
-		 u32 component_id, const char *format, ...)
+void  ACPI_INTERNAL_VAR_XFACE
+AcpiDebugPrint (
+    UINT32                  RequestedDebugLevel,
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId,
+    const char              *Format,
+    ...)
 {
-	acpi_thread_id thread_id;
-	va_list args;
+    ACPI_THREAD_ID          ThreadId;
+    va_list                 args;
 
-	/* Check if debug output enabled */
 
-	if (!ACPI_IS_DEBUG_ENABLED(requested_debug_level, component_id)) {
-		return;
-	}
+    /* Check if debug output enabled */
 
-	/*
-	 * Thread tracking and context switch notification
-	 */
-	thread_id = acpi_os_get_thread_id();
-	if (thread_id != acpi_gbl_prev_thread_id) {
-		if (ACPI_LV_THREADS & acpi_dbg_level) {
-			acpi_os_printf
-			    ("\n**** Context Switch from TID %u to TID %u ****\n\n",
-			     (u32)acpi_gbl_prev_thread_id, (u32)thread_id);
-		}
+    if (!ACPI_IS_DEBUG_ENABLED (RequestedDebugLevel, ComponentId))
+    {
+        return;
+    }
 
-		acpi_gbl_prev_thread_id = thread_id;
-		acpi_gbl_nesting_level = 0;
-	}
+    /*
+     * Thread tracking and context switch notification
+     */
+    ThreadId = AcpiOsGetThreadId ();
+    if (ThreadId != AcpiGbl_PrevThreadId)
+    {
+        if (ACPI_LV_THREADS & AcpiDbgLevel)
+        {
+            AcpiOsPrintf (
+                "\n**** Context Switch from TID %u to TID %u ****\n\n",
+                (UINT32) AcpiGbl_PrevThreadId, (UINT32) ThreadId);
+        }
 
-	/*
-	 * Display the module name, current line number, thread ID (if requested),
-	 * current procedure nesting level, and the current procedure name
-	 */
-	acpi_os_printf("%9s-%04ld ", module_name, line_number);
+        AcpiGbl_PrevThreadId = ThreadId;
+        AcpiGbl_NestingLevel = 0;
+    }
+
+    /*
+     * Display the module name, current line number, thread ID (if requested),
+     * current procedure nesting level, and the current procedure name
+     */
+    AcpiOsPrintf ("%9s-%04ld ", ModuleName, LineNumber);
 
 #ifdef ACPI_APPLICATION
-	/*
-	 * For acpi_exec/iASL only, emit the thread ID and nesting level.
-	 * Note: nesting level is really only useful during a single-thread
-	 * execution. Otherwise, multiple threads will keep resetting the
-	 * level.
-	 */
-	if (ACPI_LV_THREADS & acpi_dbg_level) {
-		acpi_os_printf("[%u] ", (u32)thread_id);
-	}
+    /*
+     * For AcpiExec/iASL only, emit the thread ID and nesting level.
+     * Note: nesting level is really only useful during a single-thread
+     * execution. Otherwise, multiple threads will keep resetting the
+     * level.
+     */
+    if (ACPI_LV_THREADS & AcpiDbgLevel)
+    {
+        AcpiOsPrintf ("[%u] ", (UINT32) ThreadId);
+    }
 
-	acpi_os_printf("[%02ld] ", acpi_gbl_nesting_level);
+    AcpiOsPrintf ("[%02ld] ", AcpiGbl_NestingLevel);
 #endif
 
-	acpi_os_printf("%-22.22s: ", acpi_ut_trim_function_name(function_name));
+    AcpiOsPrintf ("%-22.22s: ", AcpiUtTrimFunctionName (FunctionName));
 
-	va_start(args, format);
-	acpi_os_vprintf(format, args);
-	va_end(args);
+    va_start (args, Format);
+    AcpiOsVprintf (Format, args);
+    va_end (args);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_debug_print)
+ACPI_EXPORT_SYMBOL (AcpiDebugPrint)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_debug_print_raw
+ * FUNCTION:    AcpiDebugPrintRaw
  *
- * PARAMETERS:  requested_debug_level - Requested debug print level
- *              line_number         - Caller's line number
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
- *              format              - Printf format field
+ * PARAMETERS:  RequestedDebugLevel - Requested debug print level
+ *              LineNumber          - Caller's line number
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
+ *              Format              - Printf format field
  *              ...                 - Optional printf arguments
  *
  * RETURN:      None
  *
  * DESCRIPTION: Print message with no headers. Has same interface as
- *              debug_print so that the same macros can be used.
+ *              DebugPrint so that the same macros can be used.
  *
  ******************************************************************************/
-void ACPI_INTERNAL_VAR_XFACE
-acpi_debug_print_raw(u32 requested_debug_level,
-		     u32 line_number,
-		     const char *function_name,
-		     const char *module_name,
-		     u32 component_id, const char *format, ...)
+
+void  ACPI_INTERNAL_VAR_XFACE
+AcpiDebugPrintRaw (
+    UINT32                  RequestedDebugLevel,
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId,
+    const char              *Format,
+    ...)
 {
-	va_list args;
+    va_list                 args;
 
-	/* Check if debug output enabled */
 
-	if (!ACPI_IS_DEBUG_ENABLED(requested_debug_level, component_id)) {
-		return;
-	}
+    /* Check if debug output enabled */
 
-	va_start(args, format);
-	acpi_os_vprintf(format, args);
-	va_end(args);
+    if (!ACPI_IS_DEBUG_ENABLED (RequestedDebugLevel, ComponentId))
+    {
+        return;
+    }
+
+    va_start (args, Format);
+    AcpiOsVprintf (Format, args);
+    va_end (args);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_debug_print_raw)
+ACPI_EXPORT_SYMBOL (AcpiDebugPrintRaw)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_trace
+ * FUNCTION:    AcpiUtTrace
  *
- * PARAMETERS:  line_number         - Caller's line number
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
+ * PARAMETERS:  LineNumber          - Caller's line number
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
  *
  * RETURN:      None
  *
  * DESCRIPTION: Function entry trace. Prints only if TRACE_FUNCTIONS bit is
- *              set in debug_level
+ *              set in DebugLevel
  *
  ******************************************************************************/
+
 void
-acpi_ut_trace(u32 line_number,
-	      const char *function_name,
-	      const char *module_name, u32 component_id)
+AcpiUtTrace (
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId)
 {
 
-	acpi_gbl_nesting_level++;
-	acpi_ut_track_stack_ptr();
+    AcpiGbl_NestingLevel++;
+    AcpiUtTrackStackPtr ();
 
-	/* Check if enabled up-front for performance */
+    /* Check if enabled up-front for performance */
 
-	if (ACPI_IS_DEBUG_ENABLED(ACPI_LV_FUNCTIONS, component_id)) {
-		acpi_debug_print(ACPI_LV_FUNCTIONS,
-				 line_number, function_name, module_name,
-				 component_id, "%s\n", acpi_gbl_fn_entry_str);
-	}
+    if (ACPI_IS_DEBUG_ENABLED (ACPI_LV_FUNCTIONS, ComponentId))
+    {
+        AcpiDebugPrint (ACPI_LV_FUNCTIONS,
+            LineNumber, FunctionName, ModuleName, ComponentId,
+            "%s\n", AcpiGbl_FnEntryStr);
+    }
 }
 
-ACPI_EXPORT_SYMBOL(acpi_ut_trace)
+ACPI_EXPORT_SYMBOL (AcpiUtTrace)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_trace_ptr
+ * FUNCTION:    AcpiUtTracePtr
  *
- * PARAMETERS:  line_number         - Caller's line number
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
- *              pointer             - Pointer to display
+ * PARAMETERS:  LineNumber          - Caller's line number
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
+ *              Pointer             - Pointer to display
  *
  * RETURN:      None
  *
  * DESCRIPTION: Function entry trace. Prints only if TRACE_FUNCTIONS bit is
- *              set in debug_level
+ *              set in DebugLevel
  *
  ******************************************************************************/
+
 void
-acpi_ut_trace_ptr(u32 line_number,
-		  const char *function_name,
-		  const char *module_name, u32 component_id, void *pointer)
+AcpiUtTracePtr (
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId,
+    void                    *Pointer)
 {
 
-	acpi_gbl_nesting_level++;
-	acpi_ut_track_stack_ptr();
+    AcpiGbl_NestingLevel++;
+    AcpiUtTrackStackPtr ();
 
-	/* Check if enabled up-front for performance */
+    /* Check if enabled up-front for performance */
 
-	if (ACPI_IS_DEBUG_ENABLED(ACPI_LV_FUNCTIONS, component_id)) {
-		acpi_debug_print(ACPI_LV_FUNCTIONS,
-				 line_number, function_name, module_name,
-				 component_id, "%s %p\n", acpi_gbl_fn_entry_str,
-				 pointer);
-	}
+    if (ACPI_IS_DEBUG_ENABLED (ACPI_LV_FUNCTIONS, ComponentId))
+    {
+        AcpiDebugPrint (ACPI_LV_FUNCTIONS,
+            LineNumber, FunctionName, ModuleName, ComponentId,
+            "%s %p\n", AcpiGbl_FnEntryStr, Pointer);
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_trace_str
+ * FUNCTION:    AcpiUtTraceStr
  *
- * PARAMETERS:  line_number         - Caller's line number
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
- *              string              - Additional string to display
+ * PARAMETERS:  LineNumber          - Caller's line number
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
+ *              String              - Additional string to display
  *
  * RETURN:      None
  *
  * DESCRIPTION: Function entry trace. Prints only if TRACE_FUNCTIONS bit is
- *              set in debug_level
+ *              set in DebugLevel
  *
  ******************************************************************************/
 
 void
-acpi_ut_trace_str(u32 line_number,
-		  const char *function_name,
-		  const char *module_name, u32 component_id, char *string)
+AcpiUtTraceStr (
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId,
+    char                    *String)
 {
 
-	acpi_gbl_nesting_level++;
-	acpi_ut_track_stack_ptr();
+    AcpiGbl_NestingLevel++;
+    AcpiUtTrackStackPtr ();
 
-	/* Check if enabled up-front for performance */
+    /* Check if enabled up-front for performance */
 
-	if (ACPI_IS_DEBUG_ENABLED(ACPI_LV_FUNCTIONS, component_id)) {
-		acpi_debug_print(ACPI_LV_FUNCTIONS,
-				 line_number, function_name, module_name,
-				 component_id, "%s %s\n", acpi_gbl_fn_entry_str,
-				 string);
-	}
+    if (ACPI_IS_DEBUG_ENABLED (ACPI_LV_FUNCTIONS, ComponentId))
+    {
+        AcpiDebugPrint (ACPI_LV_FUNCTIONS,
+            LineNumber, FunctionName, ModuleName, ComponentId,
+            "%s %s\n", AcpiGbl_FnEntryStr, String);
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_trace_u32
+ * FUNCTION:    AcpiUtTraceU32
  *
- * PARAMETERS:  line_number         - Caller's line number
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
- *              integer             - Integer to display
+ * PARAMETERS:  LineNumber          - Caller's line number
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
+ *              Integer             - Integer to display
  *
  * RETURN:      None
  *
  * DESCRIPTION: Function entry trace. Prints only if TRACE_FUNCTIONS bit is
- *              set in debug_level
+ *              set in DebugLevel
  *
  ******************************************************************************/
 
 void
-acpi_ut_trace_u32(u32 line_number,
-		  const char *function_name,
-		  const char *module_name, u32 component_id, u32 integer)
+AcpiUtTraceU32 (
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId,
+    UINT32                  Integer)
 {
 
-	acpi_gbl_nesting_level++;
-	acpi_ut_track_stack_ptr();
+    AcpiGbl_NestingLevel++;
+    AcpiUtTrackStackPtr ();
 
-	/* Check if enabled up-front for performance */
+    /* Check if enabled up-front for performance */
 
-	if (ACPI_IS_DEBUG_ENABLED(ACPI_LV_FUNCTIONS, component_id)) {
-		acpi_debug_print(ACPI_LV_FUNCTIONS,
-				 line_number, function_name, module_name,
-				 component_id, "%s %08X\n",
-				 acpi_gbl_fn_entry_str, integer);
-	}
+    if (ACPI_IS_DEBUG_ENABLED (ACPI_LV_FUNCTIONS, ComponentId))
+    {
+        AcpiDebugPrint (ACPI_LV_FUNCTIONS,
+            LineNumber, FunctionName, ModuleName, ComponentId,
+            "%s %08X\n", AcpiGbl_FnEntryStr, Integer);
+    }
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_exit
+ * FUNCTION:    AcpiUtExit
  *
- * PARAMETERS:  line_number         - Caller's line number
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
+ * PARAMETERS:  LineNumber          - Caller's line number
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
  *
  * RETURN:      None
  *
  * DESCRIPTION: Function exit trace. Prints only if TRACE_FUNCTIONS bit is
- *              set in debug_level
+ *              set in DebugLevel
  *
  ******************************************************************************/
 
 void
-acpi_ut_exit(u32 line_number,
-	     const char *function_name,
-	     const char *module_name, u32 component_id)
+AcpiUtExit (
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId)
 {
 
-	/* Check if enabled up-front for performance */
+    /* Check if enabled up-front for performance */
 
-	if (ACPI_IS_DEBUG_ENABLED(ACPI_LV_FUNCTIONS, component_id)) {
-		acpi_debug_print(ACPI_LV_FUNCTIONS,
-				 line_number, function_name, module_name,
-				 component_id, "%s\n", acpi_gbl_fn_exit_str);
-	}
+    if (ACPI_IS_DEBUG_ENABLED (ACPI_LV_FUNCTIONS, ComponentId))
+    {
+        AcpiDebugPrint (ACPI_LV_FUNCTIONS,
+            LineNumber, FunctionName, ModuleName, ComponentId,
+            "%s\n", AcpiGbl_FnExitStr);
+    }
 
-	if (acpi_gbl_nesting_level) {
-		acpi_gbl_nesting_level--;
-	}
+    if (AcpiGbl_NestingLevel)
+    {
+        AcpiGbl_NestingLevel--;
+    }
 }
 
-ACPI_EXPORT_SYMBOL(acpi_ut_exit)
+ACPI_EXPORT_SYMBOL (AcpiUtExit)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_status_exit
+ * FUNCTION:    AcpiUtStatusExit
  *
- * PARAMETERS:  line_number         - Caller's line number
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
- *              status              - Exit status code
+ * PARAMETERS:  LineNumber          - Caller's line number
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
+ *              Status              - Exit status code
  *
  * RETURN:      None
  *
  * DESCRIPTION: Function exit trace. Prints only if TRACE_FUNCTIONS bit is
- *              set in debug_level. Prints exit status also.
+ *              set in DebugLevel. Prints exit status also.
  *
  ******************************************************************************/
+
 void
-acpi_ut_status_exit(u32 line_number,
-		    const char *function_name,
-		    const char *module_name,
-		    u32 component_id, acpi_status status)
+AcpiUtStatusExit (
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId,
+    ACPI_STATUS             Status)
 {
 
-	/* Check if enabled up-front for performance */
+    /* Check if enabled up-front for performance */
 
-	if (ACPI_IS_DEBUG_ENABLED(ACPI_LV_FUNCTIONS, component_id)) {
-		if (ACPI_SUCCESS(status)) {
-			acpi_debug_print(ACPI_LV_FUNCTIONS,
-					 line_number, function_name,
-					 module_name, component_id, "%s %s\n",
-					 acpi_gbl_fn_exit_str,
-					 acpi_format_exception(status));
-		} else {
-			acpi_debug_print(ACPI_LV_FUNCTIONS,
-					 line_number, function_name,
-					 module_name, component_id,
-					 "%s ****Exception****: %s\n",
-					 acpi_gbl_fn_exit_str,
-					 acpi_format_exception(status));
-		}
-	}
+    if (ACPI_IS_DEBUG_ENABLED (ACPI_LV_FUNCTIONS, ComponentId))
+    {
+        if (ACPI_SUCCESS (Status))
+        {
+            AcpiDebugPrint (ACPI_LV_FUNCTIONS,
+                LineNumber, FunctionName, ModuleName, ComponentId,
+                "%s %s\n", AcpiGbl_FnExitStr,
+                AcpiFormatException (Status));
+        }
+        else
+        {
+            AcpiDebugPrint (ACPI_LV_FUNCTIONS,
+                LineNumber, FunctionName, ModuleName, ComponentId,
+                "%s ****Exception****: %s\n", AcpiGbl_FnExitStr,
+                AcpiFormatException (Status));
+        }
+    }
 
-	if (acpi_gbl_nesting_level) {
-		acpi_gbl_nesting_level--;
-	}
+    if (AcpiGbl_NestingLevel)
+    {
+        AcpiGbl_NestingLevel--;
+    }
 }
 
-ACPI_EXPORT_SYMBOL(acpi_ut_status_exit)
+ACPI_EXPORT_SYMBOL (AcpiUtStatusExit)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_value_exit
+ * FUNCTION:    AcpiUtValueExit
  *
- * PARAMETERS:  line_number         - Caller's line number
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
- *              value               - Value to be printed with exit msg
+ * PARAMETERS:  LineNumber          - Caller's line number
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
+ *              Value               - Value to be printed with exit msg
  *
  * RETURN:      None
  *
  * DESCRIPTION: Function exit trace. Prints only if TRACE_FUNCTIONS bit is
- *              set in debug_level. Prints exit value also.
+ *              set in DebugLevel. Prints exit value also.
  *
  ******************************************************************************/
+
 void
-acpi_ut_value_exit(u32 line_number,
-		   const char *function_name,
-		   const char *module_name, u32 component_id, u64 value)
+AcpiUtValueExit (
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId,
+    UINT64                  Value)
 {
 
-	/* Check if enabled up-front for performance */
+    /* Check if enabled up-front for performance */
 
-	if (ACPI_IS_DEBUG_ENABLED(ACPI_LV_FUNCTIONS, component_id)) {
-		acpi_debug_print(ACPI_LV_FUNCTIONS,
-				 line_number, function_name, module_name,
-				 component_id, "%s %8.8X%8.8X\n",
-				 acpi_gbl_fn_exit_str,
-				 ACPI_FORMAT_UINT64(value));
-	}
+    if (ACPI_IS_DEBUG_ENABLED (ACPI_LV_FUNCTIONS, ComponentId))
+    {
+        AcpiDebugPrint (ACPI_LV_FUNCTIONS,
+            LineNumber, FunctionName, ModuleName, ComponentId,
+            "%s %8.8X%8.8X\n", AcpiGbl_FnExitStr,
+            ACPI_FORMAT_UINT64 (Value));
+    }
 
-	if (acpi_gbl_nesting_level) {
-		acpi_gbl_nesting_level--;
-	}
+    if (AcpiGbl_NestingLevel)
+    {
+        AcpiGbl_NestingLevel--;
+    }
 }
 
-ACPI_EXPORT_SYMBOL(acpi_ut_value_exit)
+ACPI_EXPORT_SYMBOL (AcpiUtValueExit)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ut_ptr_exit
+ * FUNCTION:    AcpiUtPtrExit
  *
- * PARAMETERS:  line_number         - Caller's line number
- *              function_name       - Caller's procedure name
- *              module_name         - Caller's module name
- *              component_id        - Caller's component ID
- *              ptr                 - Pointer to display
+ * PARAMETERS:  LineNumber          - Caller's line number
+ *              FunctionName        - Caller's procedure name
+ *              ModuleName          - Caller's module name
+ *              ComponentId         - Caller's component ID
+ *              Ptr                 - Pointer to display
  *
  * RETURN:      None
  *
  * DESCRIPTION: Function exit trace. Prints only if TRACE_FUNCTIONS bit is
- *              set in debug_level. Prints exit value also.
+ *              set in DebugLevel. Prints exit value also.
  *
  ******************************************************************************/
+
 void
-acpi_ut_ptr_exit(u32 line_number,
-		 const char *function_name,
-		 const char *module_name, u32 component_id, u8 *ptr)
+AcpiUtPtrExit (
+    UINT32                  LineNumber,
+    const char              *FunctionName,
+    const char              *ModuleName,
+    UINT32                  ComponentId,
+    UINT8                   *Ptr)
 {
 
-	/* Check if enabled up-front for performance */
+    /* Check if enabled up-front for performance */
 
-	if (ACPI_IS_DEBUG_ENABLED(ACPI_LV_FUNCTIONS, component_id)) {
-		acpi_debug_print(ACPI_LV_FUNCTIONS,
-				 line_number, function_name, module_name,
-				 component_id, "%s %p\n", acpi_gbl_fn_exit_str,
-				 ptr);
-	}
+    if (ACPI_IS_DEBUG_ENABLED (ACPI_LV_FUNCTIONS, ComponentId))
+    {
+        AcpiDebugPrint (ACPI_LV_FUNCTIONS,
+            LineNumber, FunctionName, ModuleName, ComponentId,
+            "%s %p\n", AcpiGbl_FnExitStr, Ptr);
+    }
 
-	if (acpi_gbl_nesting_level) {
-		acpi_gbl_nesting_level--;
-	}
+    if (AcpiGbl_NestingLevel)
+    {
+        AcpiGbl_NestingLevel--;
+    }
 }
 
+#endif
+
+
+#ifdef ACPI_APPLICATION
+/*******************************************************************************
+ *
+ * FUNCTION:    AcpiLogError
+ *
+ * PARAMETERS:  Format              - Printf format field
+ *              ...                 - Optional printf arguments
+ *
+ * RETURN:      None
+ *
+ * DESCRIPTION: Print error message to the console, used by applications.
+ *
+ ******************************************************************************/
+
+void  ACPI_INTERNAL_VAR_XFACE
+AcpiLogError (
+    const char              *Format,
+    ...)
+{
+    va_list                 Args;
+
+    va_start (Args, Format);
+    (void) AcpiUtFileVprintf (ACPI_FILE_ERR, Format, Args);
+    va_end (Args);
+}
+
+ACPI_EXPORT_SYMBOL (AcpiLogError)
 #endif

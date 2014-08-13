@@ -4,54 +4,128 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acparser.h"
 #include "amlcode.h"
 
 #define _COMPONENT          ACPI_PARSER
-ACPI_MODULE_NAME("psutils")
+        ACPI_MODULE_NAME    ("psutils")
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ps_create_scope_op
+ * FUNCTION:    AcpiPsCreateScopeOp
  *
  * PARAMETERS:  None
  *
@@ -60,25 +134,31 @@ ACPI_MODULE_NAME("psutils")
  * DESCRIPTION: Create a Scope and associated namepath op with the root name
  *
  ******************************************************************************/
-union acpi_parse_object *acpi_ps_create_scope_op(void)
+
+ACPI_PARSE_OBJECT *
+AcpiPsCreateScopeOp (
+    void)
 {
-	union acpi_parse_object *scope_op;
+    ACPI_PARSE_OBJECT       *ScopeOp;
 
-	scope_op = acpi_ps_alloc_op(AML_SCOPE_OP);
-	if (!scope_op) {
-		return (NULL);
-	}
 
-	scope_op->named.name = ACPI_ROOT_NAME;
-	return (scope_op);
+    ScopeOp = AcpiPsAllocOp (AML_SCOPE_OP);
+    if (!ScopeOp)
+    {
+        return (NULL);
+    }
+
+    ScopeOp->Named.Name = ACPI_ROOT_NAME;
+    return (ScopeOp);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ps_init_op
+ * FUNCTION:    AcpiPsInitOp
  *
- * PARAMETERS:  op              - A newly allocated Op object
- *              opcode          - Opcode to store in the Op
+ * PARAMETERS:  Op              - A newly allocated Op object
+ *              Opcode          - Opcode to store in the Op
  *
  * RETURN:      None
  *
@@ -86,24 +166,28 @@ union acpi_parse_object *acpi_ps_create_scope_op(void)
  *
  ******************************************************************************/
 
-void acpi_ps_init_op(union acpi_parse_object *op, u16 opcode)
+void
+AcpiPsInitOp (
+    ACPI_PARSE_OBJECT       *Op,
+    UINT16                  Opcode)
 {
-	ACPI_FUNCTION_ENTRY();
+    ACPI_FUNCTION_ENTRY ();
 
-	op->common.descriptor_type = ACPI_DESC_TYPE_PARSER;
-	op->common.aml_opcode = opcode;
 
-	ACPI_DISASM_ONLY_MEMBERS(ACPI_STRNCPY(op->common.aml_op_name,
-					      (acpi_ps_get_opcode_info
-					       (opcode))->name,
-					      sizeof(op->common.aml_op_name)));
+    Op->Common.DescriptorType = ACPI_DESC_TYPE_PARSER;
+    Op->Common.AmlOpcode = Opcode;
+
+    ACPI_DISASM_ONLY_MEMBERS (ACPI_STRNCPY (Op->Common.AmlOpName,
+            (AcpiPsGetOpcodeInfo (Opcode))->Name,
+                sizeof (Op->Common.AmlOpName)));
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ps_alloc_op
+ * FUNCTION:    AcpiPsAllocOp
  *
- * PARAMETERS:  opcode          - Opcode that will be stored in the new Op
+ * PARAMETERS:  Opcode          - Opcode that will be stored in the new Op
  *
  * RETURN:      Pointer to the new Op, null on failure
  *
@@ -113,54 +197,67 @@ void acpi_ps_init_op(union acpi_parse_object *op, u16 opcode)
  *
  ******************************************************************************/
 
-union acpi_parse_object *acpi_ps_alloc_op(u16 opcode)
+ACPI_PARSE_OBJECT*
+AcpiPsAllocOp (
+    UINT16                  Opcode)
 {
-	union acpi_parse_object *op;
-	const struct acpi_opcode_info *op_info;
-	u8 flags = ACPI_PARSEOP_GENERIC;
+    ACPI_PARSE_OBJECT       *Op;
+    const ACPI_OPCODE_INFO  *OpInfo;
+    UINT8                   Flags = ACPI_PARSEOP_GENERIC;
 
-	ACPI_FUNCTION_ENTRY();
 
-	op_info = acpi_ps_get_opcode_info(opcode);
+    ACPI_FUNCTION_ENTRY ();
 
-	/* Determine type of parse_op required */
 
-	if (op_info->flags & AML_DEFER) {
-		flags = ACPI_PARSEOP_DEFERRED;
-	} else if (op_info->flags & AML_NAMED) {
-		flags = ACPI_PARSEOP_NAMED;
-	} else if (opcode == AML_INT_BYTELIST_OP) {
-		flags = ACPI_PARSEOP_BYTELIST;
-	}
+    OpInfo = AcpiPsGetOpcodeInfo (Opcode);
 
-	/* Allocate the minimum required size object */
+    /* Determine type of ParseOp required */
 
-	if (flags == ACPI_PARSEOP_GENERIC) {
+    if (OpInfo->Flags & AML_DEFER)
+    {
+        Flags = ACPI_PARSEOP_DEFERRED;
+    }
+    else if (OpInfo->Flags & AML_NAMED)
+    {
+        Flags = ACPI_PARSEOP_NAMED;
+    }
+    else if (Opcode == AML_INT_BYTELIST_OP)
+    {
+        Flags = ACPI_PARSEOP_BYTELIST;
+    }
 
-		/* The generic op (default) is by far the most common (16 to 1) */
+    /* Allocate the minimum required size object */
 
-		op = acpi_os_acquire_object(acpi_gbl_ps_node_cache);
-	} else {
-		/* Extended parseop */
+    if (Flags == ACPI_PARSEOP_GENERIC)
+    {
+        /* The generic op (default) is by far the most common (16 to 1) */
 
-		op = acpi_os_acquire_object(acpi_gbl_ps_node_ext_cache);
-	}
+        Op = AcpiOsAcquireObject (AcpiGbl_PsNodeCache);
+    }
+    else
+    {
+        /* Extended parseop */
 
-	/* Initialize the Op */
+        Op = AcpiOsAcquireObject (AcpiGbl_PsNodeExtCache);
+    }
 
-	if (op) {
-		acpi_ps_init_op(op, opcode);
-		op->common.flags = flags;
-	}
+    /* Initialize the Op */
 
-	return (op);
+    if (Op)
+    {
+        AcpiPsInitOp (Op, Opcode);
+        Op->Common.Flags = Flags;
+    }
+
+    return (Op);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ps_free_op
+ * FUNCTION:    AcpiPsFreeOp
  *
- * PARAMETERS:  op              - Op to be freed
+ * PARAMETERS:  Op              - Op to be freed
  *
  * RETURN:      None.
  *
@@ -169,21 +266,28 @@ union acpi_parse_object *acpi_ps_alloc_op(u16 opcode)
  *
  ******************************************************************************/
 
-void acpi_ps_free_op(union acpi_parse_object *op)
+void
+AcpiPsFreeOp (
+    ACPI_PARSE_OBJECT       *Op)
 {
-	ACPI_FUNCTION_NAME(ps_free_op);
+    ACPI_FUNCTION_NAME (PsFreeOp);
 
-	if (op->common.aml_opcode == AML_INT_RETURN_VALUE_OP) {
-		ACPI_DEBUG_PRINT((ACPI_DB_ALLOCATIONS, "Free retval op: %p\n",
-				  op));
-	}
 
-	if (op->common.flags & ACPI_PARSEOP_GENERIC) {
-		(void)acpi_os_release_object(acpi_gbl_ps_node_cache, op);
-	} else {
-		(void)acpi_os_release_object(acpi_gbl_ps_node_ext_cache, op);
-	}
+    if (Op->Common.AmlOpcode == AML_INT_RETURN_VALUE_OP)
+    {
+        ACPI_DEBUG_PRINT ((ACPI_DB_ALLOCATIONS, "Free retval op: %p\n", Op));
+    }
+
+    if (Op->Common.Flags & ACPI_PARSEOP_GENERIC)
+    {
+        (void) AcpiOsReleaseObject (AcpiGbl_PsNodeCache, Op);
+    }
+    else
+    {
+        (void) AcpiOsReleaseObject (AcpiGbl_PsNodeExtCache, Op);
+    }
 }
+
 
 /*******************************************************************************
  *
@@ -193,44 +297,54 @@ void acpi_ps_free_op(union acpi_parse_object *op)
  *
  ******************************************************************************/
 
+
 /*
  * Is "c" a namestring lead character?
  */
-u8 acpi_ps_is_leading_char(u32 c)
+BOOLEAN
+AcpiPsIsLeadingChar (
+    UINT32                  c)
 {
-	return ((u8) (c == '_' || (c >= 'A' && c <= 'Z')));
+    return ((BOOLEAN) (c == '_' || (c >= 'A' && c <= 'Z')));
 }
+
 
 /*
  * Get op's name (4-byte name segment) or 0 if unnamed
  */
-#ifdef ACPI_FUTURE_USAGE
-u32 acpi_ps_get_name(union acpi_parse_object * op)
+UINT32
+AcpiPsGetName (
+    ACPI_PARSE_OBJECT       *Op)
 {
 
-	/* The "generic" object has no name associated with it */
+    /* The "generic" object has no name associated with it */
 
-	if (op->common.flags & ACPI_PARSEOP_GENERIC) {
-		return (0);
-	}
+    if (Op->Common.Flags & ACPI_PARSEOP_GENERIC)
+    {
+        return (0);
+    }
 
-	/* Only the "Extended" parse objects have a name */
+    /* Only the "Extended" parse objects have a name */
 
-	return (op->named.name);
+    return (Op->Named.Name);
 }
-#endif				/*  ACPI_FUTURE_USAGE  */
+
 
 /*
  * Set op's name
  */
-void acpi_ps_set_name(union acpi_parse_object *op, u32 name)
+void
+AcpiPsSetName (
+    ACPI_PARSE_OBJECT       *Op,
+    UINT32                  name)
 {
 
-	/* The "generic" object has no name associated with it */
+    /* The "generic" object has no name associated with it */
 
-	if (op->common.flags & ACPI_PARSEOP_GENERIC) {
-		return;
-	}
+    if (Op->Common.Flags & ACPI_PARSEOP_GENERIC)
+    {
+        return;
+    }
 
-	op->named.name = name;
+    Op->Named.Name = name;
 }

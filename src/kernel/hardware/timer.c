@@ -19,6 +19,7 @@ struct waiting_thread {
 
 static struct {
   volatile uint64_t ticks; // Won't overflow for 5e8 ticks
+  uint64_t cycles_per_tick;
   list waiting_threads;
 } timer_data;
 
@@ -29,12 +30,12 @@ static inline void wake_waiting_thread(struct waiting_thread *wt) {
 }
 
 void timer_isr() {
-  ++timer_data.ticks;
+  uint64_t current_ticks = __sync_add_and_fetch(&timer_data.ticks, 1);
 
   struct waiting_thread *current = (struct waiting_thread *)list_head(&timer_data.waiting_threads);
   while (current) {
     struct waiting_thread *next = (struct waiting_thread *)list_next((list_entry *)current);
-    if (timer_data.ticks >= current->wake_time) {
+    if (current_ticks >= current->wake_time) {
       wake_waiting_thread(current);
     }
 
@@ -49,13 +50,10 @@ uint64_t timer_ticks() {
 }
 
 void timer_init() {
-
   text_output_printf("Initializing timer...");
 
-  timer_data.ticks = 0;
   list_init(&timer_data.waiting_threads);
 
-  ioapic_map(TIMER_IRQ, TIMER_IV);
   interrupts_register_handler(TIMER_IV, timer_isr);
 
   // Use Legacy PIC Timer
@@ -66,7 +64,28 @@ void timer_init() {
   io_write_8(0x40, TIMER_DIVIDER & 0xff);
   io_write_8(0x40, TIMER_DIVIDER >> 8);
 
+  // Enable I/O APIC routing for PIC timer
+  ioapic_map(TIMER_IRQ, TIMER_IV);
+
+  // Calibrate cycles_per_tick
+  timer_data.cycles_per_tick = 0;
+  timer_data.ticks = 0;
+  while (timer_data.ticks < 128) {
+    timer_data.cycles_per_tick++;
+    __sync_synchronize();
+  }
+  timer_data.cycles_per_tick >>= 5; // We execute about 4x more instructions in this loop than in the timer_thread_stall() loop
+
   text_output_printf("Done\n");
+}
+
+void timer_thread_stall(uint64_t microseconds) {
+  // TODO: Who knows if this is even remotely precice
+  // also, it can get interrupted by things
+
+  uint64_t cycles = microseconds * TIMER_FREQUENCY * timer_data.cycles_per_tick / 1e6;
+  text_output_printf("Stalling for %d cycles\n", cycles);
+  while (cycles > 0) cycles--;
 }
 
 void timer_thread_sleep(uint64_t milliseconds) {

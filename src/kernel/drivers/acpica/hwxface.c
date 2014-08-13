@@ -4,55 +4,128 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
 #define EXPORT_ACPI_INTERFACES
 
-#include <acpi/acpi.h>
+#include "acpi.h"
 #include "accommon.h"
 #include "acnamesp.h"
 
 #define _COMPONENT          ACPI_HARDWARE
-ACPI_MODULE_NAME("hwxface")
+        ACPI_MODULE_NAME    ("hwxface")
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_reset
+ * FUNCTION:    AcpiReset
  *
  * PARAMETERS:  None
  *
@@ -63,228 +136,262 @@ ACPI_MODULE_NAME("hwxface")
  *              handled separately.
  *
  ******************************************************************************/
-acpi_status acpi_reset(void)
+
+ACPI_STATUS
+AcpiReset (
+    void)
 {
-	struct acpi_generic_address *reset_reg;
-	acpi_status status;
+    ACPI_GENERIC_ADDRESS    *ResetReg;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(acpi_reset);
 
-	reset_reg = &acpi_gbl_FADT.reset_register;
+    ACPI_FUNCTION_TRACE (AcpiReset);
 
-	/* Check if the reset register is supported */
 
-	if (!(acpi_gbl_FADT.flags & ACPI_FADT_RESET_REGISTER) ||
-	    !reset_reg->address) {
-		return_ACPI_STATUS(AE_NOT_EXIST);
-	}
+    ResetReg = &AcpiGbl_FADT.ResetRegister;
 
-	if (reset_reg->space_id == ACPI_ADR_SPACE_SYSTEM_IO) {
-		/*
-		 * For I/O space, write directly to the OSL. This bypasses the port
-		 * validation mechanism, which may block a valid write to the reset
-		 * register.
-		 *
-		 * NOTE:
-		 * The ACPI spec requires the reset register width to be 8, so we
-		 * hardcode it here and ignore the FADT value. This maintains
-		 * compatibility with other ACPI implementations that have allowed
-		 * BIOS code with bad register width values to go unnoticed.
-		 */
-		status =
-		    acpi_os_write_port((acpi_io_address) reset_reg->address,
-				       acpi_gbl_FADT.reset_value,
-				       ACPI_RESET_REGISTER_WIDTH);
-	} else {
-		/* Write the reset value to the reset register */
+    /* Check if the reset register is supported */
 
-		status = acpi_hw_write(acpi_gbl_FADT.reset_value, reset_reg);
-	}
+    if (!(AcpiGbl_FADT.Flags & ACPI_FADT_RESET_REGISTER) ||
+        !ResetReg->Address)
+    {
+        return_ACPI_STATUS (AE_NOT_EXIST);
+    }
 
-	return_ACPI_STATUS(status);
+    if (ResetReg->SpaceId == ACPI_ADR_SPACE_SYSTEM_IO)
+    {
+        /*
+         * For I/O space, write directly to the OSL. This bypasses the port
+         * validation mechanism, which may block a valid write to the reset
+         * register.
+         *
+         * NOTE:
+         * The ACPI spec requires the reset register width to be 8, so we
+         * hardcode it here and ignore the FADT value. This maintains
+         * compatibility with other ACPI implementations that have allowed
+         * BIOS code with bad register width values to go unnoticed.
+         */
+        Status = AcpiOsWritePort ((ACPI_IO_ADDRESS) ResetReg->Address,
+            AcpiGbl_FADT.ResetValue, ACPI_RESET_REGISTER_WIDTH);
+    }
+    else
+    {
+        /* Write the reset value to the reset register */
+
+        Status = AcpiHwWrite (AcpiGbl_FADT.ResetValue, ResetReg);
+    }
+
+    return_ACPI_STATUS (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_reset)
+ACPI_EXPORT_SYMBOL (AcpiReset)
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_read
+ * FUNCTION:    AcpiRead
  *
- * PARAMETERS:  value               - Where the value is returned
- *              reg                 - GAS register structure
+ * PARAMETERS:  Value               - Where the value is returned
+ *              Reg                 - GAS register structure
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Read from either memory or IO space.
  *
- * LIMITATIONS: <These limitations also apply to acpi_write>
- *      bit_width must be exactly 8, 16, 32, or 64.
- *      space_ID must be system_memory or system_IO.
- *      bit_offset and access_width are currently ignored, as there has
+ * LIMITATIONS: <These limitations also apply to AcpiWrite>
+ *      BitWidth must be exactly 8, 16, 32, or 64.
+ *      SpaceID must be SystemMemory or SystemIO.
+ *      BitOffset and AccessWidth are currently ignored, as there has
  *          not been a need to implement these.
  *
  ******************************************************************************/
-acpi_status acpi_read(u64 *return_value, struct acpi_generic_address *reg)
+
+ACPI_STATUS
+AcpiRead (
+    UINT64                  *ReturnValue,
+    ACPI_GENERIC_ADDRESS    *Reg)
 {
-	u32 value_lo;
-	u32 value_hi;
-	u32 width;
-	u64 address;
-	acpi_status status;
+    UINT32                  ValueLo;
+    UINT32                  ValueHi;
+    UINT32                  Width;
+    UINT64                  Address;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_NAME(acpi_read);
 
-	if (!return_value) {
-		return (AE_BAD_PARAMETER);
-	}
+    ACPI_FUNCTION_NAME (AcpiRead);
 
-	/* Validate contents of the GAS register. Allow 64-bit transfers */
 
-	status = acpi_hw_validate_register(reg, 64, &address);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
+    if (!ReturnValue)
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	/*
-	 * Two address spaces supported: Memory or I/O. PCI_Config is
-	 * not supported here because the GAS structure is insufficient
-	 */
-	if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-		status = acpi_os_read_memory((acpi_physical_address)
-					     address, return_value,
-					     reg->bit_width);
-		if (ACPI_FAILURE(status)) {
-			return (status);
-		}
-	} else {		/* ACPI_ADR_SPACE_SYSTEM_IO, validated earlier */
+    /* Validate contents of the GAS register. Allow 64-bit transfers */
 
-		value_lo = 0;
-		value_hi = 0;
+    Status = AcpiHwValidateRegister (Reg, 64, &Address);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-		width = reg->bit_width;
-		if (width == 64) {
-			width = 32;	/* Break into two 32-bit transfers */
-		}
+    /*
+     * Two address spaces supported: Memory or I/O. PCI_Config is
+     * not supported here because the GAS structure is insufficient
+     */
+    if (Reg->SpaceId == ACPI_ADR_SPACE_SYSTEM_MEMORY)
+    {
+        Status = AcpiOsReadMemory ((ACPI_PHYSICAL_ADDRESS)
+                    Address, ReturnValue, Reg->BitWidth);
+        if (ACPI_FAILURE (Status))
+        {
+            return (Status);
+        }
+    }
+    else /* ACPI_ADR_SPACE_SYSTEM_IO, validated earlier */
+    {
+        ValueLo = 0;
+        ValueHi = 0;
 
-		status = acpi_hw_read_port((acpi_io_address)
-					   address, &value_lo, width);
-		if (ACPI_FAILURE(status)) {
-			return (status);
-		}
+        Width = Reg->BitWidth;
+        if (Width == 64)
+        {
+            Width = 32; /* Break into two 32-bit transfers */
+        }
 
-		if (reg->bit_width == 64) {
+        Status = AcpiHwReadPort ((ACPI_IO_ADDRESS)
+                    Address, &ValueLo, Width);
+        if (ACPI_FAILURE (Status))
+        {
+            return (Status);
+        }
 
-			/* Read the top 32 bits */
+        if (Reg->BitWidth == 64)
+        {
+            /* Read the top 32 bits */
 
-			status = acpi_hw_read_port((acpi_io_address)
-						   (address + 4), &value_hi,
-						   32);
-			if (ACPI_FAILURE(status)) {
-				return (status);
-			}
-		}
+            Status = AcpiHwReadPort ((ACPI_IO_ADDRESS)
+                        (Address + 4), &ValueHi, 32);
+            if (ACPI_FAILURE (Status))
+            {
+                return (Status);
+            }
+        }
 
-		/* Set the return value only if status is AE_OK */
+        /* Set the return value only if status is AE_OK */
 
-		*return_value = (value_lo | ((u64)value_hi << 32));
-	}
+        *ReturnValue = (ValueLo | ((UINT64) ValueHi << 32));
+    }
 
-	ACPI_DEBUG_PRINT((ACPI_DB_IO,
-			  "Read:  %8.8X%8.8X width %2d from %8.8X%8.8X (%s)\n",
-			  ACPI_FORMAT_UINT64(*return_value), reg->bit_width,
-			  ACPI_FORMAT_UINT64(address),
-			  acpi_ut_get_region_name(reg->space_id)));
+    ACPI_DEBUG_PRINT ((ACPI_DB_IO,
+        "Read:  %8.8X%8.8X width %2d from %8.8X%8.8X (%s)\n",
+        ACPI_FORMAT_UINT64 (*ReturnValue), Reg->BitWidth,
+        ACPI_FORMAT_UINT64 (Address),
+        AcpiUtGetRegionName (Reg->SpaceId)));
 
-	return (AE_OK);
+    return (AE_OK);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_read)
+ACPI_EXPORT_SYMBOL (AcpiRead)
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_write
+ * FUNCTION:    AcpiWrite
  *
- * PARAMETERS:  value               - Value to be written
- *              reg                 - GAS register structure
+ * PARAMETERS:  Value               - Value to be written
+ *              Reg                 - GAS register structure
  *
  * RETURN:      Status
  *
  * DESCRIPTION: Write to either memory or IO space.
  *
  ******************************************************************************/
-acpi_status acpi_write(u64 value, struct acpi_generic_address *reg)
+
+ACPI_STATUS
+AcpiWrite (
+    UINT64                  Value,
+    ACPI_GENERIC_ADDRESS    *Reg)
 {
-	u32 width;
-	u64 address;
-	acpi_status status;
+    UINT32                  Width;
+    UINT64                  Address;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_NAME(acpi_write);
 
-	/* Validate contents of the GAS register. Allow 64-bit transfers */
+    ACPI_FUNCTION_NAME (AcpiWrite);
 
-	status = acpi_hw_validate_register(reg, 64, &address);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
 
-	/*
-	 * Two address spaces supported: Memory or IO. PCI_Config is
-	 * not supported here because the GAS structure is insufficient
-	 */
-	if (reg->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
-		status = acpi_os_write_memory((acpi_physical_address)
-					      address, value, reg->bit_width);
-		if (ACPI_FAILURE(status)) {
-			return (status);
-		}
-	} else {		/* ACPI_ADR_SPACE_SYSTEM_IO, validated earlier */
+    /* Validate contents of the GAS register. Allow 64-bit transfers */
 
-		width = reg->bit_width;
-		if (width == 64) {
-			width = 32;	/* Break into two 32-bit transfers */
-		}
+    Status = AcpiHwValidateRegister (Reg, 64, &Address);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-		status = acpi_hw_write_port((acpi_io_address)
-					    address, ACPI_LODWORD(value),
-					    width);
-		if (ACPI_FAILURE(status)) {
-			return (status);
-		}
+    /*
+     * Two address spaces supported: Memory or IO. PCI_Config is
+     * not supported here because the GAS structure is insufficient
+     */
+    if (Reg->SpaceId == ACPI_ADR_SPACE_SYSTEM_MEMORY)
+    {
+        Status = AcpiOsWriteMemory ((ACPI_PHYSICAL_ADDRESS)
+                    Address, Value, Reg->BitWidth);
+        if (ACPI_FAILURE (Status))
+        {
+            return (Status);
+        }
+    }
+    else /* ACPI_ADR_SPACE_SYSTEM_IO, validated earlier */
+    {
+        Width = Reg->BitWidth;
+        if (Width == 64)
+        {
+            Width = 32; /* Break into two 32-bit transfers */
+        }
 
-		if (reg->bit_width == 64) {
-			status = acpi_hw_write_port((acpi_io_address)
-						    (address + 4),
-						    ACPI_HIDWORD(value), 32);
-			if (ACPI_FAILURE(status)) {
-				return (status);
-			}
-		}
-	}
+        Status = AcpiHwWritePort ((ACPI_IO_ADDRESS)
+                    Address, ACPI_LODWORD (Value), Width);
+        if (ACPI_FAILURE (Status))
+        {
+            return (Status);
+        }
 
-	ACPI_DEBUG_PRINT((ACPI_DB_IO,
-			  "Wrote: %8.8X%8.8X width %2d   to %8.8X%8.8X (%s)\n",
-			  ACPI_FORMAT_UINT64(value), reg->bit_width,
-			  ACPI_FORMAT_UINT64(address),
-			  acpi_ut_get_region_name(reg->space_id)));
+        if (Reg->BitWidth == 64)
+        {
+            Status = AcpiHwWritePort ((ACPI_IO_ADDRESS)
+                        (Address + 4), ACPI_HIDWORD (Value), 32);
+            if (ACPI_FAILURE (Status))
+            {
+                return (Status);
+            }
+        }
+    }
 
-	return (status);
+    ACPI_DEBUG_PRINT ((ACPI_DB_IO,
+        "Wrote: %8.8X%8.8X width %2d   to %8.8X%8.8X (%s)\n",
+        ACPI_FORMAT_UINT64 (Value), Reg->BitWidth,
+        ACPI_FORMAT_UINT64 (Address),
+        AcpiUtGetRegionName (Reg->SpaceId)));
+
+    return (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_write)
+ACPI_EXPORT_SYMBOL (AcpiWrite)
+
 
 #if (!ACPI_REDUCED_HARDWARE)
 /*******************************************************************************
  *
- * FUNCTION:    acpi_read_bit_register
+ * FUNCTION:    AcpiReadBitRegister
  *
- * PARAMETERS:  register_id     - ID of ACPI Bit Register to access
- *              return_value    - Value that was read from the register,
+ * PARAMETERS:  RegisterId      - ID of ACPI Bit Register to access
+ *              ReturnValue     - Value that was read from the register,
  *                                normalized to bit position zero.
  *
  * RETURN:      Status and the value read from the specified Register. Value
  *              returned is normalized to bit0 (is shifted all the way right)
  *
- * DESCRIPTION: ACPI bit_register read function. Does not acquire the HW lock.
+ * DESCRIPTION: ACPI BitRegister read function. Does not acquire the HW lock.
  *
  * SUPPORTS:    Bit fields in PM1 Status, PM1 Enable, PM1 Control, and
  *              PM2 Control.
@@ -297,52 +404,60 @@ ACPI_EXPORT_SYMBOL(acpi_write)
  *       it make much sense to actually read this field.)
  *
  ******************************************************************************/
-acpi_status acpi_read_bit_register(u32 register_id, u32 *return_value)
+
+ACPI_STATUS
+AcpiReadBitRegister (
+    UINT32                  RegisterId,
+    UINT32                  *ReturnValue)
 {
-	struct acpi_bit_register_info *bit_reg_info;
-	u32 register_value;
-	u32 value;
-	acpi_status status;
+    ACPI_BIT_REGISTER_INFO  *BitRegInfo;
+    UINT32                  RegisterValue;
+    UINT32                  Value;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE_U32(acpi_read_bit_register, register_id);
 
-	/* Get the info structure corresponding to the requested ACPI Register */
+    ACPI_FUNCTION_TRACE_U32 (AcpiReadBitRegister, RegisterId);
 
-	bit_reg_info = acpi_hw_get_bit_register_info(register_id);
-	if (!bit_reg_info) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
 
-	/* Read the entire parent register */
+    /* Get the info structure corresponding to the requested ACPI Register */
 
-	status = acpi_hw_register_read(bit_reg_info->parent_register,
-				       &register_value);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    BitRegInfo = AcpiHwGetBitRegisterInfo (RegisterId);
+    if (!BitRegInfo)
+    {
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-	/* Normalize the value that was read, mask off other bits */
+    /* Read the entire parent register */
 
-	value = ((register_value & bit_reg_info->access_bit_mask)
-		 >> bit_reg_info->bit_position);
+    Status = AcpiHwRegisterRead (BitRegInfo->ParentRegister,
+                &RegisterValue);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	ACPI_DEBUG_PRINT((ACPI_DB_IO,
-			  "BitReg %X, ParentReg %X, Actual %8.8X, ReturnValue %8.8X\n",
-			  register_id, bit_reg_info->parent_register,
-			  register_value, value));
+    /* Normalize the value that was read, mask off other bits */
 
-	*return_value = value;
-	return_ACPI_STATUS(AE_OK);
+    Value = ((RegisterValue & BitRegInfo->AccessBitMask)
+                >> BitRegInfo->BitPosition);
+
+    ACPI_DEBUG_PRINT ((ACPI_DB_IO,
+        "BitReg %X, ParentReg %X, Actual %8.8X, ReturnValue %8.8X\n",
+        RegisterId, BitRegInfo->ParentRegister, RegisterValue, Value));
+
+    *ReturnValue = Value;
+    return_ACPI_STATUS (AE_OK);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_read_bit_register)
+ACPI_EXPORT_SYMBOL (AcpiReadBitRegister)
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_write_bit_register
+ * FUNCTION:    AcpiWriteBitRegister
  *
- * PARAMETERS:  register_id     - ID of ACPI Bit Register to access
- *              value           - Value to write to the register, in bit
+ * PARAMETERS:  RegisterId      - ID of ACPI Bit Register to access
+ *              Value           - Value to write to the register, in bit
  *                                position zero. The bit is automatically
  *                                shifted to the correct position.
  *
@@ -358,96 +473,105 @@ ACPI_EXPORT_SYMBOL(acpi_read_bit_register)
  * hardware registers (A and B - and B may not exist) is abstracted.
  *
  ******************************************************************************/
-acpi_status acpi_write_bit_register(u32 register_id, u32 value)
+
+ACPI_STATUS
+AcpiWriteBitRegister (
+    UINT32                  RegisterId,
+    UINT32                  Value)
 {
-	struct acpi_bit_register_info *bit_reg_info;
-	acpi_cpu_flags lock_flags;
-	u32 register_value;
-	acpi_status status = AE_OK;
+    ACPI_BIT_REGISTER_INFO  *BitRegInfo;
+    ACPI_CPU_FLAGS          LockFlags;
+    UINT32                  RegisterValue;
+    ACPI_STATUS             Status = AE_OK;
 
-	ACPI_FUNCTION_TRACE_U32(acpi_write_bit_register, register_id);
 
-	/* Get the info structure corresponding to the requested ACPI Register */
+    ACPI_FUNCTION_TRACE_U32 (AcpiWriteBitRegister, RegisterId);
 
-	bit_reg_info = acpi_hw_get_bit_register_info(register_id);
-	if (!bit_reg_info) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
 
-	lock_flags = acpi_os_acquire_lock(acpi_gbl_hardware_lock);
+    /* Get the info structure corresponding to the requested ACPI Register */
 
-	/*
-	 * At this point, we know that the parent register is one of the
-	 * following: PM1 Status, PM1 Enable, PM1 Control, or PM2 Control
-	 */
-	if (bit_reg_info->parent_register != ACPI_REGISTER_PM1_STATUS) {
-		/*
-		 * 1) Case for PM1 Enable, PM1 Control, and PM2 Control
-		 *
-		 * Perform a register read to preserve the bits that we are not
-		 * interested in
-		 */
-		status = acpi_hw_register_read(bit_reg_info->parent_register,
-					       &register_value);
-		if (ACPI_FAILURE(status)) {
-			goto unlock_and_exit;
-		}
+    BitRegInfo = AcpiHwGetBitRegisterInfo (RegisterId);
+    if (!BitRegInfo)
+    {
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-		/*
-		 * Insert the input bit into the value that was just read
-		 * and write the register
-		 */
-		ACPI_REGISTER_INSERT_VALUE(register_value,
-					   bit_reg_info->bit_position,
-					   bit_reg_info->access_bit_mask,
-					   value);
+    LockFlags = AcpiOsAcquireLock (AcpiGbl_HardwareLock);
 
-		status = acpi_hw_register_write(bit_reg_info->parent_register,
-						register_value);
-	} else {
-		/*
-		 * 2) Case for PM1 Status
-		 *
-		 * The Status register is different from the rest. Clear an event
-		 * by writing 1, writing 0 has no effect. So, the only relevant
-		 * information is the single bit we're interested in, all others
-		 * should be written as 0 so they will be left unchanged.
-		 */
-		register_value = ACPI_REGISTER_PREPARE_BITS(value,
-							    bit_reg_info->
-							    bit_position,
-							    bit_reg_info->
-							    access_bit_mask);
+    /*
+     * At this point, we know that the parent register is one of the
+     * following: PM1 Status, PM1 Enable, PM1 Control, or PM2 Control
+     */
+    if (BitRegInfo->ParentRegister != ACPI_REGISTER_PM1_STATUS)
+    {
+        /*
+         * 1) Case for PM1 Enable, PM1 Control, and PM2 Control
+         *
+         * Perform a register read to preserve the bits that we are not
+         * interested in
+         */
+        Status = AcpiHwRegisterRead (BitRegInfo->ParentRegister,
+                    &RegisterValue);
+        if (ACPI_FAILURE (Status))
+        {
+            goto UnlockAndExit;
+        }
 
-		/* No need to write the register if value is all zeros */
+        /*
+         * Insert the input bit into the value that was just read
+         * and write the register
+         */
+        ACPI_REGISTER_INSERT_VALUE (RegisterValue, BitRegInfo->BitPosition,
+            BitRegInfo->AccessBitMask, Value);
 
-		if (register_value) {
-			status =
-			    acpi_hw_register_write(ACPI_REGISTER_PM1_STATUS,
-						   register_value);
-		}
-	}
+        Status = AcpiHwRegisterWrite (BitRegInfo->ParentRegister,
+                    RegisterValue);
+    }
+    else
+    {
+        /*
+         * 2) Case for PM1 Status
+         *
+         * The Status register is different from the rest. Clear an event
+         * by writing 1, writing 0 has no effect. So, the only relevant
+         * information is the single bit we're interested in, all others
+         * should be written as 0 so they will be left unchanged.
+         */
+        RegisterValue = ACPI_REGISTER_PREPARE_BITS (Value,
+            BitRegInfo->BitPosition, BitRegInfo->AccessBitMask);
 
-	ACPI_DEBUG_PRINT((ACPI_DB_IO,
-			  "BitReg %X, ParentReg %X, Value %8.8X, Actual %8.8X\n",
-			  register_id, bit_reg_info->parent_register, value,
-			  register_value));
+        /* No need to write the register if value is all zeros */
 
-unlock_and_exit:
+        if (RegisterValue)
+        {
+            Status = AcpiHwRegisterWrite (ACPI_REGISTER_PM1_STATUS,
+                        RegisterValue);
+        }
+    }
 
-	acpi_os_release_lock(acpi_gbl_hardware_lock, lock_flags);
-	return_ACPI_STATUS(status);
+    ACPI_DEBUG_PRINT ((ACPI_DB_IO,
+        "BitReg %X, ParentReg %X, Value %8.8X, Actual %8.8X\n",
+        RegisterId, BitRegInfo->ParentRegister, Value, RegisterValue));
+
+
+UnlockAndExit:
+
+    AcpiOsReleaseLock (AcpiGbl_HardwareLock, LockFlags);
+    return_ACPI_STATUS (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_write_bit_register)
-#endif				/* !ACPI_REDUCED_HARDWARE */
+ACPI_EXPORT_SYMBOL (AcpiWriteBitRegister)
+
+#endif /* !ACPI_REDUCED_HARDWARE */
+
+
 /*******************************************************************************
  *
- * FUNCTION:    acpi_get_sleep_type_data
+ * FUNCTION:    AcpiGetSleepTypeData
  *
- * PARAMETERS:  sleep_state         - Numeric sleep state
- *              *sleep_type_a        - Where SLP_TYPa is returned
- *              *sleep_type_b        - Where SLP_TYPb is returned
+ * PARAMETERS:  SleepState          - Numeric sleep state
+ *              *SleepTypeA         - Where SLP_TYPa is returned
+ *              *SleepTypeB         - Where SLP_TYPb is returned
  *
  * RETURN:      Status
  *
@@ -478,110 +602,124 @@ ACPI_EXPORT_SYMBOL(acpi_write_bit_register)
  *      Integer 1 - Value for the PM1A SLP_TYP register
  *
  ******************************************************************************/
-acpi_status
-acpi_get_sleep_type_data(u8 sleep_state, u8 *sleep_type_a, u8 *sleep_type_b)
+
+ACPI_STATUS
+AcpiGetSleepTypeData (
+    UINT8                   SleepState,
+    UINT8                   *SleepTypeA,
+    UINT8                   *SleepTypeB)
 {
-	acpi_status status;
-	struct acpi_evaluate_info *info;
-	union acpi_operand_object **elements;
+    ACPI_STATUS             Status;
+    ACPI_EVALUATE_INFO      *Info;
+    ACPI_OPERAND_OBJECT     **Elements;
 
-	ACPI_FUNCTION_TRACE(acpi_get_sleep_type_data);
 
-	/* Validate parameters */
+    ACPI_FUNCTION_TRACE (AcpiGetSleepTypeData);
 
-	if ((sleep_state > ACPI_S_STATES_MAX) || !sleep_type_a || !sleep_type_b) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
 
-	/* Allocate the evaluation information block */
+    /* Validate parameters */
 
-	info = ACPI_ALLOCATE_ZEROED(sizeof(struct acpi_evaluate_info));
-	if (!info) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
+    if ((SleepState > ACPI_S_STATES_MAX) ||
+        !SleepTypeA || !SleepTypeB)
+    {
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-	/*
-	 * Evaluate the \_Sx namespace object containing the register values
-	 * for this state
-	 */
-	info->relative_pathname =
-	    ACPI_CAST_PTR(char, acpi_gbl_sleep_state_names[sleep_state]);
-	status = acpi_ns_evaluate(info);
-	if (ACPI_FAILURE(status)) {
-		goto cleanup;
-	}
+    /* Allocate the evaluation information block */
 
-	/* Must have a return object */
+    Info = ACPI_ALLOCATE_ZEROED (sizeof (ACPI_EVALUATE_INFO));
+    if (!Info)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	if (!info->return_object) {
-		ACPI_ERROR((AE_INFO, "No Sleep State object returned from [%s]",
-			    info->relative_pathname));
-		status = AE_AML_NO_RETURN_VALUE;
-		goto cleanup;
-	}
+    /*
+     * Evaluate the \_Sx namespace object containing the register values
+     * for this state
+     */
+    Info->RelativePathname = ACPI_CAST_PTR (
+        char, AcpiGbl_SleepStateNames[SleepState]);
+    Status = AcpiNsEvaluate (Info);
+    if (ACPI_FAILURE (Status))
+    {
+        goto Cleanup;
+    }
 
-	/* Return object must be of type Package */
+    /* Must have a return object */
 
-	if (info->return_object->common.type != ACPI_TYPE_PACKAGE) {
-		ACPI_ERROR((AE_INFO,
-			    "Sleep State return object is not a Package"));
-		status = AE_AML_OPERAND_TYPE;
-		goto cleanup1;
-	}
+    if (!Info->ReturnObject)
+    {
+        ACPI_ERROR ((AE_INFO, "No Sleep State object returned from [%s]",
+            Info->RelativePathname));
+        Status = AE_AML_NO_RETURN_VALUE;
+        goto Cleanup;
+    }
 
-	/*
-	 * Any warnings about the package length or the object types have
-	 * already been issued by the predefined name module -- there is no
-	 * need to repeat them here.
-	 */
-	elements = info->return_object->package.elements;
-	switch (info->return_object->package.count) {
-	case 0:
+    /* Return object must be of type Package */
 
-		status = AE_AML_PACKAGE_LIMIT;
-		break;
+    if (Info->ReturnObject->Common.Type != ACPI_TYPE_PACKAGE)
+    {
+        ACPI_ERROR ((AE_INFO, "Sleep State return object is not a Package"));
+        Status = AE_AML_OPERAND_TYPE;
+        goto Cleanup1;
+    }
 
-	case 1:
+    /*
+     * Any warnings about the package length or the object types have
+     * already been issued by the predefined name module -- there is no
+     * need to repeat them here.
+     */
+    Elements = Info->ReturnObject->Package.Elements;
+    switch (Info->ReturnObject->Package.Count)
+    {
+    case 0:
 
-		if (elements[0]->common.type != ACPI_TYPE_INTEGER) {
-			status = AE_AML_OPERAND_TYPE;
-			break;
-		}
+        Status = AE_AML_PACKAGE_LIMIT;
+        break;
 
-		/* A valid _Sx_ package with one integer */
+    case 1:
 
-		*sleep_type_a = (u8)elements[0]->integer.value;
-		*sleep_type_b = (u8)(elements[0]->integer.value >> 8);
-		break;
+        if (Elements[0]->Common.Type != ACPI_TYPE_INTEGER)
+        {
+            Status = AE_AML_OPERAND_TYPE;
+            break;
+        }
 
-	case 2:
-	default:
+        /* A valid _Sx_ package with one integer */
 
-		if ((elements[0]->common.type != ACPI_TYPE_INTEGER) ||
-		    (elements[1]->common.type != ACPI_TYPE_INTEGER)) {
-			status = AE_AML_OPERAND_TYPE;
-			break;
-		}
+        *SleepTypeA = (UINT8) Elements[0]->Integer.Value;
+        *SleepTypeB = (UINT8) (Elements[0]->Integer.Value >> 8);
+        break;
 
-		/* A valid _Sx_ package with two integers */
+    case 2:
+    default:
 
-		*sleep_type_a = (u8)elements[0]->integer.value;
-		*sleep_type_b = (u8)elements[1]->integer.value;
-		break;
-	}
+        if ((Elements[0]->Common.Type != ACPI_TYPE_INTEGER) ||
+            (Elements[1]->Common.Type != ACPI_TYPE_INTEGER))
+        {
+            Status = AE_AML_OPERAND_TYPE;
+            break;
+        }
 
-cleanup1:
-	acpi_ut_remove_reference(info->return_object);
+        /* A valid _Sx_ package with two integers */
 
-cleanup:
-	if (ACPI_FAILURE(status)) {
-		ACPI_EXCEPTION((AE_INFO, status,
-				"While evaluating Sleep State [%s]",
-				info->relative_pathname));
-	}
+        *SleepTypeA = (UINT8) Elements[0]->Integer.Value;
+        *SleepTypeB = (UINT8) Elements[1]->Integer.Value;
+        break;
+    }
 
-	ACPI_FREE(info);
-	return_ACPI_STATUS(status);
+Cleanup1:
+    AcpiUtRemoveReference (Info->ReturnObject);
+
+Cleanup:
+    if (ACPI_FAILURE (Status))
+    {
+        ACPI_EXCEPTION ((AE_INFO, Status,
+            "While evaluating Sleep State [%s]", Info->RelativePathname));
+    }
+
+    ACPI_FREE (Info);
+    return_ACPI_STATUS (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_get_sleep_type_data)
+ACPI_EXPORT_SYMBOL (AcpiGetSleepTypeData)

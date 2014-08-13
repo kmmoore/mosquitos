@@ -1,127 +1,210 @@
 /******************************************************************************
  *
- * Module Name: evrgnini- ACPI address_space (op_region) init
+ * Module Name: evrgnini- ACPI AddressSpace (OpRegion) init
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+
+#define __EVRGNINI_C__
+
+#include "acpi.h"
 #include "accommon.h"
 #include "acevents.h"
 #include "acnamesp.h"
 
 #define _COMPONENT          ACPI_EVENTS
-ACPI_MODULE_NAME("evrgnini")
+        ACPI_MODULE_NAME    ("evrgnini")
 
 /* Local prototypes */
-static u8 acpi_ev_is_pci_root_bridge(struct acpi_namespace_node *node);
+
+static BOOLEAN
+AcpiEvIsPciRootBridge (
+    ACPI_NAMESPACE_NODE     *Node);
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_system_memory_region_setup
+ * FUNCTION:    AcpiEvSystemMemoryRegionSetup
  *
- * PARAMETERS:  handle              - Region we are interested in
- *              function            - Start or stop
- *              handler_context     - Address space handler context
- *              region_context      - Region specific context
+ * PARAMETERS:  Handle              - Region we are interested in
+ *              Function            - Start or stop
+ *              HandlerContext      - Address space handler context
+ *              RegionContext       - Region specific context
  *
  * RETURN:      Status
  *
- * DESCRIPTION: Setup a system_memory operation region
+ * DESCRIPTION: Setup a SystemMemory operation region
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ev_system_memory_region_setup(acpi_handle handle,
-				   u32 function,
-				   void *handler_context, void **region_context)
+ACPI_STATUS
+AcpiEvSystemMemoryRegionSetup (
+    ACPI_HANDLE             Handle,
+    UINT32                  Function,
+    void                    *HandlerContext,
+    void                    **RegionContext)
 {
-	union acpi_operand_object *region_desc =
-	    (union acpi_operand_object *)handle;
-	struct acpi_mem_space_context *local_region_context;
+    ACPI_OPERAND_OBJECT     *RegionDesc = (ACPI_OPERAND_OBJECT *) Handle;
+    ACPI_MEM_SPACE_CONTEXT  *LocalRegionContext;
 
-	ACPI_FUNCTION_TRACE(ev_system_memory_region_setup);
 
-	if (function == ACPI_REGION_DEACTIVATE) {
-		if (*region_context) {
-			local_region_context =
-			    (struct acpi_mem_space_context *)*region_context;
+    ACPI_FUNCTION_TRACE (EvSystemMemoryRegionSetup);
 
-			/* Delete a cached mapping if present */
 
-			if (local_region_context->mapped_length) {
-				acpi_os_unmap_memory(local_region_context->
-						     mapped_logical_address,
-						     local_region_context->
-						     mapped_length);
-			}
-			ACPI_FREE(local_region_context);
-			*region_context = NULL;
-		}
-		return_ACPI_STATUS(AE_OK);
-	}
+    if (Function == ACPI_REGION_DEACTIVATE)
+    {
+        if (*RegionContext)
+        {
+            LocalRegionContext = (ACPI_MEM_SPACE_CONTEXT *) *RegionContext;
 
-	/* Create a new context */
+            /* Delete a cached mapping if present */
 
-	local_region_context =
-	    ACPI_ALLOCATE_ZEROED(sizeof(struct acpi_mem_space_context));
-	if (!(local_region_context)) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
+            if (LocalRegionContext->MappedLength)
+            {
+                AcpiOsUnmapMemory (LocalRegionContext->MappedLogicalAddress,
+                    LocalRegionContext->MappedLength);
+            }
+            ACPI_FREE (LocalRegionContext);
+            *RegionContext = NULL;
+        }
+        return_ACPI_STATUS (AE_OK);
+    }
 
-	/* Save the region length and address for use in the handler */
+    /* Create a new context */
 
-	local_region_context->length = region_desc->region.length;
-	local_region_context->address = region_desc->region.address;
+    LocalRegionContext = ACPI_ALLOCATE_ZEROED (sizeof (ACPI_MEM_SPACE_CONTEXT));
+    if (!(LocalRegionContext))
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	*region_context = local_region_context;
-	return_ACPI_STATUS(AE_OK);
+    /* Save the region length and address for use in the handler */
+
+    LocalRegionContext->Length  = RegionDesc->Region.Length;
+    LocalRegionContext->Address = RegionDesc->Region.Address;
+
+    *RegionContext = LocalRegionContext;
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_io_space_region_setup
+ * FUNCTION:    AcpiEvIoSpaceRegionSetup
  *
- * PARAMETERS:  handle              - Region we are interested in
- *              function            - Start or stop
- *              handler_context     - Address space handler context
- *              region_context      - Region specific context
+ * PARAMETERS:  Handle              - Region we are interested in
+ *              Function            - Start or stop
+ *              HandlerContext      - Address space handler context
+ *              RegionContext       - Region specific context
  *
  * RETURN:      Status
  *
@@ -129,30 +212,37 @@ acpi_ev_system_memory_region_setup(acpi_handle handle,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ev_io_space_region_setup(acpi_handle handle,
-			      u32 function,
-			      void *handler_context, void **region_context)
+ACPI_STATUS
+AcpiEvIoSpaceRegionSetup (
+    ACPI_HANDLE             Handle,
+    UINT32                  Function,
+    void                    *HandlerContext,
+    void                    **RegionContext)
 {
-	ACPI_FUNCTION_TRACE(ev_io_space_region_setup);
+    ACPI_FUNCTION_TRACE (EvIoSpaceRegionSetup);
 
-	if (function == ACPI_REGION_DEACTIVATE) {
-		*region_context = NULL;
-	} else {
-		*region_context = handler_context;
-	}
 
-	return_ACPI_STATUS(AE_OK);
+    if (Function == ACPI_REGION_DEACTIVATE)
+    {
+        *RegionContext = NULL;
+    }
+    else
+    {
+        *RegionContext = HandlerContext;
+    }
+
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_pci_config_region_setup
+ * FUNCTION:    AcpiEvPciConfigRegionSetup
  *
- * PARAMETERS:  handle              - Region we are interested in
- *              function            - Start or stop
- *              handler_context     - Address space handler context
- *              region_context      - Region specific context
+ * PARAMETERS:  Handle              - Region we are interested in
+ *              Function            - Start or stop
+ *              HandlerContext      - Address space handler context
+ *              RegionContext       - Region specific context
  *
  * RETURN:      Status
  *
@@ -162,182 +252,202 @@ acpi_ev_io_space_region_setup(acpi_handle handle,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ev_pci_config_region_setup(acpi_handle handle,
-				u32 function,
-				void *handler_context, void **region_context)
+ACPI_STATUS
+AcpiEvPciConfigRegionSetup (
+    ACPI_HANDLE             Handle,
+    UINT32                  Function,
+    void                    *HandlerContext,
+    void                    **RegionContext)
 {
-	acpi_status status = AE_OK;
-	u64 pci_value;
-	struct acpi_pci_id *pci_id = *region_context;
-	union acpi_operand_object *handler_obj;
-	struct acpi_namespace_node *parent_node;
-	struct acpi_namespace_node *pci_root_node;
-	struct acpi_namespace_node *pci_device_node;
-	union acpi_operand_object *region_obj =
-	    (union acpi_operand_object *)handle;
+    ACPI_STATUS             Status = AE_OK;
+    UINT64                  PciValue;
+    ACPI_PCI_ID             *PciId = *RegionContext;
+    ACPI_OPERAND_OBJECT     *HandlerObj;
+    ACPI_NAMESPACE_NODE     *ParentNode;
+    ACPI_NAMESPACE_NODE     *PciRootNode;
+    ACPI_NAMESPACE_NODE     *PciDeviceNode;
+    ACPI_OPERAND_OBJECT     *RegionObj = (ACPI_OPERAND_OBJECT  *) Handle;
 
-	ACPI_FUNCTION_TRACE(ev_pci_config_region_setup);
 
-	handler_obj = region_obj->region.handler;
-	if (!handler_obj) {
-		/*
-		 * No installed handler. This shouldn't happen because the dispatch
-		 * routine checks before we get here, but we check again just in case.
-		 */
-		ACPI_DEBUG_PRINT((ACPI_DB_OPREGION,
-				  "Attempting to init a region %p, with no handler\n",
-				  region_obj));
-		return_ACPI_STATUS(AE_NOT_EXIST);
-	}
+    ACPI_FUNCTION_TRACE (EvPciConfigRegionSetup);
 
-	*region_context = NULL;
-	if (function == ACPI_REGION_DEACTIVATE) {
-		if (pci_id) {
-			ACPI_FREE(pci_id);
-		}
-		return_ACPI_STATUS(status);
-	}
 
-	parent_node = region_obj->region.node->parent;
+    HandlerObj = RegionObj->Region.Handler;
+    if (!HandlerObj)
+    {
+        /*
+         * No installed handler. This shouldn't happen because the dispatch
+         * routine checks before we get here, but we check again just in case.
+         */
+        ACPI_DEBUG_PRINT ((ACPI_DB_OPREGION,
+            "Attempting to init a region %p, with no handler\n", RegionObj));
+        return_ACPI_STATUS (AE_NOT_EXIST);
+    }
 
-	/*
-	 * Get the _SEG and _BBN values from the device upon which the handler
-	 * is installed.
-	 *
-	 * We need to get the _SEG and _BBN objects relative to the PCI BUS device.
-	 * This is the device the handler has been registered to handle.
-	 */
+    *RegionContext = NULL;
+    if (Function == ACPI_REGION_DEACTIVATE)
+    {
+        if (PciId)
+        {
+            ACPI_FREE (PciId);
+        }
+        return_ACPI_STATUS (Status);
+    }
 
-	/*
-	 * If the address_space.Node is still pointing to the root, we need
-	 * to scan upward for a PCI Root bridge and re-associate the op_region
-	 * handlers with that device.
-	 */
-	if (handler_obj->address_space.node == acpi_gbl_root_node) {
+    ParentNode = RegionObj->Region.Node->Parent;
 
-		/* Start search from the parent object */
+    /*
+     * Get the _SEG and _BBN values from the device upon which the handler
+     * is installed.
+     *
+     * We need to get the _SEG and _BBN objects relative to the PCI BUS device.
+     * This is the device the handler has been registered to handle.
+     */
 
-		pci_root_node = parent_node;
-		while (pci_root_node != acpi_gbl_root_node) {
+    /*
+     * If the AddressSpace.Node is still pointing to the root, we need
+     * to scan upward for a PCI Root bridge and re-associate the OpRegion
+     * handlers with that device.
+     */
+    if (HandlerObj->AddressSpace.Node == AcpiGbl_RootNode)
+    {
+        /* Start search from the parent object */
 
-			/* Get the _HID/_CID in order to detect a root_bridge */
+        PciRootNode = ParentNode;
+        while (PciRootNode != AcpiGbl_RootNode)
+        {
+            /* Get the _HID/_CID in order to detect a RootBridge */
 
-			if (acpi_ev_is_pci_root_bridge(pci_root_node)) {
+            if (AcpiEvIsPciRootBridge (PciRootNode))
+            {
+                /* Install a handler for this PCI root bridge */
 
-				/* Install a handler for this PCI root bridge */
+                Status = AcpiInstallAddressSpaceHandler (
+                            (ACPI_HANDLE) PciRootNode,
+                            ACPI_ADR_SPACE_PCI_CONFIG,
+                            ACPI_DEFAULT_HANDLER, NULL, NULL);
+                if (ACPI_FAILURE (Status))
+                {
+                    if (Status == AE_SAME_HANDLER)
+                    {
+                        /*
+                         * It is OK if the handler is already installed on the
+                         * root bridge. Still need to return a context object
+                         * for the new PCI_Config operation region, however.
+                         */
+                        Status = AE_OK;
+                    }
+                    else
+                    {
+                        ACPI_EXCEPTION ((AE_INFO, Status,
+                            "Could not install PciConfig handler "
+                            "for Root Bridge %4.4s",
+                            AcpiUtGetNodeName (PciRootNode)));
+                    }
+                }
+                break;
+            }
 
-				status = acpi_install_address_space_handler((acpi_handle) pci_root_node, ACPI_ADR_SPACE_PCI_CONFIG, ACPI_DEFAULT_HANDLER, NULL, NULL);
-				if (ACPI_FAILURE(status)) {
-					if (status == AE_SAME_HANDLER) {
-						/*
-						 * It is OK if the handler is already installed on the
-						 * root bridge. Still need to return a context object
-						 * for the new PCI_Config operation region, however.
-						 */
-						status = AE_OK;
-					} else {
-						ACPI_EXCEPTION((AE_INFO, status,
-								"Could not install PciConfig handler "
-								"for Root Bridge %4.4s",
-								acpi_ut_get_node_name
-								(pci_root_node)));
-					}
-				}
-				break;
-			}
+            PciRootNode = PciRootNode->Parent;
+        }
 
-			pci_root_node = pci_root_node->parent;
-		}
+        /* PCI root bridge not found, use namespace root node */
+    }
+    else
+    {
+        PciRootNode = HandlerObj->AddressSpace.Node;
+    }
 
-		/* PCI root bridge not found, use namespace root node */
-	} else {
-		pci_root_node = handler_obj->address_space.node;
-	}
+    /*
+     * If this region is now initialized, we are done.
+     * (InstallAddressSpaceHandler could have initialized it)
+     */
+    if (RegionObj->Region.Flags & AOPOBJ_SETUP_COMPLETE)
+    {
+        return_ACPI_STATUS (AE_OK);
+    }
 
-	/*
-	 * If this region is now initialized, we are done.
-	 * (install_address_space_handler could have initialized it)
-	 */
-	if (region_obj->region.flags & AOPOBJ_SETUP_COMPLETE) {
-		return_ACPI_STATUS(AE_OK);
-	}
+    /* Region is still not initialized. Create a new context */
 
-	/* Region is still not initialized. Create a new context */
+    PciId = ACPI_ALLOCATE_ZEROED (sizeof (ACPI_PCI_ID));
+    if (!PciId)
+    {
+        return_ACPI_STATUS (AE_NO_MEMORY);
+    }
 
-	pci_id = ACPI_ALLOCATE_ZEROED(sizeof(struct acpi_pci_id));
-	if (!pci_id) {
-		return_ACPI_STATUS(AE_NO_MEMORY);
-	}
+    /*
+     * For PCI_Config space access, we need the segment, bus, device and
+     * function numbers. Acquire them here.
+     *
+     * Find the parent device object. (This allows the operation region to be
+     * within a subscope under the device, such as a control method.)
+     */
+    PciDeviceNode = RegionObj->Region.Node;
+    while (PciDeviceNode && (PciDeviceNode->Type != ACPI_TYPE_DEVICE))
+    {
+        PciDeviceNode = PciDeviceNode->Parent;
+    }
 
-	/*
-	 * For PCI_Config space access, we need the segment, bus, device and
-	 * function numbers. Acquire them here.
-	 *
-	 * Find the parent device object. (This allows the operation region to be
-	 * within a subscope under the device, such as a control method.)
-	 */
-	pci_device_node = region_obj->region.node;
-	while (pci_device_node && (pci_device_node->type != ACPI_TYPE_DEVICE)) {
-		pci_device_node = pci_device_node->parent;
-	}
+    if (!PciDeviceNode)
+    {
+        ACPI_FREE (PciId);
+        return_ACPI_STATUS (AE_AML_OPERAND_TYPE);
+    }
 
-	if (!pci_device_node) {
-		ACPI_FREE(pci_id);
-		return_ACPI_STATUS(AE_AML_OPERAND_TYPE);
-	}
+    /*
+     * Get the PCI device and function numbers from the _ADR object
+     * contained in the parent's scope.
+     */
+    Status = AcpiUtEvaluateNumericObject (METHOD_NAME__ADR,
+                PciDeviceNode, &PciValue);
 
-	/*
-	 * Get the PCI device and function numbers from the _ADR object
-	 * contained in the parent's scope.
-	 */
-	status = acpi_ut_evaluate_numeric_object(METHOD_NAME__ADR,
-						 pci_device_node, &pci_value);
+    /*
+     * The default is zero, and since the allocation above zeroed the data,
+     * just do nothing on failure.
+     */
+    if (ACPI_SUCCESS (Status))
+    {
+        PciId->Device   = ACPI_HIWORD (ACPI_LODWORD (PciValue));
+        PciId->Function = ACPI_LOWORD (ACPI_LODWORD (PciValue));
+    }
 
-	/*
-	 * The default is zero, and since the allocation above zeroed the data,
-	 * just do nothing on failure.
-	 */
-	if (ACPI_SUCCESS(status)) {
-		pci_id->device = ACPI_HIWORD(ACPI_LODWORD(pci_value));
-		pci_id->function = ACPI_LOWORD(ACPI_LODWORD(pci_value));
-	}
+    /* The PCI segment number comes from the _SEG method */
 
-	/* The PCI segment number comes from the _SEG method */
+    Status = AcpiUtEvaluateNumericObject (METHOD_NAME__SEG,
+                PciRootNode, &PciValue);
+    if (ACPI_SUCCESS (Status))
+    {
+        PciId->Segment = ACPI_LOWORD (PciValue);
+    }
 
-	status = acpi_ut_evaluate_numeric_object(METHOD_NAME__SEG,
-						 pci_root_node, &pci_value);
-	if (ACPI_SUCCESS(status)) {
-		pci_id->segment = ACPI_LOWORD(pci_value);
-	}
+    /* The PCI bus number comes from the _BBN method */
 
-	/* The PCI bus number comes from the _BBN method */
+    Status = AcpiUtEvaluateNumericObject (METHOD_NAME__BBN,
+                PciRootNode, &PciValue);
+    if (ACPI_SUCCESS (Status))
+    {
+        PciId->Bus = ACPI_LOWORD (PciValue);
+    }
 
-	status = acpi_ut_evaluate_numeric_object(METHOD_NAME__BBN,
-						 pci_root_node, &pci_value);
-	if (ACPI_SUCCESS(status)) {
-		pci_id->bus = ACPI_LOWORD(pci_value);
-	}
+    /* Complete/update the PCI ID for this device */
 
-	/* Complete/update the PCI ID for this device */
+    Status = AcpiHwDerivePciId (PciId, PciRootNode, RegionObj->Region.Node);
+    if (ACPI_FAILURE (Status))
+    {
+        ACPI_FREE (PciId);
+        return_ACPI_STATUS (Status);
+    }
 
-	status =
-	    acpi_hw_derive_pci_id(pci_id, pci_root_node,
-				  region_obj->region.node);
-	if (ACPI_FAILURE(status)) {
-		ACPI_FREE(pci_id);
-		return_ACPI_STATUS(status);
-	}
-
-	*region_context = pci_id;
-	return_ACPI_STATUS(AE_OK);
+    *RegionContext = PciId;
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_is_pci_root_bridge
+ * FUNCTION:    AcpiEvIsPciRootBridge
  *
- * PARAMETERS:  node            - Device node being examined
+ * PARAMETERS:  Node            - Device node being examined
  *
  * RETURN:      TRUE if device is a PCI/PCI-Express Root Bridge
  *
@@ -346,83 +456,96 @@ acpi_ev_pci_config_region_setup(acpi_handle handle,
  *
  ******************************************************************************/
 
-static u8 acpi_ev_is_pci_root_bridge(struct acpi_namespace_node *node)
+static BOOLEAN
+AcpiEvIsPciRootBridge (
+    ACPI_NAMESPACE_NODE     *Node)
 {
-	acpi_status status;
-	struct acpi_pnp_device_id *hid;
-	struct acpi_pnp_device_id_list *cid;
-	u32 i;
-	u8 match;
+    ACPI_STATUS             Status;
+    ACPI_PNP_DEVICE_ID      *Hid;
+    ACPI_PNP_DEVICE_ID_LIST *Cid;
+    UINT32                  i;
+    BOOLEAN                 Match;
 
-	/* Get the _HID and check for a PCI Root Bridge */
 
-	status = acpi_ut_execute_HID(node, &hid);
-	if (ACPI_FAILURE(status)) {
-		return (FALSE);
-	}
+    /* Get the _HID and check for a PCI Root Bridge */
 
-	match = acpi_ut_is_pci_root_bridge(hid->string);
-	ACPI_FREE(hid);
+    Status = AcpiUtExecute_HID (Node, &Hid);
+    if (ACPI_FAILURE (Status))
+    {
+        return (FALSE);
+    }
 
-	if (match) {
-		return (TRUE);
-	}
+    Match = AcpiUtIsPciRootBridge (Hid->String);
+    ACPI_FREE (Hid);
 
-	/* The _HID did not match. Get the _CID and check for a PCI Root Bridge */
+    if (Match)
+    {
+        return (TRUE);
+    }
 
-	status = acpi_ut_execute_CID(node, &cid);
-	if (ACPI_FAILURE(status)) {
-		return (FALSE);
-	}
+    /* The _HID did not match. Get the _CID and check for a PCI Root Bridge */
 
-	/* Check all _CIDs in the returned list */
+    Status = AcpiUtExecute_CID (Node, &Cid);
+    if (ACPI_FAILURE (Status))
+    {
+        return (FALSE);
+    }
 
-	for (i = 0; i < cid->count; i++) {
-		if (acpi_ut_is_pci_root_bridge(cid->ids[i].string)) {
-			ACPI_FREE(cid);
-			return (TRUE);
-		}
-	}
+    /* Check all _CIDs in the returned list */
 
-	ACPI_FREE(cid);
-	return (FALSE);
+    for (i = 0; i < Cid->Count; i++)
+    {
+        if (AcpiUtIsPciRootBridge (Cid->Ids[i].String))
+        {
+            ACPI_FREE (Cid);
+            return (TRUE);
+        }
+    }
+
+    ACPI_FREE (Cid);
+    return (FALSE);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_pci_bar_region_setup
+ * FUNCTION:    AcpiEvPciBarRegionSetup
  *
- * PARAMETERS:  handle              - Region we are interested in
- *              function            - Start or stop
- *              handler_context     - Address space handler context
- *              region_context      - Region specific context
+ * PARAMETERS:  Handle              - Region we are interested in
+ *              Function            - Start or stop
+ *              HandlerContext      - Address space handler context
+ *              RegionContext       - Region specific context
  *
  * RETURN:      Status
  *
- * DESCRIPTION: Setup a pci_BAR operation region
+ * DESCRIPTION: Setup a PciBAR operation region
  *
  * MUTEX:       Assumes namespace is not locked
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ev_pci_bar_region_setup(acpi_handle handle,
-			     u32 function,
-			     void *handler_context, void **region_context)
+ACPI_STATUS
+AcpiEvPciBarRegionSetup (
+    ACPI_HANDLE             Handle,
+    UINT32                  Function,
+    void                    *HandlerContext,
+    void                    **RegionContext)
 {
-	ACPI_FUNCTION_TRACE(ev_pci_bar_region_setup);
+    ACPI_FUNCTION_TRACE (EvPciBarRegionSetup);
 
-	return_ACPI_STATUS(AE_OK);
+
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_cmos_region_setup
+ * FUNCTION:    AcpiEvCmosRegionSetup
  *
- * PARAMETERS:  handle              - Region we are interested in
- *              function            - Start or stop
- *              handler_context     - Address space handler context
- *              region_context      - Region specific context
+ * PARAMETERS:  Handle              - Region we are interested in
+ *              Function            - Start or stop
+ *              HandlerContext      - Address space handler context
+ *              RegionContext       - Region specific context
  *
  * RETURN:      Status
  *
@@ -432,24 +555,28 @@ acpi_ev_pci_bar_region_setup(acpi_handle handle,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ev_cmos_region_setup(acpi_handle handle,
-			  u32 function,
-			  void *handler_context, void **region_context)
+ACPI_STATUS
+AcpiEvCmosRegionSetup (
+    ACPI_HANDLE             Handle,
+    UINT32                  Function,
+    void                    *HandlerContext,
+    void                    **RegionContext)
 {
-	ACPI_FUNCTION_TRACE(ev_cmos_region_setup);
+    ACPI_FUNCTION_TRACE (EvCmosRegionSetup);
 
-	return_ACPI_STATUS(AE_OK);
+
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_default_region_setup
+ * FUNCTION:    AcpiEvDefaultRegionSetup
  *
- * PARAMETERS:  handle              - Region we are interested in
- *              function            - Start or stop
- *              handler_context     - Address space handler context
- *              region_context      - Region specific context
+ * PARAMETERS:  Handle              - Region we are interested in
+ *              Function            - Start or stop
+ *              HandlerContext      - Address space handler context
+ *              RegionContext       - Region specific context
  *
  * RETURN:      Status
  *
@@ -457,28 +584,35 @@ acpi_ev_cmos_region_setup(acpi_handle handle,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ev_default_region_setup(acpi_handle handle,
-			     u32 function,
-			     void *handler_context, void **region_context)
+ACPI_STATUS
+AcpiEvDefaultRegionSetup (
+    ACPI_HANDLE             Handle,
+    UINT32                  Function,
+    void                    *HandlerContext,
+    void                    **RegionContext)
 {
-	ACPI_FUNCTION_TRACE(ev_default_region_setup);
+    ACPI_FUNCTION_TRACE (EvDefaultRegionSetup);
 
-	if (function == ACPI_REGION_DEACTIVATE) {
-		*region_context = NULL;
-	} else {
-		*region_context = handler_context;
-	}
 
-	return_ACPI_STATUS(AE_OK);
+    if (Function == ACPI_REGION_DEACTIVATE)
+    {
+        *RegionContext = NULL;
+    }
+    else
+    {
+        *RegionContext = HandlerContext;
+    }
+
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_ev_initialize_region
+ * FUNCTION:    AcpiEvInitializeRegion
  *
- * PARAMETERS:  region_obj      - Region we are initializing
- *              acpi_ns_locked  - Is namespace locked?
+ * PARAMETERS:  RegionObj       - Region we are initializing
+ *              AcpiNsLocked    - Is namespace locked?
  *
  * RETURN:      Status
  *
@@ -498,178 +632,174 @@ acpi_ev_default_region_setup(acpi_handle handle,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_ev_initialize_region(union acpi_operand_object *region_obj,
-			  u8 acpi_ns_locked)
+ACPI_STATUS
+AcpiEvInitializeRegion (
+    ACPI_OPERAND_OBJECT     *RegionObj,
+    BOOLEAN                 AcpiNsLocked)
 {
-	union acpi_operand_object *handler_obj;
-	union acpi_operand_object *obj_desc;
-	acpi_adr_space_type space_id;
-	struct acpi_namespace_node *node;
-	acpi_status status;
-	struct acpi_namespace_node *method_node;
-	acpi_name *reg_name_ptr = (acpi_name *) METHOD_NAME__REG;
-	union acpi_operand_object *region_obj2;
+    ACPI_OPERAND_OBJECT     *HandlerObj;
+    ACPI_OPERAND_OBJECT     *ObjDesc;
+    ACPI_ADR_SPACE_TYPE     SpaceId;
+    ACPI_NAMESPACE_NODE     *Node;
+    ACPI_STATUS             Status;
+    ACPI_NAMESPACE_NODE     *MethodNode;
+    ACPI_NAME               *RegNamePtr = (ACPI_NAME *) METHOD_NAME__REG;
+    ACPI_OPERAND_OBJECT     *RegionObj2;
 
-	ACPI_FUNCTION_TRACE_U32(ev_initialize_region, acpi_ns_locked);
 
-	if (!region_obj) {
-		return_ACPI_STATUS(AE_BAD_PARAMETER);
-	}
+    ACPI_FUNCTION_TRACE_U32 (EvInitializeRegion, AcpiNsLocked);
 
-	if (region_obj->common.flags & AOPOBJ_OBJECT_INITIALIZED) {
-		return_ACPI_STATUS(AE_OK);
-	}
 
-	region_obj2 = acpi_ns_get_secondary_object(region_obj);
-	if (!region_obj2) {
-		return_ACPI_STATUS(AE_NOT_EXIST);
-	}
+    if (!RegionObj)
+    {
+        return_ACPI_STATUS (AE_BAD_PARAMETER);
+    }
 
-	node = region_obj->region.node->parent;
-	space_id = region_obj->region.space_id;
+    if (RegionObj->Common.Flags & AOPOBJ_OBJECT_INITIALIZED)
+    {
+        return_ACPI_STATUS (AE_OK);
+    }
 
-	/* Setup defaults */
+    RegionObj2 = AcpiNsGetSecondaryObject (RegionObj);
+    if (!RegionObj2)
+    {
+        return_ACPI_STATUS (AE_NOT_EXIST);
+    }
 
-	region_obj->region.handler = NULL;
-	region_obj2->extra.method_REG = NULL;
-	region_obj->common.flags &= ~(AOPOBJ_SETUP_COMPLETE);
-	region_obj->common.flags |= AOPOBJ_OBJECT_INITIALIZED;
+    Node = RegionObj->Region.Node->Parent;
+    SpaceId = RegionObj->Region.SpaceId;
 
-	/* Find any "_REG" method associated with this region definition */
+    /* Setup defaults */
 
-	status =
-	    acpi_ns_search_one_scope(*reg_name_ptr, node, ACPI_TYPE_METHOD,
-				     &method_node);
-	if (ACPI_SUCCESS(status)) {
-		/*
-		 * The _REG method is optional and there can be only one per region
-		 * definition. This will be executed when the handler is attached
-		 * or removed
-		 */
-		region_obj2->extra.method_REG = method_node;
-	}
+    RegionObj->Region.Handler = NULL;
+    RegionObj2->Extra.Method_REG = NULL;
+    RegionObj->Common.Flags &= ~(AOPOBJ_SETUP_COMPLETE);
+    RegionObj->Common.Flags |= AOPOBJ_OBJECT_INITIALIZED;
 
-	/*
-	 * The following loop depends upon the root Node having no parent
-	 * ie: acpi_gbl_root_node->parent_entry being set to NULL
-	 */
-	while (node) {
+    /* Find any "_REG" method associated with this region definition */
 
-		/* Check to see if a handler exists */
+    Status = AcpiNsSearchOneScope (
+                *RegNamePtr, Node, ACPI_TYPE_METHOD, &MethodNode);
+    if (ACPI_SUCCESS (Status))
+    {
+        /*
+         * The _REG method is optional and there can be only one per region
+         * definition. This will be executed when the handler is attached
+         * or removed
+         */
+        RegionObj2->Extra.Method_REG = MethodNode;
+    }
 
-		handler_obj = NULL;
-		obj_desc = acpi_ns_get_attached_object(node);
-		if (obj_desc) {
+    /*
+     * The following loop depends upon the root Node having no parent
+     * ie: AcpiGbl_RootNode->ParentEntry being set to NULL
+     */
+    while (Node)
+    {
+        /* Check to see if a handler exists */
 
-			/* Can only be a handler if the object exists */
+        HandlerObj = NULL;
+        ObjDesc = AcpiNsGetAttachedObject (Node);
+        if (ObjDesc)
+        {
+            /* Can only be a handler if the object exists */
 
-			switch (node->type) {
-			case ACPI_TYPE_DEVICE:
+            switch (Node->Type)
+            {
+            case ACPI_TYPE_DEVICE:
 
-				handler_obj = obj_desc->device.handler;
-				break;
+                HandlerObj = ObjDesc->Device.Handler;
+                break;
 
-			case ACPI_TYPE_PROCESSOR:
+            case ACPI_TYPE_PROCESSOR:
 
-				handler_obj = obj_desc->processor.handler;
-				break;
+                HandlerObj = ObjDesc->Processor.Handler;
+                break;
 
-			case ACPI_TYPE_THERMAL:
+            case ACPI_TYPE_THERMAL:
 
-				handler_obj = obj_desc->thermal_zone.handler;
-				break;
+                HandlerObj = ObjDesc->ThermalZone.Handler;
+                break;
 
-			case ACPI_TYPE_METHOD:
-				/*
-				 * If we are executing module level code, the original
-				 * Node's object was replaced by this Method object and we
-				 * saved the handler in the method object.
-				 *
-				 * See acpi_ns_exec_module_code
-				 */
-				if (obj_desc->method.
-				    info_flags & ACPI_METHOD_MODULE_LEVEL) {
-					handler_obj =
-					    obj_desc->method.dispatch.handler;
-				}
-				break;
+            case ACPI_TYPE_METHOD:
+                /*
+                 * If we are executing module level code, the original
+                 * Node's object was replaced by this Method object and we
+                 * saved the handler in the method object.
+                 *
+                 * See AcpiNsExecModuleCode
+                 */
+                if (ObjDesc->Method.InfoFlags & ACPI_METHOD_MODULE_LEVEL)
+                {
+                    HandlerObj = ObjDesc->Method.Dispatch.Handler;
+                }
+                break;
 
-			default:
+            default:
 
-				/* Ignore other objects */
+                /* Ignore other objects */
 
-				break;
-			}
+                break;
+            }
 
-			while (handler_obj) {
+            while (HandlerObj)
+            {
+                /* Is this handler of the correct type? */
 
-				/* Is this handler of the correct type? */
+                if (HandlerObj->AddressSpace.SpaceId == SpaceId)
+                {
+                    /* Found correct handler */
 
-				if (handler_obj->address_space.space_id ==
-				    space_id) {
+                    ACPI_DEBUG_PRINT ((ACPI_DB_OPREGION,
+                        "Found handler %p for region %p in obj %p\n",
+                        HandlerObj, RegionObj, ObjDesc));
 
-					/* Found correct handler */
+                    Status = AcpiEvAttachRegion (HandlerObj, RegionObj,
+                                AcpiNsLocked);
 
-					ACPI_DEBUG_PRINT((ACPI_DB_OPREGION,
-							  "Found handler %p for region %p in obj %p\n",
-							  handler_obj,
-							  region_obj,
-							  obj_desc));
+                    /*
+                     * Tell all users that this region is usable by
+                     * running the _REG method
+                     */
+                    if (AcpiNsLocked)
+                    {
+                        Status = AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+                        if (ACPI_FAILURE (Status))
+                        {
+                            return_ACPI_STATUS (Status);
+                        }
+                    }
 
-					status =
-					    acpi_ev_attach_region(handler_obj,
-								  region_obj,
-								  acpi_ns_locked);
+                    Status = AcpiEvExecuteRegMethod (RegionObj, ACPI_REG_CONNECT);
 
-					/*
-					 * Tell all users that this region is usable by
-					 * running the _REG method
-					 */
-					if (acpi_ns_locked) {
-						status =
-						    acpi_ut_release_mutex
-						    (ACPI_MTX_NAMESPACE);
-						if (ACPI_FAILURE(status)) {
-							return_ACPI_STATUS
-							    (status);
-						}
-					}
+                    if (AcpiNsLocked)
+                    {
+                        Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+                        if (ACPI_FAILURE (Status))
+                        {
+                            return_ACPI_STATUS (Status);
+                        }
+                    }
 
-					status =
-					    acpi_ev_execute_reg_method
-					    (region_obj, ACPI_REG_CONNECT);
+                    return_ACPI_STATUS (AE_OK);
+                }
 
-					if (acpi_ns_locked) {
-						status =
-						    acpi_ut_acquire_mutex
-						    (ACPI_MTX_NAMESPACE);
-						if (ACPI_FAILURE(status)) {
-							return_ACPI_STATUS
-							    (status);
-						}
-					}
+                /* Try next handler in the list */
 
-					return_ACPI_STATUS(AE_OK);
-				}
+                HandlerObj = HandlerObj->AddressSpace.Next;
+            }
+        }
 
-				/* Try next handler in the list */
+        /* This node does not have the handler we need; Pop up one level */
 
-				handler_obj = handler_obj->address_space.next;
-			}
-		}
+        Node = Node->Parent;
+    }
 
-		/* This node does not have the handler we need; Pop up one level */
+    /* If we get here, there is no handler for this region */
 
-		node = node->parent;
-	}
+    ACPI_DEBUG_PRINT ((ACPI_DB_OPREGION,
+        "No handler for RegionType %s(%X) (RegionObj %p)\n",
+        AcpiUtGetRegionName (SpaceId), SpaceId, RegionObj));
 
-	/* If we get here, there is no handler for this region */
-
-	ACPI_DEBUG_PRINT((ACPI_DB_OPREGION,
-			  "No handler for RegionType %s(%X) (RegionObj %p)\n",
-			  acpi_ut_get_region_name(space_id), space_id,
-			  region_obj));
-
-	return_ACPI_STATUS(AE_NOT_EXIST);
+    return_ACPI_STATUS (AE_NOT_EXIST);
 }

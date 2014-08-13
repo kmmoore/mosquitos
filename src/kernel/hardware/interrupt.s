@@ -24,7 +24,7 @@ isr\num:
   save_context
 
     # TODO: Inline the isr_common call
-    popq %rsi
+    movq 56(%rsp), %rsi
     movq $\num, %rdi
     call isr_common
 
@@ -40,7 +40,7 @@ isr_noerror 2
 isr_noerror 3
 isr_noerror 4
 isr_noerror 5
-isr_noerror 6
+isr_error 6
 isr_noerror 7
 isr_error 8
 isr_noerror 9

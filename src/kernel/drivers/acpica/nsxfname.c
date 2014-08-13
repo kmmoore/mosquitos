@@ -5,67 +5,145 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
+#define __NSXFNAME_C__
 #define EXPORT_ACPI_INTERFACES
 
-#include <acpi/acpi.h>
+#include "acpi.h"
 #include "accommon.h"
 #include "acnamesp.h"
 #include "acparser.h"
 #include "amlcode.h"
 
+
 #define _COMPONENT          ACPI_NAMESPACE
-ACPI_MODULE_NAME("nsxfname")
+        ACPI_MODULE_NAME    ("nsxfname")
 
 /* Local prototypes */
-static char *acpi_ns_copy_device_id(struct acpi_pnp_device_id *dest,
-				    struct acpi_pnp_device_id *source,
-				    char *string_area);
+
+static char *
+AcpiNsCopyDeviceId (
+    ACPI_PNP_DEVICE_ID      *Dest,
+    ACPI_PNP_DEVICE_ID      *Source,
+    char                    *StringArea);
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_get_handle
+ * FUNCTION:    AcpiGetHandle
  *
- * PARAMETERS:  parent          - Object to search under (search scope).
- *              pathname        - Pointer to an asciiz string containing the
+ * PARAMETERS:  Parent          - Object to search under (search scope).
+ *              Pathname        - Pointer to an asciiz string containing the
  *                                name
- *              ret_handle      - Where the return handle is returned
+ *              RetHandle       - Where the return handle is returned
  *
  * RETURN:      Status
  *
@@ -76,182 +154,207 @@ static char *acpi_ns_copy_device_id(struct acpi_pnp_device_id *dest,
  *
  ******************************************************************************/
 
-acpi_status
-acpi_get_handle(acpi_handle parent,
-		acpi_string pathname, acpi_handle * ret_handle)
+ACPI_STATUS
+AcpiGetHandle (
+    ACPI_HANDLE             Parent,
+    ACPI_STRING             Pathname,
+    ACPI_HANDLE             *RetHandle)
 {
-	acpi_status status;
-	struct acpi_namespace_node *node = NULL;
-	struct acpi_namespace_node *prefix_node = NULL;
+    ACPI_STATUS             Status;
+    ACPI_NAMESPACE_NODE     *Node = NULL;
+    ACPI_NAMESPACE_NODE     *PrefixNode = NULL;
 
-	ACPI_FUNCTION_ENTRY();
 
-	/* Parameter Validation */
+    ACPI_FUNCTION_ENTRY ();
 
-	if (!ret_handle || !pathname) {
-		return (AE_BAD_PARAMETER);
-	}
 
-	/* Convert a parent handle to a prefix node */
+    /* Parameter Validation */
 
-	if (parent) {
-		prefix_node = acpi_ns_validate_handle(parent);
-		if (!prefix_node) {
-			return (AE_BAD_PARAMETER);
-		}
-	}
+    if (!RetHandle || !Pathname)
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	/*
-	 * Valid cases are:
-	 * 1) Fully qualified pathname
-	 * 2) Parent + Relative pathname
-	 *
-	 * Error for <null Parent + relative path>
-	 */
-	if (ACPI_IS_ROOT_PREFIX(pathname[0])) {
+    /* Convert a parent handle to a prefix node */
 
-		/* Pathname is fully qualified (starts with '\') */
+    if (Parent)
+    {
+        PrefixNode = AcpiNsValidateHandle (Parent);
+        if (!PrefixNode)
+        {
+            return (AE_BAD_PARAMETER);
+        }
+    }
 
-		/* Special case for root-only, since we can't search for it */
+    /*
+     * Valid cases are:
+     * 1) Fully qualified pathname
+     * 2) Parent + Relative pathname
+     *
+     * Error for <null Parent + relative path>
+     */
+    if (ACPI_IS_ROOT_PREFIX (Pathname[0]))
+    {
+        /* Pathname is fully qualified (starts with '\') */
 
-		if (!ACPI_STRCMP(pathname, ACPI_NS_ROOT_PATH)) {
-			*ret_handle =
-			    ACPI_CAST_PTR(acpi_handle, acpi_gbl_root_node);
-			return (AE_OK);
-		}
-	} else if (!prefix_node) {
+        /* Special case for root-only, since we can't search for it */
 
-		/* Relative path with null prefix is disallowed */
+        if (!ACPI_STRCMP (Pathname, ACPI_NS_ROOT_PATH))
+        {
+            *RetHandle = ACPI_CAST_PTR (ACPI_HANDLE, AcpiGbl_RootNode);
+            return (AE_OK);
+        }
+    }
+    else if (!PrefixNode)
+    {
+        /* Relative path with null prefix is disallowed */
 
-		return (AE_BAD_PARAMETER);
-	}
+        return (AE_BAD_PARAMETER);
+    }
 
-	/* Find the Node and convert to a handle */
+    /* Find the Node and convert to a handle */
 
-	status =
-	    acpi_ns_get_node(prefix_node, pathname, ACPI_NS_NO_UPSEARCH, &node);
-	if (ACPI_SUCCESS(status)) {
-		*ret_handle = ACPI_CAST_PTR(acpi_handle, node);
-	}
+    Status = AcpiNsGetNode (PrefixNode, Pathname, ACPI_NS_NO_UPSEARCH, &Node);
+    if (ACPI_SUCCESS (Status))
+    {
+        *RetHandle = ACPI_CAST_PTR (ACPI_HANDLE, Node);
+    }
 
-	return (status);
+    return (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_get_handle)
+ACPI_EXPORT_SYMBOL (AcpiGetHandle)
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_get_name
+ * FUNCTION:    AcpiGetName
  *
- * PARAMETERS:  handle          - Handle to be converted to a pathname
- *              name_type       - Full pathname or single segment
- *              buffer          - Buffer for returned path
+ * PARAMETERS:  Handle          - Handle to be converted to a pathname
+ *              NameType        - Full pathname or single segment
+ *              Buffer          - Buffer for returned path
  *
  * RETURN:      Pointer to a string containing the fully qualified Name.
  *
  * DESCRIPTION: This routine returns the fully qualified name associated with
- *              the Handle parameter. This and the acpi_pathname_to_handle are
+ *              the Handle parameter. This and the AcpiPathnameToHandle are
  *              complementary functions.
  *
  ******************************************************************************/
-acpi_status
-acpi_get_name(acpi_handle handle, u32 name_type, struct acpi_buffer * buffer)
+
+ACPI_STATUS
+AcpiGetName (
+    ACPI_HANDLE             Handle,
+    UINT32                  NameType,
+    ACPI_BUFFER             *Buffer)
 {
-	acpi_status status;
-	struct acpi_namespace_node *node;
-	char *node_name;
+    ACPI_STATUS             Status;
+    ACPI_NAMESPACE_NODE     *Node;
+    char                    *NodeName;
 
-	/* Parameter validation */
 
-	if (name_type > ACPI_NAME_TYPE_MAX) {
-		return (AE_BAD_PARAMETER);
-	}
+    /* Parameter validation */
 
-	status = acpi_ut_validate_buffer(buffer);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
+    if (NameType > ACPI_NAME_TYPE_MAX)
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	if (name_type == ACPI_FULL_PATHNAME) {
+    Status = AcpiUtValidateBuffer (Buffer);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-		/* Get the full pathname (From the namespace root) */
+    if (NameType == ACPI_FULL_PATHNAME)
+    {
+        /* Get the full pathname (From the namespace root) */
 
-		status = acpi_ns_handle_to_pathname(handle, buffer);
-		return (status);
-	}
+        Status = AcpiNsHandleToPathname (Handle, Buffer);
+        return (Status);
+    }
 
-	/*
-	 * Wants the single segment ACPI name.
-	 * Validate handle and convert to a namespace Node
-	 */
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
+    /*
+     * Wants the single segment ACPI name.
+     * Validate handle and convert to a namespace Node
+     */
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	node = acpi_ns_validate_handle(handle);
-	if (!node) {
-		status = AE_BAD_PARAMETER;
-		goto unlock_and_exit;
-	}
+    Node = AcpiNsValidateHandle (Handle);
+    if (!Node)
+    {
+        Status = AE_BAD_PARAMETER;
+        goto UnlockAndExit;
+    }
 
-	/* Validate/Allocate/Clear caller buffer */
+    /* Validate/Allocate/Clear caller buffer */
 
-	status = acpi_ut_initialize_buffer(buffer, ACPI_PATH_SEGMENT_LENGTH);
-	if (ACPI_FAILURE(status)) {
-		goto unlock_and_exit;
-	}
+    Status = AcpiUtInitializeBuffer (Buffer, ACPI_PATH_SEGMENT_LENGTH);
+    if (ACPI_FAILURE (Status))
+    {
+        goto UnlockAndExit;
+    }
 
-	/* Just copy the ACPI name from the Node and zero terminate it */
+    /* Just copy the ACPI name from the Node and zero terminate it */
 
-	node_name = acpi_ut_get_node_name(node);
-	ACPI_MOVE_NAME(buffer->pointer, node_name);
-	((char *)buffer->pointer)[ACPI_NAME_SIZE] = 0;
-	status = AE_OK;
+    NodeName = AcpiUtGetNodeName (Node);
+    ACPI_MOVE_NAME (Buffer->Pointer, NodeName);
+    ((char *) Buffer->Pointer) [ACPI_NAME_SIZE] = 0;
+    Status = AE_OK;
 
-unlock_and_exit:
 
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
-	return (status);
+UnlockAndExit:
+
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+    return (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_get_name)
+ACPI_EXPORT_SYMBOL (AcpiGetName)
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_ns_copy_device_id
+ * FUNCTION:    AcpiNsCopyDeviceId
  *
- * PARAMETERS:  dest                - Pointer to the destination PNP_DEVICE_ID
- *              source              - Pointer to the source PNP_DEVICE_ID
- *              string_area         - Pointer to where to copy the dest string
+ * PARAMETERS:  Dest                - Pointer to the destination PNP_DEVICE_ID
+ *              Source              - Pointer to the source PNP_DEVICE_ID
+ *              StringArea          - Pointer to where to copy the dest string
  *
  * RETURN:      Pointer to the next string area
  *
  * DESCRIPTION: Copy a single PNP_DEVICE_ID, including the string data.
  *
  ******************************************************************************/
-static char *acpi_ns_copy_device_id(struct acpi_pnp_device_id *dest,
-				    struct acpi_pnp_device_id *source,
-				    char *string_area)
+
+static char *
+AcpiNsCopyDeviceId (
+    ACPI_PNP_DEVICE_ID      *Dest,
+    ACPI_PNP_DEVICE_ID      *Source,
+    char                    *StringArea)
 {
 
-	/* Create the destination PNP_DEVICE_ID */
+    /* Create the destination PNP_DEVICE_ID */
 
-	dest->string = string_area;
-	dest->length = source->length;
+    Dest->String = StringArea;
+    Dest->Length = Source->Length;
 
-	/* Copy actual string and return a pointer to the next string area */
+    /* Copy actual string and return a pointer to the next string area */
 
-	ACPI_MEMCPY(string_area, source->string, source->length);
-	return (string_area + source->length);
+    ACPI_MEMCPY (StringArea, Source->String, Source->Length);
+    return (StringArea + Source->Length);
 }
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_get_object_info
+ * FUNCTION:    AcpiGetObjectInfo
  *
- * PARAMETERS:  handle              - Object Handle
- *              return_buffer       - Where the info is returned
+ * PARAMETERS:  Handle              - Object Handle
+ *              ReturnBuffer        - Where the info is returned
  *
  * RETURN:      Status
  *
@@ -260,266 +363,290 @@ static char *acpi_ns_copy_device_id(struct acpi_pnp_device_id *dest,
  *              control methods (Such as in the case of a device.)
  *
  * For Device and Processor objects, run the Device _HID, _UID, _CID, _SUB,
- * _STA, _ADR, _sx_w, and _sx_d methods.
+ * _STA, _ADR, _SxW, and _SxD methods.
  *
  * Note: Allocates the return buffer, must be freed by the caller.
  *
  ******************************************************************************/
 
-acpi_status
-acpi_get_object_info(acpi_handle handle,
-		     struct acpi_device_info **return_buffer)
+ACPI_STATUS
+AcpiGetObjectInfo (
+    ACPI_HANDLE             Handle,
+    ACPI_DEVICE_INFO        **ReturnBuffer)
 {
-	struct acpi_namespace_node *node;
-	struct acpi_device_info *info;
-	struct acpi_pnp_device_id_list *cid_list = NULL;
-	struct acpi_pnp_device_id *hid = NULL;
-	struct acpi_pnp_device_id *uid = NULL;
-	struct acpi_pnp_device_id *sub = NULL;
-	char *next_id_string;
-	acpi_object_type type;
-	acpi_name name;
-	u8 param_count = 0;
-	u8 valid = 0;
-	u32 info_size;
-	u32 i;
-	acpi_status status;
+    ACPI_NAMESPACE_NODE     *Node;
+    ACPI_DEVICE_INFO        *Info;
+    ACPI_PNP_DEVICE_ID_LIST *CidList = NULL;
+    ACPI_PNP_DEVICE_ID      *Hid = NULL;
+    ACPI_PNP_DEVICE_ID      *Uid = NULL;
+    ACPI_PNP_DEVICE_ID      *Sub = NULL;
+    char                    *NextIdString;
+    ACPI_OBJECT_TYPE        Type;
+    ACPI_NAME               Name;
+    UINT8                   ParamCount= 0;
+    UINT8                   Valid = 0;
+    UINT32                  InfoSize;
+    UINT32                  i;
+    ACPI_STATUS             Status;
 
-	/* Parameter validation */
 
-	if (!handle || !return_buffer) {
-		return (AE_BAD_PARAMETER);
-	}
+    /* Parameter validation */
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
+    if (!Handle || !ReturnBuffer)
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	node = acpi_ns_validate_handle(handle);
-	if (!node) {
-		(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
-		return (AE_BAD_PARAMETER);
-	}
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-	/* Get the namespace node data while the namespace is locked */
+    Node = AcpiNsValidateHandle (Handle);
+    if (!Node)
+    {
+        (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+        return (AE_BAD_PARAMETER);
+    }
 
-	info_size = sizeof(struct acpi_device_info);
-	type = node->type;
-	name = node->name.integer;
+    /* Get the namespace node data while the namespace is locked */
 
-	if (node->type == ACPI_TYPE_METHOD) {
-		param_count = node->object->method.param_count;
-	}
+    InfoSize = sizeof (ACPI_DEVICE_INFO);
+    Type = Node->Type;
+    Name = Node->Name.Integer;
 
-	status = acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		return (status);
-	}
+    if (Node->Type == ACPI_TYPE_METHOD)
+    {
+        ParamCount = Node->Object->Method.ParamCount;
+    }
 
-	if ((type == ACPI_TYPE_DEVICE) || (type == ACPI_TYPE_PROCESSOR)) {
-		/*
-		 * Get extra info for ACPI Device/Processor objects only:
-		 * Run the Device _HID, _UID, _SUB, and _CID methods.
-		 *
-		 * Note: none of these methods are required, so they may or may
-		 * not be present for this device. The Info->Valid bitfield is used
-		 * to indicate which methods were found and run successfully.
-		 */
+    Status = AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        return (Status);
+    }
 
-		/* Execute the Device._HID method */
+    if ((Type == ACPI_TYPE_DEVICE) ||
+        (Type == ACPI_TYPE_PROCESSOR))
+    {
+        /*
+         * Get extra info for ACPI Device/Processor objects only:
+         * Run the Device _HID, _UID, _SUB, and _CID methods.
+         *
+         * Note: none of these methods are required, so they may or may
+         * not be present for this device. The Info->Valid bitfield is used
+         * to indicate which methods were found and run successfully.
+         */
 
-		status = acpi_ut_execute_HID(node, &hid);
-		if (ACPI_SUCCESS(status)) {
-			info_size += hid->length;
-			valid |= ACPI_VALID_HID;
-		}
+        /* Execute the Device._HID method */
 
-		/* Execute the Device._UID method */
+        Status = AcpiUtExecute_HID (Node, &Hid);
+        if (ACPI_SUCCESS (Status))
+        {
+            InfoSize += Hid->Length;
+            Valid |= ACPI_VALID_HID;
+        }
 
-		status = acpi_ut_execute_UID(node, &uid);
-		if (ACPI_SUCCESS(status)) {
-			info_size += uid->length;
-			valid |= ACPI_VALID_UID;
-		}
+        /* Execute the Device._UID method */
 
-		/* Execute the Device._SUB method */
+        Status = AcpiUtExecute_UID (Node, &Uid);
+        if (ACPI_SUCCESS (Status))
+        {
+            InfoSize += Uid->Length;
+            Valid |= ACPI_VALID_UID;
+        }
 
-		status = acpi_ut_execute_SUB(node, &sub);
-		if (ACPI_SUCCESS(status)) {
-			info_size += sub->length;
-			valid |= ACPI_VALID_SUB;
-		}
+        /* Execute the Device._SUB method */
 
-		/* Execute the Device._CID method */
+        Status = AcpiUtExecute_SUB (Node, &Sub);
+        if (ACPI_SUCCESS (Status))
+        {
+            InfoSize += Sub->Length;
+            Valid |= ACPI_VALID_SUB;
+        }
 
-		status = acpi_ut_execute_CID(node, &cid_list);
-		if (ACPI_SUCCESS(status)) {
+        /* Execute the Device._CID method */
 
-			/* Add size of CID strings and CID pointer array */
+        Status = AcpiUtExecute_CID (Node, &CidList);
+        if (ACPI_SUCCESS (Status))
+        {
+            /* Add size of CID strings and CID pointer array */
 
-			info_size +=
-			    (cid_list->list_size -
-			     sizeof(struct acpi_pnp_device_id_list));
-			valid |= ACPI_VALID_CID;
-		}
-	}
+            InfoSize += (CidList->ListSize - sizeof (ACPI_PNP_DEVICE_ID_LIST));
+            Valid |= ACPI_VALID_CID;
+        }
+    }
 
-	/*
-	 * Now that we have the variable-length data, we can allocate the
-	 * return buffer
-	 */
-	info = ACPI_ALLOCATE_ZEROED(info_size);
-	if (!info) {
-		status = AE_NO_MEMORY;
-		goto cleanup;
-	}
+    /*
+     * Now that we have the variable-length data, we can allocate the
+     * return buffer
+     */
+    Info = ACPI_ALLOCATE_ZEROED (InfoSize);
+    if (!Info)
+    {
+        Status = AE_NO_MEMORY;
+        goto Cleanup;
+    }
 
-	/* Get the fixed-length data */
+    /* Get the fixed-length data */
 
-	if ((type == ACPI_TYPE_DEVICE) || (type == ACPI_TYPE_PROCESSOR)) {
-		/*
-		 * Get extra info for ACPI Device/Processor objects only:
-		 * Run the _STA, _ADR and, sx_w, and _sx_d methods.
-		 *
-		 * Notes: none of these methods are required, so they may or may
-		 * not be present for this device. The Info->Valid bitfield is used
-		 * to indicate which methods were found and run successfully.
-		 *
-		 * For _STA, if the method does not exist, then (as per the ACPI
-		 * specification), the returned current_status flags will indicate
-		 * that the device is present/functional/enabled. Otherwise, the
-		 * current_status flags reflect the value returned from _STA.
-		 */
+    if ((Type == ACPI_TYPE_DEVICE) ||
+        (Type == ACPI_TYPE_PROCESSOR))
+    {
+        /*
+         * Get extra info for ACPI Device/Processor objects only:
+         * Run the _STA, _ADR and, SxW, and _SxD methods.
+         *
+         * Notes: none of these methods are required, so they may or may
+         * not be present for this device. The Info->Valid bitfield is used
+         * to indicate which methods were found and run successfully.
+         *
+         * For _STA, if the method does not exist, then (as per the ACPI
+         * specification), the returned CurrentStatus flags will indicate
+         * that the device is present/functional/enabled. Otherwise, the
+         * CurrentStatus flags reflect the value returned from _STA.
+         */
 
-		/* Execute the Device._STA method */
+        /* Execute the Device._STA method */
 
-		status = acpi_ut_execute_STA(node, &info->current_status);
-		if (ACPI_SUCCESS(status)) {
-			valid |= ACPI_VALID_STA;
-		}
+        Status = AcpiUtExecute_STA (Node, &Info->CurrentStatus);
+        if (ACPI_SUCCESS (Status))
+        {
+            Valid |= ACPI_VALID_STA;
+        }
 
-		/* Execute the Device._ADR method */
+        /* Execute the Device._ADR method */
 
-		status = acpi_ut_evaluate_numeric_object(METHOD_NAME__ADR, node,
-							 &info->address);
-		if (ACPI_SUCCESS(status)) {
-			valid |= ACPI_VALID_ADR;
-		}
+        Status = AcpiUtEvaluateNumericObject (METHOD_NAME__ADR, Node,
+                    &Info->Address);
+        if (ACPI_SUCCESS (Status))
+        {
+            Valid |= ACPI_VALID_ADR;
+        }
 
-		/* Execute the Device._sx_w methods */
+        /* Execute the Device._SxW methods */
 
-		status = acpi_ut_execute_power_methods(node,
-						       acpi_gbl_lowest_dstate_names,
-						       ACPI_NUM_sx_w_METHODS,
-						       info->lowest_dstates);
-		if (ACPI_SUCCESS(status)) {
-			valid |= ACPI_VALID_SXWS;
-		}
+        Status = AcpiUtExecutePowerMethods (Node,
+                    AcpiGbl_LowestDstateNames, ACPI_NUM_SxW_METHODS,
+                    Info->LowestDstates);
+        if (ACPI_SUCCESS (Status))
+        {
+            Valid |= ACPI_VALID_SXWS;
+        }
 
-		/* Execute the Device._sx_d methods */
+        /* Execute the Device._SxD methods */
 
-		status = acpi_ut_execute_power_methods(node,
-						       acpi_gbl_highest_dstate_names,
-						       ACPI_NUM_sx_d_METHODS,
-						       info->highest_dstates);
-		if (ACPI_SUCCESS(status)) {
-			valid |= ACPI_VALID_SXDS;
-		}
-	}
+        Status = AcpiUtExecutePowerMethods (Node,
+                    AcpiGbl_HighestDstateNames, ACPI_NUM_SxD_METHODS,
+                    Info->HighestDstates);
+        if (ACPI_SUCCESS (Status))
+        {
+            Valid |= ACPI_VALID_SXDS;
+        }
+    }
 
-	/*
-	 * Create a pointer to the string area of the return buffer.
-	 * Point to the end of the base struct acpi_device_info structure.
-	 */
-	next_id_string = ACPI_CAST_PTR(char, info->compatible_id_list.ids);
-	if (cid_list) {
+    /*
+     * Create a pointer to the string area of the return buffer.
+     * Point to the end of the base ACPI_DEVICE_INFO structure.
+     */
+    NextIdString = ACPI_CAST_PTR (char, Info->CompatibleIdList.Ids);
+    if (CidList)
+    {
+        /* Point past the CID PNP_DEVICE_ID array */
 
-		/* Point past the CID PNP_DEVICE_ID array */
+        NextIdString += ((ACPI_SIZE) CidList->Count * sizeof (ACPI_PNP_DEVICE_ID));
+    }
 
-		next_id_string +=
-		    ((acpi_size) cid_list->count *
-		     sizeof(struct acpi_pnp_device_id));
-	}
+    /*
+     * Copy the HID, UID, SUB, and CIDs to the return buffer.
+     * The variable-length strings are copied to the reserved area
+     * at the end of the buffer.
+     *
+     * For HID and CID, check if the ID is a PCI Root Bridge.
+     */
+    if (Hid)
+    {
+        NextIdString = AcpiNsCopyDeviceId (&Info->HardwareId,
+            Hid, NextIdString);
 
-	/*
-	 * Copy the HID, UID, SUB, and CIDs to the return buffer.
-	 * The variable-length strings are copied to the reserved area
-	 * at the end of the buffer.
-	 *
-	 * For HID and CID, check if the ID is a PCI Root Bridge.
-	 */
-	if (hid) {
-		next_id_string = acpi_ns_copy_device_id(&info->hardware_id,
-							hid, next_id_string);
+        if (AcpiUtIsPciRootBridge (Hid->String))
+        {
+            Info->Flags |= ACPI_PCI_ROOT_BRIDGE;
+        }
+    }
 
-		if (acpi_ut_is_pci_root_bridge(hid->string)) {
-			info->flags |= ACPI_PCI_ROOT_BRIDGE;
-		}
-	}
+    if (Uid)
+    {
+        NextIdString = AcpiNsCopyDeviceId (&Info->UniqueId,
+            Uid, NextIdString);
+    }
 
-	if (uid) {
-		next_id_string = acpi_ns_copy_device_id(&info->unique_id,
-							uid, next_id_string);
-	}
+    if (Sub)
+    {
+        NextIdString = AcpiNsCopyDeviceId (&Info->SubsystemId,
+            Sub, NextIdString);
+    }
 
-	if (sub) {
-		next_id_string = acpi_ns_copy_device_id(&info->subsystem_id,
-							sub, next_id_string);
-	}
+    if (CidList)
+    {
+        Info->CompatibleIdList.Count = CidList->Count;
+        Info->CompatibleIdList.ListSize = CidList->ListSize;
 
-	if (cid_list) {
-		info->compatible_id_list.count = cid_list->count;
-		info->compatible_id_list.list_size = cid_list->list_size;
+        /* Copy each CID */
 
-		/* Copy each CID */
+        for (i = 0; i < CidList->Count; i++)
+        {
+            NextIdString = AcpiNsCopyDeviceId (&Info->CompatibleIdList.Ids[i],
+                &CidList->Ids[i], NextIdString);
 
-		for (i = 0; i < cid_list->count; i++) {
-			next_id_string =
-			    acpi_ns_copy_device_id(&info->compatible_id_list.
-						   ids[i], &cid_list->ids[i],
-						   next_id_string);
+            if (AcpiUtIsPciRootBridge (CidList->Ids[i].String))
+            {
+                Info->Flags |= ACPI_PCI_ROOT_BRIDGE;
+            }
+        }
+    }
 
-			if (acpi_ut_is_pci_root_bridge(cid_list->ids[i].string)) {
-				info->flags |= ACPI_PCI_ROOT_BRIDGE;
-			}
-		}
-	}
+    /* Copy the fixed-length data */
 
-	/* Copy the fixed-length data */
+    Info->InfoSize = InfoSize;
+    Info->Type = Type;
+    Info->Name = Name;
+    Info->ParamCount = ParamCount;
+    Info->Valid = Valid;
 
-	info->info_size = info_size;
-	info->type = type;
-	info->name = name;
-	info->param_count = param_count;
-	info->valid = valid;
+    *ReturnBuffer = Info;
+    Status = AE_OK;
 
-	*return_buffer = info;
-	status = AE_OK;
 
-cleanup:
-	if (hid) {
-		ACPI_FREE(hid);
-	}
-	if (uid) {
-		ACPI_FREE(uid);
-	}
-	if (sub) {
-		ACPI_FREE(sub);
-	}
-	if (cid_list) {
-		ACPI_FREE(cid_list);
-	}
-	return (status);
+Cleanup:
+    if (Hid)
+    {
+        ACPI_FREE (Hid);
+    }
+    if (Uid)
+    {
+        ACPI_FREE (Uid);
+    }
+    if (Sub)
+    {
+        ACPI_FREE (Sub);
+    }
+    if (CidList)
+    {
+        ACPI_FREE (CidList);
+    }
+    return (Status);
 }
 
-ACPI_EXPORT_SYMBOL(acpi_get_object_info)
+ACPI_EXPORT_SYMBOL (AcpiGetObjectInfo)
+
 
 /******************************************************************************
  *
- * FUNCTION:    acpi_install_method
+ * FUNCTION:    AcpiInstallMethod
  *
- * PARAMETERS:  buffer         - An ACPI table containing one control method
+ * PARAMETERS:  Buffer         - An ACPI table containing one control method
  *
  * RETURN:      Status
  *
@@ -529,135 +656,148 @@ ACPI_EXPORT_SYMBOL(acpi_get_object_info)
  *              single control method.
  *
  ******************************************************************************/
-acpi_status acpi_install_method(u8 *buffer)
+
+ACPI_STATUS
+AcpiInstallMethod (
+    UINT8                   *Buffer)
 {
-	struct acpi_table_header *table =
-	    ACPI_CAST_PTR(struct acpi_table_header, buffer);
-	u8 *aml_buffer;
-	u8 *aml_start;
-	char *path;
-	struct acpi_namespace_node *node;
-	union acpi_operand_object *method_obj;
-	struct acpi_parse_state parser_state;
-	u32 aml_length;
-	u16 opcode;
-	u8 method_flags;
-	acpi_status status;
+    ACPI_TABLE_HEADER       *Table = ACPI_CAST_PTR (ACPI_TABLE_HEADER, Buffer);
+    UINT8                   *AmlBuffer;
+    UINT8                   *AmlStart;
+    char                    *Path;
+    ACPI_NAMESPACE_NODE     *Node;
+    ACPI_OPERAND_OBJECT     *MethodObj;
+    ACPI_PARSE_STATE        ParserState;
+    UINT32                  AmlLength;
+    UINT16                  Opcode;
+    UINT8                   MethodFlags;
+    ACPI_STATUS             Status;
 
-	/* Parameter validation */
 
-	if (!buffer) {
-		return (AE_BAD_PARAMETER);
-	}
+    /* Parameter validation */
 
-	/* Table must be a DSDT or SSDT */
+    if (!Buffer)
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	if (!ACPI_COMPARE_NAME(table->signature, ACPI_SIG_DSDT) &&
-	    !ACPI_COMPARE_NAME(table->signature, ACPI_SIG_SSDT)) {
-		return (AE_BAD_HEADER);
-	}
+    /* Table must be a DSDT or SSDT */
 
-	/* First AML opcode in the table must be a control method */
+    if (!ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_DSDT) &&
+        !ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_SSDT))
+    {
+        return (AE_BAD_HEADER);
+    }
 
-	parser_state.aml = buffer + sizeof(struct acpi_table_header);
-	opcode = acpi_ps_peek_opcode(&parser_state);
-	if (opcode != AML_METHOD_OP) {
-		return (AE_BAD_PARAMETER);
-	}
+    /* First AML opcode in the table must be a control method */
 
-	/* Extract method information from the raw AML */
+    ParserState.Aml = Buffer + sizeof (ACPI_TABLE_HEADER);
+    Opcode = AcpiPsPeekOpcode (&ParserState);
+    if (Opcode != AML_METHOD_OP)
+    {
+        return (AE_BAD_PARAMETER);
+    }
 
-	parser_state.aml += acpi_ps_get_opcode_size(opcode);
-	parser_state.pkg_end = acpi_ps_get_next_package_end(&parser_state);
-	path = acpi_ps_get_next_namestring(&parser_state);
-	method_flags = *parser_state.aml++;
-	aml_start = parser_state.aml;
-	aml_length = ACPI_PTR_DIFF(parser_state.pkg_end, aml_start);
+    /* Extract method information from the raw AML */
 
-	/*
-	 * Allocate resources up-front. We don't want to have to delete a new
-	 * node from the namespace if we cannot allocate memory.
-	 */
-	aml_buffer = ACPI_ALLOCATE(aml_length);
-	if (!aml_buffer) {
-		return (AE_NO_MEMORY);
-	}
+    ParserState.Aml += AcpiPsGetOpcodeSize (Opcode);
+    ParserState.PkgEnd = AcpiPsGetNextPackageEnd (&ParserState);
+    Path = AcpiPsGetNextNamestring (&ParserState);
+    MethodFlags = *ParserState.Aml++;
+    AmlStart = ParserState.Aml;
+    AmlLength = ACPI_PTR_DIFF (ParserState.PkgEnd, AmlStart);
 
-	method_obj = acpi_ut_create_internal_object(ACPI_TYPE_METHOD);
-	if (!method_obj) {
-		ACPI_FREE(aml_buffer);
-		return (AE_NO_MEMORY);
-	}
+    /*
+     * Allocate resources up-front. We don't want to have to delete a new
+     * node from the namespace if we cannot allocate memory.
+     */
+    AmlBuffer = ACPI_ALLOCATE (AmlLength);
+    if (!AmlBuffer)
+    {
+        return (AE_NO_MEMORY);
+    }
 
-	/* Lock namespace for acpi_ns_lookup, we may be creating a new node */
+    MethodObj = AcpiUtCreateInternalObject (ACPI_TYPE_METHOD);
+    if (!MethodObj)
+    {
+        ACPI_FREE (AmlBuffer);
+        return (AE_NO_MEMORY);
+    }
 
-	status = acpi_ut_acquire_mutex(ACPI_MTX_NAMESPACE);
-	if (ACPI_FAILURE(status)) {
-		goto error_exit;
-	}
+    /* Lock namespace for AcpiNsLookup, we may be creating a new node */
 
-	/* The lookup either returns an existing node or creates a new one */
+    Status = AcpiUtAcquireMutex (ACPI_MTX_NAMESPACE);
+    if (ACPI_FAILURE (Status))
+    {
+        goto ErrorExit;
+    }
 
-	status =
-	    acpi_ns_lookup(NULL, path, ACPI_TYPE_METHOD, ACPI_IMODE_LOAD_PASS1,
-			   ACPI_NS_DONT_OPEN_SCOPE | ACPI_NS_ERROR_IF_FOUND,
-			   NULL, &node);
+    /* The lookup either returns an existing node or creates a new one */
 
-	(void)acpi_ut_release_mutex(ACPI_MTX_NAMESPACE);
+    Status = AcpiNsLookup (NULL, Path, ACPI_TYPE_METHOD, ACPI_IMODE_LOAD_PASS1,
+                ACPI_NS_DONT_OPEN_SCOPE | ACPI_NS_ERROR_IF_FOUND, NULL, &Node);
 
-	if (ACPI_FAILURE(status)) {	/* ns_lookup */
-		if (status != AE_ALREADY_EXISTS) {
-			goto error_exit;
-		}
+    (void) AcpiUtReleaseMutex (ACPI_MTX_NAMESPACE);
 
-		/* Node existed previously, make sure it is a method node */
+    if (ACPI_FAILURE (Status)) /* NsLookup */
+    {
+        if (Status != AE_ALREADY_EXISTS)
+        {
+            goto ErrorExit;
+        }
 
-		if (node->type != ACPI_TYPE_METHOD) {
-			status = AE_TYPE;
-			goto error_exit;
-		}
-	}
+        /* Node existed previously, make sure it is a method node */
 
-	/* Copy the method AML to the local buffer */
+        if (Node->Type != ACPI_TYPE_METHOD)
+        {
+            Status = AE_TYPE;
+            goto ErrorExit;
+        }
+    }
 
-	ACPI_MEMCPY(aml_buffer, aml_start, aml_length);
+    /* Copy the method AML to the local buffer */
 
-	/* Initialize the method object with the new method's information */
+    ACPI_MEMCPY (AmlBuffer, AmlStart, AmlLength);
 
-	method_obj->method.aml_start = aml_buffer;
-	method_obj->method.aml_length = aml_length;
+    /* Initialize the method object with the new method's information */
 
-	method_obj->method.param_count = (u8)
-	    (method_flags & AML_METHOD_ARG_COUNT);
+    MethodObj->Method.AmlStart = AmlBuffer;
+    MethodObj->Method.AmlLength = AmlLength;
 
-	if (method_flags & AML_METHOD_SERIALIZED) {
-		method_obj->method.info_flags = ACPI_METHOD_SERIALIZED;
+    MethodObj->Method.ParamCount = (UINT8)
+        (MethodFlags & AML_METHOD_ARG_COUNT);
 
-		method_obj->method.sync_level = (u8)
-		    ((method_flags & AML_METHOD_SYNC_LEVEL) >> 4);
-	}
+    if (MethodFlags & AML_METHOD_SERIALIZED)
+    {
+        MethodObj->Method.InfoFlags = ACPI_METHOD_SERIALIZED;
 
-	/*
-	 * Now that it is complete, we can attach the new method object to
-	 * the method Node (detaches/deletes any existing object)
-	 */
-	status = acpi_ns_attach_object(node, method_obj, ACPI_TYPE_METHOD);
+        MethodObj->Method.SyncLevel = (UINT8)
+            ((MethodFlags & AML_METHOD_SYNC_LEVEL) >> 4);
+    }
 
-	/*
-	 * Flag indicates AML buffer is dynamic, must be deleted later.
-	 * Must be set only after attach above.
-	 */
-	node->flags |= ANOBJ_ALLOCATED_BUFFER;
+    /*
+     * Now that it is complete, we can attach the new method object to
+     * the method Node (detaches/deletes any existing object)
+     */
+    Status = AcpiNsAttachObject (Node, MethodObj, ACPI_TYPE_METHOD);
 
-	/* Remove local reference to the method object */
+    /*
+     * Flag indicates AML buffer is dynamic, must be deleted later.
+     * Must be set only after attach above.
+     */
+    Node->Flags |= ANOBJ_ALLOCATED_BUFFER;
 
-	acpi_ut_remove_reference(method_obj);
-	return (status);
+    /* Remove local reference to the method object */
 
-error_exit:
+    AcpiUtRemoveReference (MethodObj);
+    return (Status);
 
-	ACPI_FREE(aml_buffer);
-	ACPI_FREE(method_obj);
-	return (status);
+
+ErrorExit:
+
+    ACPI_FREE (AmlBuffer);
+    ACPI_FREE (MethodObj);
+    return (Status);
 }
-ACPI_EXPORT_SYMBOL(acpi_install_method)
+
+ACPI_EXPORT_SYMBOL (AcpiInstallMethod)

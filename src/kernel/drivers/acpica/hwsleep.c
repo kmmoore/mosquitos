@@ -5,55 +5,128 @@
  *
  *****************************************************************************/
 
-/*
- * Copyright (C) 2000 - 2014, Intel Corp.
+/******************************************************************************
+ *
+ * 1. Copyright Notice
+ *
+ * Some or all of this work - Copyright (c) 1999 - 2014, Intel Corp.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions, and the following disclaimer,
- *    without modification.
- * 2. Redistributions in binary form must reproduce at minimum a disclaimer
- *    substantially similar to the "NO WARRANTY" disclaimer below
- *    ("Disclaimer") and any redistribution must be conditioned upon
- *    including a substantially similar Disclaimer requirement for further
- *    binary redistribution.
- * 3. Neither the names of the above-listed copyright holders nor the names
- *    of any contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ * 2. License
  *
- * Alternatively, this software may be distributed under the terms of the
- * GNU General Public License ("GPL") version 2 as published by the Free
- * Software Foundation.
+ * 2.1. This is your license from Intel Corp. under its intellectual property
+ * rights. You may have additional license terms from the party that provided
+ * you this software, covering your right to use that party's intellectual
+ * property rights.
  *
- * NO WARRANTY
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * HOLDERS OR CONTRIBUTORS BE LIABLE FOR SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGES.
- */
+ * 2.2. Intel grants, free of charge, to any person ("Licensee") obtaining a
+ * copy of the source code appearing in this file ("Covered Code") an
+ * irrevocable, perpetual, worldwide license under Intel's copyrights in the
+ * base code distributed originally by Intel ("Original Intel Code") to copy,
+ * make derivatives, distribute, use and display any portion of the Covered
+ * Code in any form, with the right to sublicense such rights; and
+ *
+ * 2.3. Intel grants Licensee a non-exclusive and non-transferable patent
+ * license (with the right to sublicense), under only those claims of Intel
+ * patents that are infringed by the Original Intel Code, to make, use, sell,
+ * offer to sell, and import the Covered Code and derivative works thereof
+ * solely to the minimum extent necessary to exercise the above copyright
+ * license, and in no event shall the patent license extend to any additions
+ * to or modifications of the Original Intel Code. No other license or right
+ * is granted directly or by implication, estoppel or otherwise;
+ *
+ * The above copyright and patent license is granted only if the following
+ * conditions are met:
+ *
+ * 3. Conditions
+ *
+ * 3.1. Redistribution of Source with Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification with rights to further distribute source must include
+ * the above Copyright Notice, the above License, this list of Conditions,
+ * and the following Disclaimer and Export Compliance provision. In addition,
+ * Licensee must cause all Covered Code to which Licensee contributes to
+ * contain a file documenting the changes Licensee made to create that Covered
+ * Code and the date of any change. Licensee must include in that file the
+ * documentation of any changes made by any predecessor Licensee. Licensee
+ * must include a prominent statement that the modification is derived,
+ * directly or indirectly, from Original Intel Code.
+ *
+ * 3.2. Redistribution of Source with no Rights to Further Distribute Source.
+ * Redistribution of source code of any substantial portion of the Covered
+ * Code or modification without rights to further distribute source must
+ * include the following Disclaimer and Export Compliance provision in the
+ * documentation and/or other materials provided with distribution. In
+ * addition, Licensee may not authorize further sublicense of source of any
+ * portion of the Covered Code, and must include terms to the effect that the
+ * license from Licensee to its licensee is limited to the intellectual
+ * property embodied in the software Licensee provides to its licensee, and
+ * not to intellectual property embodied in modifications its licensee may
+ * make.
+ *
+ * 3.3. Redistribution of Executable. Redistribution in executable form of any
+ * substantial portion of the Covered Code or modification must reproduce the
+ * above Copyright Notice, and the following Disclaimer and Export Compliance
+ * provision in the documentation and/or other materials provided with the
+ * distribution.
+ *
+ * 3.4. Intel retains all right, title, and interest in and to the Original
+ * Intel Code.
+ *
+ * 3.5. Neither the name Intel nor any other trademark owned or controlled by
+ * Intel shall be used in advertising or otherwise to promote the sale, use or
+ * other dealings in products derived from or relating to the Covered Code
+ * without prior written authorization from Intel.
+ *
+ * 4. Disclaimer and Export Compliance
+ *
+ * 4.1. INTEL MAKES NO WARRANTY OF ANY KIND REGARDING ANY SOFTWARE PROVIDED
+ * HERE. ANY SOFTWARE ORIGINATING FROM INTEL OR DERIVED FROM INTEL SOFTWARE
+ * IS PROVIDED "AS IS," AND INTEL WILL NOT PROVIDE ANY SUPPORT, ASSISTANCE,
+ * INSTALLATION, TRAINING OR OTHER SERVICES. INTEL WILL NOT PROVIDE ANY
+ * UPDATES, ENHANCEMENTS OR EXTENSIONS. INTEL SPECIFICALLY DISCLAIMS ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * 4.2. IN NO EVENT SHALL INTEL HAVE ANY LIABILITY TO LICENSEE, ITS LICENSEES
+ * OR ANY OTHER THIRD PARTY, FOR ANY LOST PROFITS, LOST DATA, LOSS OF USE OR
+ * COSTS OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, OR FOR ANY INDIRECT,
+ * SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT, UNDER ANY
+ * CAUSE OF ACTION OR THEORY OF LIABILITY, AND IRRESPECTIVE OF WHETHER INTEL
+ * HAS ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES. THESE LIMITATIONS
+ * SHALL APPLY NOTWITHSTANDING THE FAILURE OF THE ESSENTIAL PURPOSE OF ANY
+ * LIMITED REMEDY.
+ *
+ * 4.3. Licensee shall not export, either directly or indirectly, any of this
+ * software or system incorporating such software without first obtaining any
+ * required license or other approval from the U. S. Department of Commerce or
+ * any other agency or department of the United States Government. In the
+ * event Licensee exports any such software from the United States or
+ * re-exports any such software from a foreign destination, Licensee shall
+ * ensure that the distribution and export/re-export of the software is in
+ * compliance with all laws, regulations, orders, or other restrictions of the
+ * U.S. Export Administration Regulations. Licensee agrees that neither it nor
+ * any of its subsidiaries will export/re-export any technical data, process,
+ * software, or service, directly or indirectly, to any country for which the
+ * United States government or any agency thereof requires an export license,
+ * other governmental approval, or letter of assurance, without first obtaining
+ * such license, approval or letter.
+ *
+ *****************************************************************************/
 
-#include <acpi/acpi.h>
+#include "acpi.h"
 #include "accommon.h"
 
 #define _COMPONENT          ACPI_HARDWARE
-ACPI_MODULE_NAME("hwsleep")
+        ACPI_MODULE_NAME    ("hwsleep")
 
-#if (!ACPI_REDUCED_HARDWARE)	/* Entire module */
+
+#if (!ACPI_REDUCED_HARDWARE) /* Entire module */
 /*******************************************************************************
  *
- * FUNCTION:    acpi_hw_legacy_sleep
+ * FUNCTION:    AcpiHwLegacySleep
  *
- * PARAMETERS:  sleep_state         - Which sleep state to enter
+ * PARAMETERS:  SleepState          - Which sleep state to enter
  *
  * RETURN:      Status
  *
@@ -61,150 +134,154 @@ ACPI_MODULE_NAME("hwsleep")
  *              THIS FUNCTION MUST BE CALLED WITH INTERRUPTS DISABLED
  *
  ******************************************************************************/
-acpi_status acpi_hw_legacy_sleep(u8 sleep_state)
+
+ACPI_STATUS
+AcpiHwLegacySleep (
+    UINT8                   SleepState)
 {
-	struct acpi_bit_register_info *sleep_type_reg_info;
-	struct acpi_bit_register_info *sleep_enable_reg_info;
-	u32 pm1a_control;
-	u32 pm1b_control;
-	u32 in_value;
-	acpi_status status;
+    ACPI_BIT_REGISTER_INFO  *SleepTypeRegInfo;
+    ACPI_BIT_REGISTER_INFO  *SleepEnableRegInfo;
+    UINT32                  Pm1aControl;
+    UINT32                  Pm1bControl;
+    UINT32                  InValue;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(hw_legacy_sleep);
 
-	sleep_type_reg_info =
-	    acpi_hw_get_bit_register_info(ACPI_BITREG_SLEEP_TYPE);
-	sleep_enable_reg_info =
-	    acpi_hw_get_bit_register_info(ACPI_BITREG_SLEEP_ENABLE);
+    ACPI_FUNCTION_TRACE (HwLegacySleep);
 
-	/* Clear wake status */
 
-	status =
-	    acpi_write_bit_register(ACPI_BITREG_WAKE_STATUS, ACPI_CLEAR_STATUS);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    SleepTypeRegInfo = AcpiHwGetBitRegisterInfo (ACPI_BITREG_SLEEP_TYPE);
+    SleepEnableRegInfo = AcpiHwGetBitRegisterInfo (ACPI_BITREG_SLEEP_ENABLE);
 
-	/* Clear all fixed and general purpose status bits */
+    /* Clear wake status */
 
-	status = acpi_hw_clear_acpi_status();
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    Status = AcpiWriteBitRegister (ACPI_BITREG_WAKE_STATUS, ACPI_CLEAR_STATUS);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/*
-	 * 1) Disable/Clear all GPEs
-	 * 2) Enable all wakeup GPEs
-	 */
-	status = acpi_hw_disable_all_gpes();
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
-	acpi_gbl_system_awake_and_running = FALSE;
+    /* Clear all fixed and general purpose status bits */
 
-	status = acpi_hw_enable_all_wakeup_gpes();
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    Status = AcpiHwClearAcpiStatus ();
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/* Get current value of PM1A control */
+    /*
+     * 1) Disable/Clear all GPEs
+     * 2) Enable all wakeup GPEs
+     */
+    Status = AcpiHwDisableAllGpes ();
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
+    AcpiGbl_SystemAwakeAndRunning = FALSE;
 
-	status = acpi_hw_register_read(ACPI_REGISTER_PM1_CONTROL,
-				       &pm1a_control);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
-	ACPI_DEBUG_PRINT((ACPI_DB_INIT,
-			  "Entering sleep state [S%u]\n", sleep_state));
+    Status = AcpiHwEnableAllWakeupGpes ();
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/* Clear the SLP_EN and SLP_TYP fields */
+    /* Get current value of PM1A control */
 
-	pm1a_control &= ~(sleep_type_reg_info->access_bit_mask |
-			  sleep_enable_reg_info->access_bit_mask);
-	pm1b_control = pm1a_control;
+    Status = AcpiHwRegisterRead (ACPI_REGISTER_PM1_CONTROL,
+                &Pm1aControl);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
+    ACPI_DEBUG_PRINT ((ACPI_DB_INIT,
+        "Entering sleep state [S%u]\n", SleepState));
 
-	/* Insert the SLP_TYP bits */
+    /* Clear the SLP_EN and SLP_TYP fields */
 
-	pm1a_control |=
-	    (acpi_gbl_sleep_type_a << sleep_type_reg_info->bit_position);
-	pm1b_control |=
-	    (acpi_gbl_sleep_type_b << sleep_type_reg_info->bit_position);
+    Pm1aControl &= ~(SleepTypeRegInfo->AccessBitMask |
+                     SleepEnableRegInfo->AccessBitMask);
+    Pm1bControl = Pm1aControl;
 
-	/*
-	 * We split the writes of SLP_TYP and SLP_EN to workaround
-	 * poorly implemented hardware.
-	 */
+    /* Insert the SLP_TYP bits */
 
-	/* Write #1: write the SLP_TYP data to the PM1 Control registers */
+    Pm1aControl |= (AcpiGbl_SleepTypeA << SleepTypeRegInfo->BitPosition);
+    Pm1bControl |= (AcpiGbl_SleepTypeB << SleepTypeRegInfo->BitPosition);
 
-	status = acpi_hw_write_pm1_control(pm1a_control, pm1b_control);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    /*
+     * We split the writes of SLP_TYP and SLP_EN to workaround
+     * poorly implemented hardware.
+     */
 
-	/* Insert the sleep enable (SLP_EN) bit */
+    /* Write #1: write the SLP_TYP data to the PM1 Control registers */
 
-	pm1a_control |= sleep_enable_reg_info->access_bit_mask;
-	pm1b_control |= sleep_enable_reg_info->access_bit_mask;
+    Status = AcpiHwWritePm1Control (Pm1aControl, Pm1bControl);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/* Flush caches, as per ACPI specification */
+    /* Insert the sleep enable (SLP_EN) bit */
 
-	ACPI_FLUSH_CPU_CACHE();
+    Pm1aControl |= SleepEnableRegInfo->AccessBitMask;
+    Pm1bControl |= SleepEnableRegInfo->AccessBitMask;
 
-	status = acpi_os_prepare_sleep(sleep_state, pm1a_control,
-				       pm1b_control);
-	if (ACPI_SKIP(status))
-		return_ACPI_STATUS(AE_OK);
-	if (ACPI_FAILURE(status))
-		return_ACPI_STATUS(status);
-	/* Write #2: Write both SLP_TYP + SLP_EN */
+    /* Flush caches, as per ACPI specification */
 
-	status = acpi_hw_write_pm1_control(pm1a_control, pm1b_control);
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    ACPI_FLUSH_CPU_CACHE ();
 
-	if (sleep_state > ACPI_STATE_S3) {
-		/*
-		 * We wanted to sleep > S3, but it didn't happen (by virtue of the
-		 * fact that we are still executing!)
-		 *
-		 * Wait ten seconds, then try again. This is to get S4/S5 to work on
-		 * all machines.
-		 *
-		 * We wait so long to allow chipsets that poll this reg very slowly
-		 * to still read the right value. Ideally, this block would go
-		 * away entirely.
-		 */
-		acpi_os_stall(10 * ACPI_USEC_PER_SEC);
+    /* Write #2: Write both SLP_TYP + SLP_EN */
 
-		status = acpi_hw_register_write(ACPI_REGISTER_PM1_CONTROL,
-						sleep_enable_reg_info->
-						access_bit_mask);
-		if (ACPI_FAILURE(status)) {
-			return_ACPI_STATUS(status);
-		}
-	}
+    Status = AcpiHwWritePm1Control (Pm1aControl, Pm1bControl);
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/* Wait for transition back to Working State */
+    if (SleepState > ACPI_STATE_S3)
+    {
+        /*
+         * We wanted to sleep > S3, but it didn't happen (by virtue of the
+         * fact that we are still executing!)
+         *
+         * Wait ten seconds, then try again. This is to get S4/S5 to work on
+         * all machines.
+         *
+         * We wait so long to allow chipsets that poll this reg very slowly
+         * to still read the right value. Ideally, this block would go
+         * away entirely.
+         */
+        AcpiOsStall (10 * ACPI_USEC_PER_SEC);
 
-	do {
-		status =
-		    acpi_read_bit_register(ACPI_BITREG_WAKE_STATUS, &in_value);
-		if (ACPI_FAILURE(status)) {
-			return_ACPI_STATUS(status);
-		}
+        Status = AcpiHwRegisterWrite (ACPI_REGISTER_PM1_CONTROL,
+                    SleepEnableRegInfo->AccessBitMask);
+        if (ACPI_FAILURE (Status))
+        {
+            return_ACPI_STATUS (Status);
+        }
+    }
 
-	} while (!in_value);
+    /* Wait for transition back to Working State */
 
-	return_ACPI_STATUS(AE_OK);
+    do
+    {
+        Status = AcpiReadBitRegister (ACPI_BITREG_WAKE_STATUS, &InValue);
+        if (ACPI_FAILURE (Status))
+        {
+            return_ACPI_STATUS (Status);
+        }
+
+    } while (!InValue);
+
+    return_ACPI_STATUS (AE_OK);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_hw_legacy_wake_prep
+ * FUNCTION:    AcpiHwLegacyWakePrep
  *
- * PARAMETERS:  sleep_state         - Which sleep state we just exited
+ * PARAMETERS:  SleepState          - Which sleep state we just exited
  *
  * RETURN:      Status
  *
@@ -214,65 +291,67 @@ acpi_status acpi_hw_legacy_sleep(u8 sleep_state)
  *
  ******************************************************************************/
 
-acpi_status acpi_hw_legacy_wake_prep(u8 sleep_state)
+ACPI_STATUS
+AcpiHwLegacyWakePrep (
+    UINT8                   SleepState)
 {
-	acpi_status status;
-	struct acpi_bit_register_info *sleep_type_reg_info;
-	struct acpi_bit_register_info *sleep_enable_reg_info;
-	u32 pm1a_control;
-	u32 pm1b_control;
+    ACPI_STATUS             Status;
+    ACPI_BIT_REGISTER_INFO  *SleepTypeRegInfo;
+    ACPI_BIT_REGISTER_INFO  *SleepEnableRegInfo;
+    UINT32                  Pm1aControl;
+    UINT32                  Pm1bControl;
 
-	ACPI_FUNCTION_TRACE(hw_legacy_wake_prep);
 
-	/*
-	 * Set SLP_TYPE and SLP_EN to state S0.
-	 * This is unclear from the ACPI Spec, but it is required
-	 * by some machines.
-	 */
-	status = acpi_get_sleep_type_data(ACPI_STATE_S0,
-					  &acpi_gbl_sleep_type_a,
-					  &acpi_gbl_sleep_type_b);
-	if (ACPI_SUCCESS(status)) {
-		sleep_type_reg_info =
-		    acpi_hw_get_bit_register_info(ACPI_BITREG_SLEEP_TYPE);
-		sleep_enable_reg_info =
-		    acpi_hw_get_bit_register_info(ACPI_BITREG_SLEEP_ENABLE);
+    ACPI_FUNCTION_TRACE (HwLegacyWakePrep);
 
-		/* Get current value of PM1A control */
+    /*
+     * Set SLP_TYPE and SLP_EN to state S0.
+     * This is unclear from the ACPI Spec, but it is required
+     * by some machines.
+     */
+    Status = AcpiGetSleepTypeData (ACPI_STATE_S0,
+                    &AcpiGbl_SleepTypeA, &AcpiGbl_SleepTypeB);
+    if (ACPI_SUCCESS (Status))
+    {
+        SleepTypeRegInfo =
+            AcpiHwGetBitRegisterInfo (ACPI_BITREG_SLEEP_TYPE);
+        SleepEnableRegInfo =
+            AcpiHwGetBitRegisterInfo (ACPI_BITREG_SLEEP_ENABLE);
 
-		status = acpi_hw_register_read(ACPI_REGISTER_PM1_CONTROL,
-					       &pm1a_control);
-		if (ACPI_SUCCESS(status)) {
+        /* Get current value of PM1A control */
 
-			/* Clear the SLP_EN and SLP_TYP fields */
+        Status = AcpiHwRegisterRead (ACPI_REGISTER_PM1_CONTROL,
+                    &Pm1aControl);
+        if (ACPI_SUCCESS (Status))
+        {
+            /* Clear the SLP_EN and SLP_TYP fields */
 
-			pm1a_control &= ~(sleep_type_reg_info->access_bit_mask |
-					  sleep_enable_reg_info->
-					  access_bit_mask);
-			pm1b_control = pm1a_control;
+            Pm1aControl &= ~(SleepTypeRegInfo->AccessBitMask |
+                SleepEnableRegInfo->AccessBitMask);
+            Pm1bControl = Pm1aControl;
 
-			/* Insert the SLP_TYP bits */
+            /* Insert the SLP_TYP bits */
 
-			pm1a_control |= (acpi_gbl_sleep_type_a <<
-					 sleep_type_reg_info->bit_position);
-			pm1b_control |= (acpi_gbl_sleep_type_b <<
-					 sleep_type_reg_info->bit_position);
+            Pm1aControl |= (AcpiGbl_SleepTypeA <<
+                SleepTypeRegInfo->BitPosition);
+            Pm1bControl |= (AcpiGbl_SleepTypeB <<
+                SleepTypeRegInfo->BitPosition);
 
-			/* Write the control registers and ignore any errors */
+            /* Write the control registers and ignore any errors */
 
-			(void)acpi_hw_write_pm1_control(pm1a_control,
-							pm1b_control);
-		}
-	}
+            (void) AcpiHwWritePm1Control (Pm1aControl, Pm1bControl);
+        }
+    }
 
-	return_ACPI_STATUS(status);
+    return_ACPI_STATUS (Status);
 }
+
 
 /*******************************************************************************
  *
- * FUNCTION:    acpi_hw_legacy_wake
+ * FUNCTION:    AcpiHwLegacyWake
  *
- * PARAMETERS:  sleep_state         - Which sleep state we just exited
+ * PARAMETERS:  SleepState          - Which sleep state we just exited
  *
  * RETURN:      Status
  *
@@ -281,64 +360,67 @@ acpi_status acpi_hw_legacy_wake_prep(u8 sleep_state)
  *
  ******************************************************************************/
 
-acpi_status acpi_hw_legacy_wake(u8 sleep_state)
+ACPI_STATUS
+AcpiHwLegacyWake (
+    UINT8                   SleepState)
 {
-	acpi_status status;
+    ACPI_STATUS             Status;
 
-	ACPI_FUNCTION_TRACE(hw_legacy_wake);
 
-	/* Ensure enter_sleep_state_prep -> enter_sleep_state ordering */
+    ACPI_FUNCTION_TRACE (HwLegacyWake);
 
-	acpi_gbl_sleep_type_a = ACPI_SLEEP_TYPE_INVALID;
-	acpi_hw_execute_sleep_method(METHOD_PATHNAME__SST, ACPI_SST_WAKING);
 
-	/*
-	 * GPEs must be enabled before _WAK is called as GPEs
-	 * might get fired there
-	 *
-	 * Restore the GPEs:
-	 * 1) Disable/Clear all GPEs
-	 * 2) Enable all runtime GPEs
-	 */
-	status = acpi_hw_disable_all_gpes();
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    /* Ensure EnterSleepStatePrep -> EnterSleepState ordering */
 
-	status = acpi_hw_enable_all_runtime_gpes();
-	if (ACPI_FAILURE(status)) {
-		return_ACPI_STATUS(status);
-	}
+    AcpiGbl_SleepTypeA = ACPI_SLEEP_TYPE_INVALID;
+    AcpiHwExecuteSleepMethod (METHOD_PATHNAME__SST, ACPI_SST_WAKING);
 
-	/*
-	 * Now we can execute _WAK, etc. Some machines require that the GPEs
-	 * are enabled before the wake methods are executed.
-	 */
-	acpi_hw_execute_sleep_method(METHOD_PATHNAME__WAK, sleep_state);
+    /*
+     * GPEs must be enabled before _WAK is called as GPEs
+     * might get fired there
+     *
+     * Restore the GPEs:
+     * 1) Disable/Clear all GPEs
+     * 2) Enable all runtime GPEs
+     */
+    Status = AcpiHwDisableAllGpes ();
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/*
-	 * Some BIOS code assumes that WAK_STS will be cleared on resume
-	 * and use it to determine whether the system is rebooting or
-	 * resuming. Clear WAK_STS for compatibility.
-	 */
-	(void)acpi_write_bit_register(ACPI_BITREG_WAKE_STATUS,
-				      ACPI_CLEAR_STATUS);
-	acpi_gbl_system_awake_and_running = TRUE;
+    Status = AcpiHwEnableAllRuntimeGpes ();
+    if (ACPI_FAILURE (Status))
+    {
+        return_ACPI_STATUS (Status);
+    }
 
-	/* Enable power button */
+    /*
+     * Now we can execute _WAK, etc. Some machines require that the GPEs
+     * are enabled before the wake methods are executed.
+     */
+    AcpiHwExecuteSleepMethod (METHOD_PATHNAME__WAK, SleepState);
 
-	(void)
-	    acpi_write_bit_register(acpi_gbl_fixed_event_info
-				    [ACPI_EVENT_POWER_BUTTON].
-				    enable_register_id, ACPI_ENABLE_EVENT);
+    /*
+     * Some BIOS code assumes that WAK_STS will be cleared on resume
+     * and use it to determine whether the system is rebooting or
+     * resuming. Clear WAK_STS for compatibility.
+     */
+    (void) AcpiWriteBitRegister (ACPI_BITREG_WAKE_STATUS, ACPI_CLEAR_STATUS);
+    AcpiGbl_SystemAwakeAndRunning = TRUE;
 
-	(void)
-	    acpi_write_bit_register(acpi_gbl_fixed_event_info
-				    [ACPI_EVENT_POWER_BUTTON].
-				    status_register_id, ACPI_CLEAR_STATUS);
+    /* Enable power button */
 
-	acpi_hw_execute_sleep_method(METHOD_PATHNAME__SST, ACPI_SST_WORKING);
-	return_ACPI_STATUS(status);
+    (void) AcpiWriteBitRegister(
+            AcpiGbl_FixedEventInfo[ACPI_EVENT_POWER_BUTTON].EnableRegisterId,
+            ACPI_ENABLE_EVENT);
+
+    (void) AcpiWriteBitRegister(
+            AcpiGbl_FixedEventInfo[ACPI_EVENT_POWER_BUTTON].StatusRegisterId,
+            ACPI_CLEAR_STATUS);
+
+    AcpiHwExecuteSleepMethod (METHOD_PATHNAME__SST, ACPI_SST_WORKING);
+    return_ACPI_STATUS (Status);
 }
 
-#endif				/* !ACPI_REDUCED_HARDWARE */
+#endif /* !ACPI_REDUCED_HARDWARE */
