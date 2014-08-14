@@ -24,7 +24,7 @@ isr\num:
   save_context
 
     # TODO: Inline the isr_common call
-    movq 56(%rsp), %rsi
+    movq 128(%rsp), %rsi # Note, if you add 8 to the offset, you get the saved RIP (if there's an error)
     movq $\num, %rdi
     call isr_common
 

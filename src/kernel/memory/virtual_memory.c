@@ -51,7 +51,7 @@ static inline uint64_t physical_end(FreeBlock *block) {
   return physical_start(block) + block->num_pages * VM_PAGE_SIZE;
 }
 
-static void add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
+static void vm_add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
   // We can do this because we have identity mapping in the kernel
   // TODO: Figure out if there is a way to directly access physical memory/if this is necessary
 
@@ -105,7 +105,7 @@ static void setup_free_memory() {
         continue; // Low memory is not actually available
         // TODO: Fix this, some of this memory (i.e., page 1) is used for things that we don't know about
       }
-      add_to_free_list(descriptor->PhysicalStart, descriptor->NumberOfPages);
+      vm_add_to_free_list(descriptor->PhysicalStart, descriptor->NumberOfPages);
       virtual_memory_data.num_free_pages += descriptor->NumberOfPages;
     }
 
@@ -240,7 +240,7 @@ void * vm_pmap(uint64_t virtual_address, uint64_t num_pages) {
 
 void vm_pfree(void *physical_address, uint64_t num_pages) {
   spinlock_acquire(&virtual_memory_data.spinlock);
-  add_to_free_list((uint64_t)physical_address, num_pages);
+  vm_add_to_free_list((uint64_t)physical_address, num_pages);
   spinlock_release(&virtual_memory_data.spinlock);
 }
 

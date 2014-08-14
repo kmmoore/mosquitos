@@ -1,6 +1,8 @@
 #include <efi.h>
 #include <efilib.h>
 
+#include <acpi.h>
+
 #include "kernel.h"
 #include "../common/mem_util.h"
 #include "util.h"
@@ -76,7 +78,30 @@ void kernel_main(KernelInfo info) {
   // sata_init();
 
   timer_init();
-  keyboard_controller_init();;
+  keyboard_controller_init();
+
+  // ACPI_STATUS ret;
+
+  // if (ACPI_FAILURE(ret = AcpiInitializeSubsystem())) {
+  //   text_output_printf("ACPI INIT failure %s\n", AcpiFormatException(ret));
+  // }
+
+  // // if (ACPI_FAILURE(ret = AcpiInitializeTables(NULL, 0, FALSE))) {
+  // //   text_output_printf("ACPI INIT tables failure %s\n", AcpiFormatException(ret));
+  // // }
+
+  // // vm_pmap(0xFEC00000, 1);
+  // // if (ACPI_FAILURE(ret = AcpiLoadTables())) {
+  // //   text_output_printf("ACPI load tables failure %s\n", AcpiFormatException(ret));
+  // // }
+
+  // // if (ACPI_FAILURE(ret = AcpiEnableSubsystem(ACPI_FULL_INITIALIZATION))) {
+  // //   text_output_printf("ACPI enable failure %s\n", AcpiFormatException(ret));
+  // // }
+
+  // // if (ACPI_FAILURE(ret = AcpiInitializeObjects(ACPI_FULL_INITIALIZATION))) {
+  // //   text_output_printf("ACPI init objects failure %s\n", AcpiFormatException(ret));
+  // // }
 
   // Set up scheduler
   scheduler_init();
@@ -88,6 +113,7 @@ void kernel_main(KernelInfo info) {
   thread_start(t1);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call
+  // while(1);
 
   assert(false); // We should never get here
 }

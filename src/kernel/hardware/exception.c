@@ -37,8 +37,7 @@ static void device_not_available() {
 }
 
 static void double_fault(int error_code) {
-  text_output_printf("\nDouble Fault -- Halting! Error Code: %d\n", error_code);
-  __asm__ ("hlt");
+  panic("\nDouble Fault -- Halting! Error Code: %d\n", error_code);
 }
 
 static void invalid_tss(int error_code) {
@@ -54,7 +53,7 @@ static void stack_segment_fault(int error_code) {
 }
 
 static void general_protection_fault(int error_code) {
-  text_output_printf("\nGeneral Protection Fault! Error Code: %d\n", error_code);
+  panic("\nGeneral Protection Fault! Error Code: 0x%x\n", error_code);
 }
 
 static void page_fault(int error_code) {

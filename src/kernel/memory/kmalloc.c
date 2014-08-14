@@ -18,21 +18,21 @@ typedef struct {
   uint64_t free:1;
 } FreeBlock;
 
-static void add_to_free_list(FreeBlock *block) {
+static void kmalloc_add_to_free_list(FreeBlock *block) {
   block->free = 1;
+  list_push_front(&kmalloc_data.free_list, &block->entry);
 
-  FreeBlock *prev = (FreeBlock *)list_prev(&block->entry);
-
-  // TODO: Coalesce forward too
-  if (prev && prev->free) {
-    if ((uint64_t)prev + prev->size == (uint64_t)block) { 
-      prev->size += block->size;
-    } else {
-      list_insert_after(&kmalloc_data.free_list, &prev->entry, &block->entry);
-    }
-  } else {
-    list_push_front(&kmalloc_data.free_list, &block->entry);
-  }
+  // TODO: Coalesce
+  // This should scan through, find the right place for the block and insert it there
+  // if (prev && prev->free) {
+  //   if ((uint64_t)prev + prev->size == (uint64_t)block) { 
+  //     prev->size += block->size;
+  //   } else {
+  //     list_insert_after(&kmalloc_data.free_list, &prev->entry, &block->entry);
+  //   }
+  // } else {
+  //   list_push_front(&kmalloc_data.free_list, &block->entry);
+  // }
 }
 
 static FreeBlock * kmalloc_increase_allocation (int num_pages) {
@@ -42,7 +42,7 @@ static FreeBlock * kmalloc_increase_allocation (int num_pages) {
     // Put the new block on the start of the free list
     new_block->size = num_pages * VM_PAGE_SIZE;
 
-    add_to_free_list(new_block);
+    kmalloc_add_to_free_list(new_block);
   }
 
   return new_block;
@@ -101,8 +101,8 @@ void * kmalloc(uint64_t alloc_size) {
     return_block->size = alloc_size;
 
     // TODO: Figure out a better way to do this
-    list_insert_after(&kmalloc_data.free_list, &current->entry, &return_block->entry);
-    list_remove(&kmalloc_data.free_list, &return_block->entry);
+    // list_insert_after(&kmalloc_data.free_list, &current->entry, &return_block->entry);
+    // list_remove(&kmalloc_data.free_list, &return_block->entry);
   } else {
     // Remove `current` from free-list entirely
     list_remove(&kmalloc_data.free_list, &current->entry);
@@ -120,5 +120,5 @@ void kfree(void *addr) {
   // Use pointer arithmatic to get to the start of the block
   FreeBlock *block = (FreeBlock *)((uint8_t *)addr - sizeof(FreeBlock));
 
-  add_to_free_list(block);
+  kmalloc_add_to_free_list(block);
 }
