@@ -152,13 +152,13 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
 
   spinlock_init(&virtual_memory_data.spinlock);
 
-  text_output_printf("Determining free memory...");
+  // text_output_printf("Determining free memory...");
   setup_free_memory();
-  text_output_printf("Done\n");
+  // text_output_printf("Done\n");
 
-  text_output_printf("Found %dMB of physical memory, %dMB free.\n", virtual_memory_data.physical_end / (1024*1024), virtual_memory_data.num_free_pages * 4 / 1024);
+  // text_output_printf("Found %dMB of physical memory, %dMB free.\n", virtual_memory_data.physical_end / (1024*1024), virtual_memory_data.num_free_pages * 4 / 1024);
 
-  vm_print_free_list();
+  // vm_print_free_list();
 
   kmalloc_init();
 }

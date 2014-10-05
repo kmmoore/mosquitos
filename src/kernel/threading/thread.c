@@ -36,7 +36,7 @@ struct KernelThread {
 
 static struct {
   uint32_t next_tid;
-} thread_data = { .next_tid = 0 };
+} thread_data = { .next_tid = 1 };
 
 KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8_t priority, uint64_t stack_num_pages) {
   // Allocate large region for thread struct and stack

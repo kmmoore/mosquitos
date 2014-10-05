@@ -73,7 +73,7 @@ void interrupt_init() {
   gdt_init();
   apic_init();
 
-  text_output_print("Loading IDT...");
+  // text_output_print("Loading IDT...");
 
   // TODO: Explain what the attributes mean
 
@@ -112,7 +112,7 @@ void interrupt_init() {
 
   __asm__ ("lidt %0" : : "m" (IDTR));
 
-  text_output_print("Done\n");
+  // text_output_print("Done\n");
 }
 
 void interrupt_register_handler(int index, void (*handler)()) {

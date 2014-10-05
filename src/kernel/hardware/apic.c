@@ -174,7 +174,7 @@ bool load_ioapic_address() {
 }
 
 void apic_init() {
-  text_output_printf("Enabling APICs...");
+  // text_output_printf("Enabling APICs...");
   // Disable legacy PIC
 
   /* Set ICW1 */
@@ -212,7 +212,7 @@ void apic_init() {
   val |= (1<<8);
   apic_write(0x0f, val);
 
-  text_output_printf("Done\n");
+  // text_output_printf("Done\n");
 }
 
 void apic_send_eoi() {

@@ -5,8 +5,8 @@
 
 // From: http://en.wikipedia.org/wiki/Offsetof
 #define container_of(ptr, type, member) ({ \
-                const typeof( ((type *)0)->member ) *__mptr = (ptr); \
-                (type *)( (char *)__mptr - offsetof(type,member) );})
+        const typeof( ((type *)0)->member ) *__mptr = (ptr); \
+        (type *)( (char *)__mptr - offsetof(type,member) );})
 
 #define member_size(type, member) sizeof(((type *)0)->member)
 
@@ -27,6 +27,12 @@ void _panic(char *format, ...);
 void print_stack_trace();
 
 int int2str(uint64_t n, char *buf, int buf_len, int radix);
+
+int isdigit(int c);
+int isxdigit(int c);
+
+int abs(int i);
+long int strtol( const char * s, char ** endptr, int base );
 
 uint8_t io_read_8(unsigned port);
 void io_write_8(unsigned port, uint8_t val);

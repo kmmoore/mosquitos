@@ -142,7 +142,9 @@ uint64_t acpi_xdsp_address() {
 
 void acpi_init(void *xdsp_address) {
   acpi.xdsp_address = (uint64_t)xdsp_address;
-  text_output_printf("Locating ACPI Tables...");
+  // text_output_printf("Locating ACPI Tables...");
+
+  text_output_printf("XDSP Address: 0x%x\n", xdsp_address);
 
   XDSP *xdsp = (XDSP *)xdsp_address;
   if (!validate_xdsp(xdsp)) {
@@ -155,17 +157,17 @@ void acpi_init(void *xdsp_address) {
     panic("\nXDST validation failed!\n");
   }
 
-  text_output_printf("Done\n");
+  // text_output_printf("Done\n");
 
-  int entries = (acpi.xsdt->header.Length - sizeof(acpi.xsdt->header)) / sizeof(ACPISDTHeader *);
+  // int entries = (acpi.xsdt->header.Length - sizeof(acpi.xsdt->header)) / sizeof(ACPISDTHeader *);
 
-  text_output_printf("ACPI Tables: ");
-  for (int i = 0; i < entries; i++) {
-    // TODO: Figure out why this works
-    ACPISDTHeader *header = (&acpi.xsdt->table_pointers)[i];
-    text_output_printf("%c%c%c%c ", header->Signature[0], header->Signature[1], header->Signature[2], header->Signature[3]);
-  }
-  text_output_printf("\n");
+  // text_output_printf("ACPI Tables: ");
+  // for (int i = 0; i < entries; i++) {
+  //   // TODO: Figure out why this works
+  //   ACPISDTHeader *header = (&acpi.xsdt->table_pointers)[i];
+  //   text_output_printf("%c%c%c%c ", header->Signature[0], header->Signature[1], header->Signature[2], header->Signature[3]);
+  // }
+  // text_output_printf("\n");
 
 
   // FADT *fadt = (FADT *)acpi_locate_table("FACP");

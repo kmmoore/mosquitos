@@ -56,6 +56,25 @@ int int2str(uint64_t n, char *buf, int buf_len, int radix) {
   return 0;
 }
 
+int isdigit(int c) {
+  return (c >= '0') && (c <= '9');
+}
+
+int isxdigit(int c) {
+  if (isdigit(c))
+    return true;
+
+  if ((c >= 'a') && (c <= 'f'))
+    return true;
+
+  return (c >= 'A') && (c <= 'F');
+}
+
+int abs(int i) {
+  if (i < 0) return -i;
+  return i;
+}
+
 void sti() {
   __asm__ ("sti");
 }

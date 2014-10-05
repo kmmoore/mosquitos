@@ -57,7 +57,9 @@ static void general_protection_fault(int error_code) {
 }
 
 static void page_fault(int error_code) {
-  text_output_printf("\nPage Fault! Error Code: %d\n", error_code);
+  uint64_t cr2;
+  __asm__ volatile("movq %%cr2, %0" : "=r" (cr2));
+  panic("\nPage Fault! Error Code: 0x%x, cr2 0x%x\n", error_code, cr2);
 }
 
 static void x87_fp_exeption() {

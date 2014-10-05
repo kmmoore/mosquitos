@@ -18,7 +18,7 @@
 #include <acpi.h>
 
 ACPI_STATUS AcpiOsInitialize(void) {
-  text_output_printf("ACPI OS Initialize!\n");
+  // text_output_printf("ACPI OS Initialize!\n");
 
   return AE_OK;
 }
@@ -126,6 +126,8 @@ ACPI_STATUS AcpiOsExecute (ACPI_EXECUTE_TYPE type UNUSED, ACPI_OSD_EXEC_CALLBACK
   if (!thread) return AE_BAD_PARAMETER;
   thread_start(thread);
 
+  text_output_printf("Started thread for function: 0x%x\n", function);
+
   return AE_OK;
 }
 
@@ -142,13 +144,16 @@ void AcpiOsStall(UINT32 microseconds) {
 }
 
 void * AcpiOsMapMemory(ACPI_PHYSICAL_ADDRESS where, ACPI_SIZE length) {
-  if (length == 0)  return NULL;
-  uint64_t num_pages = (((length - 1) >> VM_PAGE_BIT_SIZE) + 1);
-  return vm_pmap(where, num_pages);
+  (void)length;
+  // if (length == 0)  return NULL;
+  // uint64_t num_pages = (((length - 1) >> VM_PAGE_BIT_SIZE) + 1);
+  // text_output_printf("[ACPICA] Trying to map %d pages (%d bytes) at 0x%x\n", num_pages, length, where);
+  // return vm_pmap(where, num_pages);
+  return (void *)where;
 }
 
-void AcpiOsUnmapMemory (void *address, ACPI_SIZE size) {
-  vm_pfree(address, size);
+void AcpiOsUnmapMemory (void *address UNUSED, ACPI_SIZE size UNUSED) {
+  // vm_pfree(address, size);
 }
 
 ACPI_STATUS AcpiOsReadMemory(ACPI_PHYSICAL_ADDRESS address, UINT64 *value, UINT32 width) {

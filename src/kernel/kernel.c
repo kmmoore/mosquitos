@@ -1,7 +1,7 @@
+#include "kernel_common.h"
+
 #include <efi.h>
 #include <efilib.h>
-
-#include <acpi.h>
 
 #include "kernel.h"
 #include "../common/mem_util.h"
@@ -26,33 +26,11 @@
 
 #include "../common/build_info.h"
 
-void * thread2_main(void *p) {
-  text_output_printf("[2] Started!\n");
-  Semaphore *sema = (Semaphore *)p;
-  bool got_semaphore = semaphore_down(sema, 1, -1);
-  text_output_printf("[2] Sema value: %d, got semaphore: %d\n", semaphore_value(sema), got_semaphore);
-  text_output_printf("[2] Exiting!\n");
-  thread_exit();
-  return NULL;
-}
+#include <acpi.h>
 
-void * thread1_main(void *p) {
-  Semaphore *sema = (Semaphore *)p;
-  text_output_printf("[1] Started!\n");
-  text_output_printf("[1] Spawning thread 2...\n");
-  timer_thread_stall(100);
+void * kernel_main_thread();
 
-  KernelThread *t2 = thread_create(thread2_main, NULL, 31, 2);
-  thread_start(t2);
-
-  timer_thread_sleep(1000);
-  text_output_printf("[1] Woke up\n");
-  semaphore_up(sema, 1);
-
-  thread_exit();
-  return NULL;
-}
-
+// Pre-threaded initialization is done here
 void kernel_main(KernelInfo info) {
 
   cli();
@@ -73,47 +51,55 @@ void kernel_main(KernelInfo info) {
 
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
-
-  pci_init();
   // sata_init();
 
   timer_init();
   keyboard_controller_init();
 
-  // ACPI_STATUS ret;
-
-  // if (ACPI_FAILURE(ret = AcpiInitializeSubsystem())) {
-  //   text_output_printf("ACPI INIT failure %s\n", AcpiFormatException(ret));
-  // }
-
-  // // if (ACPI_FAILURE(ret = AcpiInitializeTables(NULL, 0, FALSE))) {
-  // //   text_output_printf("ACPI INIT tables failure %s\n", AcpiFormatException(ret));
-  // // }
-
-  // // vm_pmap(0xFEC00000, 1);
-  // // if (ACPI_FAILURE(ret = AcpiLoadTables())) {
-  // //   text_output_printf("ACPI load tables failure %s\n", AcpiFormatException(ret));
-  // // }
-
-  // // if (ACPI_FAILURE(ret = AcpiEnableSubsystem(ACPI_FULL_INITIALIZATION))) {
-  // //   text_output_printf("ACPI enable failure %s\n", AcpiFormatException(ret));
-  // // }
-
-  // // if (ACPI_FAILURE(ret = AcpiInitializeObjects(ACPI_FULL_INITIALIZATION))) {
-  // //   text_output_printf("ACPI init objects failure %s\n", AcpiFormatException(ret));
-  // // }
-
   // Set up scheduler
   scheduler_init();
 
-  Semaphore sema;
-  semaphore_init(&sema, 0);
-
-  KernelThread *t1 = thread_create(thread1_main, &sema, 31, 2);
-  thread_start(t1);
+  KernelThread *main_thread = thread_create(kernel_main_thread, NULL, 31, 2);
+  thread_start(main_thread);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call
-  // while(1);
 
   assert(false); // We should never get here
+}
+
+// Initialization that needs a threaded context is done here
+void * kernel_main_thread() {
+  pci_init();
+
+  ACPI_STATUS ret;
+
+  if (ACPI_FAILURE(ret = AcpiInitializeSubsystem())) {
+    text_output_printf("ACPI INIT failure %s\n", AcpiFormatException(ret));
+  }
+  // text_output_printf("1\n");
+
+  ACPI_TABLE_DESC tables[16];
+  if (ACPI_FAILURE(ret = AcpiInitializeTables(tables, 16, FALSE))) {
+    text_output_printf("ACPI INIT tables failure %s\n", AcpiFormatException(ret));
+  }
+  // text_output_printf("2\n");
+
+    // vm_pmap(0xFEC00000, 1);
+  if (ACPI_FAILURE(ret = AcpiLoadTables())) {
+    text_output_printf("ACPI load tables failure %s\n", AcpiFormatException(ret));
+  }
+  // text_output_printf("3\n");
+
+  if (ACPI_FAILURE(ret = AcpiEnableSubsystem(ACPI_FULL_INITIALIZATION))) {
+    text_output_printf("ACPI enable failure %s\n", AcpiFormatException(ret));
+  }
+  text_output_printf("4\n");
+
+  if (ACPI_FAILURE(ret = AcpiInitializeObjects(ACPI_FULL_INITIALIZATION))) {
+    text_output_printf("ACPI init objects failure %s\n", AcpiFormatException(ret));
+  }
+  text_output_printf("5\n");
+
+  thread_exit();
+  return NULL;
 }
