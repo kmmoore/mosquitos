@@ -14,7 +14,7 @@ static struct {
   uint64_t mem_map_size;
   uint64_t mem_map_descriptor_size;
 
-  uint64_t physical_end;
+  uintptr_t physical_end;
   uint64_t num_free_pages;
   list free_list;
 
@@ -161,6 +161,10 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
   // vm_print_free_list();
 
   kmalloc_init();
+}
+
+uintptr_t vm_max_physical_address() {
+  return virtual_memory_data.physical_end;
 }
 
 void * vm_palloc(uint64_t num_pages) {

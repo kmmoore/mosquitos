@@ -7,7 +7,7 @@ include ../../Makefile.inc
 C_SRCS          :=  kernel.c
 C_SRCS          += ../common/build_info.c util.c ../common/mem_util.c
 C_SRCS          += datastructures/list.c
-C_SRCS          += hardware/gdt.c hardware/interrupt.c hardware/exception.c hardware/timer.c hardware/acpi.c hardware/apic.c
+C_SRCS          += hardware/gdt.c hardware/interrupt.c hardware/exception.c hardware/timer.c hardware/acpi.c hardware/apic.c hardware/serial_port.c
 C_SRCS          += format/format.c
 C_SRCS          += drivers/text_output.c drivers/font.c drivers/keyboard_controller.c drivers/pci.c drivers/sata.c drivers/acpica_shim.c
 C_SRCS          += memory/virtual_memory.c memory/kmalloc.c

@@ -228,9 +228,13 @@ AcpiTbPrintTableHeader (
     {
         /* FACS only has signature and length fields */
 
-        ACPI_INFO ((AE_INFO, "%-4.4s " ACPI_PRINTF_UINT " %06X",
-            Header->Signature, ACPI_FORMAT_TO_UINT (Address),
-            Header->Length));
+        AcpiOsPrintf("%-4.4s %lx %06X",
+            Header->Signature, Address,
+            Header->Length);
+
+        // ACPI_INFO ((AE_INFO, "%-4.4s %lx %06X",
+        //     Header->Signature, Address,
+        //     Header->Length));
     }
     else if (ACPI_VALIDATE_RSDP_SIG (Header->Signature))
     {
@@ -240,12 +244,17 @@ AcpiTbPrintTableHeader (
             ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->OemId, ACPI_OEM_ID_SIZE);
         AcpiTbFixString (LocalHeader.OemId, ACPI_OEM_ID_SIZE);
 
-        ACPI_INFO ((AE_INFO, "RSDP " ACPI_PRINTF_UINT " %06X (v%.2d %-6.6s)",
-            ACPI_FORMAT_TO_UINT (Address),
-            (ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Revision > 0) ?
+        AcpiOsPrintf("RSDP %p %06X (v%.2d %-6.6s)\n", Address, (ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Revision > 0) ?
                 ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Length : 20,
             ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Revision,
-            LocalHeader.OemId));
+            LocalHeader.OemId);
+
+        // ACPI_INFO ((AE_INFO, "RSDP %lx %06X (v%.2d %-6.6s)",
+        //     Address,
+        //     (ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Revision > 0) ?
+        //         ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Length : 20,
+        //     ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Revision,
+        //     LocalHeader.OemId));
     }
     else
     {
@@ -253,13 +262,17 @@ AcpiTbPrintTableHeader (
 
         AcpiTbCleanupTableHeader (&LocalHeader, Header);
 
-        ACPI_INFO ((AE_INFO,
-            "%-4.4s " ACPI_PRINTF_UINT
-            " %06X (v%.2d %-6.6s %-8.8s %08X %-4.4s %08X)",
-            LocalHeader.Signature, ACPI_FORMAT_TO_UINT (Address),
-            LocalHeader.Length, LocalHeader.Revision, LocalHeader.OemId,
-            LocalHeader.OemTableId, LocalHeader.OemRevision,
-            LocalHeader.AslCompilerId, LocalHeader.AslCompilerRevision));
+        AcpiOsPrintf("%-4.4s %p %06X (v%.2d %-6.6s %-8.8s %08X %-4.4s %08X)\n", LocalHeader.Signature, Address,
+                     LocalHeader.Length, LocalHeader.Revision, LocalHeader.OemId,
+                     LocalHeader.OemTableId, LocalHeader.OemRevision,
+                     LocalHeader.AslCompilerId, LocalHeader.AslCompilerRevision);
+
+        // ACPI_INFO ((AE_INFO,
+        //     "%-4.4s 0x%lx %06X (v%.2d %-6.6s %-8.8s %08X %-4.4s %08X)",
+        //     LocalHeader.Signature, Address,
+        //     LocalHeader.Length, LocalHeader.Revision, LocalHeader.OemId,
+        //     LocalHeader.OemTableId, LocalHeader.OemRevision,
+        //     LocalHeader.AslCompilerId, LocalHeader.AslCompilerRevision));
     }
 }
 

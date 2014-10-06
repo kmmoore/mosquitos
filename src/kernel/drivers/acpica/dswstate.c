@@ -685,6 +685,7 @@ AcpiDsCreateWalkState (
 
 
     WalkState = ACPI_ALLOCATE_ZEROED (sizeof (ACPI_WALK_STATE));
+    if (WalkState == (void *)0x1c7ff140) AcpiOsPrintf("Gotcha!\n");
     if (!WalkState)
     {
         return_PTR (NULL);
@@ -750,7 +751,6 @@ AcpiDsInitAmlWalk (
 
     ACPI_FUNCTION_TRACE (DsInitAmlWalk);
 
-
     WalkState->ParserState.Aml =
     WalkState->ParserState.AmlStart = AmlStart;
     WalkState->ParserState.AmlEnd =
@@ -790,8 +790,11 @@ AcpiDsInitAmlWalk (
 
         /* Init the method arguments */
 
+        if (WalkState->Params == (void *)-1) AcpiOsPrintf("WS: %p, WS->P: %p, I: %p, I->P : %p\n", WalkState, WalkState->Params, Info, Info->Parameters);
+
         Status = AcpiDsMethodDataInitArgs (WalkState->Params,
                     ACPI_METHOD_NUM_ARGS, WalkState);
+
         if (ACPI_FAILURE (Status))
         {
             return_ACPI_STATUS (Status);

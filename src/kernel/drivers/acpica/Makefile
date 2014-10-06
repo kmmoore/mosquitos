@@ -4,7 +4,7 @@
 
 include ../../../../Makefile.inc
 
-CFLAGS			:= -Os -D_MOSQUITOS -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone -isystem include
+CFLAGS			:= -O0 -D_MOSQUITOS -nostdlib -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -mno-red-zone -ggdb -isystem include
 LDFLAGS     := -nostdlib -static -r -z max-page-size=0x1000
 
 # use acpi.o to put all files here into acpi.o modparam namespace

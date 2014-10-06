@@ -100,6 +100,10 @@ void * kmalloc(uint64_t alloc_size) {
     return_block = (FreeBlock *)((uint8_t *)current + current->size);
     return_block->size = alloc_size;
 
+    if (&return_block[1] == (void *)0x1c7ff140) {
+      text_output_printf("Current: %p\n", current);
+    }
+
     // TODO: Figure out a better way to do this
     // list_insert_after(&kmalloc_data.free_list, &current->entry, &return_block->entry);
     // list_remove(&kmalloc_data.free_list, &return_block->entry);
@@ -111,6 +115,11 @@ void * kmalloc(uint64_t alloc_size) {
   }
 
   return_block->free = 0;
+
+  if (&return_block[1] == (void *)0x1c7ff140) {
+    text_output_printf("Error in kmalloc(%d)!\n", alloc_size);
+    kmalloc_print_free_list();
+  }
 
   return &return_block[1]; // Return address of data after header
 }

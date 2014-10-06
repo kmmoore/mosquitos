@@ -7,4 +7,4 @@ OBJCOPY         := objcopy
 EFIINC          := /usr/include/efi
 EFIINCS         := -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
 
-CFLAGS_COMMON   := $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -Os
+CFLAGS_COMMON   := $(EFIINCS) -std=gnu99 -Wall -ggdb -Wextra -Werror -Os

@@ -300,6 +300,7 @@ AcpiDsMethodDataInitArgs (
     }
 
     /* Copy passed parameters into the new method stack frame */
+    // AcpiOsPrintf("Params: %p, Index: %u\n", Params, Index);
 
     while ((Index < ACPI_METHOD_NUM_ARGS) &&
            (Index < MaxParamCount)        &&
