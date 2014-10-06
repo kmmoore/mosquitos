@@ -13,6 +13,10 @@ static struct {
 } kmalloc_data;
 
 typedef struct {
+  uint64_t num_pages;
+} SimpleHeader;
+
+typedef struct {
   list_entry entry; // Must be the first entry
   uint64_t size:63;
   uint64_t free:1;
@@ -59,15 +63,21 @@ void kmalloc_print_free_list() {
 }
 
 void kmalloc_init () {
-  list_init(&kmalloc_data.free_list);
+  // list_init(&kmalloc_data.free_list);
 
-  // Request some pages from the page allocator
-  FreeBlock *initial_block = kmalloc_increase_allocation(kKMallocMinPageAllocation);
+  // // Request some pages from the page allocator
+  // FreeBlock *initial_block = kmalloc_increase_allocation(kKMallocMinPageAllocation);
 
-  assert(initial_block != NULL);
+  // assert(initial_block != NULL);
 } 
 
 void * kmalloc(uint64_t alloc_size) {
+  alloc_size += sizeof(SimpleHeader);
+  uint64_t num_pages = (((alloc_size - 1) >> VM_PAGE_BIT_SIZE) + 1);
+  SimpleHeader *header = (SimpleHeader *)vm_palloc(num_pages);
+  header->num_pages = num_pages;
+  return &header[1];
+
 
   alloc_size += sizeof(FreeBlock); // We need space for our header
   alloc_size = ((alloc_size - 1) | 0xf) + 1; // Round up `size` to the nearest multiple of 16 bytes
@@ -125,6 +135,9 @@ void * kmalloc(uint64_t alloc_size) {
 }
 
 void kfree(void *addr) {
+  SimpleHeader *header = (SimpleHeader *)((uint8_t *)addr - sizeof(SimpleHeader));
+  vm_pfree(header, header->num_pages);
+  return;
 
   // Use pointer arithmatic to get to the start of the block
   FreeBlock *block = (FreeBlock *)((uint8_t *)addr - sizeof(FreeBlock));

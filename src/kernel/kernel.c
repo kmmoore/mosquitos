@@ -105,6 +105,8 @@ void * kernel_main_thread() {
   // sti();
   text_output_printf("5\n");
 
+  vm_print_free_list();
+
   thread_exit();
   return NULL;
 }
