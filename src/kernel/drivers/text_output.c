@@ -5,19 +5,16 @@
 
 #include "font.h"
 #include "text_output.h"
+#include "../hardware/serial_port.h"
 #include "../util.h"
 
-#define kTextOutputPadding 10
+#define kTextOutputPadding 1
 
 static struct {
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   int current_row, current_col;
 } text_output;
 
-// For printf.c
-// static void text_output_putc(void *p UNUSED, char c) {
-//   text_output_putchar(c);
-// }
 
 void text_output_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
   text_output.gop = gop;
@@ -30,11 +27,13 @@ static void text_output_draw_pixel(int x, int y, uint32_t color) {
 }
 
 void text_output_clear_screen(uint32_t color) {
+  // TODO: The graphics stuff should be in a graphics library, not this library
   for (unsigned int x = 0; x < text_output.gop->Mode->Info->HorizontalResolution; ++x) {
     for (unsigned int y = 0; y < text_output.gop->Mode->Info->VerticalResolution; y++) {
       text_output_draw_pixel(x, y, color);
     }
   }
+  text_output.current_row = text_output.current_col = kTextOutputPadding;
 }
 
 static void text_output_draw_char(char c, int x, int y) {
@@ -65,16 +64,26 @@ void text_output_backspace() {
     // Blank out character
     text_output_draw_char(' ', text_output.current_col, text_output.current_row);
   }
+
+  serial_port_putchar(0x8); // ASCII backspace character
 }
 
 inline void text_output_putchar(const char c) {
   if (c == '\n') {
     text_output.current_row += 2; // Put an empty line between text lines
+
+    // int max_lines = text_output.gop->Mode->Info->VerticalResolution / kCharacterHeight;
+    // if (text_output.current_row == 100) {
+    //   text_output_clear_screen(0x00000000); // TODO: This is obviously wrong, but I don't know the best way to make it right
+    // }
+
     text_output.current_col = kTextOutputPadding;
   } else{
     text_output_draw_char(c, text_output.current_col, text_output.current_row);
     text_output.current_col += 1;
   }
+
+  serial_port_putchar(c);
 }
 
 void text_output_print(const char *str) {

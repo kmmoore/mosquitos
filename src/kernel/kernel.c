@@ -16,6 +16,7 @@
 #include "hardware/interrupt.h"
 #include "hardware/exception.h"
 #include "hardware/timer.h"
+#include "hardware/serial_port.h"
 
 #include "memory/virtual_memory.h"
 #include "memory/kmalloc.h"
@@ -34,6 +35,8 @@ void * kernel_main_thread();
 void kernel_main(KernelInfo info) {
 
   cli();
+
+  serial_port_init();
 
   text_output_init(info.gop);
 
@@ -95,9 +98,11 @@ void * kernel_main_thread() {
   }
   text_output_printf("4\n");
 
+  // cli();
   if (ACPI_FAILURE(ret = AcpiInitializeObjects(ACPI_FULL_INITIALIZATION))) {
     text_output_printf("ACPI init objects failure %s\n", AcpiFormatException(ret));
   }
+  // sti();
   text_output_printf("5\n");
 
   thread_exit();
