@@ -70,6 +70,33 @@ void kernel_main(KernelInfo info) {
   assert(false); // We should never get here
 }
 
+void * DisplayOneDevice (ACPI_HANDLE ObjHandle, UINT32 Level, void *Context) {
+  (void)ObjHandle, (void)Level, (void)Context;
+  text_output_printf("DisplayOneDevice() called\n");
+  // ACPI_STATUS Status;
+  // ACPI_DEVICE_INFO Info;
+  // ACPI_BUFFER Path;
+
+  // char Buffer[256];
+
+  // Path.Length = sizeof (Buffer);
+  // Path.Pointer = Buffer;
+
+  // /* Get the full path of this device and print it */
+  // Status = AcpiHandleToPathname (ObjHandle, &Path);
+  // if (ACPI_SUCCESS (Status)) {
+  //   text_output_printf ("%s\n", Path.Pointer);
+  // }
+ 
+  // /* Get the device info for this device and print it */
+  // Status = AcpiGetDeviceInfo (ObjHandle, &Info);
+  // if (ACPI_SUCCESS (Status)) {
+  //   text_output_printf (" HID: %.8X, ADR: %.8X, Status: %x\n", Info.HardwareId, Info.Address, Info.CurrentStatus);
+  // }
+
+  return NULL;
+}
+
 // Initialization that needs a threaded context is done here
 void * kernel_main_thread() {
   pci_init();
@@ -105,7 +132,12 @@ void * kernel_main_thread() {
   // sti();
   text_output_printf("5\n");
 
-  vm_print_free_list();
+  // ACPI_PCI_ROUTING_TABLE routing_table[128];
+  // ACPI_BUFFER buffer;
+  // buffer.Length = sizeof(routing_table);
+  // buffer.Pointer = &routing_table;
+  // AcpiGetIrqRoutingTable(
+
 
   thread_exit();
   return NULL;

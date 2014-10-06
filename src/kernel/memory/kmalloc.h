@@ -1,12 +1,12 @@
 #include "../kernel_common.h"
 
-#ifndef _KMALLOC_H
-#define _KMALLOC_H
+#ifndef _KMALLOC_H_
+#define _KMALLOC_H_
 
-void kmalloc_init ();
-void * kmalloc(uint64_t size);
-void kfree(void *addr);
+#define kKmallocMinIncreaseBytes (32 * 4096)
 
-void kmalloc_print_free_list();
+void kmalloc_init();
+void * kmalloc(size_t alloc_size);
+void kfree(void *pointer);
 
-#endif // _KMALLOC_H
+#endif // _KMALLOC_H_
