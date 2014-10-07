@@ -69,7 +69,7 @@ static void enumerate_devices() {
         new_device->multifunction = (new_device->header_type & (1 << 7)) > 0;
         new_device->header_type = new_device->header_type & ~(1 << 7);
 
-        // text_output_printf("PCI: 0x%x, 0x%x, 0x%x, mf: %d\n", new_device->class_code, new_device->subclass, new_device->program_if, new_device->multifunction);
+        text_output_printf("PCI: bus: 0x%x 0x%x, 0x%x, 0x%x, mf: %d\n", bus, new_device->class_code, new_device->subclass, new_device->program_if, new_device->multifunction);
         // text_output_printf("Vendor ID: 0x%x, Device ID: 0x%x\n", PCI_HEADER_FIELD_IN_WORD(vendor_word, vendor_id), PCI_HEADER_FIELD_IN_WORD(vendor_word, device_id));
       }
     }

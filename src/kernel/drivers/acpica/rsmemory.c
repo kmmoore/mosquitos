@@ -1,8 +1,8 @@
-/******************************************************************************
+/*******************************************************************************
  *
- * Module Name: tbprint - Table output utilities
+ * Module Name: rsmem24 - Memory resource descriptors
  *
- *****************************************************************************/
+ ******************************************************************************/
 
 /******************************************************************************
  *
@@ -113,253 +113,209 @@
  *
  *****************************************************************************/
 
-#define __TBPRINT_C__
+#define __RSMEMORY_C__
 
 #include "acpi.h"
 #include "accommon.h"
-#include "actables.h"
+#include "acresrc.h"
 
-#define _COMPONENT          ACPI_TABLES
-        ACPI_MODULE_NAME    ("tbprint")
-
-
-/* Local prototypes */
-
-static void
-AcpiTbFixString (
-    char                    *String,
-    ACPI_SIZE               Length);
-
-static void
-AcpiTbCleanupTableHeader (
-    ACPI_TABLE_HEADER       *OutHeader,
-    ACPI_TABLE_HEADER       *Header);
+#define _COMPONENT          ACPI_RESOURCES
+        ACPI_MODULE_NAME    ("rsmemory")
 
 
 /*******************************************************************************
  *
- * FUNCTION:    AcpiTbFixString
- *
- * PARAMETERS:  String              - String to be repaired
- *              Length              - Maximum length
- *
- * RETURN:      None
- *
- * DESCRIPTION: Replace every non-printable or non-ascii byte in the string
- *              with a question mark '?'.
+ * AcpiRsConvertMemory24
  *
  ******************************************************************************/
 
-static void
-AcpiTbFixString (
-    char                    *String,
-    ACPI_SIZE               Length)
+ACPI_RSCONVERT_INFO     AcpiRsConvertMemory24[4] =
 {
+    {ACPI_RSC_INITGET,  ACPI_RESOURCE_TYPE_MEMORY24,
+                        ACPI_RS_SIZE (ACPI_RESOURCE_MEMORY24),
+                        ACPI_RSC_TABLE_SIZE (AcpiRsConvertMemory24)},
 
-    while (Length && *String)
-    {
-        if (!ACPI_IS_PRINT (*String))
-        {
-            *String = '?';
-        }
-        String++;
-        Length--;
-    }
-}
+    {ACPI_RSC_INITSET,  ACPI_RESOURCE_NAME_MEMORY24,
+                        sizeof (AML_RESOURCE_MEMORY24),
+                        0},
+
+    /* Read/Write bit */
+
+    {ACPI_RSC_1BITFLAG, ACPI_RS_OFFSET (Data.Memory24.WriteProtect),
+                        AML_OFFSET (Memory24.Flags),
+                        0},
+    /*
+     * These fields are contiguous in both the source and destination:
+     * Minimum Base Address
+     * Maximum Base Address
+     * Address Base Alignment
+     * Range Length
+     */
+    {ACPI_RSC_MOVE16,   ACPI_RS_OFFSET (Data.Memory24.Minimum),
+                        AML_OFFSET (Memory24.Minimum),
+                        4}
+};
 
 
 /*******************************************************************************
  *
- * FUNCTION:    AcpiTbCleanupTableHeader
- *
- * PARAMETERS:  OutHeader           - Where the cleaned header is returned
- *              Header              - Input ACPI table header
- *
- * RETURN:      Returns the cleaned header in OutHeader
- *
- * DESCRIPTION: Copy the table header and ensure that all "string" fields in
- *              the header consist of printable characters.
+ * AcpiRsConvertMemory32
  *
  ******************************************************************************/
 
-static void
-AcpiTbCleanupTableHeader (
-    ACPI_TABLE_HEADER       *OutHeader,
-    ACPI_TABLE_HEADER       *Header)
+ACPI_RSCONVERT_INFO     AcpiRsConvertMemory32[4] =
 {
+    {ACPI_RSC_INITGET,  ACPI_RESOURCE_TYPE_MEMORY32,
+                        ACPI_RS_SIZE (ACPI_RESOURCE_MEMORY32),
+                        ACPI_RSC_TABLE_SIZE (AcpiRsConvertMemory32)},
 
-    ACPI_MEMCPY (OutHeader, Header, sizeof (ACPI_TABLE_HEADER));
+    {ACPI_RSC_INITSET,  ACPI_RESOURCE_NAME_MEMORY32,
+                        sizeof (AML_RESOURCE_MEMORY32),
+                        0},
 
-    AcpiTbFixString (OutHeader->Signature, ACPI_NAME_SIZE);
-    AcpiTbFixString (OutHeader->OemId, ACPI_OEM_ID_SIZE);
-    AcpiTbFixString (OutHeader->OemTableId, ACPI_OEM_TABLE_ID_SIZE);
-    AcpiTbFixString (OutHeader->AslCompilerId, ACPI_NAME_SIZE);
-}
+    /* Read/Write bit */
+
+    {ACPI_RSC_1BITFLAG, ACPI_RS_OFFSET (Data.Memory32.WriteProtect),
+                        AML_OFFSET (Memory32.Flags),
+                        0},
+    /*
+     * These fields are contiguous in both the source and destination:
+     * Minimum Base Address
+     * Maximum Base Address
+     * Address Base Alignment
+     * Range Length
+     */
+    {ACPI_RSC_MOVE32,   ACPI_RS_OFFSET (Data.Memory32.Minimum),
+                        AML_OFFSET (Memory32.Minimum),
+                        4}
+};
 
 
 /*******************************************************************************
  *
- * FUNCTION:    AcpiTbPrintTableHeader
- *
- * PARAMETERS:  Address             - Table physical address
- *              Header              - Table header
- *
- * RETURN:      None
- *
- * DESCRIPTION: Print an ACPI table header. Special cases for FACS and RSDP.
+ * AcpiRsConvertFixedMemory32
  *
  ******************************************************************************/
 
-void
-AcpiTbPrintTableHeader (
-    ACPI_PHYSICAL_ADDRESS   Address,
-    ACPI_TABLE_HEADER       *Header)
+ACPI_RSCONVERT_INFO     AcpiRsConvertFixedMemory32[4] =
 {
-    return; // Don't print table headers
-    ACPI_TABLE_HEADER       LocalHeader;
+    {ACPI_RSC_INITGET,  ACPI_RESOURCE_TYPE_FIXED_MEMORY32,
+                        ACPI_RS_SIZE (ACPI_RESOURCE_FIXED_MEMORY32),
+                        ACPI_RSC_TABLE_SIZE (AcpiRsConvertFixedMemory32)},
 
+    {ACPI_RSC_INITSET,  ACPI_RESOURCE_NAME_FIXED_MEMORY32,
+                        sizeof (AML_RESOURCE_FIXED_MEMORY32),
+                        0},
+
+    /* Read/Write bit */
+
+    {ACPI_RSC_1BITFLAG, ACPI_RS_OFFSET (Data.FixedMemory32.WriteProtect),
+                        AML_OFFSET (FixedMemory32.Flags),
+                        0},
+    /*
+     * These fields are contiguous in both the source and destination:
+     * Base Address
+     * Range Length
+     */
+    {ACPI_RSC_MOVE32,   ACPI_RS_OFFSET (Data.FixedMemory32.Address),
+                        AML_OFFSET (FixedMemory32.Address),
+                        2}
+};
+
+
+/*******************************************************************************
+ *
+ * AcpiRsGetVendorSmall
+ *
+ ******************************************************************************/
+
+ACPI_RSCONVERT_INFO     AcpiRsGetVendorSmall[3] =
+{
+    {ACPI_RSC_INITGET,  ACPI_RESOURCE_TYPE_VENDOR,
+                        ACPI_RS_SIZE (ACPI_RESOURCE_VENDOR),
+                        ACPI_RSC_TABLE_SIZE (AcpiRsGetVendorSmall)},
+
+    /* Length of the vendor data (byte count) */
+
+    {ACPI_RSC_COUNT16,  ACPI_RS_OFFSET (Data.Vendor.ByteLength),
+                        0,
+                        sizeof (UINT8)},
+
+    /* Vendor data */
+
+    {ACPI_RSC_MOVE8,    ACPI_RS_OFFSET (Data.Vendor.ByteData[0]),
+                        sizeof (AML_RESOURCE_SMALL_HEADER),
+                        0}
+};
+
+
+/*******************************************************************************
+ *
+ * AcpiRsGetVendorLarge
+ *
+ ******************************************************************************/
+
+ACPI_RSCONVERT_INFO     AcpiRsGetVendorLarge[3] =
+{
+    {ACPI_RSC_INITGET,  ACPI_RESOURCE_TYPE_VENDOR,
+                        ACPI_RS_SIZE (ACPI_RESOURCE_VENDOR),
+                        ACPI_RSC_TABLE_SIZE (AcpiRsGetVendorLarge)},
+
+    /* Length of the vendor data (byte count) */
+
+    {ACPI_RSC_COUNT16,  ACPI_RS_OFFSET (Data.Vendor.ByteLength),
+                        0,
+                        sizeof (UINT8)},
+
+    /* Vendor data */
+
+    {ACPI_RSC_MOVE8,    ACPI_RS_OFFSET (Data.Vendor.ByteData[0]),
+                        sizeof (AML_RESOURCE_LARGE_HEADER),
+                        0}
+};
+
+
+/*******************************************************************************
+ *
+ * AcpiRsSetVendor
+ *
+ ******************************************************************************/
+
+ACPI_RSCONVERT_INFO     AcpiRsSetVendor[7] =
+{
+    /* Default is a small vendor descriptor */
+
+    {ACPI_RSC_INITSET,  ACPI_RESOURCE_NAME_VENDOR_SMALL,
+                        sizeof (AML_RESOURCE_SMALL_HEADER),
+                        ACPI_RSC_TABLE_SIZE (AcpiRsSetVendor)},
+
+    /* Get the length and copy the data */
+
+    {ACPI_RSC_COUNT16,  ACPI_RS_OFFSET (Data.Vendor.ByteLength),
+                        0,
+                        0},
+
+    {ACPI_RSC_MOVE8,    ACPI_RS_OFFSET (Data.Vendor.ByteData[0]),
+                        sizeof (AML_RESOURCE_SMALL_HEADER),
+                        0},
 
     /*
-     * The reason that we use ACPI_PRINTF_UINT and ACPI_FORMAT_TO_UINT is to
-     * support both 32-bit and 64-bit hosts/addresses in a consistent manner.
-     * The %p specifier does not emit uniform output on all hosts. On some,
-     * leading zeros are not supported.
+     * All done if the Vendor byte length is 7 or less, meaning that it will
+     * fit within a small descriptor
      */
-    if (ACPI_COMPARE_NAME (Header->Signature, ACPI_SIG_FACS))
-    {
-        /* FACS only has signature and length fields */
+    {ACPI_RSC_EXIT_LE,  0, 0, 7},
 
-        AcpiOsPrintf("%-4.4s %lx %06X",
-            Header->Signature, Address,
-            Header->Length);
+    /* Must create a large vendor descriptor */
 
-        // ACPI_INFO ((AE_INFO, "%-4.4s %lx %06X",
-        //     Header->Signature, Address,
-        //     Header->Length));
-    }
-    else if (ACPI_VALIDATE_RSDP_SIG (Header->Signature))
-    {
-        /* RSDP has no common fields */
+    {ACPI_RSC_INITSET,  ACPI_RESOURCE_NAME_VENDOR_LARGE,
+                        sizeof (AML_RESOURCE_LARGE_HEADER),
+                        0},
 
-        ACPI_MEMCPY (LocalHeader.OemId,
-            ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->OemId, ACPI_OEM_ID_SIZE);
-        AcpiTbFixString (LocalHeader.OemId, ACPI_OEM_ID_SIZE);
+    {ACPI_RSC_COUNT16,  ACPI_RS_OFFSET (Data.Vendor.ByteLength),
+                        0,
+                        0},
 
-        AcpiOsPrintf("RSDP %p %06X (v%.2d %-6.6s)\n", Address, (ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Revision > 0) ?
-                ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Length : 20,
-            ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Revision,
-            LocalHeader.OemId);
-
-        // ACPI_INFO ((AE_INFO, "RSDP %lx %06X (v%.2d %-6.6s)",
-        //     Address,
-        //     (ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Revision > 0) ?
-        //         ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Length : 20,
-        //     ACPI_CAST_PTR (ACPI_TABLE_RSDP, Header)->Revision,
-        //     LocalHeader.OemId));
-    }
-    else
-    {
-        /* Standard ACPI table with full common header */
-
-        AcpiTbCleanupTableHeader (&LocalHeader, Header);
-
-        AcpiOsPrintf("%-4.4s %p %06X (v%.2d %-6.6s %-8.8s %08X %-4.4s %08X)\n", LocalHeader.Signature, Address,
-                     LocalHeader.Length, LocalHeader.Revision, LocalHeader.OemId,
-                     LocalHeader.OemTableId, LocalHeader.OemRevision,
-                     LocalHeader.AslCompilerId, LocalHeader.AslCompilerRevision);
-
-        // ACPI_INFO ((AE_INFO,
-        //     "%-4.4s 0x%lx %06X (v%.2d %-6.6s %-8.8s %08X %-4.4s %08X)",
-        //     LocalHeader.Signature, Address,
-        //     LocalHeader.Length, LocalHeader.Revision, LocalHeader.OemId,
-        //     LocalHeader.OemTableId, LocalHeader.OemRevision,
-        //     LocalHeader.AslCompilerId, LocalHeader.AslCompilerRevision));
-    }
-}
-
-
-/*******************************************************************************
- *
- * FUNCTION:    AcpiTbValidateChecksum
- *
- * PARAMETERS:  Table               - ACPI table to verify
- *              Length              - Length of entire table
- *
- * RETURN:      Status
- *
- * DESCRIPTION: Verifies that the table checksums to zero. Optionally returns
- *              exception on bad checksum.
- *
- ******************************************************************************/
-
-ACPI_STATUS
-AcpiTbVerifyChecksum (
-    ACPI_TABLE_HEADER       *Table,
-    UINT32                  Length)
-{
-    UINT8                   Checksum;
-
-
-    /*
-     * FACS/S3PT:
-     * They are the odd tables, have no standard ACPI header and no checksum
-     */
-
-    if (ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_S3PT) ||
-        ACPI_COMPARE_NAME (Table->Signature, ACPI_SIG_FACS))
-    {
-        return (AE_OK);
-    }
-
-    /* Compute the checksum on the table */
-
-    Checksum = AcpiTbChecksum (ACPI_CAST_PTR (UINT8, Table), Length);
-
-    /* Checksum ok? (should be zero) */
-
-    if (Checksum)
-    {
-        ACPI_BIOS_WARNING ((AE_INFO,
-            "Incorrect checksum in table [%4.4s] - 0x%2.2X, "
-            "should be 0x%2.2X",
-            Table->Signature, Table->Checksum,
-            (UINT8) (Table->Checksum - Checksum)));
-
-#if (ACPI_CHECKSUM_ABORT)
-        return (AE_BAD_CHECKSUM);
-#endif
-    }
-
-    return (AE_OK);
-}
-
-
-/*******************************************************************************
- *
- * FUNCTION:    AcpiTbChecksum
- *
- * PARAMETERS:  Buffer          - Pointer to memory region to be checked
- *              Length          - Length of this memory region
- *
- * RETURN:      Checksum (UINT8)
- *
- * DESCRIPTION: Calculates circular checksum of memory region.
- *
- ******************************************************************************/
-
-UINT8
-AcpiTbChecksum (
-    UINT8                   *Buffer,
-    UINT32                  Length)
-{
-    UINT8                   Sum = 0;
-    UINT8                   *End = Buffer + Length;
-
-
-    while (Buffer < End)
-    {
-        Sum = (UINT8) (Sum + *(Buffer++));
-    }
-
-    return (Sum);
-}
+    {ACPI_RSC_MOVE8,    ACPI_RS_OFFSET (Data.Vendor.ByteData[0]),
+                        sizeof (AML_RESOURCE_LARGE_HEADER),
+                        0}
+};

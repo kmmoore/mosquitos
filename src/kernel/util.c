@@ -11,6 +11,7 @@ void _panic(char *format, ...) {
 
   va_end(arg_list);
 
+  text_output_printf("\n");
   print_stack_trace();
 
   __asm__ ("cli \n\t hlt");

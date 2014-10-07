@@ -103,7 +103,14 @@ ACPI_STATUS desc_callback(ACPI_HANDLE Object, UINT32 NestingLevel UNUSED, void *
   ACPI_BUFFER name_buffer = { .Length = sizeof(name), .Pointer = &name };
   AcpiGetName(Object, ACPI_FULL_PATHNAME, &name_buffer);
 
-  text_output_printf("%s\n", name);
+  // ACPI_PCI_ROUTING_TABLE *table = (ACPI_PCI_ROUTING_TABLE *)Context;
+
+  ACPI_DEVICE_INFO *device_info;
+  assert(AcpiGetObjectInfo(Object, &device_info) == AE_OK);
+
+  text_output_printf("%s: _ADR: %llx, SUB: %s\n", name, device_info->Address, device_info->SubsystemId.String);
+
+  ACPI_FREE(device_info);
 
   return AE_OK;
 }
@@ -117,46 +124,60 @@ void * kernel_main_thread() {
   if (ACPI_FAILURE(ret = AcpiInitializeSubsystem())) {
     text_output_printf("ACPI INIT failure %s\n", AcpiFormatException(ret));
   }
-  // text_output_printf("1\n");
 
   ACPI_TABLE_DESC tables[16];
   if (ACPI_FAILURE(ret = AcpiInitializeTables(tables, 16, FALSE))) {
     text_output_printf("ACPI INIT tables failure %s\n", AcpiFormatException(ret));
   }
-  // text_output_printf("2\n");
 
-    // vm_pmap(0xFEC00000, 1);
   if (ACPI_FAILURE(ret = AcpiLoadTables())) {
     text_output_printf("ACPI load tables failure %s\n", AcpiFormatException(ret));
   }
-  // text_output_printf("3\n");
 
   if (ACPI_FAILURE(ret = AcpiEnableSubsystem(ACPI_FULL_INITIALIZATION))) {
     text_output_printf("ACPI enable failure %s\n", AcpiFormatException(ret));
   }
-  text_output_printf("4\n");
 
-  // cli();
+  // Enable IO APIC
+  ACPI_OBJECT_LIST        Params;
+  ACPI_OBJECT             Obj;
+
+  Params.Count = 1;
+  Params.Pointer = &Obj;
+  
+  Obj.Type = ACPI_TYPE_INTEGER;
+  Obj.Integer.Value = 1;     // 0 = PIC, 1 = APIC
+
+  ACPI_STATUS status = AcpiEvaluateObject(NULL, "\\_PIC", &Params, NULL);
+  assert(status == AE_OK);
+
   if (ACPI_FAILURE(ret = AcpiInitializeObjects(ACPI_FULL_INITIALIZATION))) {
     text_output_printf("ACPI init objects failure %s\n", AcpiFormatException(ret));
   }
-  // sti();
-  text_output_printf("5\n");
 
   ACPI_HANDLE system_bus_handle;
-  ACPI_STATUS status = AcpiGetHandle(NULL, "\\_SB", &system_bus_handle);
+  status = AcpiGetHandle(NULL, "\\_SB.PCI0", &system_bus_handle);
+  assert(status == AE_OK);
+
+  ACPI_PCI_ROUTING_TABLE routing_table[128];
+  ACPI_BUFFER buffer;
+  buffer.Length = sizeof(routing_table);
+  buffer.Pointer = &routing_table;
+  status = AcpiGetIrqRoutingTable(system_bus_handle, &buffer);
   text_output_printf("Status ok? %d\n", status == AE_OK);
+  assert(routing_table[0].Length == sizeof(ACPI_PCI_ROUTING_TABLE));
+
+  for (int i = 0; i < 128; ++i) {
+    if (routing_table[i].Length == 0) break;
+
+
+    text_output_printf("IRQ Pin %d, PCI Address: %llx, SourceIndex: %x Source: %x %x %x %x\n", routing_table[i].Pin, routing_table[i].Address, routing_table[i].SourceIndex, routing_table[i].Source[0], routing_table[i].Source[1], routing_table[i].Source[2], routing_table[i].Source[3]);
+  }
 
   void *walk_return_value;
-  status = AcpiWalkNamespace(ACPI_TYPE_DEVICE, system_bus_handle, 10, desc_callback, NULL, NULL, &walk_return_value);
-  text_output_printf("Status ok? %d\n", status == AE_OK);
+  status = AcpiWalkNamespace(ACPI_TYPE_DEVICE, system_bus_handle, 100, desc_callback, NULL, NULL, &walk_return_value);
+  assert(status == AE_OK);
 
-
-  // ACPI_PCI_ROUTING_TABLE routing_table[128];
-  // ACPI_BUFFER buffer;
-  // buffer.Length = sizeof(routing_table);
-  // buffer.Pointer = &routing_table;
-  // AcpiGetIrqRoutingTable(
 
 
   thread_exit();
