@@ -95,8 +95,6 @@ FreeBlockHeader * kmalloc_increase_allocation(size_t num_bytes) {
 void kmalloc_init() {
   list_init(&kmalloc_data.free_list);
   kmalloc_increase_allocation(0); // Increase by the minimum amount
-
-  print_free_list();
 }
 
 void * kmalloc(size_t alloc_size) {

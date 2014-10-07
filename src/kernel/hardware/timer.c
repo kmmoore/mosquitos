@@ -11,7 +11,7 @@
 #define TIMER_IV 0x22
 
 struct waiting_thread {
-  list_entry entry; // This must be first
+  list_entry entry;
 
   KernelThread *thread;
   uint64_t wake_time;
@@ -24,7 +24,7 @@ static struct {
 } timer_data;
 
 static inline void wake_waiting_thread(struct waiting_thread *wt) {
-  list_remove(&timer_data.waiting_threads, (list_entry *)wt);
+  list_remove(&timer_data.waiting_threads, &wt->entry);
   thread_wake(wt->thread);
   kfree(wt);
 }
@@ -32,14 +32,15 @@ static inline void wake_waiting_thread(struct waiting_thread *wt) {
 void timer_isr() {
   uint64_t current_ticks = __sync_add_and_fetch(&timer_data.ticks, 1);
 
-  struct waiting_thread *current = (struct waiting_thread *)list_head(&timer_data.waiting_threads);
+  list_entry *current = list_head(&timer_data.waiting_threads);
   while (current) {
-    struct waiting_thread *next = (struct waiting_thread *)list_next((list_entry *)current);
-    if (current_ticks >= current->wake_time) {
-      wake_waiting_thread(current);
+    struct waiting_thread *current_waiting_thread = container_of(current, struct waiting_thread, entry);
+
+    if (current_ticks >= current_waiting_thread->wake_time) {
+      wake_waiting_thread(current_waiting_thread);
     }
 
-    current = next;
+    current = list_next(current);
   }
 
   apic_send_eoi();
@@ -116,12 +117,15 @@ void timer_cancel_thread_sleep(KernelThread *thread) {
   bool interrupts_enabled = interrupts_status();
   cli();
 
-  struct waiting_thread *current = (struct waiting_thread *)list_head(&timer_data.waiting_threads);
+  list_entry *current = list_head(&timer_data.waiting_threads);
   while (current) {
-    if (current->thread == thread) {
-      wake_waiting_thread(current);
+    struct waiting_thread *current_waiting_thread = container_of(current, struct waiting_thread, entry);
+
+    if (current_waiting_thread->thread == thread) {
+      wake_waiting_thread(current_waiting_thread);
     }
-    current = (struct waiting_thread *)list_next(&current->entry);
+
+    current = list_next(current);
   }
 
   // Only re-enable interrupts if they were enabled before

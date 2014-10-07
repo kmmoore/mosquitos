@@ -42,7 +42,7 @@ KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8
   // Allocate large region for thread struct and stack
   KernelThread *new_thread = vm_palloc(stack_num_pages);
 
-  list_entry_set_value(&new_thread->entry, (uint64_t)new_thread); // Make list entry point to struct
+  // list_entry_set_value(&new_thread->entry, (uint64_t)new_thread); // Make list entry point to struct
 
   new_thread->tid = thread_data.next_tid++;
   new_thread->priority = priority;
@@ -92,7 +92,7 @@ list_entry * thread_list_entry (KernelThread *thread) {
 }
 
 KernelThread * thread_from_list_entry (list_entry *entry) {
-  return list_entry_cast(entry, KernelThread *);
+  return container_of(entry, KernelThread, entry);
 }
 
 uint64_t * thread_register_list_pointer (KernelThread *thread) {
