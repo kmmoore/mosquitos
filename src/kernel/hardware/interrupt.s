@@ -1,4 +1,4 @@
-.include "macros.s"
+.include "../macros.s"
 
 .extern interrupts_handlers
 .extern isr_common

@@ -1,0 +1,9 @@
+include_rules
+
+LDFLAGS += -r
+#CFLAGS += -fno-stack-protector -fPIC -fshort-wchar
+
+: |> /usr/bin/env python $(TUP_CWD)/../../build_info.py > %o |> build_info.c
+
+: foreach *.c build_info.c |> !cc_common |> %B.o
+: foreach *.s |> !cc_common |> %B_asm.o
