@@ -97,6 +97,17 @@ void * DisplayOneDevice (ACPI_HANDLE ObjHandle, UINT32 Level, void *Context) {
   return NULL;
 }
 
+ACPI_STATUS desc_callback(ACPI_HANDLE Object, UINT32 NestingLevel UNUSED, void *Context UNUSED, void **ReturnValue UNUSED) {
+
+  char name[128];
+  ACPI_BUFFER name_buffer = { .Length = sizeof(name), .Pointer = &name };
+  AcpiGetName(Object, ACPI_FULL_PATHNAME, &name_buffer);
+
+  text_output_printf("%s\n", name);
+
+  return AE_OK;
+}
+
 // Initialization that needs a threaded context is done here
 void * kernel_main_thread() {
   pci_init();
@@ -131,6 +142,15 @@ void * kernel_main_thread() {
   }
   // sti();
   text_output_printf("5\n");
+
+  ACPI_HANDLE system_bus_handle;
+  ACPI_STATUS status = AcpiGetHandle(NULL, "\\_SB", &system_bus_handle);
+  text_output_printf("Status ok? %d\n", status == AE_OK);
+
+  void *walk_return_value;
+  status = AcpiWalkNamespace(ACPI_TYPE_DEVICE, system_bus_handle, 10, desc_callback, NULL, NULL, &walk_return_value);
+  text_output_printf("Status ok? %d\n", status == AE_OK);
+
 
   // ACPI_PCI_ROUTING_TABLE routing_table[128];
   // ACPI_BUFFER buffer;
