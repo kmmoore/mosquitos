@@ -4,4 +4,3 @@ LDFLAGS += -r
 
 : foreach *.c |> !cc |> %B.o
 : foreach *.s |> !cc |> %B_asm.o
-: *.o mutex/module_mutex.o | <submodulegroup> |> !ld |> module_%d.o ../<submodulegroup>
