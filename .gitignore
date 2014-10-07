@@ -4,3 +4,4 @@ build/*
 *.d
 *.so
 src/common/build_info.c
+.tup/*

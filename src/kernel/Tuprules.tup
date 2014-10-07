@@ -1,0 +1,9 @@
+# Kernel TUP rules
+
+ACPICA_DIR      := $(TUP_CWD)/acpica
+ACPI_INC        := $(ACPICA_DIR)/include
+ACPICA_LIB      := $(ACPICA_DIR)/acpica.o
+
+CFLAGS += -isystem $(ACPI_INC)
+
+LDFLAGS += -nostdlib -static -z max-page-size=0x1000

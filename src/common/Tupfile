@@ -1,0 +1,9 @@
+include_rules
+
+LDFLAGS += -r
+
+: |> /usr/bin/env python $(TUP_CWD)/../../build_info.py > %o |> build_info.c
+
+: foreach *.c build_info.c |> !cc |> %B.o
+: foreach *.s |> !cc |> %B_asm.o
+: *.o |> !ld |> module_%d.o <commonmodulegroup>

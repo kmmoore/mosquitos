@@ -1,0 +1,9 @@
+include_rules
+
+LDFLAGS +=  -T kernel_link.lds
+
+SUBMODULES =  ../common/module_common.o datastructures/module_datastructures.o drivers/module_drivers.o format/module_format.o hardware/module_hardware.o memory/module_memory.o threading/module_threading.o acpica/module_acpica.o
+
+: foreach *.c |> !cc |> %B.o
+: foreach *.s |> !cc |> %B_asm.o
+: $(SUBMODULES) *.o | <submodulegrouop> |> !ld |> kernel
