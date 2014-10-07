@@ -155,28 +155,28 @@ void * kernel_main_thread() {
     text_output_printf("ACPI init objects failure %s\n", AcpiFormatException(ret));
   }
 
-  ACPI_HANDLE system_bus_handle;
-  status = AcpiGetHandle(NULL, "\\_SB.PCI0", &system_bus_handle);
-  assert(status == AE_OK);
+  // ACPI_HANDLE system_bus_handle;
+  // status = AcpiGetHandle(NULL, "\\_SB.PCI0", &system_bus_handle);
+  // assert(status == AE_OK);
 
-  ACPI_PCI_ROUTING_TABLE routing_table[128];
-  ACPI_BUFFER buffer;
-  buffer.Length = sizeof(routing_table);
-  buffer.Pointer = &routing_table;
-  status = AcpiGetIrqRoutingTable(system_bus_handle, &buffer);
-  text_output_printf("Status ok? %d\n", status == AE_OK);
-  assert(routing_table[0].Length == sizeof(ACPI_PCI_ROUTING_TABLE));
+  // ACPI_PCI_ROUTING_TABLE routing_table[128];
+  // ACPI_BUFFER buffer;
+  // buffer.Length = sizeof(routing_table);
+  // buffer.Pointer = &routing_table;
+  // status = AcpiGetIrqRoutingTable(system_bus_handle, &buffer);
+  // text_output_printf("Status ok? %d\n", status == AE_OK);
+  // assert(routing_table[0].Length == sizeof(ACPI_PCI_ROUTING_TABLE));
 
-  for (int i = 0; i < 128; ++i) {
-    if (routing_table[i].Length == 0) break;
+  // for (int i = 0; i < 128; ++i) {
+  //   if (routing_table[i].Length == 0) break;
 
 
-    text_output_printf("IRQ Pin %d, PCI Address: %llx, SourceIndex: %x Source: %x %x %x %x\n", routing_table[i].Pin, routing_table[i].Address, routing_table[i].SourceIndex, routing_table[i].Source[0], routing_table[i].Source[1], routing_table[i].Source[2], routing_table[i].Source[3]);
-  }
+  //   text_output_printf("IRQ Pin %d, PCI Address: %llx, SourceIndex: %x Source: %x %x %x %x\n", routing_table[i].Pin, routing_table[i].Address, routing_table[i].SourceIndex, routing_table[i].Source[0], routing_table[i].Source[1], routing_table[i].Source[2], routing_table[i].Source[3]);
+  // }
 
-  void *walk_return_value;
-  status = AcpiWalkNamespace(ACPI_TYPE_DEVICE, system_bus_handle, 100, desc_callback, NULL, NULL, &walk_return_value);
-  assert(status == AE_OK);
+  // void *walk_return_value;
+  // status = AcpiWalkNamespace(ACPI_TYPE_DEVICE, system_bus_handle, 100, desc_callback, NULL, NULL, &walk_return_value);
+  // assert(status == AE_OK);
 
 
 
