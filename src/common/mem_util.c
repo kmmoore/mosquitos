@@ -28,3 +28,10 @@ int memcmp(const void *s1, const void *s2, size_t n) {
 
   return 0;
 }
+
+size_t strlen(const char *s) {
+  size_t length = 0;
+  while (s[length] != 0) length++;
+
+  return length;
+}

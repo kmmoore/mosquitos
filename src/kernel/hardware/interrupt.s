@@ -1,4 +1,4 @@
-.include "macros.s"
+.include "../macros.s"
 
 .extern interrupts_handlers
 .extern isr_common
@@ -24,7 +24,7 @@ isr\num:
   save_context
 
     # TODO: Inline the isr_common call
-    popq %rsi
+    movq 128(%rsp), %rsi # Note, if you add 8 to the offset, you get the saved RIP (if there's an error)
     movq $\num, %rdi
     call isr_common
 
@@ -40,7 +40,7 @@ isr_noerror 2
 isr_noerror 3
 isr_noerror 4
 isr_noerror 5
-isr_noerror 6
+isr_error 6
 isr_noerror 7
 isr_error 8
 isr_noerror 9

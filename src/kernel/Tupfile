@@ -1,0 +1,8 @@
+include_rules
+
+LDFLAGS +=  -T kernel_link.lds
+
+: foreach *.c |> !cc |> %B.o
+: foreach *.s |> !cc |> %B_asm.o
+
+: $(MODULE_TOP)/<objects> $(PROJECT_TOP)/<common_objects> |> $(LD) $(LDFLAGS) %<objects> %<common_objects> -o %o |> $(BUILD_DIR)/%d

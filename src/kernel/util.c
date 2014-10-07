@@ -11,8 +11,30 @@ void _panic(char *format, ...) {
 
   va_end(arg_list);
 
+  text_output_printf("\n");
+  print_stack_trace();
+
   __asm__ ("cli \n\t hlt");
 }
+
+void print_stack_trace() {
+  uint64_t rbp;
+  // NOTE: Requires -fno-omit-frame-pointer
+  __asm__ ("movq %%rbp, %0" : "=r" (rbp));
+
+  uint64_t rip = *(uint64_t *)(rbp + 8);
+
+  text_output_printf("Stack Trace:\n");
+
+  while(rip) {
+    text_output_printf("  0x%x\n", rip);
+
+    rbp = *(uint64_t *)(rbp);
+    rip = *(uint64_t *)(rbp + 8);
+  }
+}
+
+
 
 int int2str(uint64_t n, char *buf, int buf_len, int radix) {
   static char *digit_lookup = "0123456789abcdef";
@@ -35,12 +57,42 @@ int int2str(uint64_t n, char *buf, int buf_len, int radix) {
   return 0;
 }
 
+int isdigit(int c) {
+  return (c >= '0') && (c <= '9');
+}
+
+int isxdigit(int c) {
+  if (isdigit(c))
+    return true;
+
+  if ((c >= 'a') && (c <= 'f'))
+    return true;
+
+  return (c >= 'A') && (c <= 'F');
+}
+
+int abs(int i) {
+  if (i < 0) return -i;
+  return i;
+}
+
 void sti() {
   __asm__ ("sti");
 }
 
 void cli() {
   __asm__ ("cli");
+}
+
+bool interrupts_status() {
+  uint64_t flags;
+
+  __asm__ volatile("pushf ; pop %0"
+                   : "=rm" (flags)
+                   : /* no input */
+                   : "memory");
+
+  return (flags & 0b1000000000) > 0; // IF is 9th bit
 }
 
 uint8_t io_read_8(unsigned port) {
@@ -54,7 +106,7 @@ void io_write_8(unsigned port, uint8_t val) {
 }
 
 uint16_t io_read_16(unsigned port) {
-    uint8_t ret;
+    uint16_t ret;
     __asm__ volatile ("inw %w1, %w0" : "=a" (ret) : "Nd" (port));
     return ret;
 }
@@ -64,13 +116,13 @@ void io_write_16(unsigned port, uint16_t val) {
 }
 
 uint32_t io_read_32(unsigned port) {
-    uint8_t ret;
-    __asm__ volatile ("inl %w1, %k0" : "=a" (ret) : "Nd" (port));
+    uint32_t ret;
+    __asm__ volatile ("inl %w1, %0" : "=a" (ret) : "Nd" (port));
     return ret;
 }
 
 void io_write_32(unsigned port, uint32_t val) {
-  __asm__ volatile ("outl %k0, %w1" : : "a" (val), "Nd" (port));
+  __asm__ volatile ("outl %0, %w1" : : "a" (val), "Nd" (port));
 }
 
 void write_msr(uint64_t index, uint64_t value) {

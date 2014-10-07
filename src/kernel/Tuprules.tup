@@ -1,0 +1,11 @@
+# Kernel TUP rules
+
+ACPICA_DIR      := $(TUP_CWD)/acpica
+ACPI_INC        := $(ACPICA_DIR)/include
+ACPICA_LIB      := $(ACPICA_DIR)/acpica.o
+
+CFLAGS += -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -fno-omit-frame-pointer -isystem $(ACPI_INC)
+
+LDFLAGS += -nostdlib -static -z max-page-size=0x1000
+
+MODULE_TOP = $(TUP_CWD)

@@ -1,4 +1,4 @@
-.include "macros.s"
+.include "../macros.s"
 
 # NOTE: Should be called from inside an interrupt handler
 # Assumes ss, rsp, rflags, cs, and rip are pushed on the

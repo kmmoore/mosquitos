@@ -1,0 +1,17 @@
+ARCH            := x86_64 
+
+CC              := gcc
+LD              := ld
+OBJCOPY         := objcopy
+
+EFIINC          := /usr/include/efi
+EFIINCS         := -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
+
+
+CFLAGS += -D_MOSQUITOS -D_mosquitos_ $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -Os -nostdlib -mno-red-zone -DEFI_FUNCTION_WRAPPER -ggdb
+
+PROJECT_TOP = $(TUP_CWD)
+BUILD_DIR = $(PROJECT_TOP)/build
+
+!cc = |> $(CC) $(CFLAGS) -c %f -o %o |> %B.o | $(MODULE_TOP)/<objects>
+!cc_common = |> $(CC) $(CFLAGS) -c %f -o %o |> %B.o | $(PROJECT_TOP)/<common_objects>

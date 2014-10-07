@@ -1,16 +1,20 @@
 #include <efi.h>
 #include <efilib.h>
 
+#include "../format/format.h"
+
 #include "font.h"
 #include "text_output.h"
+#include "../hardware/serial_port.h"
 #include "../util.h"
 
-#define kTextOutputPadding 10
+#define kTextOutputPadding 1
 
 static struct {
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   int current_row, current_col;
 } text_output;
+
 
 void text_output_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
   text_output.gop = gop;
@@ -23,11 +27,13 @@ static void text_output_draw_pixel(int x, int y, uint32_t color) {
 }
 
 void text_output_clear_screen(uint32_t color) {
+  // TODO: The graphics stuff should be in a graphics library, not this library
   for (unsigned int x = 0; x < text_output.gop->Mode->Info->HorizontalResolution; ++x) {
     for (unsigned int y = 0; y < text_output.gop->Mode->Info->VerticalResolution; y++) {
       text_output_draw_pixel(x, y, color);
     }
   }
+  text_output.current_row = text_output.current_col = kTextOutputPadding;
 }
 
 static void text_output_draw_char(char c, int x, int y) {
@@ -58,84 +64,148 @@ void text_output_backspace() {
     // Blank out character
     text_output_draw_char(' ', text_output.current_col, text_output.current_row);
   }
+
+  serial_port_putchar(0x8); // ASCII backspace character
 }
 
-inline void text_output_putchar(char c) {
+inline void text_output_putchar(const char c) {
   if (c == '\n') {
     text_output.current_row += 2; // Put an empty line between text lines
+
+    // int max_lines = text_output.gop->Mode->Info->VerticalResolution / kCharacterHeight;
+    // if (text_output.current_row == 100) {
+    //   text_output_clear_screen(0x00000000); // TODO: This is obviously wrong, but I don't know the best way to make it right
+    // }
+
     text_output.current_col = kTextOutputPadding;
   } else{
     text_output_draw_char(c, text_output.current_col, text_output.current_row);
     text_output.current_col += 1;
   }
+
+  serial_port_putchar(c);
 }
 
-void text_output_print(char *str) {
+void text_output_print(const char *str) {
   while (*str != '\0') {
     text_output_putchar(*str);
     str++;
   }
 }
 
-void text_output_printf(char *format, ...) {
-  va_list arg_list;
-  va_start(arg_list, format);
+void * text_output_format_consumer(void *arg UNUSED, const char *buffer, size_t n) {
+  while (n--) {
+    text_output_putchar(*buffer++);
+  }
 
-  text_output_vprintf(format, arg_list);
+  return (void *)( !NULL );
+}
+
+int text_output_printf(const char *fmt, ...) {
+  va_list arg_list;
+  va_start(arg_list, fmt);
+
+  int num_chars = text_output_vprintf(fmt, arg_list);
+
+  va_end(arg_list);
+
+  return num_chars;
+}
+
+int text_output_vprintf(const char *fmt, va_list arg_list) {
+  return format(text_output_format_consumer, NULL, fmt, arg_list);
+}
+
+void text_output_safe_printf(const char *fmt, ...) {
+  va_list arg_list;
+  va_start(arg_list, fmt);
+
+  text_output_safe_vprintf(fmt, arg_list);
 
   va_end(arg_list);
 }
 
-void text_output_vprintf(char *format, va_list arg_list) {
+void text_output_safe_vprintf(const char *fmt, va_list arg_list) {
   char int_conv_buffer[21]; // Can hold a 64-bit decimal string with null termination
 
-  while (*format) {
-    if (*format == '%') {
-      format++;
+  while (*fmt) {
+    if (*fmt == '%') {
 
-      switch (*format) {
-        case 'd':
-        {
-          int64_t number = va_arg(arg_list, int64_t);
-          int2str(number, int_conv_buffer, sizeof(int_conv_buffer), 10);
-          text_output_print(int_conv_buffer);
-        }
-        break;
+      bool matched_format;
+      do {
+        fmt++;
+        matched_format = true; // Will stay true unless we reach the default case
 
-        case 'x':
-        {
-          uint64_t number = va_arg(arg_list, uint64_t);
-          int2str(number, int_conv_buffer, sizeof(int_conv_buffer), 16);
-          text_output_print(int_conv_buffer);
-        }
-        break;
+        switch (*fmt) {
+          case '%':
+          {
+            text_output_putchar('%');
+          }
+          break;
 
-        case 'b':
-        {
-          uint64_t number = va_arg(arg_list, uint64_t);
-          int2str(number, int_conv_buffer, sizeof(int_conv_buffer), 2);
-          text_output_print(int_conv_buffer);
-        }
-        break;
+          case 'd':
+          {
+            int64_t number = va_arg(arg_list, int64_t);
+            if (number < 0) {
+              text_output_putchar('-');
+              number = abs(number);
+            }
 
-        case 'c':
-        {
-          char c = va_arg(arg_list, int);
-          text_output_putchar(c);
-        }
-        break;
+            int2str(number, int_conv_buffer, sizeof(int_conv_buffer), 10);
+            text_output_print(int_conv_buffer);
+          }
+          break;
 
-        case 's':
-        {
-          char *string = va_arg(arg_list, char *);
-          text_output_print(string);
+          case 'u':
+          {
+            uint64_t number = va_arg(arg_list, uint64_t);
+            int2str(number, int_conv_buffer, sizeof(int_conv_buffer), 10);
+            text_output_print(int_conv_buffer);
+          }
+          break;
+
+          case 'x':
+          case 'X':
+          {
+            uint32_t number = va_arg(arg_list, uint32_t);
+            int2str(number, int_conv_buffer, sizeof(int_conv_buffer), 16);
+            text_output_print(int_conv_buffer);
+          }
+          break;
+
+          case 'b':
+          {
+            uint64_t number = va_arg(arg_list, uint64_t);
+            int2str(number, int_conv_buffer, sizeof(int_conv_buffer), 2);
+            text_output_print(int_conv_buffer);
+          }
+          break;
+
+          case 'c':
+          {
+            char c = va_arg(arg_list, int);
+            text_output_putchar(c);
+          }
+          break;
+
+          case 's':
+          {
+            char *string = va_arg(arg_list, char *);
+            text_output_print(string);
+          }
+          break;
+
+          default:
+          {
+            matched_format = false;
+          }
         }
-        break;
-      }
+
+      } while (!matched_format);
 
     } else {
-      text_output_putchar(*format);
-    }
-    format++;
-  }
+     text_output_putchar(*fmt);
+   }
+   fmt++;
+ }
 }

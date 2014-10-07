@@ -11,7 +11,7 @@
 #define TIMER_IV 0x22
 
 struct waiting_thread {
-  list_entry entry; // This must be first
+  list_entry entry;
 
   KernelThread *thread;
   uint64_t wake_time;
@@ -19,22 +19,28 @@ struct waiting_thread {
 
 static struct {
   volatile uint64_t ticks; // Won't overflow for 5e8 ticks
+  uint64_t cycles_per_tick;
   list waiting_threads;
 } timer_data;
 
-void timer_isr() {
-  ++timer_data.ticks;
+static inline void wake_waiting_thread(struct waiting_thread *wt) {
+  list_remove(&timer_data.waiting_threads, &wt->entry);
+  thread_wake(wt->thread);
+  kfree(wt);
+}
 
-  struct waiting_thread *current = (struct waiting_thread *)list_head(&timer_data.waiting_threads);
+void timer_isr() {
+  uint64_t current_ticks = __sync_add_and_fetch(&timer_data.ticks, 1);
+
+  list_entry *current = list_head(&timer_data.waiting_threads);
   while (current) {
-    struct waiting_thread *next = (struct waiting_thread *)list_next((list_entry *)current);
-    if (timer_data.ticks >= current->wake_time) {
-      list_remove(&timer_data.waiting_threads, (list_entry *)current);
-      thread_wake(current->thread);
-      kfree(current);
+    struct waiting_thread *current_waiting_thread = container_of(current, struct waiting_thread, entry);
+
+    if (current_ticks >= current_waiting_thread->wake_time) {
+      wake_waiting_thread(current_waiting_thread);
     }
 
-    current = next;
+    current = list_next(current);
   }
 
   apic_send_eoi();
@@ -45,14 +51,11 @@ uint64_t timer_ticks() {
 }
 
 void timer_init() {
+  // text_output_printf("Initializing timer...");
 
-  text_output_printf("Initializing timer...");
-
-  timer_data.ticks = 0;
   list_init(&timer_data.waiting_threads);
 
-  ioapic_map(TIMER_IRQ, TIMER_IV);
-  interrupts_register_handler(TIMER_IV, timer_isr);
+  interrupt_register_handler(TIMER_IV, timer_isr);
 
   // Use Legacy PIC Timer
   // TODO: Use HPET eventually
@@ -62,7 +65,28 @@ void timer_init() {
   io_write_8(0x40, TIMER_DIVIDER & 0xff);
   io_write_8(0x40, TIMER_DIVIDER >> 8);
 
-  text_output_printf("Done\n");
+  // Enable I/O APIC routing for PIC timer
+  ioapic_map(TIMER_IRQ, TIMER_IV);
+
+  // Calibrate cycles_per_tick
+  timer_data.cycles_per_tick = 0;
+  timer_data.ticks = 0;
+  while (timer_data.ticks < 128) {
+    timer_data.cycles_per_tick++;
+    __sync_synchronize();
+  }
+  timer_data.cycles_per_tick >>= 5; // We execute about 4x more instructions in this loop than in the timer_thread_stall() loop
+
+  // text_output_printf("Done\n");
+}
+
+void timer_thread_stall(uint64_t microseconds) {
+  // TODO: Who knows if this is even remotely precice
+  // also, it can get interrupted by things
+
+  uint64_t cycles = microseconds * TIMER_FREQUENCY * timer_data.cycles_per_tick / 1e6;
+  text_output_printf("Stalling for %d cycles\n", cycles);
+  while (cycles > 0) cycles--;
 }
 
 void timer_thread_sleep(uint64_t milliseconds) {
@@ -75,6 +99,7 @@ void timer_thread_sleep(uint64_t milliseconds) {
   uint64_t ticks = milliseconds * 1000 / TIMER_FREQUENCY;
   new_entry->wake_time = timer_data.ticks + ticks;
 
+  bool interrupts_enabled = interrupts_status();
   cli();
 
   list_push_front(&timer_data.waiting_threads, &new_entry->entry);
@@ -83,6 +108,27 @@ void timer_thread_sleep(uint64_t milliseconds) {
   // NOTE: Interrupts will be disabled when it returns
   thread_sleep(thread);
 
-  sti();
+  // Only re-enable interrupts if they were enabled before
+  if (interrupts_enabled) sti();
 
 }
+
+void timer_cancel_thread_sleep(KernelThread *thread) {
+  bool interrupts_enabled = interrupts_status();
+  cli();
+
+  list_entry *current = list_head(&timer_data.waiting_threads);
+  while (current) {
+    struct waiting_thread *current_waiting_thread = container_of(current, struct waiting_thread, entry);
+
+    if (current_waiting_thread->thread == thread) {
+      wake_waiting_thread(current_waiting_thread);
+    }
+
+    current = list_next(current);
+  }
+
+  // Only re-enable interrupts if they were enabled before
+  if (interrupts_enabled) sti();
+}
+

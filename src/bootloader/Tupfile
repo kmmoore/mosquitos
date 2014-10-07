@@ -1,0 +1,8 @@
+include_rules
+
+: foreach *.c |> !cc |> %B.o
+: foreach *.s |> !cc |> %B_asm.o
+
+: $(MODULE_TOP)/<objects> $(PROJECT_TOP)/<common_objects> |> $(LD) $(LDFLAGS) $(EFI_CRT_OBJS) %<objects> %<common_objects> -o %o $(LIBS) |> %d.so
+
+: *.so |> $(OBJCOPY) -j .text -j .sdata -j .data -j .dynamic -j .dynsym -j .rel -j .rela -j .reloc --target=efi-app-$(ARCH) %f %o |> $(BUILD_DIR)/%d

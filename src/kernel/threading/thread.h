@@ -7,10 +7,17 @@
 typedef struct KernelThread KernelThread;
 typedef void *(*KernelThreadMain) (void *);
 
+typedef enum {
+  THREAD_RUNNING,
+  THREAD_SLEEPING,
+  THREAD_EXITED
+} KernelThreadStatus;
+
 KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8_t priority, uint64_t stack_num_pages);
 
 uint32_t thread_id(KernelThread *thread);
 uint8_t thread_priority(KernelThread *thread);
+uint8_t thread_status(KernelThread *thread);
 bool thread_can_run(KernelThread *thread);
 
 list_entry * thread_list_entry (KernelThread *thread);
@@ -21,6 +28,7 @@ uint64_t * thread_register_list_pointer (KernelThread *thread);
 void thread_exit();
 
 // Functions that should not be called by threads
+void thread_start(KernelThread *thread);
 void thread_sleep(KernelThread *thread);
 void thread_wake(KernelThread *thread);
 

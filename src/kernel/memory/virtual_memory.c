@@ -7,15 +7,18 @@
 #include "../drivers/text_output.h"
 #include "../datastructures/list.h"
 #include "../memory/kmalloc.h"
+#include "../threading/mutex/lock.h"
 
 static struct {
   uint8_t *memory_map;
   uint64_t mem_map_size;
   uint64_t mem_map_descriptor_size;
 
-  uint64_t physical_end;
+  uintptr_t physical_end;
   uint64_t num_free_pages;
   list free_list;
+
+  SpinLock spinlock; // Use a spinlock here, since this is used before the scheduler is initialized
 
 } virtual_memory_data;
 
@@ -48,7 +51,7 @@ static inline uint64_t physical_end(FreeBlock *block) {
   return physical_start(block) + block->num_pages * VM_PAGE_SIZE;
 }
 
-static void add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
+static void vm_add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
   // We can do this because we have identity mapping in the kernel
   // TODO: Figure out if there is a way to directly access physical memory/if this is necessary
 
@@ -102,7 +105,7 @@ static void setup_free_memory() {
         continue; // Low memory is not actually available
         // TODO: Fix this, some of this memory (i.e., page 1) is used for things that we don't know about
       }
-      add_to_free_list(descriptor->PhysicalStart, descriptor->NumberOfPages);
+      vm_add_to_free_list(descriptor->PhysicalStart, descriptor->NumberOfPages);
       virtual_memory_data.num_free_pages += descriptor->NumberOfPages;
     }
 
@@ -137,6 +140,7 @@ uint64_t vm_read_cr3() {
 }
 
 void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descriptor_size) {
+  assert(sizeof(FreeBlock) < VM_PAGE_SIZE);
 
   virtual_memory_data.memory_map = memory_map;
   virtual_memory_data.mem_map_size = mem_map_size;
@@ -146,18 +150,26 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
   virtual_memory_data.num_free_pages = 0;
   list_init(&virtual_memory_data.free_list);
 
-  text_output_printf("Determining free memory...");
+  spinlock_init(&virtual_memory_data.spinlock);
+
+  // text_output_printf("Determining free memory...");
   setup_free_memory();
-  text_output_printf("Done\n");
+  // text_output_printf("Done\n");
 
-  text_output_printf("Found %dMB of physical memory, %dMB free.\n", virtual_memory_data.physical_end / (1024*1024), virtual_memory_data.num_free_pages * 4 / 1024);
+  // text_output_printf("Found %dMB of physical memory, %dMB free.\n", virtual_memory_data.physical_end / (1024*1024), virtual_memory_data.num_free_pages * 4 / 1024);
 
-  vm_print_free_list();
+  // vm_print_free_list();
 
   kmalloc_init();
 }
 
+uintptr_t vm_max_physical_address() {
+  return virtual_memory_data.physical_end;
+}
+
 void * vm_palloc(uint64_t num_pages) {
+  spinlock_acquire(&virtual_memory_data.spinlock);
+
   FreeBlock *chunk = (FreeBlock *)list_head(&virtual_memory_data.free_list);
 
   while (chunk) {
@@ -177,11 +189,63 @@ void * vm_palloc(uint64_t num_pages) {
     chunk->num_pages -= num_pages;
   }
 
+  spinlock_release(&virtual_memory_data.spinlock);
+
   return last_pages;
 }
 
+void * vm_pmap(uint64_t virtual_address, uint64_t num_pages) {
+  spinlock_acquire(&virtual_memory_data.spinlock);
+
+  virtual_address = (virtual_address & BOTTOM_N_BITS_OFF(VM_PAGE_BIT_SIZE)); // Round down `virtual_address` to the nearest page
+  text_output_printf("Trying to map: 0x%x\n", virtual_address);
+
+  FreeBlock *chunk = (FreeBlock *)list_head(&virtual_memory_data.free_list);
+
+  while (chunk) {
+    if ((uint64_t)chunk <= virtual_address &&
+        ((uint64_t)chunk + VM_PAGE_SIZE * chunk->num_pages) >= (virtual_address + VM_PAGE_SIZE * num_pages)) {
+      break;
+    }
+    chunk = (FreeBlock *)list_next(&chunk->entry);
+  }
+
+  if (chunk == NULL) {
+    return NULL; // We can't fulfill the request
+  }
+
+  text_output_printf("Found chunk: 0x%x\n", chunk);
+
+  void *pages = (void *)virtual_address;
+  uint64_t chunk_end = ((uint64_t)chunk + VM_PAGE_SIZE * chunk->num_pages);
+  uint64_t requested_end = virtual_address + VM_PAGE_SIZE * num_pages;
+
+  if ((uint64_t)chunk == virtual_address && chunk_end == requested_end) {
+    // We want the whole chunk
+    list_remove(&virtual_memory_data.free_list, &chunk->entry);
+  } else if (chunk_end == virtual_address + VM_PAGE_SIZE * num_pages) {
+    // We want a chunk from the end
+    chunk->num_pages -= num_pages;
+  } else {
+    // We want a chunk from the start/middle
+    // text_output_printf("chunk from middle of 0x%x...\n", chunk);
+    FreeBlock *new_block = (FreeBlock *)(requested_end);
+    new_block->num_pages = (chunk_end - requested_end) / VM_PAGE_SIZE;
+    chunk->num_pages = (virtual_address - (uint64_t)chunk) / VM_PAGE_SIZE;
+    // text_output_printf("Creating new block at 0x%x with size: %d pages\n", new_block, new_block->num_pages);
+    list_insert_after(&virtual_memory_data.free_list, &chunk->entry, &new_block->entry);
+  }
+
+  spinlock_release(&virtual_memory_data.spinlock);
+
+  return pages;
+}
+
+
 void vm_pfree(void *physical_address, uint64_t num_pages) {
-  add_to_free_list((uint64_t)physical_address, num_pages);
+  spinlock_acquire(&virtual_memory_data.spinlock);
+  vm_add_to_free_list((uint64_t)physical_address, num_pages);
+  spinlock_release(&virtual_memory_data.spinlock);
 }
 
 void vm_map(uint64_t physical_address, void *virtual_address, uint64_t flags) {
