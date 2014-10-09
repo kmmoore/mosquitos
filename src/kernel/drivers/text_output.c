@@ -13,31 +13,51 @@
 static struct {
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   int current_row, current_col;
-} text_output;
+  uint32_t background_color, foreground_color;
+} text_output_data;
 
 
 void text_output_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
   REQUIRE_MODULE("serial_port");
   
-  text_output.gop = gop;
+  text_output_data.gop = gop;
 
-  text_output.current_row = text_output.current_col = kTextOutputPadding;
+  text_output_data.current_row = text_output_data.current_col = kTextOutputPadding;
+
+  text_output_data.foreground_color = 0x00FFFFFF;
+  text_output_data.background_color = 0x00000000;
 
   REGISTER_MODULE("text_output");
 }
 
-static void text_output_draw_pixel(int x, int y, uint32_t color) {
-  ((uint32_t *)text_output.gop->Mode->FrameBufferBase)[y * text_output.gop->Mode->Info->HorizontalResolution + x] = color;
+void text_output_set_background_color(uint32_t color) {
+  text_output_data.background_color = color;
 }
 
-void text_output_clear_screen(uint32_t color) {
+void text_output_set_foreground_color(uint32_t color) {
+  text_output_data.foreground_color = color;
+}
+
+uint32_t text_output_get_background_color() {
+  return text_output_data.background_color;
+}
+
+uint32_t text_output_get_foreground_color() {
+  return text_output_data.foreground_color;
+}
+
+static void text_output_draw_pixel(int x, int y, uint32_t color) {
+  ((uint32_t *)text_output_data.gop->Mode->FrameBufferBase)[y * text_output_data.gop->Mode->Info->HorizontalResolution + x] = color;
+}
+
+void text_output_clear_screen() {
   // TODO: The graphics stuff should be in a graphics library, not this library
-  for (unsigned int x = 0; x < text_output.gop->Mode->Info->HorizontalResolution; ++x) {
-    for (unsigned int y = 0; y < text_output.gop->Mode->Info->VerticalResolution; y++) {
-      text_output_draw_pixel(x, y, color);
+  for (unsigned int x = 0; x < text_output_data.gop->Mode->Info->HorizontalResolution; ++x) {
+    for (unsigned int y = 0; y < text_output_data.gop->Mode->Info->VerticalResolution; y++) {
+      text_output_draw_pixel(x, y, text_output_data.background_color);
     }
   }
-  text_output.current_row = text_output.current_col = kTextOutputPadding;
+  text_output_data.current_row = text_output_data.current_col = kTextOutputPadding;
 }
 
 static void text_output_draw_char(char c, int x, int y) {
@@ -54,19 +74,19 @@ static void text_output_draw_char(char c, int x, int y) {
 
   for (int i = 0; i < kCharacterWidth; ++i) {
     for (int j = 0; j < kCharacterHeight; ++j) {
-      uint32_t color = (font[j + font_char_index * kCharacterHeight] & (1 << (7-i))) == 0 ? 0x0 : 0x00ffffff;
+      uint32_t color = (font[j + font_char_index * kCharacterHeight] & (1 << (7-i))) == 0 ? text_output_data.background_color : text_output_data.foreground_color;
       text_output_draw_pixel(pixel_x + i, pixel_y + j, color);
     }
   }
 }
 
 void text_output_backspace() {
-  if (text_output.current_col == kTextOutputPadding) { // Beginning of line
+  if (text_output_data.current_col == kTextOutputPadding) { // Beginning of line
     // TODO: Figure out how to go back up...
   } else {
-    text_output.current_col -= 1;
+    text_output_data.current_col -= 1;
     // Blank out character
-    text_output_draw_char(' ', text_output.current_col, text_output.current_row);
+    text_output_draw_char(' ', text_output_data.current_col, text_output_data.current_row);
   }
 
   serial_port_putchar(0x8); // ASCII backspace character
@@ -74,17 +94,17 @@ void text_output_backspace() {
 
 inline void text_output_putchar(const char c) {
   if (c == '\n') {
-    text_output.current_row += 2; // Put an empty line between text lines
+    text_output_data.current_row += 2; // Put an empty line between text lines
 
-    // int max_lines = text_output.gop->Mode->Info->VerticalResolution / kCharacterHeight;
-    // if (text_output.current_row == 100) {
-    //   text_output_clear_screen(0x00000000); // TODO: This is obviously wrong, but I don't know the best way to make it right
+    // int max_lines = text_output_data.gop->Mode->Info->VerticalResolution / kCharacterHeight;
+    // if (text_output_data.current_row == 100) {
+    //   text_output_clear_screen();
     // }
 
-    text_output.current_col = kTextOutputPadding;
+    text_output_data.current_col = kTextOutputPadding;
   } else{
-    text_output_draw_char(c, text_output.current_col, text_output.current_row);
-    text_output.current_col += 1;
+    text_output_draw_char(c, text_output_data.current_col, text_output_data.current_row);
+    text_output_data.current_col += 1;
   }
 
   serial_port_putchar(c);

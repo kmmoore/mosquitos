@@ -38,11 +38,17 @@ void kernel_main(KernelInfo info) {
   module_manager_init();
 
   serial_port_init();
-  text_output_init(info.gop);
 
-  text_output_clear_screen(0x00000000);
+  text_output_init(info.gop);
+  text_output_set_background_color(0x00000000);
+
+  text_output_clear_screen();
+
+  text_output_set_foreground_color(0x0000FF00);
   text_output_printf("MosquitOS -- A tiny, annoying operating system\n");
+  text_output_set_foreground_color(0x00FFFF00);
   text_output_printf("Built from %s on %s\n\n", build_git_info, build_time);
+  text_output_set_foreground_color(0x00FFFFFF);
 
   // Initialize subsystems
   acpi_init(info.xdsp_address);
@@ -77,7 +83,8 @@ void * kernel_main_thread() {
   // PCI needs APCICA to determine IRQ mappings
   pci_init();
 
-  text_output_printf("Kernel initialization complete.\n");
+  text_output_set_foreground_color(0x0000FF00);
+  text_output_printf("\nKernel initialization complete.\n\n");
 
   thread_exit(); // TODO: Make returning do the same thing;
   return NULL;

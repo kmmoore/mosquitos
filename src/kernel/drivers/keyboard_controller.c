@@ -40,7 +40,10 @@ void keyboard_isr() {
       if (pressed_char == '\b' || pressed_char == 127) {
         text_output_backspace();
       } else {
+        uint32_t old_fg_color = text_output_get_foreground_color();
+        text_output_set_foreground_color(0x006666FF);
         text_output_putchar(pressed_char);
+        text_output_set_foreground_color(old_fg_color);
       }
     }
   }

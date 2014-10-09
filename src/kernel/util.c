@@ -4,6 +4,8 @@
 #include <stdarg.h>
 
 void _panic(char *format, ...) {
+  text_output_set_foreground_color(0x00FF0000);
+
   va_list arg_list;
   va_start(arg_list, format);
 

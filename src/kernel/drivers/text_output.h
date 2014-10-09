@@ -9,7 +9,11 @@
 #define _TEXT_OUTPUT_H
 
 void text_output_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop);
-void text_output_clear_screen(uint32_t color);
+void text_output_set_background_color(uint32_t color);
+void text_output_set_foreground_color(uint32_t color);
+uint32_t text_output_get_background_color();
+uint32_t text_output_get_foreground_color();
+void text_output_clear_screen();
 void text_output_backspace();
 void text_output_putchar(const char c);
 void text_output_print(const char *str);

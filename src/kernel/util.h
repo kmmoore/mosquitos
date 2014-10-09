@@ -20,7 +20,7 @@
 
 #define assert(condition) do { if (!(condition)) panic("assert(" STR(condition) ")"); } while(0)
 
-#define panic(...) do { _panic("PANIC (" __FILE__ ":" STR(__LINE__) ") " __VA_ARGS__); } while (0)
+#define panic(...) do { _panic("PANIC (" __FILE__ ":" STR(__LINE__) "): " __VA_ARGS__); } while (0)
 
 void _panic(char *format, ...);
 
