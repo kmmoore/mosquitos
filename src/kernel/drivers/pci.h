@@ -29,7 +29,7 @@ typedef struct {
 
 typedef struct {
   uint8_t program_if, subclass, class_code;
-  uint8_t bus, device;
+  uint8_t bus, device, function;
   uint8_t multifunction, header_type;
 } PCIDevice;
 

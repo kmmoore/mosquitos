@@ -48,29 +48,49 @@ void pci_config_write_word (uint8_t bus, uint8_t device, uint8_t func, uint8_t o
   return io_write_32(0xCFC, value);
 }
 
+static void print_pci_device(PCIDevice *device) {
+  text_output_printf("[PCI Device 0x%02x 0x%02x 0x%02x] Class Code: 0x%02x, Subclass: 0x%02x, Program IF: 0x%02x, Multifunction? %d\n", device->bus, device->device, device->function, device->class_code, device->subclass, device->program_if, device->multifunction);
+
+}
+
+static PCIDevice * add_pci_device(uint8_t bus, uint8_t device, uint8_t function) {
+  uint32_t vendor_word = PCI_HEADER_READ_FIELD_WORD(bus, device, function, vendor_id);
+  if (PCI_HEADER_FIELD_IN_WORD(vendor_word, vendor_id) != 0xffff) {
+    PCIDevice *new_device = &pci_data.devices[pci_data.num_devices++];
+    new_device->bus = bus;
+    new_device->device = device;
+    new_device->function = function;
+
+    uint32_t class_field = PCI_HEADER_READ_FIELD_WORD(bus, device, function, class_code);
+
+    new_device->class_code = PCI_HEADER_FIELD_IN_WORD(class_field, class_code);
+    new_device->subclass = PCI_HEADER_FIELD_IN_WORD(class_field, subclass);
+    new_device->program_if = PCI_HEADER_FIELD_IN_WORD(class_field, program_if);
+
+    uint32_t htype_field = PCI_HEADER_READ_FIELD_WORD(bus, device, function, header_type);
+
+    new_device->header_type = PCI_HEADER_FIELD_IN_WORD(htype_field, header_type);
+    new_device->multifunction = (new_device->header_type & (1 << 7)) > 0;
+    new_device->header_type = new_device->header_type & ~(1 << 7);
+
+    print_pci_device(new_device);
+
+    return new_device;
+  }
+
+  return NULL;
+}
+
+
 static void enumerate_devices() {
   for(int bus = 0; bus < 256; bus++) {
     for(int device = 0; device < 32; device++) {
-      uint32_t vendor_word = PCI_HEADER_READ_FIELD_WORD(bus, device, 0, vendor_id);
-      if (PCI_HEADER_FIELD_IN_WORD(vendor_word, vendor_id) != 0xffff) {
-        PCIDevice *new_device = &pci_data.devices[pci_data.num_devices++];
-        new_device->bus = bus;
-        new_device->device = device;
+      PCIDevice *new_device = add_pci_device(bus, device, 0);
 
-        uint32_t class_field = PCI_HEADER_READ_FIELD_WORD(bus, device, 0, class_code);
-
-        new_device->class_code = PCI_HEADER_FIELD_IN_WORD(class_field, class_code);
-        new_device->subclass = PCI_HEADER_FIELD_IN_WORD(class_field, subclass);
-        new_device->program_if = PCI_HEADER_FIELD_IN_WORD(class_field, program_if);
-
-        uint32_t htype_field = PCI_HEADER_READ_FIELD_WORD(bus, device, 0, header_type);
-
-        new_device->header_type = PCI_HEADER_FIELD_IN_WORD(htype_field, header_type);
-        new_device->multifunction = (new_device->header_type & (1 << 7)) > 0;
-        new_device->header_type = new_device->header_type & ~(1 << 7);
-
-        // text_output_printf("PCI: bus: 0x%x 0x%x, 0x%x, 0x%x, mf: %d\n", bus, new_device->class_code, new_device->subclass, new_device->program_if, new_device->multifunction);
-        // text_output_printf("Vendor ID: 0x%x, Device ID: 0x%x\n", PCI_HEADER_FIELD_IN_WORD(vendor_word, vendor_id), PCI_HEADER_FIELD_IN_WORD(vendor_word, device_id));
+      if (new_device && new_device->multifunction) {
+        for (int func = 1; func < 8; ++func) {
+          add_pci_device(new_device->bus, new_device->device, func);
+        }
       }
     }
   }
