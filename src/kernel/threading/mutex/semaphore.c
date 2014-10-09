@@ -6,7 +6,7 @@
 #include "../../drivers/text_output.h"
 
 typedef struct {
-  list_entry entry; // This must be first
+  list_entry entry;
 
   KernelThread *thread;
 } WaitingThread;
@@ -24,14 +24,14 @@ void semaphore_up(Semaphore *sema, uint64_t value) {
 
   // We have to wake all threads potentially, in case the first one can't be
   // satisfied, but a later one can
-  // TODO: Figure out a better way to do this
-  WaitingThread *waiting_thread = (WaitingThread *)list_head(&sema->waiting_threads);
-  while (waiting_thread) {
+  list_entry *current = list_head(&sema->waiting_threads);;
+  while (current) {
+    WaitingThread *waiting_thread = container_of(current, WaitingThread, entry);
     list_remove(&sema->waiting_threads, &waiting_thread->entry);
     thread_wake(waiting_thread->thread);
     kfree(waiting_thread);
 
-    waiting_thread = (WaitingThread *)list_next(&waiting_thread->entry);
+    current = list_next(current);
   }
   
   // Only re-enable interrupts if they were enabled before
@@ -49,7 +49,25 @@ bool semaphore_down(Semaphore *sema, uint64_t value, int64_t timeout) {
     assert(waiting_thread);
 
     waiting_thread->thread = scheduler_current_thread();
-    list_push_front(&sema->waiting_threads, &waiting_thread->entry); // TODO: Sort by priority
+
+    // Insert based on priority (higher priority first)
+    list_entry *current = list_head(&sema->waiting_threads);
+
+    // Try to find a place to put the new thread
+    while (current) {
+      WaitingThread *to_compare = container_of(current, WaitingThread, entry);
+
+      if (thread_priority(waiting_thread->thread) >= thread_priority(to_compare->thread)) break;
+      current = list_next(current);
+    }
+
+    // If we couldn't find a place to put it, put it at the end
+    if (current) {
+      list_insert_before(&sema->waiting_threads, current, &waiting_thread->entry);
+    } else {
+      list_push_back(&sema->waiting_threads, &waiting_thread->entry);
+    }
+
     if (timeout == -1) {
       thread_sleep(waiting_thread->thread);
     } else {

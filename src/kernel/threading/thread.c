@@ -27,7 +27,7 @@ struct KernelThread {
   list_entry entry;
   uint32_t tid;
   uint32_t waiting_on:8; // Number of mutexes, IOs, etc. this thread is waiting on
-  uint32_t priority:5;
+  uint32_t priority:5; // Thread priority, higher priority threads will preempt lower priority threads
   uint32_t status:8;
   uint32_t reserved:11;
 

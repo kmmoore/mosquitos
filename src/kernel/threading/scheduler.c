@@ -126,7 +126,7 @@ void scheduler_register_thread(KernelThread *thread) {
   list_entry *current = list_head(&scheduler_data.thread_list);
 
   // Try to find a place to put the new thread
-  while (true) {
+  while (current) {
     KernelThread *t = thread_from_list_entry(current);
     if (thread_priority(thread) >= thread_priority(t)) break;
     current = list_next(current);

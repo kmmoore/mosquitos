@@ -45,7 +45,6 @@ void kernel_main(KernelInfo info) {
   text_output_printf("Built from %s on %s\n\n", build_git_info, build_time);
 
   // Initialize subsystems
-  // TODO: Break these into initialization files
   acpi_init(info.xdsp_address);
   interrupt_init();
   exception_init();
@@ -53,6 +52,7 @@ void kernel_main(KernelInfo info) {
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
 
+  // Set up the dynamic memory subsystem
   vm_init(info.memory_map, info.mem_map_size, info.mem_map_descriptor_size);
 
   timer_init();
@@ -71,7 +71,10 @@ void kernel_main(KernelInfo info) {
 
 // Initialization that needs a threaded context is done here
 void * kernel_main_thread() {
+  // Full acpica needs dynamic memory and scheduling
   acpi_enable_acpica();
+
+  // PCI needs APCICA to determine IRQ mappings
   pci_init();
 
   text_output_printf("Kernel initialization complete.\n");
