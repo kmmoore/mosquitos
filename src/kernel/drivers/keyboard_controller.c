@@ -2,8 +2,8 @@
 #include "../util.h"
 
 #include "../drivers/text_output.h"
-#include "../hardware/apic.h"
-#include "../hardware/interrupt.h"
+#include "../drivers/apic.h"
+#include "../drivers/interrupt.h"
 
 #define KEYBOARD_IRQ 1
 #define KEYBOARD_IV 0x21

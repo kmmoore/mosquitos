@@ -2,7 +2,7 @@
 #include "../scheduler.h"
 #include "../../util.h"
 #include "../../memory/kmalloc.h"
-#include "../../hardware/timer.h"
+#include "../../drivers/timer.h"
 #include "../../drivers/text_output.h"
 
 typedef struct {

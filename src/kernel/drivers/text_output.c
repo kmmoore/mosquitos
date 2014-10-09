@@ -5,7 +5,7 @@
 
 #include "font.h"
 #include "text_output.h"
-#include "../hardware/serial_port.h"
+#include "../drivers/serial_port.h"
 #include "../util.h"
 
 #define kTextOutputPadding 1

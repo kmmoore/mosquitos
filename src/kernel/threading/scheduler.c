@@ -2,9 +2,9 @@
 #include "thread.h"
 #include "../util.h"
 
-#include "../hardware/apic.h"
-#include "../hardware/timer.h"
-#include "../hardware/interrupt.h"
+#include "../drivers/apic.h"
+#include "../drivers/timer.h"
+#include "../drivers/interrupt.h"
 
 #include "../drivers/text_output.h"
 #include "../datastructures/list.h"

@@ -1,5 +1,5 @@
 #include "gdt.h"
-#include "../drivers/text_output.h"
+#include "text_output.h"
 
 // Private structs 
 static struct GDTEntry {

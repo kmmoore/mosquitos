@@ -4,10 +4,10 @@
 #include "text_output.h"
 #include "pci.h"
 
-#include "../hardware/acpi.h"
-#include "../hardware/timer.h"
-#include "../hardware/interrupt.h"
-#include "../hardware/timer.h"
+#include "../drivers/acpi.h"
+#include "../drivers/timer.h"
+#include "../drivers/interrupt.h"
+#include "../drivers/timer.h"
 #include "../memory/virtual_memory.h"
 #include "../memory/kmalloc.h"
 #include "../threading/thread.h"
@@ -143,13 +143,13 @@ void AcpiOsStall(UINT32 microseconds) {
   timer_thread_stall(microseconds);
 }
 
-void * AcpiOsMapMemory(ACPI_PHYSICAL_ADDRESS where, ACPI_SIZE length) {
+void * AcpiOsMapMemory(ACPI_PHYSICAL_ADDRESS where, ACPI_SIZE length UNUSED) {
   // if (length == 0)  return NULL;
   // uint64_t num_pages = (((length - 1) >> VM_PAGE_BIT_SIZE) + 1);
-  if (where + length > vm_max_physical_address()) {
-    text_output_printf("[ACPICA] Memory out of bounds!\n");
-    return NULL;
-  }
+  // if (where + length > vm_max_physical_address()) {
+  //   text_output_printf("[ACPICA] Memory out of bounds!\n");
+  //   return NULL;
+  // }
   // return vm_pmap(where, num_pages);
   return (void *)where;
 }

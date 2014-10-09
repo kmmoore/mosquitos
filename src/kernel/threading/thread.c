@@ -5,8 +5,8 @@
 #include "../memory/virtual_memory.h"
 #include "../memory/kmalloc.h"
 
-#include "../hardware/gdt.h"
-#include "../hardware/timer.h"
+#include "../drivers/gdt.h"
+#include "../drivers/timer.h"
 #include "../drivers/text_output.h"
 
 struct KernelThread {
