@@ -29,13 +29,13 @@ void sata_init() {
 
   text_output_printf("Found SATA AHCI controller\n");
 
-  uint32_t capability_word = PCI_HEADER_READ_FIELD_WORD(sata_data.hba->bus, sata_data.hba->device, 0, capability_pointer);
+  uint32_t capability_word = PCI_HEADER_READ_FIELD_WORD(sata_data.hba->bus, sata_data.hba->slot, 0, capability_pointer);
   uint8_t capability_pointer = PCI_HEADER_FIELD_IN_WORD(capability_word, capability_pointer);
 
   text_output_printf("SATA capability_pointer: 0x%x\n", capability_pointer);
 
   while (true) {
-    uint32_t capability = pci_config_read_word(sata_data.hba->bus, sata_data.hba->device, 0, capability_pointer);
+    uint32_t capability = pci_config_read_word(sata_data.hba->bus, sata_data.hba->slot, 0, capability_pointer);
 
     text_output_printf("Capability: 0x%x\n", field_in_word(capability_pointer, 0, 1));
 

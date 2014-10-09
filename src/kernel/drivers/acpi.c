@@ -88,7 +88,6 @@ ACPISDTHeader * acpi_locate_table(char *name) {
   ACPI_STATUS status = AcpiGetTable(name, 1, &header);
   if (status != AE_OK) text_output_printf("AcpiGetTable status: %d\n", status);
   assert(status == AE_OK);
-  text_output_printf("Found: %c%c%c%c\n", header->Signature[0], header->Signature[1], header->Signature[2], header->Signature[3]);
 
   return (ACPISDTHeader *)header;
 }

@@ -29,15 +29,16 @@ typedef struct {
 
 typedef struct {
   uint8_t program_if, subclass, class_code;
-  uint8_t bus, device, function;
+  uint8_t bus, slot, function;
   uint8_t multifunction, header_type;
+  uint32_t real_irq;
 } PCIDevice;
 
 // Functions  
 
 void pci_init();
-uint32_t pci_config_read_word (uint8_t bus, uint8_t device_number, uint8_t func, uint8_t offset);
-void pci_config_write_word (uint8_t bus, uint8_t device, uint8_t func, uint8_t offset, uint32_t value);
+uint32_t pci_config_read_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
+void pci_config_write_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset, uint32_t value);
 PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t program_if);
 
 // Macros
@@ -45,6 +46,6 @@ PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t progra
 #define PCI_OFFSET_WITHIN_HDR_FIELD(field) (offsetof(PCIGenericConfigHeader, field) - PCI_OFFSET_FOR_HDR_FIELD(field))
 
 #define PCI_HEADER_FIELD_IN_WORD(word, field) (field_in_word(word, PCI_OFFSET_WITHIN_HDR_FIELD(field), member_size(PCIGenericConfigHeader, field)))
-#define PCI_HEADER_READ_FIELD_WORD(bus, device, func, field) (pci_config_read_word(bus, device, func, PCI_OFFSET_FOR_HDR_FIELD(field)))
+#define PCI_HEADER_READ_FIELD_WORD(bus, slot, func, field) (pci_config_read_word(bus, slot, func, PCI_OFFSET_FOR_HDR_FIELD(field)))
 
 #endif

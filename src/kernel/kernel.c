@@ -28,8 +28,6 @@
 
 #include "../common/build_info.h"
 
-#include <acpi.h>
-
 void * kernel_main_thread();
 
 // Pre-threaded initialization is done here
@@ -54,7 +52,7 @@ void kernel_main(KernelInfo info) {
 
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
-  
+
   vm_init(info.memory_map, info.mem_map_size, info.mem_map_descriptor_size);
 
   timer_init();
@@ -71,61 +69,13 @@ void kernel_main(KernelInfo info) {
   assert(false); // We should never get here
 }
 
-ACPI_STATUS desc_callback(ACPI_HANDLE Object, UINT32 NestingLevel UNUSED, void *Context UNUSED, void **ReturnValue UNUSED) {
-
-  char name[128];
-  ACPI_BUFFER name_buffer = { .Length = sizeof(name), .Pointer = &name };
-  AcpiGetName(Object, ACPI_FULL_PATHNAME, &name_buffer);
-
-  // ACPI_PCI_ROUTING_TABLE *table = (ACPI_PCI_ROUTING_TABLE *)Context;
-
-  ACPI_DEVICE_INFO *device_info;
-  assert(AcpiGetObjectInfo(Object, &device_info) == AE_OK);
-  text_output_printf("%s\n", name);
-
-  if (device_info->Flags == ACPI_PCI_ROOT_BRIDGE) { 
-    // TODO figure out how to deal with multiple buses
-    text_output_printf("Found PCI root bridge.\n");
-
-    // ACPI_PCI_ROUTING_TABLE routing_table[128];
-    //   ACPI_BUFFER buffer;
-    //   buffer.Length = sizeof(routing_table);
-    //   buffer.Pointer = &routing_table;
-    //   status = AcpiGetIrqRoutingTable(system_bus_handle, &buffer);
-    //   text_output_printf("Status ok? %d\n", status == AE_OK);
-    //   assert(routing_table[0].Length == sizeof(ACPI_PCI_ROUTING_TABLE));
-
-    //   for (int i = 0; i < 128; ++i) {
-    //     if (routing_table[i].Length == 0) break;
-
-    //     uint16_t device_number = routing_table[i].Address >> 16;
-
-    //     text_output_printf("IRQ Pin %d, PCI device number: %d, Real IRQ: %d Source: %x %x %x %x\n", routing_table[i].Pin, device_number, routing_table[i].SourceIndex, routing_table[i].Source[0], routing_table[i].Source[1], routing_table[i].Source[2], routing_table[i].Source[3]);
-    //   }
-  }
-
-  // text_output_printf("%s: _ADR: %llx, SUB: %s\n", name, device_info->Address, device_info->SubsystemId.String);
-
-  ACPI_FREE(device_info);
-
-  return AE_OK;
-}
-
 // Initialization that needs a threaded context is done here
 void * kernel_main_thread() {
   acpi_enable_acpica();
   pci_init();
 
-  ACPI_HANDLE system_bus_handle;
-  ACPI_STATUS status = AcpiGetHandle(NULL, "\\_SB", &system_bus_handle);
-  assert(status == AE_OK);
+  text_output_printf("Kernel initialization complete.\n");
 
-  void *walk_return_value;
-  status = AcpiWalkNamespace(ACPI_TYPE_DEVICE, system_bus_handle, 1, desc_callback, NULL, NULL, &walk_return_value);
-  assert(status == AE_OK);
-
-
-
-  thread_exit();
+  thread_exit(); // TODO: Make returning do the same thing;
   return NULL;
 }
