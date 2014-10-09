@@ -1,9 +1,8 @@
 #include "module_manager.h"
-#include "util.h"
 #include "../common/mem_util.h"
 
 #define kMaxModules 32
-#define kModuleNameMaxLength 16
+#define kModuleNameMaxLength 24
 
 static struct {
   size_t num_modules;

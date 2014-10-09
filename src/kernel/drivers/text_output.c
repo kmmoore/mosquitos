@@ -17,9 +17,13 @@ static struct {
 
 
 void text_output_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
+  REQUIRE_MODULE("serial_port");
+  
   text_output.gop = gop;
 
   text_output.current_row = text_output.current_col = kTextOutputPadding;
+
+  REGISTER_MODULE("text_output");
 }
 
 static void text_output_draw_pixel(int x, int y, uint32_t color) {

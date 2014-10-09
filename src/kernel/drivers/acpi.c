@@ -47,6 +47,10 @@ static bool acpica_early_init() {
 }
 
 static bool acpica_enable() {
+  REQUIRE_MODULE("acpi_early");
+  REQUIRE_MODULE("virtual_memory");
+  REQUIRE_MODULE("scheduler");
+
   ACPI_STATUS status ;
 
   if (ACPI_FAILURE(status = AcpiInitializeSubsystem())) {
@@ -90,11 +94,17 @@ ACPISDTHeader * acpi_locate_table(char *name) {
 }
 
 void acpi_init(void *xdsp_address) {
+  REQUIRE_MODULE("text_output");
+
   acpi.xdsp_address = (uint64_t)xdsp_address;
 
   assert(acpica_early_init());
+
+  REGISTER_MODULE("acpi_early");
 }
 
 void acpi_enable_acpica() {
   assert(acpica_enable());
+
+  REGISTER_MODULE("acpi_full");
 }

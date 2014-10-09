@@ -88,7 +88,9 @@ static void security_exception() {
 }
 
 
-void exceptions_init() {
+void exception_init() {
+  REQUIRE_MODULE("interrupt");
+
   // Setup interrupt handlers for all exceptions
   interrupt_register_handler(0, div_by_zero);
   interrupt_register_handler(1, debug);

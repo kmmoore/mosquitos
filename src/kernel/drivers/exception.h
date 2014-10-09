@@ -1,8 +1,8 @@
 #include "../kernel_common.h"
 
-#ifndef _EXCEPTIONS_H
-#define _EXCEPTIONS_H
+#ifndef _EXCEPTION_H
+#define _EXCEPTION_H
 
-void exceptions_init();
+void exception_init();
 
 #endif

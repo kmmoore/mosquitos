@@ -93,8 +93,12 @@ FreeBlockHeader * kmalloc_increase_allocation(size_t num_bytes) {
 }
 
 void kmalloc_init() {
+  REQUIRE_MODULE("virtual_memory");
+
   list_init(&kmalloc_data.free_list);
   kmalloc_increase_allocation(0); // Increase by the minimum amount
+
+  REGISTER_MODULE("kmalloc");
 }
 
 void * kmalloc(size_t alloc_size) {

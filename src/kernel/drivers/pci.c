@@ -97,9 +97,12 @@ static void enumerate_devices() {
 }
 
 void pci_init() {
-  // text_output_printf("Enumerating PCI devices...");
+  REQUIRE_MODULE("interrupt");
+  REQUIRE_MODULE("acpi_full");
+  
   enumerate_devices();
-  // text_output_printf("Done\n");
+
+  REGISTER_MODULE("pci");
 }
 
 PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t program_if) {

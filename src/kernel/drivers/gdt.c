@@ -33,8 +33,6 @@ static void set_gdt_entry(int index, uint32_t base, uint32_t limit, uint8_t acce
 
 // Public functions
 void gdt_init() {
-  // text_output_print("Loading GDT...");
-
   // Setup GDT
   set_gdt_entry(0, 0, 0, 0, 0);                // Null segment
   set_gdt_entry(1, 0, 0xFFFFFFFF, 0b10011010, 0b1010); // Code segment
@@ -47,5 +45,5 @@ void gdt_init() {
 
   gdt_flush();
 
-  // text_output_print("Done\n");
+  REGISTER_MODULE("gdt");
 }

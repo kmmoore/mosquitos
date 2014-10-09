@@ -174,6 +174,9 @@ bool load_ioapic_address() {
 }
 
 void apic_init() {
+  REQUIRE_MODULE("acpi_early");
+  REQUIRE_MODULE("gdt");
+
   // Disable legacy PIC
 
   /* Set ICW1 */
@@ -210,6 +213,8 @@ void apic_init() {
   uint32_t val = apic_read(0x0f);
   val |= (1<<8);
   apic_write(0x0f, val);
+
+  REGISTER_MODULE("apic");
 }
 
 void apic_send_eoi() {

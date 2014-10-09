@@ -50,6 +50,8 @@ void serial_port_init() {
   serial_port_configure_line(SERIAL_COM1_BASE);
   serial_port_configure_buffers(SERIAL_COM1_BASE);
   serial_port_configure_modem(SERIAL_COM1_BASE);
+
+  REGISTER_MODULE("serial_port");
 }
 
 static bool serial_port_is_transmit_fifo_empty(unsigned int com) {

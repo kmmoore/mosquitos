@@ -40,7 +40,6 @@ void kernel_main(KernelInfo info) {
   module_manager_init();
 
   serial_port_init();
-
   text_output_init(info.gop);
 
   text_output_clear_screen(0x00000000);
@@ -51,13 +50,12 @@ void kernel_main(KernelInfo info) {
   // TODO: Break these into initialization files
   acpi_init(info.xdsp_address);
   interrupt_init();
-  exceptions_init();
-
-  vm_init(info.memory_map, info.mem_map_size, info.mem_map_descriptor_size);
+  exception_init();
 
   // Now that interrupt/exception handlers are set up, we can enable interrupts
   sti();
-  // sata_init();
+  
+  vm_init(info.memory_map, info.mem_map_size, info.mem_map_descriptor_size);
 
   timer_init();
   keyboard_controller_init();

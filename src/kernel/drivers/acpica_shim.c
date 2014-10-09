@@ -144,18 +144,10 @@ void AcpiOsStall(UINT32 microseconds) {
 }
 
 void * AcpiOsMapMemory(ACPI_PHYSICAL_ADDRESS where, ACPI_SIZE length UNUSED) {
-  // if (length == 0)  return NULL;
-  // uint64_t num_pages = (((length - 1) >> VM_PAGE_BIT_SIZE) + 1);
-  // if (where + length > vm_max_physical_address()) {
-  //   text_output_printf("[ACPICA] Memory out of bounds!\n");
-  //   return NULL;
-  // }
-  // return vm_pmap(where, num_pages);
   return (void *)where;
 }
 
 void AcpiOsUnmapMemory (void *address UNUSED, ACPI_SIZE size UNUSED) {
-  // vm_pfree(address, size);
 }
 
 ACPI_STATUS AcpiOsReadMemory(ACPI_PHYSICAL_ADDRESS address, UINT64 *value, UINT32 width) {

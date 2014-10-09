@@ -51,7 +51,7 @@ uint64_t timer_ticks() {
 }
 
 void timer_init() {
-  // text_output_printf("Initializing timer...");
+  REQUIRE_MODULE("interrupt");
 
   list_init(&timer_data.waiting_threads);
 
@@ -77,7 +77,7 @@ void timer_init() {
   }
   timer_data.cycles_per_tick >>= 5; // We execute about 4x more instructions in this loop than in the timer_thread_stall() loop
 
-  // text_output_printf("Done\n");
+  REGISTER_MODULE("timer");
 }
 
 void timer_thread_stall(uint64_t microseconds) {

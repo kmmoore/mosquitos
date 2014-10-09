@@ -1,7 +1,7 @@
-#include "kernel_common.h"
-
 #ifndef _UTIL_H
 #define _UTIL_H
+
+#include "kernel_common.h"
 
 // From: http://en.wikipedia.org/wiki/Offsetof
 #define container_of(ptr, type, member) ({ \

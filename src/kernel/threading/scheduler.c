@@ -61,6 +61,9 @@ void * idle_thread_main(void *p UNUSED) {
 }
 
 void scheduler_init() {
+  REQUIRE_MODULE("virtual_memory");
+  REQUIRE_MODULE("timer");
+
   list_init(&scheduler_data.thread_list);
 
   scheduler_data.current_thread = NULL;
@@ -71,7 +74,7 @@ void scheduler_init() {
 
   calibrate_apic_timer();
 
-  text_output_printf("Scheduler init\n");
+  REGISTER_MODULE("scheduler");
 }
 
 void scheduler_set_next() {

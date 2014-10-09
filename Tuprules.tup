@@ -8,7 +8,7 @@ EFIINC          := /usr/include/efi
 EFIINCS         := -isystem $(EFIINC) -isystem $(EFIINC)/$(ARCH) -isystem $(EFIINC)/protocol
 
 
-CFLAGS += -D_MOSQUITOS -D_mosquitos_ $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -Os -nostdlib -mno-red-zone -DEFI_FUNCTION_WRAPPER -ggdb
+CFLAGS += -D_MOSQUITOS -D_mosquitos_ -DDEBUG $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -Os -nostdlib -mno-red-zone -DEFI_FUNCTION_WRAPPER -ggdb
 
 PROJECT_TOP = $(TUP_CWD)
 BUILD_DIR = $(PROJECT_TOP)/build
