@@ -7,6 +7,8 @@
 #include "../common/mem_util.h"
 #include "util.h"
 
+#include "module_manager.h"
+
 #include "drivers/text_output.h"
 #include "drivers/keyboard_controller.h"
 #include "drivers/pci.h"
@@ -34,6 +36,8 @@ void * kernel_main_thread();
 void kernel_main(KernelInfo info) {
 
   cli();
+
+  module_manager_init();
 
   serial_port_init();
 

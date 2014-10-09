@@ -5,7 +5,7 @@ LD              := ld
 OBJCOPY         := objcopy
 
 EFIINC          := /usr/include/efi
-EFIINCS         := -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
+EFIINCS         := -isystem $(EFIINC) -isystem $(EFIINC)/$(ARCH) -isystem $(EFIINC)/protocol
 
 
 CFLAGS += -D_MOSQUITOS -D_mosquitos_ $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -Os -nostdlib -mno-red-zone -DEFI_FUNCTION_WRAPPER -ggdb

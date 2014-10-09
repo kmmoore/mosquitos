@@ -35,3 +35,27 @@ size_t strlen(const char *s) {
 
   return length;
 }
+
+int strcmp(const char *s1, const char *s2) {
+  while (*s1 == *s2 && *s1 != '\0' && *s2 != '\0') {
+    ++s1;
+    ++s2;
+  }
+
+  return *s1 - *s2;
+}
+
+size_t strlcpy(char * restrict dst, const char * restrict src, size_t size) {
+  size_t chars_read = 0;
+  while (src[chars_read] != '\0') {
+    if (chars_read < size - 1) {
+      dst[chars_read] = src[chars_read];
+    }
+    ++chars_read;
+  }
+
+  dst[size-1] = '\0';
+
+  return chars_read;
+}
+
