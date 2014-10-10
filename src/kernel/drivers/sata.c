@@ -2,6 +2,7 @@
 #include "text_output.h"
 #include "pci.h"
 #include "../util.h"
+#include "timer.h"
 
 #define PCI_MASS_STORAGE_CLASS_CODE 0x01
 #define PCI_SATA_SUBCLASS 0x06
@@ -29,19 +30,29 @@ void sata_init() {
 
   text_output_printf("Found SATA AHCI controller\n");
 
-  uint32_t capability_word = PCI_HEADER_READ_FIELD_WORD(sata_data.hba->bus, sata_data.hba->slot, 0, capability_pointer);
-  uint8_t capability_pointer = PCI_HEADER_FIELD_IN_WORD(capability_word, capability_pointer);
+  uint32_t abar_word = pci_config_read_word(sata_data.hba->bus, sata_data.hba->slot, sata_data.hba->function, 0x24);
+  uintptr_t hba_base_address = (abar_word & FIELD_MASK(19, 13));
 
-  text_output_printf("SATA capability_pointer: 0x%x\n", capability_pointer);
+  text_output_printf("HBA Base Address: %p\n", hba_base_address);
 
-  while (true) {
-    uint32_t capability = pci_config_read_word(sata_data.hba->bus, sata_data.hba->slot, 0, capability_pointer);
+  uint32_t ahci_version_word = *(uint32_t *)(hba_base_address + 0x10);
+  text_output_printf("AHCI Version: 0x%x\n", ahci_version_word);
 
-    text_output_printf("Capability: 0x%x\n", field_in_word(capability_pointer, 0, 1));
+  text_output_printf("HBA Capabilities: 0b%b\n", *(uint32_t *)(hba_base_address + 0x00));
 
-    capability_pointer = field_in_word(capability, 3, 1);
-    text_output_printf("Next: 0x%x\n", capability_pointer);
-    if (capability_pointer == 0) break;
-  }
+  uint32_t hba_controls = *(uint32_t *)(hba_base_address + 0x04);
+  text_output_printf("Global HBA Controls: 0b%b\n", hba_controls);
 
+  *(uint32_t *)(hba_base_address + 0x04) = hba_controls & (1 << 0); // Reset HBA
+  timer_thread_sleep(10);
+  *(uint32_t *)(hba_base_address + 0x04) = hba_controls & (1 << 31); // Enable ACHI mode
+  *(uint32_t *)(hba_base_address + 0x04) = hba_controls & (1 << 1); // Enable interrupts
+  timer_thread_sleep(10); 
+
+  hba_controls = *(uint32_t *)(hba_base_address + 0x04);
+  text_output_printf("Global HBA Controls: 0b%b\n", hba_controls);
+
+  uint32_t ports_implemented = *(uint32_t *)(hba_base_address + 0x0C);
+
+  text_output_printf("Ports implemented: 0b%b\n", ports_implemented);
 }

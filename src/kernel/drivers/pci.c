@@ -55,6 +55,7 @@ void pci_config_write_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t off
   return io_write_32(0xCFC, value);
 }
 
+
 ACPI_STATUS acpi_system_bus_walk_callback(ACPI_HANDLE Object, UINT32 NestingLevel UNUSED, void *Context UNUSED, void **ReturnValue UNUSED) {
   ACPI_DEVICE_INFO *device_info;
   assert(AcpiGetObjectInfo(Object, &device_info) == AE_OK);
@@ -95,10 +96,10 @@ static void pci_load_irq_routing_table() {
   assert(status == AE_OK);
 }
 
-static void print_pci_device(PCIDevice *device) {
-  text_output_printf("[PCI Device 0x%02x 0x%02x 0x%02x] Class Code: 0x%02x, Subclass: 0x%02x, Program IF: 0x%02x, IRQ #: %d, Multifunction? %d\n", device->bus, device->slot, device->function, device->class_code, device->subclass, device->program_if, device->real_irq, device->multifunction);
+// static void print_pci_device(PCIDevice *device) {
+//   text_output_printf("[PCI Device 0x%02x 0x%02x 0x%02x] Class Code: 0x%02x, Subclass: 0x%02x, Program IF: 0x%02x, IRQ #: %d, Multifunction? %d\n", device->bus, device->slot, device->function, device->class_code, device->subclass, device->program_if, device->real_irq, device->multifunction);
 
-}
+// }
 
 static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
   uint32_t vendor_word = PCI_HEADER_READ_FIELD_WORD(bus, slot, function, vendor_id);
@@ -126,7 +127,7 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
     if (slot < 2 || bus > 0) text_output_printf("Loading incorrect IRQ #\n");
     new_device->real_irq = pci_data.irq_routing_table[slot][interrupt_pin];
 
-    print_pci_device(new_device);
+    // print_pci_device(new_device);
 
     return new_device;
   }
