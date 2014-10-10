@@ -11,7 +11,7 @@
 #define member_size(type, member) sizeof(((type *)0)->member)
 
 #define NUM_BITS(bytes) (bytes * 8)
-#define ALL_ONES (~0)
+#define ALL_ONES (~0ll)
 #define BOTTOM_N_BITS_OFF(n) (ALL_ONES << n)
 #define BOTTOM_N_BITS_ON(n) (~BOTTOM_N_BITS_OFF(n))
 #define FIELD_MASK(bit_size, bit_offset) (BOTTOM_N_BITS_ON(bit_size) << bit_offset)
