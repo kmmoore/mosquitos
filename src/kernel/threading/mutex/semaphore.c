@@ -27,11 +27,12 @@ void semaphore_up(Semaphore *sema, uint64_t value) {
   list_entry *current = list_head(&sema->waiting_threads);;
   while (current) {
     WaitingThread *waiting_thread = container_of(current, WaitingThread, entry);
+    list_entry *next = list_next(current);
     list_remove(&sema->waiting_threads, &waiting_thread->entry);
     thread_wake(waiting_thread->thread);
     kfree(waiting_thread);
 
-    current = list_next(current);
+    current = next;
   }
   
   // Only re-enable interrupts if they were enabled before

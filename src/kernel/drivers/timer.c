@@ -35,12 +35,13 @@ void timer_isr() {
   list_entry *current = list_head(&timer_data.waiting_threads);
   while (current) {
     struct waiting_thread *current_waiting_thread = container_of(current, struct waiting_thread, entry);
+    list_entry *next = list_next(current);
 
     if (current_ticks >= current_waiting_thread->wake_time) {
       wake_waiting_thread(current_waiting_thread);
     }
 
-    current = list_next(current);
+    current = next;
   }
 
   apic_send_eoi();
@@ -120,12 +121,13 @@ void timer_cancel_thread_sleep(KernelThread *thread) {
   list_entry *current = list_head(&timer_data.waiting_threads);
   while (current) {
     struct waiting_thread *current_waiting_thread = container_of(current, struct waiting_thread, entry);
+    list_entry *next = list_next(current);
 
     if (current_waiting_thread->thread == thread) {
       wake_waiting_thread(current_waiting_thread);
     }
 
-    current = list_next(current);
+    current = next;
   }
 
   // Only re-enable interrupts if they were enabled before

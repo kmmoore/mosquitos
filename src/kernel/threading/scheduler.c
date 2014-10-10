@@ -49,11 +49,11 @@ static void calibrate_apic_timer() {
   text_output_printf("Done - frequency: %dHz\n", scheduler_data.apic_timer_frequency);
 }
 
-// static void setup_scheduler_timer() {
-//   uint32_t period = scheduler_data.apic_timer_frequency * SCHEDULER_TIME_SLICE_MS / 1000;
-//   apic_setup_local_timer(SCHEDULER_TIMER_DIVIDER, SCHEDULER_TIMER_IV, APIC_TIMER_PERIODIC, period);
-//   apic_set_local_timer_masked(false);
-// }
+static void setup_scheduler_timer() {
+  uint32_t period = scheduler_data.apic_timer_frequency * SCHEDULER_TIME_SLICE_MS / 1000;
+  apic_setup_local_timer(SCHEDULER_TIMER_DIVIDER, SCHEDULER_TIMER_IV, APIC_TIMER_PERIODIC, period);
+  apic_set_local_timer_masked(false);
+}
 
 void * idle_thread_main(void *p UNUSED) {
   while (1) __asm__ ("hlt");
@@ -115,7 +115,7 @@ void scheduler_load_thread(uint64_t *ss_pointer);
 void scheduler_start_scheduling() {
   scheduler_set_next();
 
-  // setup_scheduler_timer();
+  setup_scheduler_timer();
   // TODO: There is a race condition between these lines, but it shouldn't be an issue
   // because the thread loading should happen so much faster than the first clock tick
   scheduler_load_thread(thread_register_list_pointer(scheduler_data.current_thread));

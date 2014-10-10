@@ -142,11 +142,10 @@ void thread_wake(KernelThread *thread) {
   
   assert(thread->waiting_on > 0);
 
-  thread->status = THREAD_RUNNING;
-
   --thread->waiting_on;
 
   if (thread->waiting_on == 0) {
+    thread->status = THREAD_RUNNING;
     scheduler_register_thread(thread);
   }
 }
