@@ -38,6 +38,7 @@ static void device_not_available() {
 
 static void double_fault(int error_code) {
   panic("\nDouble Fault -- Halting! Error Code: %d\n", error_code);
+  __asm__ ("cli; hlt");
 }
 
 static void invalid_tss(int error_code) {
@@ -72,7 +73,7 @@ static void alignment_check(int error_code) {
 
 static void machine_check() {
   text_output_print("\nMachine Check Error -- Halting!\n");
-  __asm__ ("hlt");
+  __asm__ ("cli; hlt");
 }
 
 static void simd_fp_exception() {

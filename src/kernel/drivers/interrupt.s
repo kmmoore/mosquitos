@@ -8,14 +8,14 @@
 isr\num:
   save_context
 
-    # TODO: Inline the isr_common call
-    movq $0, %rsi
-    movq $\num, %rdi
-    call isr_common
+  # TODO: Inline the isr_common call
+  movq $0, %rsi
+  movq $\num, %rdi
+  call isr_common
 
-    restore_context
+  restore_context
 
-    iretq
+  iretq
 .endm
 
 .macro isr_error num 
@@ -23,14 +23,14 @@ isr\num:
 isr\num:
   save_context
 
-    # TODO: Inline the isr_common call
-    movq 128(%rsp), %rsi # Note, if you add 8 to the offset, you get the saved RIP (if there's an error)
-    movq $\num, %rdi
-    call isr_common
+  # TODO: Inline the isr_common call
+  movq 128(%rsp), %rsi # Note, if you add 8 to the offset, you get the saved RIP (if there's an error)
+  movq $\num, %rdi
+  call isr_common
 
-    restore_context
+  restore_context
 
-    iretq
+  iretq
 .endm
 
 # Actual isr definitions
@@ -58,3 +58,4 @@ isr_noerror 30
 isr_noerror 33
 isr_noerror 34
 isr_noerror 35
+isr_noerror 39

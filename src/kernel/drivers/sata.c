@@ -2,9 +2,15 @@
 #include "sata_types.h"
 #include "text_output.h"
 #include "pci.h"
+#include "interrupt.h"
+#include "apic.h"
 #include "../util.h"
 #include "timer.h"
 #include "../../common/mem_util.h"
+
+// TOOD: Make sure we don't use PCI/SATA MMIO/DMA space for other stuff
+
+#define SATA_IV 39
 
 #define MAX_CACHED_DEVICES 8
 
@@ -46,9 +52,14 @@ int ahci_find_command_slot(HBAPort *port) {
 
 #define ATA_DEV_BUSY 0x80
 #define ATA_DEV_DRQ 0x08
+
+void sata_isr() {
+  text_output_printf("SATA interrupt!\n");
+  apic_send_eoi();
+}
  
 bool read(HBAPort *port, uint32_t startl, uint32_t starth, uint32_t count, uint8_t *buf) {
-  port->interrupt_status = (uint32_t)-1;   // Clear pending interrupt bits
+  port->interrupt_status = 0;   // Clear pending interrupt bits
   int spin = 0; // Spin lock timeout counter
   int slot = ahci_find_command_slot(port);
   if (slot == -1)
@@ -110,28 +121,30 @@ bool read(HBAPort *port, uint32_t startl, uint32_t starth, uint32_t count, uint8
     return false;
   }
  
+  text_output_printf("is: 0b%b\n", port->interrupt_status);
+ 
   port->command_issue = 1 << slot; // Issue command
  
-  // Wait for completion
-  while (1)
-  {
-    // In some longer duration reads, it may be helpful to spin on the DPS bit 
-    // in the PxIS port field as well (1 << 5)
-    if ((port->command_issue & (1 << slot)) == 0) 
-      break;
-    if (port->interrupt_status & (1 << 30)) // Task file error
-    {
-      text_output_printf("Read disk error 0b%b\n", port->interrupt_status);
-      return false;
-    }
-  }
+  // // Wait for completion
+  // while (1)
+  // {
+  //   // In some longer duration reads, it may be helpful to spin on the DPS bit 
+  //   // in the PxIS port field as well (1 << 5)
+  //   if ((port->command_issue & (1 << slot)) == 0) 
+  //     break;
+  //   if (port->interrupt_status & (1 << 30)) // Task file error
+  //   {
+  //     text_output_printf("Read disk error 0b%b\n", port->interrupt_status);
+  //     return false;
+  //   }
+  // }
  
-  // Check again
-  if (port->interrupt_status & (1 << 30)) // HBA_PxIS_TFES
-  {
-    text_output_printf("Read disk error\n");
-    return false;
-  }
+  // // Check again
+  // if (port->interrupt_status & (1 << 30)) // HBA_PxIS_TFES
+  // {
+  //   text_output_printf("Read disk error\n");
+  //   return false;
+  // }
  
   return true;
 }
@@ -147,27 +160,24 @@ void ahci_execute_command(AHCIDevice *device) {
 
   port->command |= (1 << 4); // Enable FIS receiving
   port->command |= (1 << 0); // Start port
+  port->interrupt_enable = ALL_ONES;
 
-  timer_thread_sleep(10);
+  text_output_printf("IE: 0b%b\n", port->interrupt_enable);
   text_output_printf("CMD: 0b%b\n", port->command);
 
-  text_output_printf("\nHard drive read:\n\n");
-  uint32_t old_fg_color = text_output_get_foreground_color();
-  text_output_set_foreground_color(0x00FFFF00);
+  // text_output_printf("\nHard drive read:\n\n");
+  // uint32_t old_fg_color = text_output_get_foreground_color();
+  // text_output_set_foreground_color(0x00FFFF00);
 
   uint8_t buffer[512];
   if(read(port, 0, 0, 1, buffer)) {
-    for (int i = 0; i < 512 / 32; ++i) {
-      for (int j = 0; j < 32; ++j) {
-        if (j > 0 && j % 8 == 0) text_output_putchar(' ');
-
-        text_output_printf("%02X", buffer[i * 32 + j]);
-      }
-      text_output_putchar('\n');
-    }
   }
 
-  text_output_set_foreground_color(old_fg_color);
+  timer_thread_sleep(1000);
+
+  text_output_printf("is: 0b%b\n", port->interrupt_status);
+
+  // text_output_set_foreground_color(old_fg_color);
 
 }
 
@@ -191,10 +201,14 @@ static void print_ahci_device(AHCIDevice *device) {
 }
 
 bool reset_hba(HBAMemory *hba) {
-  hba->ghc &= (1 << 0); // Reset HBA
-  timer_thread_sleep(10);
-  hba->ghc &= (1 << 31); // Enable ACHI mode
-  timer_thread_sleep(10); 
+  hba->ghc |= (1 << 0); // Reset HBA
+  while (hba->ghc & 0x01) __asm__ volatile ("nop"); // Wait for reset
+
+  hba->ghc |= (1 << 31); // Enable ACHI mode
+  hba->ghc |= (1 << 1); // Set interrupt enable
+
+  text_output_printf("HBA GHC: 0b%b\n", hba->ghc);
+
 
   return (hba->ghc & 0x01) == 0;
 }
@@ -242,7 +256,13 @@ bool initialize_hba(PCIDevice *hba_device) {
   // We only know how to deal with general devices
   assert(hba_device->header_type == 0x0);
 
+  uint32_t cmd_word = PCI_HEADER_READ_FIELD_WORD(hba_device->bus, hba_device->slot, hba_device->function, command);
+  text_output_printf("HBA PCI CMD Field: 0b%b\n", PCI_HEADER_FIELD_IN_WORD(cmd_word, command) & (1 << 10));
+
   text_output_printf("HBA IRQ #: %d\n", hba_device->real_irq);
+
+  interrupt_register_handler(SATA_IV, sata_isr);
+  ioapic_map(hba_device->real_irq, SATA_IV);
 
   uint32_t abar_word = pci_config_read_word(hba_device->bus, hba_device->slot, hba_device->function, 0x24);
   uintptr_t hba_base_address = (abar_word & FIELD_MASK(19, 13));
@@ -257,7 +277,7 @@ bool initialize_hba(PCIDevice *hba_device) {
 
   text_output_printf("HBA Capabilities: 64-bit? %d, SSS? %d, AHCI Only? %d, num cmd slots: %d\n", (hba->capabilities & (1 << 31)) > 0, (hba->capabilities & (1 << 27)) > 0, (hba->capabilities & (1 << 18)) > 0, ((hba->capabilities & FIELD_MASK(5, 8)) >> 8) + 1);
 
-  // assert(reset_hba(hba));
+  assert(reset_hba(hba));
 
   discover_devices(hba);
 

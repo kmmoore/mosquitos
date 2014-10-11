@@ -146,7 +146,7 @@ void apic_set_local_timer_masked(bool masked) {
 // Locates the I/O APIC with IRQ Base == 0 and 
 // loads it's address into the global variables
 // `ioapic_index` and `ioapic_data`.
-bool load_ioapic_address() {
+static bool load_ioapic_address() {
   MADT *madt = (MADT *)acpi_locate_table("APIC");
 
   if (!madt) return false;
@@ -159,6 +159,8 @@ bool load_ioapic_address() {
 
     if (entry->device_type == 1) {
       IOAPICHeader *header = (IOAPICHeader *)entry;
+
+      assert(header->irq_base == 0);
 
       if (header->irq_base == 0x0) {
         found = true;

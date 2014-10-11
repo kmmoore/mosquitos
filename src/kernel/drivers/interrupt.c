@@ -36,6 +36,7 @@ static void set_idt_entry(int index, uint64_t base, uint16_t selector, uint8_t a
 }
 
 void isr_common(uint64_t num, uint64_t error_code) {
+  if (num == 38) text_output_printf("got 38\n");
   interrupts_handlers[num](error_code);
 }
 
@@ -66,6 +67,7 @@ extern void isr35();
 // TODO: Figure out how to not special case this here
 extern void scheduler_timer_isr(); // We have to handle this separately
 extern void scheduler_yield_without_saving_isr(); // We have to handle this separately
+extern void isr39();
 
 // Public functions
 void interrupt_init() {
@@ -107,6 +109,8 @@ void interrupt_init() {
   set_idt_entry(35, (uint64_t)isr35, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (calibration)
   set_idt_entry(36, (uint64_t)scheduler_timer_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
   set_idt_entry(37, (uint64_t)scheduler_yield_without_saving_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
+  // Something is weird about IV 38...
+  set_idt_entry(39, (uint64_t)isr39, GDT_KERNEL_CS, 0b10001110); // SATA HBA
 
   IDTR.size = sizeof(IDT) - 1;
   IDTR.address = (uint64_t)&IDT[0];
