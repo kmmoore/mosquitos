@@ -2,14 +2,15 @@ MosquitOS is a tiny x86_64 UEFI-based operating system built from scratch.
 
 **Goals:**
 
-  - UEFI Bootloader
-  - Pre-emptive multitasking
-  - Thread support
-  - Multiprocessor support
-  - PCI support
-  - Basic filesystem
-  - Virtual memory
-
+-   64-bit kernel
+-   UEFI bootloader
+-   Pre-emptive multitasking
+-   Multiprocessor support
+-   PCI support
+-   USB support
+-   Basic filesystem
+-   Virtual memory
+-   Bootable on a real computer
 
 **Compilation:**
 
