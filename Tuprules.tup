@@ -4,14 +4,30 @@ CC              := gcc
 LD              := ld
 OBJCOPY         := objcopy
 
+# You may have to change the EFIINCS variable to point to wherever gnu-efi is installed on your system
 EFIINC          := /usr/include/efi
 EFIINCS         := -isystem $(EFIINC) -isystem $(EFIINC)/$(ARCH) -isystem $(EFIINC)/protocol
 
 
+# Set up some common CFLAGS for both the bootloader and the kernel
+# -nostdlib is critical because libc depends on an operating system --
+# which we do not have.
 CFLAGS += -D_MOSQUITOS -D_mosquitos_ -DDEBUG $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -Os -nostdlib -mno-red-zone -DEFI_FUNCTION_WRAPPER -ggdb
 
 PROJECT_TOP = $(TUP_CWD)
 BUILD_DIR = $(PROJECT_TOP)/build
 
+# A macro to invoke the compiler on an input file (%f) with the specified
+# flags to produce an output file (%o).
+# The final "| $(MODULE_TOP)/<objects>" tells tup to add the compiled
+# object file to the <objects> "global group" (see the tup manual)
+# located in the $MODULE_TOP directory. $MODULE_TOP is set to either 
+# /src/bootloader or /src/kernel. This adds all of the object files for
+# a module to a global list so they can be linked together into the final
+# binaries at the end.
 !cc = |> $(CC) $(CFLAGS) -c %f -o %o |> %B.o | $(MODULE_TOP)/<objects>
+
+# This does the same as !cc, but it's used to compile files that are
+# included in all modules, so they get added to a <common_objects> group
+# which gets linked into all modules.
 !cc_common = |> $(CC) $(CFLAGS) -c %f -o %o |> %B.o | $(PROJECT_TOP)/<common_objects>

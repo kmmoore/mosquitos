@@ -1,6 +1,4 @@
 include_rules
 
-LDFLAGS += -r
-
 : foreach *.c |> !cc |> %B.o
 : foreach *.s |> !cc |> %B_asm.o

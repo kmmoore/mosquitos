@@ -10,4 +10,5 @@ CFLAGS += -fno-stack-protector -fPIC -fshort-wchar
 
 LDFLAGS += -nostdlib -znocombreloc -T $(EFI_LDS) -shared -Bsymbolic -L $(LIBDIR)
 
+# Set $MODULE_TOP so the compiled objects get put in the right place
 MODULE_TOP = $(TUP_CWD)

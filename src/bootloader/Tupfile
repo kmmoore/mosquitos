@@ -1,8 +1,15 @@
 include_rules
 
+# Compile all C and ASM files
 : foreach *.c |> !cc |> %B.o
 : foreach *.s |> !cc |> %B_asm.o
 
+# Link bootloader objects and common objects together with gnu-efi 
+# libraries. We can't produce the appropriate type of executable with ld
+# so we'll create a shared library with all of the code, and patch it
+# together later.
 : $(MODULE_TOP)/<objects> $(PROJECT_TOP)/<common_objects> |> $(LD) $(LDFLAGS) $(EFI_CRT_OBJS) %<objects> %<common_objects> -o %o $(LIBS) |> %d.so
 
+# Copy the appropriate sections together into an executable with the
+# appropriate format to be a UEFI executable.
 : *.so |> $(OBJCOPY) -j .text -j .sdata -j .data -j .dynamic -j .dynsym -j .rel -j .rela -j .reloc --target=efi-app-$(ARCH) %f %o |> $(BUILD_DIR)/%d
