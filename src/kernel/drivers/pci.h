@@ -31,6 +31,8 @@ typedef struct {
   uint8_t program_if, subclass, class_code;
   uint8_t bus, slot, function;
   uint8_t multifunction, header_type;
+  uint8_t has_interrupts:1;
+  uint8_t other_flags:7;
   uint32_t real_irq;
 } PCIDevice;
 

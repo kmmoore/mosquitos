@@ -25,7 +25,7 @@ typedef union {
 
 static struct {
   PCIDevice devices[PCI_MAX_DEVICES];
-  uint32_t irq_routing_table[4][PCI_MAX_SLOT_NUM]; // TODO: Support more than just bus 0
+  uint32_t irq_routing_table[PCI_MAX_SLOT_NUM][4]; // TODO: Support more than just bus 0
   int num_devices;
 } pci_data;
 
@@ -96,10 +96,10 @@ static void pci_load_irq_routing_table() {
   assert(status == AE_OK);
 }
 
-// static void print_pci_device(PCIDevice *device) {
-//   text_output_printf("[PCI Device 0x%02x 0x%02x 0x%02x] Class Code: 0x%02x, Subclass: 0x%02x, Program IF: 0x%02x, IRQ #: %d, Multifunction? %d\n", device->bus, device->slot, device->function, device->class_code, device->subclass, device->program_if, device->real_irq, device->multifunction);
+UNUSED static void print_pci_device(PCIDevice *device) {
+  text_output_printf("[PCI Device 0x%02x 0x%02x 0x%02x] Class Code: 0x%02x, Subclass: 0x%02x, Program IF: 0x%02x, IRQ #: %d, Multifunction? %d\n", device->bus, device->slot, device->function, device->class_code, device->subclass, device->program_if, device->real_irq, device->multifunction);
 
-// }
+}
 
 static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
   uint32_t vendor_word = PCI_HEADER_READ_FIELD_WORD(bus, slot, function, vendor_id);
@@ -125,9 +125,12 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
     uint8_t interrupt_pin = PCI_HEADER_FIELD_IN_WORD(interrupt_field, interrupt_pin);
 
     if (slot < 2 || bus > 0) text_output_printf("Loading incorrect IRQ #\n");
-    new_device->real_irq = pci_data.irq_routing_table[slot][interrupt_pin];
-
-    // print_pci_device(new_device);
+    if (interrupt_pin == 0) {
+      new_device->has_interrupts = 0;
+    } else {
+      new_device->has_interrupts = 1;
+      new_device->real_irq = pci_data.irq_routing_table[slot][interrupt_pin-1]; // INTA# is 0x01
+    }
 
     return new_device;
   }

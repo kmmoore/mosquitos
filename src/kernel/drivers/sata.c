@@ -160,7 +160,7 @@ void ahci_execute_command(AHCIDevice *device) {
 
   port->command |= (1 << 4); // Enable FIS receiving
   port->command |= (1 << 0); // Start port
-  port->interrupt_enable = 1;
+  port->interrupt_enable = ALL_ONES;
 
   text_output_printf("IE: 0b%b\n", port->interrupt_enable);
   text_output_printf("CMD: 0b%b\n", port->command);
@@ -173,7 +173,7 @@ void ahci_execute_command(AHCIDevice *device) {
   if(read(port, 0, 0, 1, buffer)) {
   }
 
-  timer_thread_sleep(1000);
+  timer_thread_sleep(100);
 
   text_output_printf("is: 0b%b\n", port->interrupt_status);
 
@@ -256,13 +256,16 @@ bool initialize_hba(PCIDevice *hba_device) {
   // We only know how to deal with general devices
   assert(hba_device->header_type == 0x0);
 
+  // TODO: Fall back to polling if there isn't a PCI interrupt associated. In reality this should never(?) happen.
+  assert(hba_device->has_interrupts);
+
   uint32_t cmd_word = PCI_HEADER_READ_FIELD_WORD(hba_device->bus, hba_device->slot, hba_device->function, command);
   text_output_printf("HBA PCI CMD Field: 0b%b\n", PCI_HEADER_FIELD_IN_WORD(cmd_word, command) & (1 << 10));
 
-  text_output_printf("HBA IRQ #: %d\n", hba_device->real_irq);
+  text_output_printf("HBA Slot: %d, IRQ #: %d\n", hba_device->slot, hba_device->real_irq);
 
   interrupt_register_handler(SATA_IV, sata_isr);
-  ioapic_map(23, SATA_IV); // TODO: Figure out why this is interrupt 23...
+  ioapic_map(hba_device->real_irq, SATA_IV);
 
   uint32_t abar_word = pci_config_read_word(hba_device->bus, hba_device->slot, hba_device->function, 0x24);
   uintptr_t hba_base_address = (abar_word & FIELD_MASK(19, 13));
