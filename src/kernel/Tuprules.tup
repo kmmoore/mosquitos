@@ -1,8 +1,7 @@
 # Kernel TUP rules
 
-ACPICA_DIR      := $(TUP_CWD)/acpica
-ACPI_INC        := $(ACPICA_DIR)/include
-ACPICA_LIB      := $(ACPICA_DIR)/acpica.o
+ACPI_INC        := $(TUP_CWD)/acpica/include
+LIBS            := `$(CC) -print-libgcc-file-name`
 
 CFLAGS += -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -fno-omit-frame-pointer -isystem $(ACPI_INC)
 

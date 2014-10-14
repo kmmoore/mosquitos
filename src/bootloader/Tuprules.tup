@@ -3,8 +3,7 @@
 LIBDIR          := /usr/lib
 EFI_CRT_OBJS    := $(LIBDIR)/crt0-efi-$(ARCH).o
 EFI_LDS         := $(LIBDIR)/elf_$(ARCH)_efi.lds
-LIBS            := -lefi -lgnuefi
-# `$(CC) -print-libgcc-file-name`
+LIBS            := -lefi -lgnuefi `$(CC) -print-libgcc-file-name`
 
 CFLAGS += -fno-stack-protector -fPIC -fshort-wchar 
 
