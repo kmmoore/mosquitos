@@ -160,7 +160,7 @@ void ahci_execute_command(AHCIDevice *device) {
 
   port->command |= (1 << 4); // Enable FIS receiving
   port->command |= (1 << 0); // Start port
-  port->interrupt_enable = ALL_ONES;
+  port->interrupt_enable = 1;
 
   text_output_printf("IE: 0b%b\n", port->interrupt_enable);
   text_output_printf("CMD: 0b%b\n", port->command);
@@ -262,7 +262,7 @@ bool initialize_hba(PCIDevice *hba_device) {
   text_output_printf("HBA IRQ #: %d\n", hba_device->real_irq);
 
   interrupt_register_handler(SATA_IV, sata_isr);
-  ioapic_map(hba_device->real_irq, SATA_IV);
+  ioapic_map(23, SATA_IV); // TODO: Figure out why this is interrupt 23...
 
   uint32_t abar_word = pci_config_read_word(hba_device->bus, hba_device->slot, hba_device->function, 0x24);
   uintptr_t hba_base_address = (abar_word & FIELD_MASK(19, 13));
