@@ -116,6 +116,7 @@ void scheduler_start_scheduling() {
   scheduler_set_next();
 
   setup_scheduler_timer();
+  
   // TODO: There is a race condition between these lines, but it shouldn't be an issue
   // because the thread loading should happen so much faster than the first clock tick
   scheduler_load_thread(thread_register_list_pointer(scheduler_data.current_thread));

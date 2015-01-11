@@ -88,6 +88,7 @@ void * kernel_main_thread() {
 
   text_output_set_foreground_color(0x0000FF00);
   text_output_printf("\nKernel initialization complete.\n\n");
+  text_output_set_foreground_color(0x00FFFFFF);
 
   thread_exit(); // TODO: Make returning do the same thing;
   return NULL;

@@ -7,6 +7,7 @@
 #include "text_output.h"
 #include "../drivers/serial_port.h"
 #include "../util.h"
+#include "../threading/mutex/lock.h"
 
 #define kTextOutputPadding 1
 
@@ -14,11 +15,15 @@ static struct {
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   int current_row, current_col;
   uint32_t background_color, foreground_color;
+  Lock lock;
 } text_output_data;
 
 
 void text_output_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
   REQUIRE_MODULE("serial_port");
+
+  // TODO: Sort out locking
+  lock_init(&text_output_data.lock);
   
   text_output_data.gop = gop;
 
@@ -81,6 +86,8 @@ static void text_output_draw_char(char c, int x, int y) {
 }
 
 void text_output_backspace() {
+  // lock_acquire(&text_output_data.lock, -1);
+
   if (text_output_data.current_col == kTextOutputPadding) { // Beginning of line
     // TODO: Figure out how to go back up...
   } else {
@@ -90,9 +97,13 @@ void text_output_backspace() {
   }
 
   serial_port_putchar(0x8); // ASCII backspace character
+
+  // lock_release(&text_output_data.lock);
 }
 
 inline void text_output_putchar(const char c) {
+  // lock_acquire(&text_output_data.lock, -1);
+
   if (c == '\n') {
     text_output_data.current_row += 2; // Put an empty line between text lines
 
@@ -108,6 +119,8 @@ inline void text_output_putchar(const char c) {
   }
 
   serial_port_putchar(c);
+
+  // lock_release(&text_output_data.lock);
 }
 
 void text_output_print(const char *str) {

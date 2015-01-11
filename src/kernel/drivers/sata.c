@@ -55,6 +55,16 @@ int ahci_find_command_slot(HBAPort *port) {
 
 void sata_isr() {
   text_output_printf("SATA interrupt!\n");
+  for (size_t i = 0; i < sata_data.num_devices; ++i) {
+    AHCIDevice *device = &sata_data.devices[i];
+    HBAPort *port = &device->hba->ports[device->port_number];
+
+    if (port->interrupt_status > 0) {
+      text_output_printf("Got interrupt for device #%d\n", i);
+    }
+  }
+
+
   apic_send_eoi();
 }
  
@@ -173,10 +183,6 @@ void ahci_execute_command(AHCIDevice *device) {
   if(read(port, 0, 0, 1, buffer)) {
   }
 
-  timer_thread_sleep(100);
-
-  text_output_printf("is: 0b%b\n", port->interrupt_status);
-
   // text_output_set_foreground_color(old_fg_color);
 
 }
@@ -264,6 +270,7 @@ bool initialize_hba(PCIDevice *hba_device) {
 
   text_output_printf("HBA Slot: %d, IRQ #: %d\n", hba_device->slot, hba_device->real_irq);
 
+  // TODO: Try to set up MSI again
   interrupt_register_handler(SATA_IV, sata_isr);
   ioapic_map(hba_device->real_irq, SATA_IV);
 
