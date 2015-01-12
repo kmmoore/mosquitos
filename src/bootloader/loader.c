@@ -5,6 +5,9 @@
 #include "../kernel/kernel.h"
 #include "elf_parse.h"
 
+#include "efiConsoleControl.h"
+
+
 EFI_STATUS
 get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, OUT UINTN *descriptor_size) {
   EFI_STATUS status;
@@ -57,85 +60,118 @@ bool guids_match(EFI_GUID guid1, EFI_GUID guid2) {
   return true;
 }
 
+EFI_GUID gEfiConsoleControlProtocolGuid = EFI_CONSOLE_CONTROL_PROTOCOL_GUID;
+
 EFI_STATUS
 EFIAPI
 efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
   InitializeLib(ImageHandle, SystemTable);
 
-  EFI_STATUS status;
-
-  // Load the kernel ELF file into memory and get the entry address
-  void *kernel_main_addr = NULL;
-  status = load_kernel(L"kernel", &kernel_main_addr);
-  if (status != EFI_SUCCESS) {
-    Print(L"Error loading kernel: %d\n", status);
-    return EFI_ABORTED;
-  }
-
-  Print(L"Got kernel_main at: 0x%x\n", kernel_main_addr);
-
-  EFI_CONFIGURATION_TABLE *configuration_tables = SystemTable->ConfigurationTable;
-
-  void *xdsp_address = NULL;
-  static EFI_GUID acpi_guid = ACPI_20_TABLE_GUID;
-  for (unsigned i = 0; i < SystemTable->NumberOfTableEntries; ++i) {
-    if (guids_match(acpi_guid, configuration_tables[i].VendorGuid)) {
-      Print(L"Found ACPI Table pointer 0x%x\n", configuration_tables[i].VendorTable);
-      xdsp_address = configuration_tables[i].VendorTable;
-    }
-  }
-
-  if (!xdsp_address) {
-    Print(L"Could not locate ACPI v2.0 table, aborting!\n");
-    return EFI_ABORTED;
-  }
-
-  // Wait for keypress to give us time to attach a debugger, etc.
-  Print(L"Waiting for keypress to continue booting...\n");
-  wait_for_keypress();
+  uefi_call_wrapper(BS->SetWatchdogTimer, 4, 0, 0x0, 0, NULL);
+  uefi_call_wrapper(ST->ConOut->Reset, 2, ST->ConOut, FALSE);
+  
 
   // Get access to a simple graphics buffer
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
-   
-  status = uefi_call_wrapper(BS->LocateProtocol, 3, &gop_guid, NULL, &gop);
 
-  // Get memory map
-  UINTN mem_map_size = 0, mem_map_key = 0, mem_map_descriptor_size = 0;
-  uint8_t *mem_map = NULL;
+  uefi_call_wrapper(BS->LocateProtocol, 3, &gop_guid, NULL, &gop);
 
-  // Try to exit boot services 3 times
-  for (int retries = 0; retries < 3; ++retries) {
-    status = get_memory_map((void **)&mem_map, &mem_map_size, &mem_map_key, &mem_map_descriptor_size);
+  EFI_GRAPHICS_OUTPUT_BLT_PIXEL fillColor = { 0, 0, 0xff, 0 };
+  UINTN width = gop->Mode->Info->HorizontalResolution;
+  UINTN height = gop->Mode->Info->VerticalResolution;
+  uefi_call_wrapper(gop->Blt, 10, gop, &fillColor, EfiBltVideoFill, 0, 0, 0, 0, width, height, 0);
 
-    if (EFI_ERROR(status)) {
-      Print(L"Error getting memory map!\n");
-      return status;
-    }
+  EFI_CONSOLE_CONTROL_PROTOCOL *ConsoleControl;
+  int changed = 0;
 
-    // Exit boot services
-    status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, mem_map_key);
-    // Execute kernel if we are successful
-    if (status == EFI_SUCCESS) {
-      // Jump to kernel code
-      KernelInfo info = {
-        .xdsp_address = xdsp_address,
-        .memory_map = mem_map,
-        .mem_map_size = mem_map_size,
-        .mem_map_descriptor_size = mem_map_descriptor_size,
-        .gop = gop
-      };
-      ((KernelMainFunc)kernel_main_addr)(info);
-    }
+  if (uefi_call_wrapper(BS->LocateProtocol, 3, &gEfiConsoleControlProtocolGuid, NULL, &ConsoleControl) == EFI_SUCCESS) {
+    uefi_call_wrapper(ConsoleControl->SetMode, 2, ConsoleControl, EfiConsoleControlScreenText);
+    changed = 1;
   }
 
-  /*
-    If we've reached here, we haven't managed to exit boot services,
-    we should print an error, free our resources and return.
-  */
+  if (changed) {
+    Print(L"Hello, world!");
+  }
 
-  Print(L"Unable to successfully exit boot services. Last status: %d\n", status);
-  uefi_call_wrapper(BS->FreePool, 1, mem_map);
+  while(1);
 
-  return EFI_ABORTED;
+  return EFI_SUCCESS;
+
+  // EFI_STATUS status;
+
+  // // Load the kernel ELF file into memory and get the entry address
+  // void *kernel_main_addr = NULL;
+  // status = load_kernel(L"kernel", &kernel_main_addr);
+  // if (status != EFI_SUCCESS) {
+  //   Print(L"Error loading kernel: %d\n", status);
+  //   return EFI_ABORTED;
+  // }
+
+  // Print(L"Got kernel_main at: 0x%x\n", kernel_main_addr);
+
+  // EFI_CONFIGURATION_TABLE *configuration_tables = SystemTable->ConfigurationTable;
+
+  // void *xdsp_address = NULL;
+  // static EFI_GUID acpi_guid = ACPI_20_TABLE_GUID;
+  // for (unsigned i = 0; i < SystemTable->NumberOfTableEntries; ++i) {
+  //   if (guids_match(acpi_guid, configuration_tables[i].VendorGuid)) {
+  //     Print(L"Found ACPI Table pointer 0x%x\n", configuration_tables[i].VendorTable);
+  //     xdsp_address = configuration_tables[i].VendorTable;
+  //   }
+  // }
+
+  // if (!xdsp_address) {
+  //   Print(L"Could not locate ACPI v2.0 table, aborting!\n");
+  //   return EFI_ABORTED;
+  // }
+
+  // // Wait for keypress to give us time to attach a debugger, etc.
+  // Print(L"Waiting for keypress to continue booting...\n");
+  // wait_for_keypress();
+
+  // // Get access to a simple graphics buffer
+  // EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
+  // EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
+   
+  // status = uefi_call_wrapper(BS->LocateProtocol, 3, &gop_guid, NULL, &gop);
+
+  // // Get memory map
+  // UINTN mem_map_size = 0, mem_map_key = 0, mem_map_descriptor_size = 0;
+  // uint8_t *mem_map = NULL;
+
+  // // Try to exit boot services 3 times
+  // for (int retries = 0; retries < 3; ++retries) {
+  //   status = get_memory_map((void **)&mem_map, &mem_map_size, &mem_map_key, &mem_map_descriptor_size);
+
+  //   if (EFI_ERROR(status)) {
+  //     Print(L"Error getting memory map!\n");
+  //     return status;
+  //   }
+
+  //   // Exit boot services
+  //   status = uefi_call_wrapper(BS->ExitBootServices, 2, ImageHandle, mem_map_key);
+  //   // Execute kernel if we are successful
+  //   if (status == EFI_SUCCESS) {
+  //     // Jump to kernel code
+  //     KernelInfo info = {
+  //       .xdsp_address = xdsp_address,
+  //       .memory_map = mem_map,
+  //       .mem_map_size = mem_map_size,
+  //       .mem_map_descriptor_size = mem_map_descriptor_size,
+  //       .gop = gop
+  //     };
+  //     ((KernelMainFunc)kernel_main_addr)(info);
+  //   }
+  // }
+
+  // /*
+  //   If we've reached here, we haven't managed to exit boot services,
+  //   we should print an error, free our resources and return.
+  // */
+
+  // Print(L"Unable to successfully exit boot services. Last status: %d\n", status);
+  // uefi_call_wrapper(BS->FreePool, 1, mem_map);
+
+  // return EFI_ABORTED;
 }
