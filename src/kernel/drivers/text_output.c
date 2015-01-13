@@ -52,11 +52,12 @@ uint32_t text_output_get_foreground_color() {
 }
 
 static void text_output_draw_pixel(int x, int y, uint32_t color) {
-  ((uint32_t *)text_output_data.gop->Mode->FrameBufferBase)[y * text_output_data.gop->Mode->Info->HorizontalResolution + x] = color;
+  ((uint32_t *)text_output_data.gop->Mode->FrameBufferBase)[y * text_output_data.gop->Mode->Info->PixelsPerScanLine + x] = color;
 }
 
 void text_output_clear_screen() {
   // TODO: The graphics stuff should be in a graphics library, not this library
+  // TODO: We should use gop->Blt here
   for (unsigned int x = 0; x < text_output_data.gop->Mode->Info->HorizontalResolution; ++x) {
     for (unsigned int y = 0; y < text_output_data.gop->Mode->Info->VerticalResolution; y++) {
       text_output_draw_pixel(x, y, text_output_data.background_color);

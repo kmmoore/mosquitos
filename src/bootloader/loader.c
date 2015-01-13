@@ -107,15 +107,25 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     return EFI_ABORTED;
   }
 
-  // Wait for keypress to give us time to attach a debugger, etc.
-  Print(L"Waiting for keypress to continue booting...\n");
-  wait_for_keypress();
-
   // Get access to a simple graphics buffer
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
    
   status = uefi_call_wrapper(BS->LocateProtocol, 3, &gop_guid, NULL, &gop);
+
+  if (EFI_ERROR(status)) {
+    Print(L"Could not get Simple Graphics Output Protocol, error: %d. Aborting.\n", status);
+    return EFI_ABORTED;
+  }
+
+  UINT32 max_mode = gop->Mode->MaxMode;
+  Print(L"Current mode: %d, max mode: %d\n", gop->Mode->Mode, max_mode);
+
+  // uefi_call_wrapper(gop->SetMode, 2, gop, max_mode-2);
+
+  // Wait for keypress to give us time to attach a debugger, etc.
+  Print(L"Waiting for keypress to continue booting...\n");
+  wait_for_keypress();
 
   // Get memory map
   UINTN mem_map_size = 0, mem_map_key = 0, mem_map_descriptor_size = 0;
