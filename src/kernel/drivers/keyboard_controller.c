@@ -15,6 +15,7 @@ static uint8_t SCAN_CODE_MAPPING_SHIFTED[] = "\x00""\x1B""!@#$%^&*()_+""\x08""\t
 
 // TODO: Make this a little better
 void keyboard_isr() {
+  text_output_printf("Keyboard interrupt!\n");
   // uint8_t status = inb(0x64);
   uint8_t scancode = io_read_8(0x60); // Read scancode
 
