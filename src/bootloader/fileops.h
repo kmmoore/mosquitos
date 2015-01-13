@@ -10,9 +10,11 @@
 #ifndef _FILEOPS_H
 #define _FILEOPS_H
 
+void fops_init(EFI_HANDLE image_handle);
+
 EFI_FILE_IO_INTERFACE * fops_get_filesystem();
 
-EFI_FILE * fops_open_volume(EFI_FILE_IO_INTERFACE *fs);
+EFI_FILE * fops_open_volume();
 
 EFI_FILE * fops_open_file(EFI_FILE *root_dir, CHAR16 *filename, UINT64 mode, UINT64 attributes);
 

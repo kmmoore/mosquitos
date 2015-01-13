@@ -46,9 +46,21 @@ EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
   EFI_STATUS status;
 
   // Open filesystem
-  EFI_FILE_IO_INTERFACE *fs = fops_get_filesystem();
-  EFI_FILE *fs_root = fops_open_volume(fs);
+  // EFI_FILE_IO_INTERFACE *fs = fops_get_filesystem();
+  EFI_FILE *fs_root = fops_open_volume();
   if (fs_root == NULL) return EFI_ABORTED;
+
+  // List the root directory
+  char file_info_buffer[SIZE_OF_EFI_FILE_INFO * 4]; // We don't now how big this needs to be, hopefully this big
+  EFI_FILE_INFO *file_info_ptr = (EFI_FILE_INFO *)&file_info_buffer;
+  UINTN info_buffer_size = sizeof(file_info_buffer);
+
+  while (1) {
+    UINTN length = fops_file_read(fs_root, info_buffer_size, file_info_buffer);
+    if (length == 0) break;
+
+    Print(L"Name: %s, Size: %d\n", file_info_ptr->FileName, file_info_ptr->FileSize);
+  }
   
   // Open kernel file
   EFI_FILE *kernel_file = fops_open_file(fs_root, kernel_fname, EFI_FILE_MODE_READ, 0);
