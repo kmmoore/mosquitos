@@ -16,33 +16,8 @@ void fops_init(EFI_HANDLE image_handle) {
   }
 }
 
-EFI_FILE_IO_INTERFACE * fops_get_filesystem() {
-  EFI_FILE_IO_INTERFACE *simple_file_system;
-  EFI_GUID sfs_guid = SIMPLE_FILE_SYSTEM_PROTOCOL;
-   
-  EFI_STATUS status = uefi_call_wrapper(BS->LocateProtocol, 3, &sfs_guid, NULL, &simple_file_system);
-
-  if (status == EFI_SUCCESS) {
-    return simple_file_system;
-  } else {
-    Print(L"fops_get_filesystem() error: %d\n", status);
-    return NULL;
-  }
-}
-
-EFI_FILE * fops_open_volume() {
+EFI_FILE * fops_open_root() {
   return LibOpenRoot(fops_data.loaded_image->DeviceHandle);
-  /*
-  EFI_FILE *file_handle;
-  EFI_STATUS status = uefi_call_wrapper(fs->OpenVolume, 2, fs, &file_handle);
-
-  if (status == EFI_SUCCESS) {
-    return file_handle;
-  } else {
-    Print(L"fops_open_volume() error: %d\n", status);
-    return NULL;
-  }
-  */
 }
 
 EFI_FILE * fops_open_file(EFI_FILE *root_dir, CHAR16 *filename, UINT64 mode, UINT64 attributes) {

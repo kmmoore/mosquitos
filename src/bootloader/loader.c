@@ -83,7 +83,7 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
   // Load the kernel ELF file into memory and get the entry address
   void *kernel_main_addr = NULL;
-  status = load_kernel(L"kernel", &kernel_main_addr);
+  status = load_kernel(L"\\kernel", &kernel_main_addr);
   if (status != EFI_SUCCESS) {
     Print(L"Error loading kernel: %d\n", status);
     return EFI_ABORTED;
