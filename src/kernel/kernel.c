@@ -81,7 +81,7 @@ void * kernel_main_thread() {
   acpi_enable_acpica();
 
   // PCI needs APCICA to determine IRQ mappings
-  // pci_init();
+  pci_init();
   // sata_init();
   
   // kmalloc_print_free_list();
