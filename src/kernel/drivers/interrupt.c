@@ -36,7 +36,6 @@ static void set_idt_entry(int index, uint64_t base, uint16_t selector, uint8_t a
 }
 
 void isr_common(uint64_t num, uint64_t error_code) {
-  if (num == 38) text_output_printf("got 38\n");
   interrupts_handlers[num](error_code);
 }
 

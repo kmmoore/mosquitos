@@ -45,9 +45,8 @@ void print_c_str(char *str) {
 EFI_STATUS load_kernel(CHAR16 *kernel_fname, OUT void **entry_address) {
   EFI_STATUS status;
 
-  // Open filesystem
-  EFI_FILE_IO_INTERFACE *fs = fops_get_filesystem();
-  EFI_FILE *fs_root = fops_open_volume(fs);
+  // Open root directory
+  EFI_FILE *fs_root = fops_open_root();
   if (fs_root == NULL) return EFI_ABORTED;
   
   // Open kernel file

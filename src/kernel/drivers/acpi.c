@@ -5,7 +5,7 @@
 
 #include <acpi.h>
 
-#define ACPI_MAX_INIT_TABLES 16
+#define ACPI_MAX_INIT_TABLES 32
 
 static struct {
   uint64_t xdsp_address;
@@ -51,7 +51,7 @@ static bool acpica_enable() {
   REQUIRE_MODULE("virtual_memory");
   REQUIRE_MODULE("scheduler");
 
-  ACPI_STATUS status ;
+  ACPI_STATUS status;
 
   if (ACPI_FAILURE(status = AcpiInitializeSubsystem())) {
     text_output_printf("ACPI INIT failure %s\n", AcpiFormatException(status));

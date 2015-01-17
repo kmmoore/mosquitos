@@ -211,10 +211,10 @@ void apic_init() {
   apic_msr |= (1 << 11);
   write_msr(0x1b, apic_msr);
 
-  // Enable APIC flag in SIVR
-  uint32_t val = apic_read(0x0f);
-  val |= (1<<8);
-  apic_write(0x0f, val);
+  // Enable APIC flag and set SIVR IRQ to 0xFF
+  uint32_t spurious_irq_num = 0xff;
+  spurious_irq_num |= (1<<8);
+  apic_write(0x0f, spurious_irq_num);
 
   REGISTER_MODULE("apic");
 }

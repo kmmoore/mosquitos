@@ -4,6 +4,10 @@
 
 #include "../kernel/kernel.h"
 #include "elf_parse.h"
+#include "fileops.h"
+
+#include "efiConsoleControl.h"
+
 
 EFI_STATUS
 get_memory_map(OUT void **map, OUT UINTN *mem_map_size, OUT UINTN *mem_map_key, OUT UINTN *descriptor_size) {
@@ -57,16 +61,29 @@ bool guids_match(EFI_GUID guid1, EFI_GUID guid2) {
   return true;
 }
 
+EFI_GUID gEfiConsoleControlProtocolGuid = EFI_CONSOLE_CONTROL_PROTOCOL_GUID;
+
 EFI_STATUS
 EFIAPI
 efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
+  EFI_STATUS status;
+
   InitializeLib(ImageHandle, SystemTable);
 
-  EFI_STATUS status;
+  uefi_call_wrapper(BS->SetWatchdogTimer, 4, 0, 0x0, 0, NULL);
+  uefi_call_wrapper(ST->ConOut->Reset, 2, ST->ConOut, FALSE);
+
+  EFI_CONSOLE_CONTROL_PROTOCOL *ConsoleControl;
+
+  if (uefi_call_wrapper(BS->LocateProtocol, 3, &gEfiConsoleControlProtocolGuid, NULL, &ConsoleControl) == EFI_SUCCESS) {
+    uefi_call_wrapper(ConsoleControl->SetMode, 2, ConsoleControl, EfiConsoleControlScreenText);
+  }
+
+  fops_init(ImageHandle);
 
   // Load the kernel ELF file into memory and get the entry address
   void *kernel_main_addr = NULL;
-  status = load_kernel(L"kernel", &kernel_main_addr);
+  status = load_kernel(L"\\kernel", &kernel_main_addr);
   if (status != EFI_SUCCESS) {
     Print(L"Error loading kernel: %d\n", status);
     return EFI_ABORTED;
@@ -90,15 +107,25 @@ efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
     return EFI_ABORTED;
   }
 
-  // Wait for keypress to give us time to attach a debugger, etc.
-  Print(L"Waiting for keypress to continue booting...\n");
-  wait_for_keypress();
-
   // Get access to a simple graphics buffer
   EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   EFI_GUID gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
    
   status = uefi_call_wrapper(BS->LocateProtocol, 3, &gop_guid, NULL, &gop);
+
+  if (EFI_ERROR(status)) {
+    Print(L"Could not get Simple Graphics Output Protocol, error: %d. Aborting.\n", status);
+    return EFI_ABORTED;
+  }
+
+  UINT32 max_mode = gop->Mode->MaxMode;
+  Print(L"Current mode: %d, max mode: %d\n", gop->Mode->Mode, max_mode);
+
+  // uefi_call_wrapper(gop->SetMode, 2, gop, max_mode-2);
+
+  // Wait for keypress to give us time to attach a debugger, etc.
+  Print(L"Waiting for keypress to continue booting...\n");
+  wait_for_keypress();
 
   // Get memory map
   UINTN mem_map_size = 0, mem_map_key = 0, mem_map_descriptor_size = 0;
