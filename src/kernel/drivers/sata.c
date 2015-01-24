@@ -7,6 +7,9 @@
 #include "../util.h"
 #include "timer.h"
 #include "../../common/mem_util.h"
+#include "../memory/kmalloc.h"
+
+#include "../threading/mutex/semaphore.h"
 
 // TOOD: Make sure we don't use PCI/SATA MMIO/DMA space for other stuff
 
@@ -15,26 +18,46 @@
 #define MAX_CACHED_DEVICES 8
 
 #define PCI_MASS_STORAGE_CLASS_CODE 0x01
-#define PCI_SATA_SUBCLASS 0x06
-#define PCI_AHCI_V1_PROGRAM_IF 0x01
+#define PCI_SATA_SUBCLASS           0x06
+#define PCI_AHCI_V1_PROGRAM_IF      0x01
 
-#define SATA_SIG_ATA  0x00000101  // SATA drive
+#define SATA_SIG_ATA    0x00000101  // SATA drive
 #define SATA_SIG_ATAPI  0xEB140101  // SATAPI drive
-#define SATA_SIG_SEMB 0xC33C0101  // Enclosure management bridge
-#define SATA_SIG_PM 0x96690101  // Port multiplier
+#define SATA_SIG_SEMB   0xC33C0101  // Enclosure management bridge
+#define SATA_SIG_PM     0x96690101  // Port multiplier
+
+#define ATA_DEV_BUSY (1 << 7)
+#define ATA_DEV_DRQ  (1 << 3)
+
+#define ATA_CMD_READ_DMA_EX  0x25
+#define ATA_CMD_WRITE_DMA_EX 0x35
+#define ATA_CMD_IDENTIFY     0xEC
+
+#define MAX_BYTES_PER_PRDT (1 << 22)
+#define BYTES_PER_SECTOR   512
 
 static AHCIDeviceType device_type_in_port(HBAPort *port);
 
-typedef struct {
+typedef struct _AHCIDevice {
   HBAMemory *hba;
   uint8_t port_number;
   AHCIDeviceType type;
+  Semaphore pending_command;
 } AHCIDevice;
 
 struct {
+  // TODO: Store HBA(s?) capabilities
+  bool use_64_bits;
   AHCIDevice devices[MAX_CACHED_DEVICES];
   uint8_t num_devices;
 } sata_data;
+
+HBAPort * port_from_device(AHCIDevice *device) {
+  assert(device);
+  assert(device->hba);
+  assert(device->hba->ports);
+  return &device->hba->ports[device->port_number];
+}
 
 // Find a free command list slot
 int ahci_find_command_slot(HBAPort *port) {
@@ -50,141 +73,215 @@ int ahci_find_command_slot(HBAPort *port) {
   return -1;
 }
 
-#define ATA_DEV_BUSY 0x80
-#define ATA_DEV_DRQ 0x08
-
+// TODO: This ISR might be shared with other PCI devices,
+// it should be handled by the PCI driver and then passed
+// to the AHCI driver if necessary.
 void sata_isr() {
-  text_output_printf("SATA interrupt!\n");
   for (size_t i = 0; i < sata_data.num_devices; ++i) {
     AHCIDevice *device = &sata_data.devices[i];
-    HBAPort *port = &device->hba->ports[device->port_number];
+    HBAPort *port = port_from_device(device);
 
     if (port->interrupt_status > 0) {
-      text_output_printf("Got interrupt for device #%d\n", i);
+      semaphore_up(&device->pending_command, 1);
     }
   }
 
-
   apic_send_eoi();
 }
+
+void port_start(HBAPort *port) {
+  // Set up the HBA to process a command (AHCI Spec. p.26)
+  port->command |= (1 << 4); // Enable FIS receiving
+  port->command |= (1 << 0); // Start port
+  port->interrupt_enable = ALL_ONES; // Enable all interrupts
+
+  assert((port->command & (1 << 4)) != 0);
+  assert((port->command & (1 << 0)) != 0);
+}
+
+void port_stop(HBAPort *port) {
+  // Disable command processing
+  port->command &= ~(1 << 0); // Stop port
+  assert((port->command & (1 << 0)) == 0);
+}
  
-bool read(HBAPort *port, uint32_t startl, uint32_t starth, uint32_t count, uint8_t *buf) {
+bool sata_read(AHCIDevice *device, uint64_t lba, uint32_t count, uint8_t *buf) {
+  // We only know how to read from SATA devices
+  assert(device->type == AHCI_DEVICE_SATA);
+
+  HBAPort *port = port_from_device(device);
+
+  port_start(port);
+
   port->interrupt_status = 0;   // Clear pending interrupt bits
-  int spin = 0; // Spin lock timeout counter
   int slot = ahci_find_command_slot(port);
-  if (slot == -1)
+  if (slot == -1) {
     return FALSE;
- 
-  HBACommandHeader *cmdheader = (HBACommandHeader*)(uintptr_t)port->command_list_base_address;
-  cmdheader += slot;
-  cmdheader->cfl = sizeof(FISRegisterH2D)/sizeof(uint32_t); // Command FIS size in dwords
-  cmdheader->w = 0;   // Read from device
-  cmdheader->p = 1;
-  cmdheader->prdtl = (uint16_t)((count-1)>>4) + 1;  // PRDT entries count
- 
-  HBACommandTable *cmdtbl = (HBACommandTable*)(uintptr_t)(cmdheader->ctba);
-  memset(cmdtbl, 0, sizeof(HBACommandTable) +
-    (cmdheader->prdtl-1)*sizeof(HBAPRDTEntry));
- 
-  // 8K bytes (16 sectors) per PRDT
-  for (int i=0; i<cmdheader->prdtl-1; i++) {
-    cmdtbl->prdt_entry[i].dba = field_in_word((uint64_t)buf, 0, 4);
-    cmdtbl->prdt_entry[i].dbau = field_in_word((uint64_t)buf, 4, 4);
-    cmdtbl->prdt_entry[i].dbc = 8*1024; // 8K bytes
-    cmdtbl->prdt_entry[i].i = 1;
-    buf += 4*1024;  // 4K words
-    count -= 16;  // 16 sectors
   }
-  // Last entry
-  cmdtbl->prdt_entry[cmdheader->prdtl-1].dba = field_in_word((uint64_t)buf, 0, 4);
-  cmdtbl->prdt_entry[cmdheader->prdtl-1].dbau = field_in_word((uint64_t)buf, 4, 4);
-  cmdtbl->prdt_entry[cmdheader->prdtl-1].dbc = count<<9; // 512 bytes per sector
-  cmdtbl->prdt_entry[cmdheader->prdtl-1].i = 1;
+ 
+  // Get the command header associated with our free slot
+  // TODO: Refactor this into a #define or something
+  uintptr_t command_header_address = (uintptr_t)port->command_list_base_address;
+  if (sata_data.use_64_bits) {
+    command_header_address |= ((uintptr_t)port->command_list_base_address_upper) << 32;
+  }
+  command_header_address += slot * sizeof(HBACommandHeader);
+
+  HBACommandHeader *command_header = (HBACommandHeader *)command_header_address;
+  memset(command_header, 0, sizeof(HBACommandHeader));
+  command_header->command_fis_length = sizeof(FISRegisterH2D) / sizeof(uint32_t); // Command FIS size in dwords
+  command_header->write = 0;   // Read from device
+  command_header->prefetchable = 1;
+
+  uint64_t requested_bytes = count * BYTES_PER_SECTOR;
+  command_header->prdt_count = ((requested_bytes - 1) / MAX_BYTES_PER_PRDT) + 1;
+
+  // Get command table from command header
+  uintptr_t command_table_address = (uintptr_t)command_header->command_table_base_address;
+  if (sata_data.use_64_bits) {
+    command_table_address |= ((uintptr_t)command_header->command_table_base_address_upper) << 32;
+  }
+
+  HBACommandTable *command_table = (HBACommandTable *)command_table_address;
+  memset(command_table, 0, sizeof(HBACommandTable) + (command_header->prdt_count - 1) * sizeof(HBAPRDTEntry));
+
+  // Get PRDT from command table
+  HBAPRDTEntry *prdt = command_table->prdt_entry;
+ 
+  // Fill PRDT. 4MB (8192 sectors) per PRDT entrt
+  for (int i = 0; i < command_header->prdt_count; ++i) {
+    prdt[i].data_base_address = field_in_word((uint64_t)buf, 0, 4);
+    prdt[i].data_base_address_upper = field_in_word((uint64_t)buf, 4, 4);
+    // data_size is 0-indexed
+    prdt[i].data_size = requested_bytes > MAX_BYTES_PER_PRDT ? MAX_BYTES_PER_PRDT - 1 : requested_bytes - 1;
+    prdt[i].interrupt_on_completion = 1;
+    buf += prdt[i].data_size + 1;
+    requested_bytes -= prdt[i].data_size + 1;
+  }
  
   // Setup command
-  FISRegisterH2D *cmdfis = (FISRegisterH2D*)(uintptr_t)(&cmdtbl->cfis);
+  FISRegisterH2D *command_fis = (FISRegisterH2D*)(uintptr_t)(&command_table->cfis);
+  memset(command_fis, 0, sizeof(FISRegisterH2D));
  
-  cmdfis->fis_type = FIS_TYPE_REG_H2D;
-  cmdfis->c = 1;  // Command
-  cmdfis->command = 0x25;//ATA_CMD_READ_DMA_EX;
+  command_fis->fis_type = FIS_TYPE_REG_H2D;
+  command_fis->c = 1;  // Command
+  command_fis->command = ATA_CMD_READ_DMA_EX;
  
-  cmdfis->lba0 = (uint8_t)startl;
-  cmdfis->lba1 = (uint8_t)(startl>>8);
-  cmdfis->lba2 = (uint8_t)(startl>>16);
-  cmdfis->device = 1<<6;  // LBA mode
+  command_fis->lba0 = field_in_word(lba, 0, 1);
+  command_fis->lba1 = field_in_word(lba, 1, 1);
+  command_fis->lba2 = field_in_word(lba, 2, 1);
+  command_fis->device = 1 << 6;  // LBA mode;
  
-  cmdfis->lba3 = (uint8_t)(startl>>24);
-  cmdfis->lba4 = (uint8_t)starth;
-  cmdfis->lba5 = (uint8_t)(starth>>8);
+  command_fis->lba3 = field_in_word(lba, 3, 1);
+  command_fis->lba4 = field_in_word(lba, 4, 1);
+  command_fis->lba5 = field_in_word(lba, 5, 1);
  
-  cmdfis->countl = (count & 0xFF);
-  cmdfis->counth = (count >> 8) & 0xFF;
+  command_fis->countl = field_in_word(count, 0, 1);
+  command_fis->counth = field_in_word(count, 1, 1);
  
-  // The below loop waits until the port is no longer busy before issuing a new command
-  while ((port->tfd & (ATA_DEV_BUSY | ATA_DEV_DRQ)) && spin < 1000000)
-  {
+  // Wait until the port is free
+  int spin = 0;
+  while ((port->tfd & (ATA_DEV_BUSY | ATA_DEV_DRQ)) && spin < 1000000) {
     spin++;
   }
-  if (spin == 1000000)
-  {
+
+  if (spin == 1000000) {
     text_output_printf("Port is hung\n");
     return false;
   }
- 
-  text_output_printf("is: 0b%b\n", port->interrupt_status);
- 
-  port->command_issue = 1 << slot; // Issue command
- 
-  // // Wait for completion
-  // while (1)
-  // {
-  //   // In some longer duration reads, it may be helpful to spin on the DPS bit 
-  //   // in the PxIS port field as well (1 << 5)
-  //   if ((port->command_issue & (1 << slot)) == 0) 
-  //     break;
-  //   if (port->interrupt_status & (1 << 30)) // Task file error
-  //   {
-  //     text_output_printf("Read disk error 0b%b\n", port->interrupt_status);
-  //     return false;
-  //   }
-  // }
- 
-  // // Check again
-  // if (port->interrupt_status & (1 << 30)) // HBA_PxIS_TFES
-  // {
-  //   text_output_printf("Read disk error\n");
-  //   return false;
-  // }
- 
+
+  // Issue command
+  port->command_issue |= 1 << slot;
+
+  // Make sure the command has actually finished
+  while (port->command_issue & (1 << slot)) {
+    semaphore_down(&device->pending_command, 1, 0); // Sleep until we get an interrupt
+  }
+
+  // TODO: Make sure no one else is using the port
+  port_stop(port);
+
   return true;
 }
 
-void ahci_execute_command(AHCIDevice *device) {
-  HBAPort *port = &device->hba->ports[device->port_number];
+// buf should be 256 bytes
+bool sata_identify(AHCIDevice *device, uint8_t *buf) {
+  HBAPort *port = port_from_device(device);
 
-  uintptr_t clb = ((uintptr_t)port->command_list_base_address_upper << 32) | port->command_list_base_address;
-  text_output_printf("Command list base address: %p\n", clb);
+  port_start(port);
 
-  uintptr_t fb = ((uintptr_t)port->fbu << 32) | port->fb;
-  text_output_printf("FIS base address: %p\n", fb);
+  port->interrupt_status = 0;   // Clear pending interrupt bits
+  int slot = ahci_find_command_slot(port);
+  if (slot == -1) {
+    return FALSE;
+  }
+ 
+  // Get the command header associated with our free slot
+  // TODO: Refactor this into a #define or something
+  uintptr_t command_header_address = (uintptr_t)port->command_list_base_address;
+  if (sata_data.use_64_bits) {
+    command_header_address |= ((uintptr_t)port->command_list_base_address_upper) << 32;
+  }
+  command_header_address += slot * sizeof(HBACommandHeader);
 
-  port->command |= (1 << 4); // Enable FIS receiving
-  port->command |= (1 << 0); // Start port
-  port->interrupt_enable = ALL_ONES;
+  HBACommandHeader *command_header = (HBACommandHeader *)command_header_address;
+  memset(command_header, 0, sizeof(HBACommandHeader));
+  command_header->command_fis_length = sizeof(FISRegisterH2D) / sizeof(uint32_t); // Command FIS size in dwords
+  command_header->write = 0;   // Read from device
+  command_header->prefetchable = 0;
+  command_header->prdt_count = 1;
 
-  text_output_printf("IE: 0b%b\n", port->interrupt_enable);
-  text_output_printf("CMD: 0b%b\n", port->command);
-
-  // text_output_printf("\nHard drive read:\n\n");
-  // uint32_t old_fg_color = text_output_get_foreground_color();
-  // text_output_set_foreground_color(0x00FFFF00);
-
-  uint8_t buffer[512];
-  if(read(port, 0, 0, 1, buffer)) {
+  // Get command table from command header
+  uintptr_t command_table_address = (uintptr_t)command_header->command_table_base_address;
+  if (sata_data.use_64_bits) {
+    command_table_address |= ((uintptr_t)command_header->command_table_base_address_upper) << 32;
   }
 
-  // text_output_set_foreground_color(old_fg_color);
+  HBACommandTable *command_table = (HBACommandTable *)command_table_address;
+  memset(command_table, 0, sizeof(HBACommandTable) + (command_header->prdt_count - 1) * sizeof(HBAPRDTEntry));
 
+  // Get PRDT from command table
+  HBAPRDTEntry *prdt = command_table->prdt_entry;
+ 
+  // Fill PRDT
+  prdt[0].data_base_address = field_in_word((uint64_t)buf, 0, 4);
+  prdt[0].data_base_address_upper = field_in_word((uint64_t)buf, 4, 4);
+  // data_size is 0-indexed
+  prdt[0].data_size = 255;
+  prdt[0].interrupt_on_completion = 1;
+ 
+  // Setup command
+  FISRegisterH2D *command_fis = (FISRegisterH2D *)(uintptr_t)(&command_table->cfis);
+  memset(command_fis, 0, sizeof(FISRegisterH2D));
+ 
+  command_fis->fis_type = FIS_TYPE_REG_H2D;
+  command_fis->c = 1;  // Command
+  command_fis->command = ATA_CMD_IDENTIFY;
+  command_fis->device = 0;
+ 
+  // Wait until the port is free
+  int spin = 0;
+  while ((port->tfd & (ATA_DEV_BUSY | ATA_DEV_DRQ)) && spin < 1000000) {
+    spin++;
+  }
+
+  if (spin == 1000000) {
+    text_output_printf("Port is hung\n");
+    return false;
+  }
+
+  // Issue command
+  port->command_issue |= 1 << slot;
+
+  // Make sure the command has actually finished
+  while (port->command_issue & (1 << slot)) {
+    semaphore_down(&device->pending_command, 1, 0); // Sleep until we get an interrupt
+  }
+
+  // TODO: Make sure no one else is using the port
+  port_stop(port);
+
+  return true;
 }
 
 static void print_ahci_device(AHCIDevice *device) {
@@ -199,9 +296,8 @@ static void print_ahci_device(AHCIDevice *device) {
   }
 
   text_output_printf("[AHCI Device] Port #: %d, Type: %s\n", device->port_number, type);
-
   if (device->type == AHCI_DEVICE_SATA) {
-    ahci_execute_command(device);
+    text_output_printf("Signature: 0b%b\n", field_in_word(port_from_device(device)->signature, 0, 1));
   }
 
 }
@@ -212,9 +308,6 @@ bool reset_hba(HBAMemory *hba) {
 
   hba->ghc |= (1 << 31); // Enable ACHI mode
   hba->ghc |= (1 << 1); // Set interrupt enable
-
-  text_output_printf("HBA GHC: 0b%b\n", hba->ghc);
-
 
   return (hba->ghc & 0x01) == 0;
 }
@@ -234,6 +327,8 @@ static void discover_devices(HBAMemory *hba) {
         new_device->hba = hba;
         new_device->port_number = i;
         new_device->type = device_type;
+
+        semaphore_init(&new_device->pending_command, 0);
       }
     }
   }
@@ -285,6 +380,8 @@ bool initialize_hba(PCIDevice *hba_device) {
 
   assert(major_version == 1 && minor_version <= 3); // We only know how to deal with ACHI version 1.0 - 1.3
 
+  sata_data.use_64_bits = (hba->capabilities & (1 << 31)) > 0;
+
   text_output_printf("HBA Capabilities: 64-bit? %d, SSS? %d, AHCI Only? %d, num cmd slots: %d\n", (hba->capabilities & (1 << 31)) > 0, (hba->capabilities & (1 << 27)) > 0, (hba->capabilities & (1 << 18)) > 0, ((hba->capabilities & FIELD_MASK(5, 8)) >> 8) + 1);
 
   assert(reset_hba(hba));
@@ -311,5 +408,15 @@ void sata_init() {
 
   if (!initialize_hba(hba)) {
     panic("Could not initialize HBA!\n");
+  }
+
+  for (int i = 0; i < sata_data.num_devices; ++i) {
+    if (sata_data.devices[i].type == AHCI_DEVICE_SATA) {
+      uint8_t buffer[257];
+      memset(buffer, 0, sizeof(buffer));
+      if (sata_identify(&sata_data.devices[i], buffer)) {
+        text_output_printf("Device %d IDENTIFY: %s\n", i, buffer);
+      }
+    }
   }
 }

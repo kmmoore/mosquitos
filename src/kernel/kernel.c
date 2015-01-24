@@ -82,9 +82,7 @@ void * kernel_main_thread() {
 
   // PCI needs APCICA to determine IRQ mappings
   pci_init();
-  // sata_init();
-  
-  // kmalloc_print_free_list();
+  sata_init();
 
   text_output_set_foreground_color(0x0000FF00);
   text_output_printf("\nKernel initialization complete.\n\n");

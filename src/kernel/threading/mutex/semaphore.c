@@ -24,7 +24,7 @@ void semaphore_up(Semaphore *sema, uint64_t value) {
 
   // We have to wake all threads potentially, in case the first one can't be
   // satisfied, but a later one can
-  list_entry *current = list_head(&sema->waiting_threads);;
+  list_entry *current = list_head(&sema->waiting_threads);
   while (current) {
     WaitingThread *waiting_thread = container_of(current, WaitingThread, entry);
     list_entry *next = list_next(current);
