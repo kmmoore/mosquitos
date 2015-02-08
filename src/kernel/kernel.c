@@ -40,7 +40,7 @@ void kernel_main(KernelInfo info) {
   serial_port_init();
 
   graphics_init(info.gop);
-  text_output_init(info.gop);
+  text_output_init();
   text_output_set_background_color(0x00000000);
 
   text_output_clear_screen();

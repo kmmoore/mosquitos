@@ -1,10 +1,8 @@
 #include <kernel/drivers/text_output.h>
 
-#include <efi.h>
-#include <efilib.h>
-
 #include <kernel/util.h>
 #include <kernel/drivers/serial_port.h>
+#include <kernel/drivers/graphics.h>
 #include <kernel/drivers/font.h>
 #include <kernel/threading/mutex/lock.h>
 #include <kernel/format/format.h>
@@ -12,21 +10,19 @@
 #define kTextOutputPadding 1
 
 static struct {
-  EFI_GRAPHICS_OUTPUT_PROTOCOL *gop;
   int current_row, current_col;
   uint32_t background_color, foreground_color;
   Lock lock;
 } text_output_data;
 
 
-void text_output_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
+void text_output_init() {
   REQUIRE_MODULE("serial_port");
+  REQUIRE_MODULE("graphics");
 
   // TODO: Sort out locking
   lock_init(&text_output_data.lock);
   
-  text_output_data.gop = gop;
-
   text_output_data.current_row = text_output_data.current_col = kTextOutputPadding;
 
   text_output_data.foreground_color = 0x00FFFFFF;
@@ -51,18 +47,8 @@ uint32_t text_output_get_foreground_color() {
   return text_output_data.foreground_color;
 }
 
-static void text_output_draw_pixel(int x, int y, uint32_t color) {
-  ((uint32_t *)text_output_data.gop->Mode->FrameBufferBase)[y * text_output_data.gop->Mode->Info->PixelsPerScanLine + x] = color;
-}
-
 void text_output_clear_screen() {
-  // TODO: The graphics stuff should be in a graphics library, not this library
-  // TODO: We should use gop->Blt here
-  for (unsigned int x = 0; x < text_output_data.gop->Mode->Info->HorizontalResolution; ++x) {
-    for (unsigned int y = 0; y < text_output_data.gop->Mode->Info->VerticalResolution; y++) {
-      text_output_draw_pixel(x, y, text_output_data.background_color);
-    }
-  }
+  graphics_clear_screen(text_output_data.background_color);
   text_output_data.current_row = text_output_data.current_col = kTextOutputPadding;
 }
 
@@ -81,7 +67,7 @@ static void text_output_draw_char(char c, int x, int y) {
   for (int i = 0; i < kCharacterWidth; ++i) {
     for (int j = 0; j < kCharacterHeight; ++j) {
       uint32_t color = (font[j + font_char_index * kCharacterHeight] & (1 << (7-i))) == 0 ? text_output_data.background_color : text_output_data.foreground_color;
-      text_output_draw_pixel(pixel_x + i, pixel_y + j, color);
+      graphics_draw_pixel(pixel_x + i, pixel_y + j, color);
     }
   }
 }

@@ -193,7 +193,7 @@ bool sata_read(AHCIDevice *device, uint64_t lba, uint32_t count, uint8_t *buffer
   port->interrupt_status = 0;   // Clear pending interrupt bits
   int slot = ahci_find_command_slot(port);
   if (slot == -1) {
-    return FALSE;
+    return false;
   }
 
   uint64_t requested_bytes = count * BYTES_PER_SECTOR;
