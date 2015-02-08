@@ -1,8 +1,8 @@
-#include "exception.h"
-#include "interrupt.h"
-#include "../util.h"
+#include <kernel/drivers/exception.h>
+#include <kernel/drivers/interrupt.h>
+#include <kernel/util.h>
 
-#include "../drivers/text_output.h"
+#include <kernel/drivers/text_output.h>
 
 static void div_by_zero() {
   text_output_print("\nDivision by Zero!\n");

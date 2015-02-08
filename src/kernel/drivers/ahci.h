@@ -1,4 +1,4 @@
-#include "../kernel_common.h"
+#include <kernel/kernel_common.h>
 
 #ifndef _AHCI_H
 #define _AHCI_H

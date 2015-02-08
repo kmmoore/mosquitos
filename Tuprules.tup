@@ -4,18 +4,19 @@ CC              := gcc
 LD              := ld
 OBJCOPY         := objcopy
 
+PROJECT_TOP = $(TUP_CWD)
+BUILD_DIR = $(PROJECT_TOP)/build
+
 # You may have to change the EFIINCS variable to point to wherever gnu-efi is installed on your system
 EFIINC          := /usr/include/efi
 EFIINCS         := -isystem $(EFIINC) -isystem $(EFIINC)/$(ARCH) -isystem $(EFIINC)/protocol
 
+INCS            := $(EFIINCS) -I$(PROJECT_TOP)/src
 
 # Set up some common CFLAGS for both the bootloader and the kernel
 # -nostdlib is critical because libc depends on an operating system --
 # which we do not have.
-CFLAGS += -D_MOSQUITOS -D_mosquitos_ -DDEBUG $(EFIINCS) -std=gnu99 -Wall -Wextra -Werror -Os -nostdlib -mno-red-zone -DEFI_FUNCTION_WRAPPER -ggdb
-
-PROJECT_TOP = $(TUP_CWD)
-BUILD_DIR = $(PROJECT_TOP)/build
+CFLAGS += -D_MOSQUITOS -D_mosquitos_ -DDEBUG $(INCS) -std=gnu99 -Wall -Wextra -Werror -Os -nostdlib -mno-red-zone -DEFI_FUNCTION_WRAPPER -ggdb
 
 # A macro to invoke the compiler on an input file (%f) with the specified
 # flags to produce an output file (%o).

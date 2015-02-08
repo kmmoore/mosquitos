@@ -1,8 +1,8 @@
 // Sends serial data over COM1
 
-#include "serial_port.h"
-#include "../drivers/text_output.h"
-#include "../util.h"
+#include <kernel/drivers/serial_port.h>
+#include <kernel/drivers/text_output.h>
+#include <kernel/util.h>
 
 #define SERIAL_MAX_BAUD_RATE            115200
 #define SERIAL_BAUD_RATE                38400

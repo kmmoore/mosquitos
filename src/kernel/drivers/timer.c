@@ -1,11 +1,11 @@
-#include "timer.h"
-#include "../drivers/text_output.h"
-#include "apic.h"
-#include "interrupt.h"
-#include "../util.h"
-#include "../datastructures/list.h"
-#include "../memory/kmalloc.h"
-#include "../threading/scheduler.h"
+#include <kernel/drivers/timer.h>
+#include <kernel/drivers/text_output.h>
+#include <kernel/drivers/apic.h>
+#include <kernel/drivers/interrupt.h>
+#include <kernel/util.h>
+#include <kernel/datastructures/list.h>
+#include <kernel/memory/kmalloc.h>
+#include <kernel/threading/scheduler.h>
 
 #define TIMER_IRQ 2
 #define TIMER_IV 0x22

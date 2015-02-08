@@ -1,4 +1,4 @@
-#include "../kernel_common.h"
+#include <kernel/kernel_common.h>
 
 #ifndef _GDT_H
 #define _GDT_H

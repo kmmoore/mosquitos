@@ -1,5 +1,5 @@
-#include "module_manager.h"
-#include "../common/mem_util.h"
+#include <kernel/module_manager.h>
+#include <common/mem_util.h>
 
 #define kMaxModules 32
 #define kModuleNameMaxLength 24

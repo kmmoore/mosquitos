@@ -1,8 +1,8 @@
-#include "interrupt.h"
-#include "gdt.h"
-#include "apic.h"
-#include "../drivers/text_output.h"
-#include "../util.h"
+#include <kernel/drivers/interrupt.h>
+#include <kernel/drivers/gdt.h>
+#include <kernel/drivers/apic.h>
+#include <kernel/drivers/text_output.h>
+#include <kernel/util.h>
 
 // Private structs
 static struct IDTEntry {

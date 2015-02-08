@@ -1,5 +1,5 @@
-#include "pci.h"
-#include "text_output.h"
+#include <kernel/drivers/pci.h>
+#include <kernel/drivers/text_output.h>
 #include <acpi.h>
 
 #define PCI_MAX_BUS_NUM 256

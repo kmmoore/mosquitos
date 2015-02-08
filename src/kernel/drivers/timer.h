@@ -1,5 +1,5 @@
-#include "../kernel_common.h"
-#include "../threading/thread.h"
+#include <kernel/kernel_common.h>
+#include <kernel/threading/thread.h>
 
 #ifndef _TIMER_H
 #define _TIMER_H

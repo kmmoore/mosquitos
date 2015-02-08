@@ -1,5 +1,5 @@
-#include "../kernel_common.h"
-#include "../util.h"
+#include <kernel/kernel_common.h>
+#include <kernel/util.h>
 
 #ifndef _PCI_H
 #define _PCI_H

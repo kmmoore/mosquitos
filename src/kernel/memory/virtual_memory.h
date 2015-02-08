@@ -1,4 +1,4 @@
-#include "../kernel_common.h"
+#include <kernel/kernel_common.h>
 
 #ifndef _VIRTUAL_MEMORY_H
 #define _VIRTUAL_MEMORY_H

@@ -1,9 +1,9 @@
-#include "semaphore.h"
-#include "../scheduler.h"
-#include "../../util.h"
-#include "../../memory/kmalloc.h"
-#include "../../drivers/timer.h"
-#include "../../drivers/text_output.h"
+#include <kernel/threading/mutex/semaphore.h>
+#include <kernel/threading/scheduler.h>
+#include <kernel/util.h>
+#include <kernel/memory/kmalloc.h>
+#include <kernel/drivers/timer.h>
+#include <kernel/drivers/text_output.h>
 
 typedef struct {
   list_entry entry;

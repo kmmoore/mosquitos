@@ -1,5 +1,5 @@
-#include "../kernel_common.h"
-#include "../datastructures/list.h"
+#include <kernel/kernel_common.h>
+#include <kernel/datastructures/list.h>
 
 #ifndef _THREAD_H
 #define _THREAD_H

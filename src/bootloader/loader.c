@@ -2,11 +2,11 @@
 #include <efilib.h>
 #include <string.h>
 
-#include "../kernel/kernel.h"
-#include "elf_parse.h"
-#include "fileops.h"
+#include <kernel/kernel.h>
+#include <bootloader/elf_parse.h>
+#include <bootloader/fileops.h>
 
-#include "efiConsoleControl.h"
+#include <bootloader/efiConsoleControl.h>
 
 
 EFI_STATUS

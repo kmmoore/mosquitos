@@ -1,7 +1,8 @@
-#include "acpi.h"
-#include "../util.h"
-#include "../drivers/text_output.h"
-#include "../../common/mem_util.h"
+#include <kernel/drivers/acpi.h>
+
+#include <kernel/util.h>
+#include <kernel/drivers/text_output.h>
+#include <common/mem_util.h>
 
 #include <acpi.h>
 

@@ -1,13 +1,13 @@
 #include <efi.h>
 #include <efilib.h>
 
-#include "virtual_memory.h"
-#include "../util.h"
+#include <kernel/memory/virtual_memory.h>
+#include <kernel/util.h>
 
-#include "../drivers/text_output.h"
-#include "../datastructures/list.h"
-#include "../memory/kmalloc.h"
-#include "../threading/mutex/lock.h"
+#include <kernel/drivers/text_output.h>
+#include <kernel/datastructures/list.h>
+#include <kernel/memory/kmalloc.h>
+#include <kernel/threading/mutex/lock.h>
 
 static struct {
   uint8_t *memory_map;

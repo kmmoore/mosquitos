@@ -1,13 +1,13 @@
+#include <kernel/drivers/text_output.h>
+
 #include <efi.h>
 #include <efilib.h>
 
-#include "../format/format.h"
-
-#include "font.h"
-#include "text_output.h"
-#include "../drivers/serial_port.h"
-#include "../util.h"
-#include "../threading/mutex/lock.h"
+#include <kernel/util.h>
+#include <kernel/drivers/serial_port.h>
+#include <kernel/drivers/font.h>
+#include <kernel/threading/mutex/lock.h>
+#include <kernel/format/format.h>
 
 #define kTextOutputPadding 1
 

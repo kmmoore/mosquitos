@@ -1,5 +1,5 @@
-#include "../kernel_common.h"
-#include "thread.h"
+#include <kernel/kernel_common.h>
+#include <kernel/threading/thread.h>
 
 #ifndef _SCHEDULER_H
 #define _SCHEDULER_H

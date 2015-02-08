@@ -1,13 +1,13 @@
-#include "thread.h"
-#include "scheduler.h"
-#include "../util.h"
+#include <kernel/threading/thread.h>
+#include <kernel/threading/scheduler.h>
+#include <kernel/util.h>
 
-#include "../memory/virtual_memory.h"
-#include "../memory/kmalloc.h"
+#include <kernel/memory/virtual_memory.h>
+#include <kernel/memory/kmalloc.h>
 
-#include "../drivers/gdt.h"
-#include "../drivers/timer.h"
-#include "../drivers/text_output.h"
+#include <kernel/drivers/gdt.h>
+#include <kernel/drivers/timer.h>
+#include <kernel/drivers/text_output.h>
 
 struct KernelThread {
   // NOTE: If the following fields are changed, scheduler.s

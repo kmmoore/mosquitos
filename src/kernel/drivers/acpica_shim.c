@@ -1,19 +1,19 @@
-#include "../kernel_common.h"
-#include "../util.h"
+#include <kernel/kernel_common.h>
+#include <kernel/util.h>
 
-#include "text_output.h"
-#include "pci.h"
+#include <kernel/drivers/text_output.h>
+#include <kernel/drivers/pci.h>
 
-#include "../drivers/acpi.h"
-#include "../drivers/timer.h"
-#include "../drivers/interrupt.h"
-#include "../drivers/timer.h"
-#include "../memory/virtual_memory.h"
-#include "../memory/kmalloc.h"
-#include "../threading/thread.h"
-#include "../threading/scheduler.h"
-#include "../threading/mutex/semaphore.h"
-#include "../threading/mutex/lock.h"
+#include <kernel/drivers/acpi.h>
+#include <kernel/drivers/timer.h>
+#include <kernel/drivers/interrupt.h>
+#include <kernel/drivers/timer.h>
+#include <kernel/memory/virtual_memory.h>
+#include <kernel/memory/kmalloc.h>
+#include <kernel/threading/thread.h>
+#include <kernel/threading/scheduler.h>
+#include <kernel/threading/mutex/semaphore.h>
+#include <kernel/threading/mutex/lock.h>
 
 #include <acpi.h>
 

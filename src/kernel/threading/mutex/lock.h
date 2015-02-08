@@ -1,5 +1,5 @@
-#include "../../kernel_common.h"
-#include "semaphore.h"
+#include <kernel/kernel_common.h>
+#include <kernel/threading/mutex/semaphore.h>
 
 #ifndef _LOCK_H
 #define _LOCK_H

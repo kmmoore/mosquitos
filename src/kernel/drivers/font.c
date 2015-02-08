@@ -1,4 +1,4 @@
-#include "font.h"
+#include <kernel/drivers/font.h>
 
 uint32_t font[] = {
   0b00000000,

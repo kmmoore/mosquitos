@@ -1,4 +1,4 @@
-#include "../kernel_common.h"
+#include <kernel/kernel_common.h>
 
 #ifndef _SATA_TYPES_H
 #define _SATA_TYPES_H

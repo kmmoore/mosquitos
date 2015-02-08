@@ -1,4 +1,4 @@
-#include "../kernel_common.h"
+#include <kernel/kernel_common.h>
 
 #ifndef _APIC_H
 #define _APIC_H

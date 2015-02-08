@@ -1,6 +1,6 @@
 include_rules
 
-LDFLAGS +=  -T kernel_link.lds
+LDFLAGS += -T kernel_link.lds
 
 : foreach *.c |> !cc |> %B.o
 : foreach *.s |> !cc |> %B_asm.o

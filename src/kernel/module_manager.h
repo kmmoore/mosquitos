@@ -1,8 +1,8 @@
 #ifndef _MODULE_MANAGER_H
 #define _MODULE_MANAGER_H
 
-#include "kernel_common.h"
-#include "util.h"
+#include <kernel/kernel_common.h>
+#include <kernel/util.h>
 
 #ifdef DEBUG
   #define REGISTER_MODULE(module_name) module_manager_set_initialized(module_name)

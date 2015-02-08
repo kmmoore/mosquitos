@@ -3,7 +3,7 @@
 ACPI_INC        := $(TUP_CWD)/acpica/include
 LIBS            := `$(CC) -print-libgcc-file-name`
 
-CFLAGS += -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -fno-omit-frame-pointer -isystem $(ACPI_INC)
+CFLAGS  += -fno-asynchronous-unwind-tables -ffreestanding -mcmodel=large -fno-omit-frame-pointer -isystem $(ACPI_INC)
 
 LDFLAGS += -nostdlib -static -z max-page-size=0x1000
 

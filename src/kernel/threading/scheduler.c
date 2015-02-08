@@ -1,13 +1,13 @@
-#include "scheduler.h"
-#include "thread.h"
-#include "../util.h"
+#include <kernel/threading/scheduler.h>
+#include <kernel/threading/thread.h>
+#include <kernel/util.h>
 
-#include "../drivers/apic.h"
-#include "../drivers/timer.h"
-#include "../drivers/interrupt.h"
+#include <kernel/drivers/apic.h>
+#include <kernel/drivers/timer.h>
+#include <kernel/drivers/interrupt.h>
 
-#include "../drivers/text_output.h"
-#include "../datastructures/list.h"
+#include <kernel/drivers/text_output.h>
+#include <kernel/datastructures/list.h>
 
 #define SCHEDULER_TIMER_CALIBRATION_IV 35
 #define SCHEDULER_TIMER_IV 36

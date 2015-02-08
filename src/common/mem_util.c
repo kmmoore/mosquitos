@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "mem_util.h"
+#include <common/mem_util.h>
 
 void * memset(void *buffer, int value, size_t length) {
   for (size_t i = 0; i < length; ++i) {

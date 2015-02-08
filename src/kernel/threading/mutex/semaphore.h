@@ -1,6 +1,6 @@
-#include "../thread.h"
-#include "../../kernel_common.h"
-#include "../../datastructures/list.h"
+#include <kernel/threading/thread.h>
+#include <kernel/kernel_common.h>
+#include <kernel/datastructures/list.h>
 
 #ifndef _SEMAPHORE_H
 #define _SEMAPHORE_H

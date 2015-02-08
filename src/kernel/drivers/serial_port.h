@@ -1,4 +1,4 @@
-#include "../kernel_common.h"
+#include <kernel/kernel_common.h>
 
 #ifndef _SERIAL_PORT_H_
 #define _SERIAL_PORT_H_

@@ -1,4 +1,4 @@
-#include "list.h"
+#include <kernel/datastructures/list.h>
 
 void list_init(list *l) {
   l->head = l->tail = NULL;

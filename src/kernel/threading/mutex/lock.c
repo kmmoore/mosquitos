@@ -1,4 +1,4 @@
-#include "lock.h"
+#include <kernel/threading/mutex/lock.h>
 
 void lock_init(Lock *lock) {
   semaphore_init(&lock->sema, 0);

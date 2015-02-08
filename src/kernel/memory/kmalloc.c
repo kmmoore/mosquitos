@@ -1,8 +1,8 @@
-#include "kmalloc.h"
-#include "virtual_memory.h"
-#include "../util.h"
-#include "../datastructures/list.h"
-#include "../drivers/text_output.h"
+#include <kernel/memory/kmalloc.h>
+#include <kernel/memory/virtual_memory.h>
+#include <kernel/util.h>
+#include <kernel/datastructures/list.h>
+#include <kernel/drivers/text_output.h>
 
 typedef struct _FreeBlockHeader {
   uint64_t size:63;

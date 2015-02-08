@@ -1,44 +1,45 @@
-#include "kernel_common.h"
+#include <kernel/kernel.h>
 
 #include <efi.h>
 #include <efilib.h>
 
-#include "kernel.h"
-#include "../common/mem_util.h"
-#include "util.h"
+#include <common/mem_util.h>
+#include <kernel/util.h>
 
-#include "module_manager.h"
+#include <kernel/module_manager.h>
 
-#include "drivers/text_output.h"
-#include "drivers/keyboard_controller.h"
-#include "drivers/pci.h"
-#include "drivers/ahci.h"
+#include <kernel/drivers/graphics.h>
+#include <kernel/drivers/text_output.h>
+#include <kernel/drivers/keyboard_controller.h>
+#include <kernel/drivers/pci.h>
+#include <kernel/drivers/ahci.h>
 
-#include "drivers/acpi.h"
-#include "drivers/interrupt.h"
-#include "drivers/exception.h"
-#include "drivers/timer.h"
-#include "drivers/serial_port.h"
+#include <kernel/drivers/acpi.h>
+#include <kernel/drivers/interrupt.h>
+#include <kernel/drivers/exception.h>
+#include <kernel/drivers/timer.h>
+#include <kernel/drivers/serial_port.h>
 
-#include "memory/virtual_memory.h"
-#include "memory/kmalloc.h"
+#include <kernel/memory/virtual_memory.h>
+#include <kernel/memory/kmalloc.h>
 
-#include "threading/scheduler.h"
-#include "threading/mutex/semaphore.h"
+#include <kernel/threading/scheduler.h>
+#include <kernel/threading/mutex/semaphore.h>
 
-#include "../common/build_info.h"
+#include <common/build_info.h>
 
 void * kernel_main_thread();
 
 // Pre-threaded initialization is done here
 void kernel_main(KernelInfo info) {
-
+  // Disable interrupts as we have no way to handle them now
   cli();
 
   module_manager_init();
 
   serial_port_init();
 
+  graphics_init(info.gop);
   text_output_init(info.gop);
   text_output_set_background_color(0x00000000);
 
@@ -88,6 +89,6 @@ void * kernel_main_thread() {
   text_output_printf("\nKernel initialization complete.\n\n");
   text_output_set_foreground_color(0x00FFFFFF);
 
-  thread_exit(); // TODO: Make returning do the same thing;
+  thread_exit(); // TODO: Maybe make returning do the same thing?
   return NULL;
 }

@@ -1,15 +1,15 @@
-#include "ahci.h"
-#include "ahci_types.h"
-#include "text_output.h"
-#include "pci.h"
-#include "interrupt.h"
-#include "apic.h"
-#include "../util.h"
-#include "timer.h"
-#include "../../common/mem_util.h"
-#include "../memory/kmalloc.h"
+#include <kernel/drivers/ahci.h>
+#include <kernel/drivers/ahci_types.h>
+#include <kernel/drivers/text_output.h>
+#include <kernel/drivers/pci.h>
+#include <kernel/drivers/interrupt.h>
+#include <kernel/drivers/apic.h>
+#include <kernel/util.h>
+#include <kernel/drivers/timer.h>
+#include <common/mem_util.h>
+#include <kernel/memory/kmalloc.h>
 
-#include "../threading/mutex/semaphore.h"
+#include <kernel/threading/mutex/semaphore.h>
 
 // TOOD: Make sure we don't use PCI/SATA MMIO/DMA space for other stuff
 

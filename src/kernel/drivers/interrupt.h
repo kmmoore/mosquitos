@@ -1,4 +1,4 @@
-#include "../kernel_common.h"
+#include <kernel/kernel_common.h>
 
 #ifndef _INTERRUPTS_H
 #define _INTERRUPTS_H

@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "module_manager.h"
+#include <kernel/module_manager.h>
 
 #ifndef _MOSQUITOS
 #define _MOSQUITOS

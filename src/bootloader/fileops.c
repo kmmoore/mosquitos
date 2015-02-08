@@ -1,7 +1,7 @@
 #include <efi.h>
 #include <efilib.h>
 
-#include "fileops.h"
+#include <bootloader/fileops.h>
 
 struct {
   EFI_LOADED_IMAGE *loaded_image;

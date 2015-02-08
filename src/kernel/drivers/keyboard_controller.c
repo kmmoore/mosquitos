@@ -1,9 +1,9 @@
-#include "keyboard_controller.h"
-#include "../util.h"
+#include <kernel/drivers/keyboard_controller.h>
+#include <kernel/util.h>
 
-#include "../drivers/text_output.h"
-#include "../drivers/apic.h"
-#include "../drivers/interrupt.h"
+#include <kernel/drivers/text_output.h>
+#include <kernel/drivers/apic.h>
+#include <kernel/drivers/interrupt.h>
 
 #define KEYBOARD_IRQ 1
 #define KEYBOARD_IV 0x21

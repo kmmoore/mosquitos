@@ -1,5 +1,5 @@
-#include "util.h"
-#include "drivers/text_output.h"
+#include <kernel/util.h>
+#include <kernel/drivers/text_output.h>
 
 #include <stdarg.h>
 
