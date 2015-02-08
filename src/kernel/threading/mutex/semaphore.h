@@ -7,7 +7,7 @@
 
 typedef struct {
   uint64_t value;
-  list waiting_threads;
+  List waiting_threads;
 } Semaphore;
 
 void semaphore_init(Semaphore *sema, uint64_t initial_value);

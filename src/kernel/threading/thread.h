@@ -20,8 +20,8 @@ uint8_t thread_priority(KernelThread *thread);
 uint8_t thread_status(KernelThread *thread);
 bool thread_can_run(KernelThread *thread);
 
-list_entry * thread_list_entry (KernelThread *thread);
-KernelThread * thread_from_list_entry (list_entry *entry);
+ListEntry * thread_list_entry (KernelThread *thread);
+KernelThread * thread_from_list_entry (ListEntry *entry);
 uint64_t * thread_register_list_pointer (KernelThread *thread);
 
 // Functions that can be called by threads

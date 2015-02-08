@@ -20,7 +20,7 @@
 struct {
   KernelThread *current_thread; // This must be the first entry
 
-  list thread_list; // Sorted list (by priority) used as a priority queue
+  List thread_list; // Sorted list (by priority) used as a priority queue
   uint64_t apic_timer_frequency;
 } scheduler_data;
 
@@ -82,22 +82,22 @@ void scheduler_set_next() {
   // schedule all top priority threads
 
   KernelThread *next = NULL;
-  list_entry *first_thread_entry = list_head(&scheduler_data.thread_list);
+  ListEntry *first_thread_entry = list_head(&scheduler_data.thread_list);
   KernelThread *first_thread = thread_from_list_entry(first_thread_entry);
 
   // Schedule the next thread in line if there isn't a higher priority thread waiting
   if (scheduler_data.current_thread &&
       thread_priority(scheduler_data.current_thread) >= thread_priority(first_thread)) {
 
-    list_entry *current_thread_entry = thread_list_entry(scheduler_data.current_thread);
-    list_entry *next_thread_entry = list_next(current_thread_entry);
+    ListEntry *current_thread_entry = thread_list_entry(scheduler_data.current_thread);
+    ListEntry *next_thread_entry = list_next(current_thread_entry);
 
     if (next_thread_entry) next = thread_from_list_entry(next_thread_entry);
   }
   
   // If we can't use the next one, pull highest priority ready thread off
   if (!next || thread_priority(next) < thread_priority(scheduler_data.current_thread)) {
-    list_entry *entry = list_head(&scheduler_data.thread_list);
+    ListEntry *entry = list_head(&scheduler_data.thread_list);
 
     while (entry) {
       next = thread_from_list_entry(entry);
@@ -124,7 +124,7 @@ void scheduler_start_scheduling() {
 
 void scheduler_register_thread(KernelThread *thread) {
   // Put the new thread in the priority queue
-  list_entry *current = list_head(&scheduler_data.thread_list);
+  ListEntry *current = list_head(&scheduler_data.thread_list);
 
   // Try to find a place to put the new thread
   while (current) {
@@ -156,7 +156,7 @@ void scheduler_yield_no_save() {
 }
 
 void scheduler_remove_thread(KernelThread *thread) {
-  list_entry *current_entry = thread_list_entry(thread);
+  ListEntry *current_entry = thread_list_entry(thread);
 
   list_remove(&scheduler_data.thread_list, current_entry);
 }

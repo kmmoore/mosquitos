@@ -11,7 +11,7 @@
 #define TIMER_IV 0x22
 
 struct waiting_thread {
-  list_entry entry;
+  ListEntry entry;
 
   KernelThread *thread;
   uint64_t wake_time;
@@ -20,7 +20,7 @@ struct waiting_thread {
 static struct {
   volatile uint64_t ticks; // Won't overflow for 5e8 ticks
   uint64_t cycles_per_tick;
-  list waiting_threads;
+  List waiting_threads;
 } timer_data;
 
 static inline void wake_waiting_thread(struct waiting_thread *wt) {
@@ -32,10 +32,10 @@ static inline void wake_waiting_thread(struct waiting_thread *wt) {
 void timer_isr() {
   uint64_t current_ticks = __sync_add_and_fetch(&timer_data.ticks, 1);
 
-  list_entry *current = list_head(&timer_data.waiting_threads);
+  ListEntry *current = list_head(&timer_data.waiting_threads);
   while (current) {
     struct waiting_thread *current_waiting_thread = container_of(current, struct waiting_thread, entry);
-    list_entry *next = list_next(current);
+    ListEntry *next = list_next(current);
 
     if (current_ticks >= current_waiting_thread->wake_time) {
       wake_waiting_thread(current_waiting_thread);
@@ -118,10 +118,10 @@ void timer_cancel_thread_sleep(KernelThread *thread) {
   bool interrupts_enabled = interrupts_status();
   cli();
 
-  list_entry *current = list_head(&timer_data.waiting_threads);
+  ListEntry *current = list_head(&timer_data.waiting_threads);
   while (current) {
     struct waiting_thread *current_waiting_thread = container_of(current, struct waiting_thread, entry);
-    list_entry *next = list_next(current);
+    ListEntry *next = list_next(current);
 
     if (current_waiting_thread->thread == thread) {
       wake_waiting_thread(current_waiting_thread);

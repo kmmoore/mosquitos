@@ -16,14 +16,14 @@ static struct {
 
   uintptr_t physical_end;
   uint64_t num_free_pages;
-  list free_list;
+  List free_list;
 
   SpinLock spinlock; // Use a spinlock here, since this is used before the scheduler is initialized
 
 } virtual_memory_data;
 
 typedef struct {
-  list_entry entry;
+  ListEntry entry;
   uint64_t num_pages;
 } FreeBlock;
 

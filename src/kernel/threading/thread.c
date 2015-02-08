@@ -24,7 +24,7 @@ struct KernelThread {
 
   // These fields can be modified at will
 
-  list_entry entry;
+  ListEntry entry;
   uint32_t tid;
   uint32_t waiting_on:8; // Number of mutexes, IOs, etc. this thread is waiting on
   uint32_t priority:5; // Thread priority, higher priority threads will preempt lower priority threads
@@ -87,11 +87,11 @@ uint8_t thread_status(KernelThread *thread) {
   return thread->status;
 }
 
-list_entry * thread_list_entry (KernelThread *thread) {
+ListEntry * thread_list_entry (KernelThread *thread) {
   return &thread->entry;
 }
 
-KernelThread * thread_from_list_entry (list_entry *entry) {
+KernelThread * thread_from_list_entry (ListEntry *entry) {
   return container_of(entry, KernelThread, entry);
 }
 

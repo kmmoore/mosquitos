@@ -6,7 +6,7 @@
 #include <kernel/drivers/text_output.h>
 
 typedef struct {
-  list_entry entry;
+  ListEntry entry;
 
   KernelThread *thread;
 } WaitingThread;
@@ -24,10 +24,10 @@ void semaphore_up(Semaphore *sema, uint64_t value) {
 
   // We have to wake all threads potentially, in case the first one can't be
   // satisfied, but a later one can
-  list_entry *current = list_head(&sema->waiting_threads);
+  ListEntry *current = list_head(&sema->waiting_threads);
   while (current) {
     WaitingThread *waiting_thread = container_of(current, WaitingThread, entry);
-    list_entry *next = list_next(current);
+    ListEntry *next = list_next(current);
     list_remove(&sema->waiting_threads, &waiting_thread->entry);
     thread_wake(waiting_thread->thread);
     kfree(waiting_thread);
@@ -52,7 +52,7 @@ bool semaphore_down(Semaphore *sema, uint64_t value, int64_t timeout) {
     waiting_thread->thread = scheduler_current_thread();
 
     // Insert based on priority (higher priority first)
-    list_entry *current = list_head(&sema->waiting_threads);
+    ListEntry *current = list_head(&sema->waiting_threads);
 
     // Try to find a place to put the new thread
     while (current) {

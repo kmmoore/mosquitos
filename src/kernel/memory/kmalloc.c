@@ -7,7 +7,7 @@
 typedef struct _FreeBlockHeader {
   uint64_t size:63;
   uint64_t free:1;
-  list_entry entry;
+  ListEntry entry;
 } FreeBlockHeader;
 
 typedef struct _BlockHeader {
@@ -23,7 +23,7 @@ typedef struct _BlockFooter {
 
 
 static struct {
-  list free_list;
+  List free_list;
 } kmalloc_data;
 
 void print_block(BlockHeader *header);
@@ -107,7 +107,7 @@ void * kmalloc(size_t alloc_size) {
   // TODO: I think the returned pointers have to be aligned to 64 bytes
 
   // Find the best fit in the free list
-  list_entry *current = list_head(&kmalloc_data.free_list);
+  ListEntry *current = list_head(&kmalloc_data.free_list);
   FreeBlockHeader *chosen_header = NULL;
   while(current) {
     FreeBlockHeader *header = container_of(current, FreeBlockHeader, entry);
@@ -213,7 +213,7 @@ void print_block(BlockHeader *header) {
 void print_free_list() {
   text_output_printf("kmalloc() Free List:\n");
 
-  list_entry *current = list_head(&kmalloc_data.free_list);
+  ListEntry *current = list_head(&kmalloc_data.free_list);
   while(current) {
     FreeBlockHeader *header = container_of(current, FreeBlockHeader, entry);
     print_block((BlockHeader *)header);

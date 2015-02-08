@@ -3,37 +3,37 @@
 #ifndef _LIST_H
 #define _LIST_H
 
-typedef struct _list list;
-typedef struct _list_entry list_entry;
+typedef struct _List List;
+typedef struct _ListEntry ListEntry;
 
-struct _list {
-  struct _list_entry *head;
-  struct _list_entry *tail;
+struct _List {
+  struct _ListEntry *head;
+  struct _ListEntry *tail;
 };
 
-struct _list_entry {
-  struct _list_entry *next, *prev;
+struct _ListEntry {
+  struct _ListEntry *next, *prev;
   uint64_t value;
 };
 
-void list_init(list *l);
+void list_init(List *l);
 
-list_entry *list_head(list *l);
-list_entry *list_tail(list *l);
+ListEntry *list_head(List *l);
+ListEntry *list_tail(List *l);
 
-#define list_entry_cast(entry, type) ((type)(list_entry_value(entry)))
+#define ListEntry_cast(entry, type) ((type)(ListEntry_value(entry)))
 
-uint64_t list_entry_value(list_entry *entry);
-void list_entry_set_value(list_entry *entry, uint64_t value);
-list_entry *list_next(list_entry *entry);
-list_entry *list_prev(list_entry *entry);
+uint64_t ListEntry_value(ListEntry *entry);
+void ListEntry_set_value(ListEntry *entry, uint64_t value);
+ListEntry *list_next(ListEntry *entry);
+ListEntry *list_prev(ListEntry *entry);
 
 /* In the following functions, `before`, `after`, and
    `to_remove` must be in `l`. */
-void list_push_front(list *l, list_entry *new);
-void list_push_back(list *l, list_entry *new);
-void list_insert_before(list *l, list_entry *before, list_entry *new);
-void list_insert_after(list *l, list_entry *after, list_entry *new);
-void list_remove(list *l, list_entry *to_remove);
+void list_push_front(List *l, ListEntry *new);
+void list_push_back(List *l, ListEntry *new);
+void list_insert_before(List *l, ListEntry *before, ListEntry *new);
+void list_insert_after(List *l, ListEntry *after, ListEntry *new);
+void list_remove(List *l, ListEntry *to_remove);
 
 #endif

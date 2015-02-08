@@ -1,44 +1,44 @@
 #include <kernel/datastructures/list.h>
 
-void list_init(list *l) {
+void list_init(List *l) {
   l->head = l->tail = NULL;
 }
 
-list_entry *list_head(list *l) {
+ListEntry *list_head(List *l) {
   return l->head;
 }
 
-list_entry *list_tail(list *l) {
+ListEntry *list_tail(List *l) {
   return l->tail;
 }
 
-uint64_t list_entry_value(list_entry *entry) {
+uint64_t list_entry_value(ListEntry *entry) {
   return entry->value;
 }
 
-void list_entry_set_value(list_entry *entry, uint64_t value) {
+void list_entry_set_value(ListEntry *entry, uint64_t value) {
   entry->value = value;
 }
 
-list_entry *list_next(list_entry *entry) {
+ListEntry *list_next(ListEntry *entry) {
   if (!entry) return NULL;
   return entry->next;
 }
 
-list_entry *list_prev(list_entry *entry) {
+ListEntry *list_prev(ListEntry *entry) {
   if (!entry) return NULL;
   return entry->prev;
 }
 
-void list_push_front(list *l, list_entry *new) {
+void list_push_front(List *l, ListEntry *new) {
   list_insert_before(l, list_head(l), new);
 }
 
-void list_push_back(list *l, list_entry *new) {
+void list_push_back(List *l, ListEntry *new) {
   list_insert_after(l, list_tail(l), new);
 }
 
-void list_insert_before(list *l, list_entry *before, list_entry *new) {
+void list_insert_before(List *l, ListEntry *before, ListEntry *new) {
   if (before == NULL) {
     new->prev = new->next = NULL;
     l->head = new;
@@ -59,7 +59,7 @@ void list_insert_before(list *l, list_entry *before, list_entry *new) {
   }
 }
 
-void list_insert_after(list *l, list_entry *after, list_entry *new) {
+void list_insert_after(List *l, ListEntry *after, ListEntry *new) {
   if (after == NULL) {
     new->prev = new->next = NULL;
     l->head = new;
@@ -80,7 +80,7 @@ void list_insert_after(list *l, list_entry *after, list_entry *new) {
   }
 }
 
-void list_remove(list *l, list_entry *to_remove) {
+void list_remove(List *l, ListEntry *to_remove) {
   if (to_remove->prev) {
     to_remove->prev->next = to_remove->next;
   }
