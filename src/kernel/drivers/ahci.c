@@ -1,5 +1,5 @@
-#include "sata.h"
-#include "sata_types.h"
+#include "ahci.h"
+#include "ahci_types.h"
 #include "text_output.h"
 #include "pci.h"
 #include "interrupt.h"
@@ -223,7 +223,7 @@ bool sata_read(AHCIDevice *device, uint64_t lba, uint32_t count, uint8_t *buffer
   return success;
 }
 
-// buf should be 256 bytes
+// buf should be 512 bytes
 bool sata_identify(AHCIDevice *device, uint8_t *buffer) {
   HBAPort *port = port_from_device(device);
 
@@ -236,7 +236,7 @@ bool sata_identify(AHCIDevice *device, uint8_t *buffer) {
   }
  
   // Setup command
-  FISRegisterH2D *command_fis = new_command_fis(device, slot, false, true, 256, buffer);
+  FISRegisterH2D *command_fis = new_command_fis(device, slot, false, true, 512, buffer);
   command_fis->command = ATA_CMD_IDENTIFY;
   command_fis->device = 0;
  
@@ -359,11 +359,14 @@ bool initialize_hba(PCIDevice *hba_device) {
   return true;
 }
 
-void sata_init() {
+void ahci_init() {
+  REQUIRE_MODULE("pci");
+
   sata_data.num_devices = 0;
 
   // Find a SATA AHCI v1 PCI device
   // TODO: Handle multiple AHCI devices
+  // TODO: The PCI driver should load a new AHCI driver for each HBA
   PCIDevice *hba = pci_find_device(PCI_MASS_STORAGE_CLASS_CODE, PCI_SATA_SUBCLASS, PCI_AHCI_V1_PROGRAM_IF);
 
   if (!hba) {
@@ -376,11 +379,17 @@ void sata_init() {
 
   for (int i = 0; i < sata_data.num_devices; ++i) {
     if (sata_data.devices[i].type == AHCI_DEVICE_SATA) {
-      uint8_t buffer[512];
+      uint16_t buffer[256];
       memset(buffer, 0, sizeof(buffer));
-      if (sata_identify(&sata_data.devices[i], buffer)) {
-        text_output_printf("Device %d IDENTIFY: %s\n", i, buffer);
+      if (sata_identify(&sata_data.devices[i], (uint8_t *)buffer)) {
+        text_output_printf("Supports LBA48? %s\n", (buffer[83] & (1 << 10)) > 0 ? "yes" : "no");
+        text_output_printf("Max LBA: 0x%.4x%.4x%.4x%.4x\n", buffer[103], buffer[102], buffer[101], buffer[100]);
+        uint64_t byte_capacity = (buffer[100] + ((uint64_t)buffer[101] << 16) + ((uint64_t)buffer[101] << 32) + ((uint64_t)buffer[101] << 48)) * 512;
+
+        text_output_printf("Capacity: %d bytes\n", byte_capacity);
       }
     }
   }
+
+  REGISTER_MODULE("ahci");
 }
