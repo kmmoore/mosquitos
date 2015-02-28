@@ -1,14 +1,16 @@
 #include <kernel/threading/mutex/lock.h>
 
 void lock_init(Lock *lock) {
-  semaphore_init(&lock->sema, 0);
+  semaphore_init(&lock->sema, 1);
 }
 
 bool lock_acquire(Lock *lock, int64_t timeout) {
+  assert(semaphore_value(&lock->sema) <= 1);
   return semaphore_down(&lock->sema, 1, timeout);
 }
 
 void lock_release(Lock *lock) {
+  assert(semaphore_value(&lock->sema) == 0);
   semaphore_up(&lock->sema, 1);
 }
 

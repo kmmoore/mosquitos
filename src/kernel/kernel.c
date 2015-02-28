@@ -24,9 +24,11 @@
 #include <kernel/memory/kmalloc.h>
 
 #include <kernel/threading/scheduler.h>
-#include <kernel/threading/mutex/semaphore.h>
+#include <kernel/threading/mutex/lock.h>
 
 #include <common/build_info.h>
+
+Lock kernel_lock;
 
 void * kernel_main_thread();
 
@@ -50,6 +52,8 @@ void kernel_main(KernelInfo info) {
   text_output_set_foreground_color(0x00FFFF00);
   text_output_printf("Built from %s on %s\n\n", build_git_info, build_time);
   text_output_set_foreground_color(0x00FFFFFF);
+
+  lock_init(&kernel_lock);
 
   // Initialize subsystems
   acpi_init(info.xdsp_address);
@@ -76,6 +80,29 @@ void kernel_main(KernelInfo info) {
   assert(false); // We should never get here
 }
 
+void * keyboard_echo_thread() {
+  lock_acquire(&kernel_lock, -1);
+  text_output_printf("Starting keyboard_echo_thread.\n");
+  lock_release(&kernel_lock);
+
+  while (1) {
+    int c = keyboard_controller_read_char(false);
+    if (c >= 0) {
+      if (c == '\b' || c == 127) {
+        text_output_backspace();
+      } else {
+        uint32_t old_fg = text_output_get_foreground_color();
+        text_output_set_foreground_color(0x006666FF);
+        text_output_putchar(c);
+        text_output_set_foreground_color(old_fg);
+      }
+    }
+  }
+
+  thread_exit();
+  return NULL;
+}
+
 // Initialization that needs a threaded context is done here
 void * kernel_main_thread() {
   // Full acpica needs dynamic memory and scheduling
@@ -85,9 +112,15 @@ void * kernel_main_thread() {
   pci_init();
   ahci_init();
 
+  // Set up low-priority thread to echo keyboard to screen
+  KernelThread *keyboard_thread = thread_create(keyboard_echo_thread, NULL, 1, 1);
+  thread_start(keyboard_thread);
+
+  lock_acquire(&kernel_lock, -1);
   text_output_set_foreground_color(0x0000FF00);
-  text_output_printf("\nKernel initialization complete.\n\n");
+  text_output_printf("\nKernel initialization complete. Exiting kernel_main_thread.\n\n");
   text_output_set_foreground_color(0x00FFFFFF);
+  lock_release(&kernel_lock);
 
   thread_exit(); // TODO: Maybe make returning do the same thing?
   return NULL;

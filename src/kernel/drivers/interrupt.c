@@ -37,6 +37,7 @@ static void set_idt_entry(int index, uint64_t base, uint16_t selector, uint8_t a
 
 void isr_common(uint64_t num, uint64_t error_code) {
   interrupts_handlers[num](error_code);
+  apic_send_eoi_if_necessary(num);
 }
 
 extern void isr0();

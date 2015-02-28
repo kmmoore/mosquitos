@@ -10,15 +10,19 @@
 
 #define member_size(type, member) sizeof(((type *)0)->member)
 
-#define NUM_BITS(bytes) (bytes * 8)
+#define NUM_BITS(bytes) ((bytes) * 8)
 #define ALL_ONES (~0ll)
-#define BOTTOM_N_BITS_OFF(n) (ALL_ONES << n)
+#define BOTTOM_N_BITS_OFF(n) (ALL_ONES << (n))
 #define BOTTOM_N_BITS_ON(n) (~BOTTOM_N_BITS_OFF(n))
-#define FIELD_MASK(bit_size, bit_offset) (BOTTOM_N_BITS_ON(bit_size) << bit_offset)
+#define FIELD_MASK(bit_size, bit_offset) (BOTTOM_N_BITS_ON(bit_size) << (bit_offset))
 
-#define field_in_word(word, byte_offset, byte_size) ((word & FIELD_MASK(NUM_BITS(byte_size), NUM_BITS(byte_offset))) >> NUM_BITS(byte_offset))
+#define field_in_word(word, byte_offset, byte_size) (((word) & FIELD_MASK(NUM_BITS(byte_size), NUM_BITS(byte_offset))) >> NUM_BITS(byte_offset))
 
-#define assert(condition) do { if (!(condition)) panic("assert(" STR(condition) ")"); } while(0)
+#ifdef DEBUG
+  #define assert(condition) do { if (!(condition)) panic("assert(" STR(condition) ")"); } while(0)
+#else
+  #define assert(condition)
+#endif
 
 #define panic(...) do { _panic("PANIC (" __FILE__ ":" STR(__LINE__) "): " __VA_ARGS__); } while (0)
 

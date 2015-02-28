@@ -42,7 +42,7 @@ KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8
   // Allocate large region for thread struct and stack
   KernelThread *new_thread = vm_palloc(stack_num_pages);
 
-  // list_entry_set_value(&new_thread->entry, (uint64_t)new_thread); // Make list entry point to struct
+  assert(priority < 32); // We only have 5 bits
 
   new_thread->tid = thread_data.next_tid++;
   new_thread->priority = priority;
@@ -109,7 +109,7 @@ void thread_exit() {
   sti();
 
   // TODO: There is a race if the scheduler comes in right now
-  scheduler_yield_no_save(); 
+  scheduler_yield_no_save();
 }
 
 void thread_sleep(KernelThread *thread) {
@@ -136,7 +136,6 @@ void thread_start(KernelThread *thread) {
 
 void thread_wake(KernelThread *thread) {
   // NOTE: This function must be called with interrupts disabled
-  // text_output_printf("Waking thread: %d\n", thread->tid);
 
   if (thread->status == THREAD_RUNNING) return;
   

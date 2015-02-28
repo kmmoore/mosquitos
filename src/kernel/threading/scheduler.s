@@ -63,7 +63,7 @@ scheduler_timer_isr:
   save_thread
 
   # NOTE: We can do whatever we want to registers now, they are all saved
-  # NOTE 2: Theoretically this is true, but annecdotally it is false
+  # NOTE 2: Theoretically this is true, but empirically it is false
 
   call  apic_send_eoi
 

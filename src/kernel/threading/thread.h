@@ -13,6 +13,8 @@ typedef enum {
   THREAD_EXITED
 } KernelThreadStatus;
 
+// Priority is in the range [0, 31]. Higher priority threads run before lower priority threads.
+// Idle thread runs at lowest priority (0) so any thread that does work should be priority > 0.
 KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8_t priority, uint64_t stack_num_pages);
 
 uint32_t thread_id(KernelThread *thread);

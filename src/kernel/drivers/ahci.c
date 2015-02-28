@@ -36,6 +36,8 @@
 #define MAX_BYTES_PER_PRDT (1 << 22)
 #define BYTES_PER_SECTOR   512
 
+#define COMMAND_TIMEOUT_MS 1500
+
 static AHCIDeviceType device_type_in_port(HBAPort *port);
 
 typedef struct _AHCIDevice {
@@ -85,8 +87,6 @@ void sata_isr() {
       semaphore_up(&device->pending_command, 1);
     }
   }
-
-  apic_send_eoi();
 }
 
 void port_start(HBAPort *port) {
@@ -176,7 +176,11 @@ bool issue_command(AHCIDevice *device, int slot) {
 
   // Make sure the command has actually finished
   while (port->command_issue & (1 << slot)) {
-    semaphore_down(&device->pending_command, 1, 0); // Sleep until we get an interrupt
+    // Sleep until we get an interrupt or we timeout
+    if (!semaphore_down(&device->pending_command, 1, COMMAND_TIMEOUT_MS)) {
+      text_output_printf("AHCI command issue timeout.\n");
+      return false;
+    }
   }
 
   return true;

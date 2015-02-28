@@ -219,6 +219,14 @@ void apic_init() {
   REGISTER_MODULE("apic");
 }
 
-void apic_send_eoi() {
+void apic_send_eoi_if_necessary(uint8_t interrupt_vector) {
+  int apic_register_index = 0x10 + interrupt_vector / 32;
+  uint32_t isr_value = apic_read(apic_register_index);
+  if ((isr_value & FIELD_MASK(1, interrupt_vector % 32)) != 0) {
+    apic_send_eoi();
+  }
+}
+
+inline void apic_send_eoi() {
   apic_write(0x0b, 1);
 }

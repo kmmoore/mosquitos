@@ -27,7 +27,6 @@ struct {
 static volatile uint64_t calibration_end = 0;
 static void apic_timer_calibration_isr() {
   calibration_end = timer_ticks();
-  apic_send_eoi();
 }
 
 static void calibrate_apic_timer() {

@@ -43,8 +43,6 @@ void timer_isr() {
 
     current = next;
   }
-
-  apic_send_eoi();
 }
 
 uint64_t timer_ticks() {
@@ -86,7 +84,7 @@ void timer_thread_stall(uint64_t microseconds) {
   // also, it can get interrupted by things
 
   uint64_t cycles = microseconds * TIMER_FREQUENCY * timer_data.cycles_per_tick / 1e6;
-  text_output_printf("Stalling for %d cycles\n", cycles);
+  // text_output_printf("Stalling for %d cycles\n", cycles);
   while (cycles > 0) cycles--;
 }
 

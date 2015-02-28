@@ -73,7 +73,11 @@ bool semaphore_down(Semaphore *sema, uint64_t value, int64_t timeout) {
       thread_sleep(waiting_thread->thread);
     } else {
       uint64_t old_value = sema->value;
+
+      // timer_thread_sleep() will return with interrupts in the same state as when it
+      // is called. Interrupts will be re-enabled while the thread sleeps.
       timer_thread_sleep(timeout);
+      // Interrupts will be off again when we get here
 
       // We woke up either from the timer, or the semaphore
       if (sema->value != old_value) {

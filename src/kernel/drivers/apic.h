@@ -20,6 +20,7 @@ typedef enum {
 } APICTimerMode;
 
 void apic_init();
+void apic_send_eoi_if_necessary(uint8_t interrupt_vector);
 void apic_send_eoi();
 void apic_setup_local_timer(APICTimerDivider divider, uint8_t interrupt_vector, APICTimerMode mode, uint32_t initial_count);
 void apic_set_local_timer_masked(bool masked);
