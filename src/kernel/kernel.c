@@ -12,7 +12,7 @@
 #include <kernel/drivers/text_output.h>
 #include <kernel/drivers/keyboard_controller.h>
 #include <kernel/drivers/pci.h>
-#include <kernel/drivers/ahci.h>
+#include <kernel/drivers/pci_drivers/ahci/ahci_driver.h>
 
 #include <kernel/drivers/acpi.h>
 #include <kernel/drivers/interrupt.h>
@@ -110,11 +110,38 @@ void * kernel_main_thread() {
 
   // PCI needs APCICA to determine IRQ mappings
   pci_init();
-  ahci_init();
+
+  // Register PCI drivers
+  ahci_register();
+
+  // Once we've registered the PCI drivers, enumerate and instantiate PCI drivers
+  pci_enumerate_devices();
 
   // Set up low-priority thread to echo keyboard to screen
   KernelThread *keyboard_thread = thread_create(keyboard_echo_thread, NULL, 1, 1);
   thread_start(keyboard_thread);
+
+  PCIDevice *ahci_device = pci_find_device(0x01, 0x06, 0x01);
+  PCIDeviceDriverInterface *driver = &ahci_device->driver;
+  driver->execute_command(driver, AHCI_COMMAND_LIST_DEVICES, NULL, 0, NULL, 0);
+
+  uint16_t buffer[256];
+  struct AHCIIdentifyCommand command = { .device_id = 1 };
+  PCIDeviceDriverInterfaceError error = driver->execute_command(driver, AHCI_COMMAND_IDENTIFY,
+                                                                &command, sizeof(struct AHCIIdentifyCommand),
+                                                                buffer, sizeof(buffer));
+
+  if (error == PCI_ERROR_NONE) {
+    text_output_printf("Supports LBA48? %s\n", (buffer[83] & (1 << 10)) > 0 ? "yes" : "no");
+    text_output_printf("Max LBA: 0x%.4x%.4x%.4x%.4x\n", buffer[103], buffer[102], buffer[101], buffer[100]);
+    uint64_t byte_capacity = (buffer[100] + ((uint64_t)buffer[101] << 16) + ((uint64_t)buffer[101] << 32) + ((uint64_t)buffer[101] << 48)) * 512;
+
+    text_output_printf("Capacity: %d bytes\n", byte_capacity);
+  } else {
+    text_output_printf("PCI Error: %d\n", error);
+  }
+  
+
 
   lock_acquire(&kernel_lock, -1);
   text_output_set_foreground_color(0x0000FF00);

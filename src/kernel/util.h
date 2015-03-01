@@ -24,6 +24,8 @@
   #define assert(condition)
 #endif
 
+#define NOT_IMPLEMENTED panic("NOT IMPLEMENTED");
+
 #define panic(...) do { _panic("PANIC (" __FILE__ ":" STR(__LINE__) "): " __VA_ARGS__); } while (0)
 
 void _panic(char *format, ...);

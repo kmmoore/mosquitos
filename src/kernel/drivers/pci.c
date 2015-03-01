@@ -8,6 +8,7 @@
 #define PCI_NUM_INTERRUPT_PORTS 4
 
 #define PCI_MAX_DEVICES 20
+#define PCI_MAX_DRIVERS (2*PCI_MAX_DEVICES)
 
 typedef union {
 
@@ -27,6 +28,9 @@ static struct {
   PCIDevice devices[PCI_MAX_DEVICES];
   uint32_t irq_routing_table[PCI_MAX_SLOT_NUM][4]; // TODO: Support more than just bus 0
   int num_devices;
+
+  PCIDeviceDriverInterface drivers[PCI_MAX_DRIVERS];
+  int num_drivers;
 } pci_data;
 
 uint32_t pci_config_read_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
@@ -76,8 +80,6 @@ ACPI_STATUS acpi_system_bus_walk_callback(ACPI_HANDLE Object, UINT32 NestingLeve
 
         // TODO: Make sure the SourceIndex isn't referencing a link device
         pci_data.irq_routing_table[slot_number][routing_table[i].Pin] = routing_table[i].SourceIndex;
-
-        // text_output_printf("IRQ Pin %d, PCI slot number: %d, Real IRQ: %d Source: %x %x %x %x\n", routing_table[i].Pin, slot_number, routing_table[i].SourceIndex, routing_table[i].Source[0], routing_table[i].Source[1], routing_table[i].Source[2], routing_table[i].Source[3]);
       }
   }
 
@@ -99,6 +101,19 @@ static void pci_load_irq_routing_table() {
 UNUSED static void print_pci_device(PCIDevice *device) {
   text_output_printf("[PCI Device 0x%02x 0x%02x 0x%02x] Class Code: 0x%02x, Subclass: 0x%02x, Program IF: 0x%02x, IRQ #: %d, Multifunction? %d\n", device->bus, device->slot, device->function, device->class_code, device->subclass, device->program_if, device->real_irq, device->multifunction);
 
+}
+
+static PCIDeviceDriverInterface *driver_for_device(PCIDevice *device) {
+  for (int i = 0; i < pci_data.num_drivers; ++i) {
+    PCIDeviceDriverInterface *driver = &pci_data.drivers[i];
+    if (driver->class_code == device->class_code &&
+        driver->subclass == device->subclass &&
+        driver->program_if == device->program_if) {
+      return driver;
+    }
+  }
+
+  return NULL;
 }
 
 static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
@@ -132,6 +147,16 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
       new_device->real_irq = pci_data.irq_routing_table[slot][interrupt_pin-1]; // INTA# is 0x01
     }
 
+    PCIDeviceDriverInterface *driver = driver_for_device(new_device);
+    if (driver != NULL) {
+      new_device->driver = *driver;
+      new_device->has_driver = true;
+      new_device->driver.device = new_device;
+      new_device->driver.init(&new_device->driver);
+    } else {
+      new_device->has_driver = false;
+    }
+
     return new_device;
   }
 
@@ -139,7 +164,10 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
 }
 
 
-static void enumerate_devices() {
+void pci_enumerate_devices() {
+  REQUIRE_MODULE("pci");
+  pci_data.num_devices = 0;
+
   for(int bus = 0; bus < PCI_MAX_BUS_NUM; bus++) {
     for(int slot = 0; slot < PCI_MAX_SLOT_NUM; slot++) {
       PCIDevice *new_device = add_pci_device(bus, slot, 0);
@@ -156,9 +184,10 @@ static void enumerate_devices() {
 void pci_init() {
   REQUIRE_MODULE("interrupt");
   REQUIRE_MODULE("acpi_full");
+
+  pci_data.num_drivers = 0;
   
   pci_load_irq_routing_table();
-  enumerate_devices();
 
   REGISTER_MODULE("pci");
 }
@@ -174,3 +203,11 @@ PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t progra
   return NULL;
 }
 
+void pci_register_device_driver(PCIDeviceDriverInterface driver_interface) {
+  REQUIRE_MODULE("pci");
+
+  assert(pci_data.num_drivers < PCI_MAX_DRIVERS);
+  pci_data.drivers[pci_data.num_drivers++] = driver_interface;
+
+  text_output_printf("Registered PCI device driver for cc: %d, sc: %d, pif: %d\n", driver_interface.class_code, driver_interface.subclass, driver_interface.program_if);
+}
