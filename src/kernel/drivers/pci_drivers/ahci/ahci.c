@@ -1,5 +1,5 @@
 #include <kernel/drivers/pci_drivers/ahci/ahci.h>
-#include <kernel/drivers/pci_drivers/ahci/ahci_driver.h>
+#include <kernel/drivers/pci_drivers/ahci/ahci_internal.h>
 #include <kernel/drivers/pci_drivers/ahci/sata.h>
 #include <kernel/drivers/text_output.h>
 #include <kernel/drivers/pci.h>
@@ -32,19 +32,20 @@
 
 #define MAX_BYTES_PER_PRDT (1 << 22)
 
-#define COMMAND_TIMEOUT_MS 1500
+#define COMMAND_TIMEOUT_MS 500
 
 static AHCIDeviceType device_type_in_port(HBAPort *port);
 
 typedef struct _AHCIDevice {
-  HBAMemory *hba;
   uint8_t port_number;
   AHCIDeviceType type;
   Semaphore pending_command;
+  PCIDeviceDriver *driver;
 } AHCIDevice;
 
 typedef struct _AHCIData {
   // TODO: Store HBA(s?) capabilities
+  HBAMemory *hba;
   bool use_64_bits;
   AHCIDevice devices[MAX_CACHED_DEVICES];
   uint8_t num_devices;
@@ -52,9 +53,12 @@ typedef struct _AHCIData {
 
 static inline HBAPort * port_from_device(AHCIDevice *device) {
   assert(device);
-  assert(device->hba);
-  assert(device->hba->ports);
-  return &device->hba->ports[device->port_number];
+  assert(device->driver);
+  assert(device->driver->driver_data);
+
+  AHCIData *ahci_data = (AHCIData *)device->driver->driver_data;
+  assert(ahci_data->hba->ports);
+  return &ahci_data->hba->ports[device->port_number];
 }
 
 inline AHCIDeviceType ahci_device_type(AHCIDevice *device) {
@@ -210,7 +214,7 @@ static bool reset_hba(HBAMemory *hba) {
   return (hba->ghc & 0x01) == 0;
 }
 
-static void enumerate_devices(HBAMemory *hba, AHCIData *ahci_data) {
+static void enumerate_devices(PCIDeviceDriver *driver, HBAMemory *hba, AHCIData *ahci_data) {
   // Check all implemented ports
   uint32_t ports_implemented = hba->ports_implemented;
   for (int i = 0; i < 32; ++i) {
@@ -222,7 +226,7 @@ static void enumerate_devices(HBAMemory *hba, AHCIData *ahci_data) {
         assert(ahci_data->num_devices < MAX_CACHED_DEVICES);
         AHCIDevice *new_device = &ahci_data->devices[ahci_data->num_devices++];
 
-        new_device->hba = hba;
+        new_device->driver = driver;
         new_device->port_number = i;
         new_device->type = device_type;
 
@@ -287,9 +291,10 @@ static bool initialize_hba(PCIDeviceDriver *driver) {
   driver->driver_data = kcalloc(1, sizeof(AHCIData));
   AHCIData *ahci_data = (AHCIData *)(driver->driver_data);
   ahci_data->use_64_bits = (hba->capabilities & (1 << 31)) > 0;
+  ahci_data->hba = hba;
 
 
-  enumerate_devices(hba, ahci_data);
+  enumerate_devices(driver, hba, ahci_data);
 
   for (int i = 0; i < ahci_data->num_devices; ++i) {
     print_ahci_device(&ahci_data->devices[i]);
@@ -379,15 +384,23 @@ static PCIDeviceDriverError ahci_execute_command(PCIDeviceDriver *driver,
 
 static void ahci_isr(PCIDeviceDriver *driver) {
   AHCIData *ahci_data = (AHCIData *)driver->driver_data;
+  if (ahci_data->hba->interrupt_status == 0) return;
+  text_output_printf("HBA IS: 0b%b\n", ahci_data->hba->interrupt_status);
 
+  // TODO: Only loop over ports with bits set in hba->interrupt_status
   for (size_t i = 0; i < ahci_data->num_devices; ++i) {
     AHCIDevice *device = &ahci_data->devices[i];
     HBAPort *port = port_from_device(device);
 
     if (port->interrupt_status > 0) {
       semaphore_up(&device->pending_command, 1);
+      // Clear port interrupt status
+      port->interrupt_status = ALL_ONES;
     }
   }
+
+  // Clear HBA interrupt status when we are done
+  ahci_data->hba->interrupt_status = ALL_ONES;
 }
 
 void ahci_register() {

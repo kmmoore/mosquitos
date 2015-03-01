@@ -12,7 +12,7 @@
 #include <kernel/drivers/text_output.h>
 #include <kernel/drivers/keyboard_controller.h>
 #include <kernel/drivers/pci.h>
-#include <kernel/drivers/pci_drivers/ahci/ahci_driver.h>
+#include <kernel/drivers/pci_drivers/ahci/ahci.h>
 
 #include <kernel/drivers/acpi.h>
 #include <kernel/drivers/interrupt.h>
@@ -120,36 +120,37 @@ void * kernel_main_thread() {
   driver->execute_command(driver, AHCI_COMMAND_LIST_DEVICES, NULL, 0, NULL, 0);
 
   uint16_t buffer[256];
-  // struct AHCIIdentifyCommand command = { .device_id = 1 };
-  // PCIDeviceDriverError error = driver->execute_command(driver, AHCI_COMMAND_IDENTIFY, &command,
-  //                                                      sizeof(command), buffer, sizeof(buffer));
+  struct AHCIIdentifyCommand command = { .device_id = 1 };
+  PCIDeviceDriverError error = driver->execute_command(driver, AHCI_COMMAND_IDENTIFY, &command,
+                                                       sizeof(command), buffer, sizeof(buffer));
 
 
-
-  // if (error == PCI_ERROR_NONE) {
-  //   text_output_printf("Supports LBA48? %s\n", (buffer[83] & (1 << 10)) > 0 ? "yes" : "no");
-  //   text_output_printf("Max LBA: 0x%.4x%.4x%.4x%.4x\n", buffer[103], buffer[102], buffer[101], buffer[100]);
-  //   uint64_t byte_capacity = (buffer[100] + ((uint64_t)buffer[101] << 16) + ((uint64_t)buffer[101] << 32) + ((uint64_t)buffer[101] << 48)) * 512;
-
-  //   text_output_printf("Capacity: %d bytes\n", byte_capacity);
-  // } else {
-  //   text_output_printf("PCI Error: %d\n", error);
-  // }
-
-  struct AHCIReadCommand read_command = { .device_id = 1, .address = 0, .block_count = 1 };
-  PCIDeviceDriverError error = driver->execute_command(driver, AHCI_COMMAND_READ, &read_command,
-                                  sizeof(read_command), buffer, sizeof(buffer));
 
   if (error == PCI_ERROR_NONE) {
-    for (int i = 0; i < 16; ++i) {
-      for (int j = 0; j < 16; ++j) {
-        text_output_printf("%.2x %.2x ", (uint8_t)buffer[i*16+j], (uint8_t)(buffer[i*16+j] >> 8));
-      }
-      text_output_printf("\n");
-    }
+    text_output_printf("Supports LBA48? %s\n", (buffer[83] & (1 << 10)) > 0 ? "yes" : "no");
+    text_output_printf("Max LBA: 0x%.4x%.4x%.4x%.4x\n", buffer[103], buffer[102], buffer[101], buffer[100]);
+    uint64_t byte_capacity = (buffer[100] + ((uint64_t)buffer[101] << 16) + ((uint64_t)buffer[101] << 32) + ((uint64_t)buffer[101] << 48)) * 512;
+
+    text_output_printf("Capacity: %d bytes\n", byte_capacity);
   } else {
     text_output_printf("PCI Error: %d\n", error);
-  }  
+  }
+
+  memset(buffer, 0xFF, sizeof(buffer));
+  struct AHCIReadCommand read_command = { .device_id = 1, .address = 0, .block_count = 1 };
+  error = driver->execute_command(driver, AHCI_COMMAND_READ, &read_command,
+                                  sizeof(read_command), buffer, sizeof(buffer));
+
+  if (error != PCI_ERROR_NONE) {
+    text_output_printf("PCI Error: %d\n", error);
+  }
+
+  for (int i = 0; i < 16; ++i) {
+    for (int j = 0; j < 16; ++j) {
+      text_output_printf("%.2x %.2x ", (uint8_t)buffer[i*16+j], (uint8_t)(buffer[i*16+j] >> 8));
+    }
+    text_output_printf("\n");
+  }
   
 
   text_output_set_foreground_color(0x0000FF00);

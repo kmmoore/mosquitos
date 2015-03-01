@@ -1,6 +1,6 @@
 #include <kernel/kernel_common.h>
 #include <kernel/drivers/pci_drivers/pci_device_driver.h>
-#include <kernel/drivers/pci_drivers/ahci/ahci.h>
+#include <kernel/drivers/pci_drivers/ahci/ahci_internal.h>
 
 #ifndef _SATA_H
 #define _SATA_H

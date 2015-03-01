@@ -1,22 +1,31 @@
 #include <kernel/kernel_common.h>
-#include <kernel/drivers/pci_drivers/ahci/ahci_types.h>
-#include <kernel/drivers/pci_drivers/pci_device_driver.h>
 
-#ifndef _AHCI_H
-#define _AHCI_H
+#ifndef _AHCI_DRIVER_H
+#define _AHCI_DRIVER_H
 
-typedef struct _AHCIDevice AHCIDevice;
+enum AHCICommandIDs {
+  AHCI_COMMAND_LIST_DEVICES, // input_buffer is NULL
+  AHCI_COMMAND_IDENTIFY,     // input_buffer is struct AHCIIdentifyCommand *
+  AHCI_COMMAND_READ,         // input_buffer is struct AHCIReadCommand *
+  AHCI_COMMAND_WRITE         // input_buffer is struct AHCIWriteCommand *
+};
 
-AHCIDeviceType ahci_device_type(AHCIDevice *device);
+struct AHCIIdentifyCommand {
+  int device_id;
+};
 
-void ahci_clear_pending_interrupts(AHCIDevice *device);
-int ahci_find_command_slot(AHCIDevice *device);
-FISRegisterH2D * ahci_initialize_command_fis(PCIDeviceDriver *driver, AHCIDevice *device, int slot, bool write, bool prefetchable, uint64_t byte_size, uint8_t *dma_buffer);
-bool ahci_issue_command(AHCIDevice *device, int slot);
+struct AHCIReadCommand {
+  int device_id;
+  uint64_t address;
+  uint64_t block_count;
+};
 
+struct AHCIWriteCommand {
+  int device_id;
+  uint64_t address;
+  uint64_t block_count; 
+};
 
-// TODO: Determine if we can just call these in ahci_issue_command.
-void port_start(AHCIDevice *device);
-void port_stop(AHCIDevice *device);
+void ahci_register();
 
 #endif

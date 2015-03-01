@@ -65,7 +65,7 @@ void timer_init() {
   io_write_8(0x40, TIMER_DIVIDER >> 8);
 
   // Enable I/O APIC routing for PIC timer
-  ioapic_map(TIMER_IRQ, TIMER_IV);
+  ioapic_map(TIMER_IRQ, TIMER_IV, false, false);
 
   // Calibrate cycles_per_tick
   timer_data.cycles_per_tick = 0;

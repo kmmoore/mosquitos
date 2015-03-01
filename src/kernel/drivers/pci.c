@@ -177,7 +177,8 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
       new_device->driver.init(&new_device->driver);
 
       if (new_device->has_interrupts) {
-        ioapic_map(new_device->real_irq, PCI_IV);
+        // TODO: We probably shouldn't remap if this IRQ has already been mapped
+        ioapic_map(new_device->real_irq, PCI_IV, true, true);
       }
     } else {
       new_device->has_driver = false;

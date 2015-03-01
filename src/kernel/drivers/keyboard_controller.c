@@ -76,7 +76,7 @@ void keyboard_controller_init() {
 
   // Map keyboard interrupt
   interrupt_register_handler(KEYBOARD_IV, keyboard_isr);
-  ioapic_map(KEYBOARD_IRQ, KEYBOARD_IV);
+  ioapic_map(KEYBOARD_IRQ, KEYBOARD_IV, false, false);
 
   REGISTER_MODULE("keyboard_controller");
 }
