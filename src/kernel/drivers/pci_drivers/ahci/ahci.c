@@ -78,20 +78,6 @@ static void print_ahci_device(AHCIDevice *device) {
   }
 }
 
-// TODO: This ISR might be shared with other PCI devices,
-// it should be handled by the PCI driver and then passed
-// to the AHCI driver if necessary.
-void sata_isr() {
-  // for (size_t i = 0; i < sata_data.num_devices; ++i) {
-  //   AHCIDevice *device = &sata_data.devices[i];
-  //   HBAPort *port = port_from_device(device);
-
-  //   if (port->interrupt_status > 0) {
-  //     semaphore_up(&device->pending_command, 1);
-  //   }
-  // }
-}
-
 void ahci_clear_pending_interrupts(AHCIDevice *device) {
   HBAPort *port = port_from_device(device);
   port->interrupt_status = 0;
@@ -131,7 +117,7 @@ int ahci_find_command_slot(AHCIDevice *device) {
   return -1;
 }
 
-FISRegisterH2D * ahci_initialize_command_fis(PCIDeviceDriverInterface *driver, AHCIDevice *device, int slot, bool write, bool prefetchable, uint64_t byte_size, uint8_t *dma_buffer) {
+FISRegisterH2D * ahci_initialize_command_fis(PCIDeviceDriver *driver, AHCIDevice *device, int slot, bool write, bool prefetchable, uint64_t byte_size, uint8_t *dma_buffer) {
   HBAPort *port = port_from_device(device);
 
   bool use_64_bits = ((AHCIData *)driver->driver_data)->use_64_bits;
@@ -264,7 +250,7 @@ static AHCIDeviceType device_type_in_port(HBAPort *port) {
   }
 }
 
-static bool initialize_hba(PCIDeviceDriverInterface *driver) {
+static bool initialize_hba(PCIDeviceDriver *driver) {
   PCIDevice *hba_device = driver->device;
 
   assert(hba_device->class_code == PCI_MASS_STORAGE_CLASS_CODE);
@@ -281,11 +267,6 @@ static bool initialize_hba(PCIDeviceDriverInterface *driver) {
   text_output_printf("HBA PCI CMD Field: 0b%b\n", PCI_HEADER_FIELD_IN_WORD(cmd_word, command) & (1 << 10));
 
   text_output_printf("HBA Slot: %d, IRQ #: %d\n", hba_device->slot, hba_device->real_irq);
-
-  // TODO: Try to set up MSI again
-  // TODO: Ask PCI for an interrupt
-  interrupt_register_handler(SATA_IV, sata_isr);
-  ioapic_map(hba_device->real_irq, SATA_IV);
 
   uint32_t abar_word = pci_config_read_word(hba_device->bus, hba_device->slot, hba_device->function, 0x24);
   uintptr_t hba_base_address = (abar_word & FIELD_MASK(19, 13));
@@ -317,7 +298,7 @@ static bool initialize_hba(PCIDeviceDriverInterface *driver) {
   return true;
 }
 
-void ahci_driver_init(PCIDeviceDriverInterface *driver) {
+static void ahci_driver_init(PCIDeviceDriver *driver) {
   text_output_printf("Initializing AHCI driver for PCI device: %p\n");
 
   if (!initialize_hba(driver)) {
@@ -325,7 +306,7 @@ void ahci_driver_init(PCIDeviceDriverInterface *driver) {
   }
 }
 
-PCIDeviceDriverInterfaceError ahci_execute_command(PCIDeviceDriverInterface *driver,
+static PCIDeviceDriverError ahci_execute_command(PCIDeviceDriver *driver,
                                                    uint64_t command_id, void *input_buffer,
                                                    uint64_t input_buffer_size, void *output_buffer,
                                                    uint64_t output_buffer_size) {
@@ -396,47 +377,31 @@ PCIDeviceDriverInterfaceError ahci_execute_command(PCIDeviceDriverInterface *dri
   return PCI_ERROR_COMMAND_NOT_IMPLEMENTED;
 }
 
+static void ahci_isr(PCIDeviceDriver *driver) {
+  AHCIData *ahci_data = (AHCIData *)driver->driver_data;
+
+  for (size_t i = 0; i < ahci_data->num_devices; ++i) {
+    AHCIDevice *device = &ahci_data->devices[i];
+    HBAPort *port = port_from_device(device);
+
+    if (port->interrupt_status > 0) {
+      semaphore_up(&device->pending_command, 1);
+    }
+  }
+}
 
 void ahci_register() {
   REQUIRE_MODULE("pci");
 
-  PCIDeviceDriverInterface interface = {
+  PCIDeviceDriver interface = {
     .class_code = PCI_MASS_STORAGE_CLASS_CODE,
     .subclass = PCI_SATA_SUBCLASS,
     .program_if = PCI_AHCI_V1_PROGRAM_IF,
 
     .init = ahci_driver_init,
-    .execute_command = ahci_execute_command
+    .execute_command = ahci_execute_command,
+    .isr = ahci_isr
   };
 
   pci_register_device_driver(interface);
-
-  // Find a SATA AHCI v1 PCI device
-  // TODO: Handle multiple AHCI devices
-  // TODO: The PCI driver should load a new AHCI driver for each HBA
-  // PCIDevice *hba = pci_find_device(PCI_MASS_STORAGE_CLASS_CODE, PCI_SATA_SUBCLASS, PCI_AHCI_V1_PROGRAM_IF);
-
-  // if (!hba) {
-  //   panic("Could not find SATA AHCI PCI device!\n");
-  // }
-
-  // if (!initialize_hba(hba)) {
-  //   panic("Could not initialize HBA!\n");
-  // }
-
-  // for (int i = 0; i < sata_data.num_devices; ++i) {
-  //   if (sata_data.devices[i].type == AHCI_DEVICE_SATA) {
-  //     uint16_t buffer[256];
-  //     memset(buffer, 0, sizeof(buffer));
-  //     if (sata_identify(&sata_data.devices[i], (uint8_t *)buffer)) {
-  //       text_output_printf("Supports LBA48? %s\n", (buffer[83] & (1 << 10)) > 0 ? "yes" : "no");
-  //       text_output_printf("Max LBA: 0x%.4x%.4x%.4x%.4x\n", buffer[103], buffer[102], buffer[101], buffer[100]);
-  //       uint64_t byte_capacity = (buffer[100] + ((uint64_t)buffer[101] << 16) + ((uint64_t)buffer[101] << 32) + ((uint64_t)buffer[101] << 48)) * 512;
-
-  //       text_output_printf("Capacity: %d bytes\n", byte_capacity);
-  //     }
-  //   }
-  // }
-
-  // REGISTER_MODULE("ahci");
 }

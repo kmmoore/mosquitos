@@ -1,6 +1,6 @@
 #include <kernel/kernel_common.h>
 #include <kernel/util.h>
-#include <kernel/drivers/pci_drivers/pci_device_driver_interface.h>
+#include <kernel/drivers/pci_drivers/pci_device_driver.h>
 
 #ifndef _PCI_H
 #define _PCI_H
@@ -35,7 +35,7 @@ typedef struct _PCIDevice {
   uint8_t has_interrupts:1;
   uint8_t other_flags:7;
   uint32_t real_irq;
-  PCIDeviceDriverInterface driver;
+  PCIDeviceDriver driver;
   bool has_driver;
 } PCIDevice;
 
@@ -47,7 +47,7 @@ uint32_t pci_config_read_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t 
 void pci_config_write_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset, uint32_t value);
 PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t program_if);
 
-void pci_register_device_driver(PCIDeviceDriverInterface driver_interface);
+void pci_register_device_driver(PCIDeviceDriver driver_interface);
 
 // Macros
 #define PCI_OFFSET_FOR_HDR_FIELD(field) (offsetof(PCIGenericConfigHeader, field) & ~0b11)

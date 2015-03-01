@@ -219,6 +219,22 @@ void apic_init() {
   REGISTER_MODULE("apic");
 }
 
+int apic_current_irq() {
+  // Determine the highest bit on in the APIC ISR registers
+  for (int reg = 0x17; reg >= 0x10; --reg) {
+    uint32_t isr_value = apic_read(reg);
+    if (isr_value > 0) {
+      for (int i = 31; i >= 0; --i) {
+        if ((isr_value & FIELD_MASK(1, i)) != 0) {
+          return (reg - 0x10) * 32 + i;
+        }
+      }
+    }
+  }
+
+  return -1;
+}
+
 void apic_send_eoi_if_necessary(uint8_t interrupt_vector) {
   int apic_register_index = 0x10 + interrupt_vector / 32;
   uint32_t isr_value = apic_read(apic_register_index);

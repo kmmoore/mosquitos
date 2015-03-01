@@ -7,7 +7,7 @@
 
 #define BYTES_PER_SECTOR     512
 
-PCIDeviceDriverInterfaceError sata_read(PCIDeviceDriverInterface *ahci_driver, AHCIDevice *device,
+PCIDeviceDriverError sata_read(PCIDeviceDriver *ahci_driver, AHCIDevice *device,
                                         uint64_t address, uint32_t block_count, uint8_t *buffer,
                                         uint64_t buffer_size) {
 
@@ -55,7 +55,7 @@ PCIDeviceDriverInterfaceError sata_read(PCIDeviceDriverInterface *ahci_driver, A
 }
 
 // buffer should be 512 bytes
-PCIDeviceDriverInterfaceError sata_identify(PCIDeviceDriverInterface *ahci_driver,
+PCIDeviceDriverError sata_identify(PCIDeviceDriver *ahci_driver,
                                             AHCIDevice *device, uint8_t *buffer,
                                             uint64_t buffer_size) {
 

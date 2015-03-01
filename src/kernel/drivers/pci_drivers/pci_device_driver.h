@@ -4,7 +4,7 @@
 #define _PCI_DEVICE_DRIVER_INTERFACE_H
 
 typedef struct _PCIDevice PCIDevice;
-typedef struct _PCIDeviceDriverInterface PCIDeviceDriverInterface;
+typedef struct _PCIDeviceDriver PCIDeviceDriver;
 
 typedef enum {
   PCI_ERROR_NONE = 0,
@@ -13,19 +13,22 @@ typedef enum {
   PCI_ERROR_INPUT_BUFFER_TOO_SMALL,
   PCI_ERROR_OUTPUT_BUFFER_TOO_SMALL,
   PCI_ERROR_DEVICE_ERROR
-} PCIDeviceDriverInterfaceError;
+} PCIDeviceDriverError;
 
-typedef void (* PCIDeviceDriverInitFunction) (PCIDeviceDriverInterface *driver);
+typedef void (* PCIDeviceDriverInitFunction) (PCIDeviceDriver *driver);
 
-typedef PCIDeviceDriverInterfaceError (* PCIDeviceDriverCommandFunction)
-        (PCIDeviceDriverInterface *driver, uint64_t command_id, void *input_buffer,
-         uint64_t input_buffer_size, void *output_buffer, uint64_t output_buffer_size);
+typedef PCIDeviceDriverError (* PCIDeviceDriverCommandFunction)
+        (PCIDeviceDriver *driver, uint64_t command_id, void *input_buffer,
+        uint64_t input_buffer_size, void *output_buffer, uint64_t output_buffer_size);
 
-struct _PCIDeviceDriverInterface {
+typedef void (* PCIDeviceDriverISR) (PCIDeviceDriver *driver);
+
+struct _PCIDeviceDriver {
   int class_code, subclass, program_if;
 
   PCIDeviceDriverInitFunction init;
   PCIDeviceDriverCommandFunction execute_command;
+  PCIDeviceDriverISR isr;
 
   PCIDevice *device;
   void *driver_data;

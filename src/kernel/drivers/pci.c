@@ -1,5 +1,7 @@
 #include <kernel/drivers/pci.h>
 #include <kernel/drivers/text_output.h>
+#include <kernel/drivers/apic.h>
+#include <kernel/drivers/interrupt.h>
 #include <acpi.h>
 
 #define PCI_MAX_BUS_NUM 256
@@ -9,6 +11,8 @@
 
 #define PCI_MAX_DEVICES 20
 #define PCI_MAX_DRIVERS (2*PCI_MAX_DEVICES)
+
+#define PCI_IV 39
 
 typedef union {
 
@@ -26,12 +30,30 @@ typedef union {
 
 static struct {
   PCIDevice devices[PCI_MAX_DEVICES];
-  uint32_t irq_routing_table[PCI_MAX_SLOT_NUM][4]; // TODO: Support more than just bus 0
   int num_devices;
 
-  PCIDeviceDriverInterface drivers[PCI_MAX_DRIVERS];
+  PCIDeviceDriver drivers[PCI_MAX_DRIVERS];
   int num_drivers;
+
+  uint32_t irq_routing_table[PCI_MAX_SLOT_NUM][4]; // TODO: Support more than just bus 0
 } pci_data;
+
+
+// TODO: Try to set up MSI again
+static void pci_isr() {
+  for (int i = 0; i < pci_data.num_devices; ++i) {
+    PCIDevice *device = &pci_data.devices[i];
+
+    // TODO: The interrupt status field never seems to be set, even when an interrupt is pending.
+    // Find a way to not fire every devices ISR on every interrupt
+    // uint32_t status_field = PCI_HEADER_READ_FIELD_WORD(device->bus, device->slot, device->function, status);
+    // uint8_t pending_interrupt = (PCI_HEADER_FIELD_IN_WORD(status_field, status) & (1 << 3)) > 0;
+
+    if (device->has_interrupts && device->has_driver) {
+      device->driver.isr(&device->driver);
+    }
+  }
+}
 
 uint32_t pci_config_read_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
   PCIConfigAddress address;
@@ -103,9 +125,9 @@ UNUSED static void print_pci_device(PCIDevice *device) {
 
 }
 
-static PCIDeviceDriverInterface *driver_for_device(PCIDevice *device) {
+static PCIDeviceDriver *driver_for_device(PCIDevice *device) {
   for (int i = 0; i < pci_data.num_drivers; ++i) {
-    PCIDeviceDriverInterface *driver = &pci_data.drivers[i];
+    PCIDeviceDriver *driver = &pci_data.drivers[i];
     if (driver->class_code == device->class_code &&
         driver->subclass == device->subclass &&
         driver->program_if == device->program_if) {
@@ -147,12 +169,16 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
       new_device->real_irq = pci_data.irq_routing_table[slot][interrupt_pin-1]; // INTA# is 0x01
     }
 
-    PCIDeviceDriverInterface *driver = driver_for_device(new_device);
+    PCIDeviceDriver *driver = driver_for_device(new_device);
     if (driver != NULL) {
       new_device->driver = *driver;
       new_device->has_driver = true;
       new_device->driver.device = new_device;
       new_device->driver.init(&new_device->driver);
+
+      if (new_device->has_interrupts) {
+        ioapic_map(new_device->real_irq, PCI_IV);
+      }
     } else {
       new_device->has_driver = false;
     }
@@ -189,6 +215,9 @@ void pci_init() {
   
   pci_load_irq_routing_table();
 
+  // TODO: Handle each interrupt number with a different ISR for better performance
+  interrupt_register_handler(PCI_IV, pci_isr);
+
   REGISTER_MODULE("pci");
 }
 
@@ -203,11 +232,9 @@ PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t progra
   return NULL;
 }
 
-void pci_register_device_driver(PCIDeviceDriverInterface driver_interface) {
+void pci_register_device_driver(PCIDeviceDriver driver_interface) {
   REQUIRE_MODULE("pci");
 
   assert(pci_data.num_drivers < PCI_MAX_DRIVERS);
   pci_data.drivers[pci_data.num_drivers++] = driver_interface;
-
-  text_output_printf("Registered PCI device driver for cc: %d, sc: %d, pif: %d\n", driver_interface.class_code, driver_interface.subclass, driver_interface.program_if);
 }
