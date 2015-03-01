@@ -3,15 +3,6 @@
 #ifndef _SATA_TYPES_H
 #define _SATA_TYPES_H
 
-typedef enum {
-  AHCI_DEVICE_NONE,
-  AHCI_DEVICE_SATA,
-  AHCI_DEVICE_SATAPI,
-  AHCI_DEVICE_SEMB,
-  AHCI_DEVICE_PM,
-  AHCI_DEVICE_UNKNOWN
-} AHCIDeviceType;
-
 enum {
   IPM_NOT_PRESENT  = 0x0,
   IPM_ACTIVE       = 0x1,

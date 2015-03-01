@@ -7,15 +7,16 @@
 
 typedef struct _AHCIDevice AHCIDevice;
 
-AHCIDeviceType ahci_device_type(AHCIDevice *device);
+enum AHCIDeviceType ahci_device_type(AHCIDevice *device);
+struct AHCIDeviceInfo * ahci_device_info(AHCIDevice *device);
 
 void ahci_clear_pending_interrupts(AHCIDevice *device);
-int ahci_find_command_slot(AHCIDevice *device);
-FISRegisterH2D * ahci_initialize_command_fis(PCIDeviceDriver *driver, AHCIDevice *device, int slot, bool write, bool prefetchable, uint64_t byte_size, uint8_t *dma_buffer);
-bool ahci_issue_command(AHCIDevice *device, int slot);
+FISRegisterH2D * ahci_initialize_command_fis(AHCIDevice *device, int slot, bool write,
+                                             bool prefetchable, uint64_t byte_size,
+                                             uint8_t *dma_buffer);
+void ahci_set_command_fis_lba(FISRegisterH2D *command_fis, uint64_t address, uint64_t block_count);
 
-// TODO: Determine if we can just call these in ahci_issue_command.
-void port_start(AHCIDevice *device);
-void port_stop(AHCIDevice *device);
+int ahci_begin_command(AHCIDevice *device);
+bool ahci_issue_command(AHCIDevice *device, int slot);
 
 #endif

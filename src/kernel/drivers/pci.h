@@ -47,7 +47,7 @@ uint32_t pci_config_read_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t 
 void pci_config_write_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset, uint32_t value);
 PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t program_if);
 
-void pci_register_device_driver(PCIDeviceDriver driver_interface);
+void pci_register_device_driver(PCIDeviceDriver driver);
 
 // Macros
 #define PCI_OFFSET_FOR_HDR_FIELD(field) (offsetof(PCIGenericConfigHeader, field) & ~0b11)

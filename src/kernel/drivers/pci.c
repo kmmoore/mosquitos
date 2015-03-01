@@ -12,8 +12,6 @@
 #define PCI_MAX_DEVICES 20
 #define PCI_MAX_DRIVERS (2*PCI_MAX_DEVICES)
 
-#define PCI_IV 39
-
 typedef union {
 
   struct {
@@ -43,11 +41,6 @@ static struct {
 static void pci_isr() {
   for (int i = 0; i < pci_data.num_devices; ++i) {
     PCIDevice *device = &pci_data.devices[i];
-
-    // TODO: The interrupt status field never seems to be set, even when an interrupt is pending.
-    // Find a way to not fire every devices ISR on every interrupt
-    // uint32_t status_field = PCI_HEADER_READ_FIELD_WORD(device->bus, device->slot, device->function, status);
-    // uint8_t pending_interrupt = (PCI_HEADER_FIELD_IN_WORD(status_field, status) & (1 << 3)) > 0;
 
     if (device->has_interrupts && device->has_driver) {
       device->driver.isr(&device->driver);
@@ -174,12 +167,14 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
       new_device->driver = *driver;
       new_device->has_driver = true;
       new_device->driver.device = new_device;
-      new_device->driver.init(&new_device->driver);
 
       if (new_device->has_interrupts) {
         // TODO: We probably shouldn't remap if this IRQ has already been mapped
         ioapic_map(new_device->real_irq, PCI_IV, true, true);
       }
+
+      // init() must be called when the device is able to issue commands
+      new_device->driver.init(&new_device->driver);
     } else {
       new_device->has_driver = false;
     }
@@ -233,9 +228,9 @@ PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t progra
   return NULL;
 }
 
-void pci_register_device_driver(PCIDeviceDriver driver_interface) {
+void pci_register_device_driver(PCIDeviceDriver driver) {
   REQUIRE_MODULE("pci");
 
   assert(pci_data.num_drivers < PCI_MAX_DRIVERS);
-  pci_data.drivers[pci_data.num_drivers++] = driver_interface;
+  pci_data.drivers[pci_data.num_drivers++] = driver;
 }

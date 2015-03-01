@@ -8,7 +8,6 @@
 #include <kernel/threading/scheduler.h>
 
 #define TIMER_IRQ 2
-#define TIMER_IV 0x22
 
 struct waiting_thread {
   ListEntry entry;
@@ -54,7 +53,7 @@ void timer_init() {
 
   list_init(&timer_data.waiting_threads);
 
-  interrupt_register_handler(TIMER_IV, timer_isr);
+  interrupt_register_handler(PIC_TIMER_IV, timer_isr);
 
   // Use Legacy PIC Timer
   // TODO: Use HPET eventually
@@ -65,7 +64,7 @@ void timer_init() {
   io_write_8(0x40, TIMER_DIVIDER >> 8);
 
   // Enable I/O APIC routing for PIC timer
-  ioapic_map(TIMER_IRQ, TIMER_IV, false, false);
+  ioapic_map(TIMER_IRQ, PIC_TIMER_IV, false, false);
 
   // Calibrate cycles_per_tick
   timer_data.cycles_per_tick = 0;
@@ -80,11 +79,9 @@ void timer_init() {
 }
 
 void timer_thread_stall(uint64_t microseconds) {
-  // TODO: Who knows if this is even remotely precice
-  // also, it can get interrupted by things
+  // TODO: Who knows if this is even remotely precise. Also, it can get interrupted by things
 
   uint64_t cycles = microseconds * TIMER_FREQUENCY * timer_data.cycles_per_tick / 1e6;
-  // text_output_printf("Stalling for %d cycles\n", cycles);
   while (cycles > 0) cycles--;
 }
 

@@ -30,6 +30,8 @@
 
 void * kernel_main_thread();
 
+Lock kernel_lock;
+
 // Pre-threaded initialization is done here
 void kernel_main(KernelInfo info) {
   // Disable interrupts as we have no way to handle them now
@@ -50,6 +52,8 @@ void kernel_main(KernelInfo info) {
   text_output_set_foreground_color(0x00FFFF00);
   text_output_printf("Built from %s on %s\n\n", build_git_info, build_time);
   text_output_set_foreground_color(0x00FFFFFF);
+
+  lock_init(&kernel_lock);
 
   // Initialize subsystems
   acpi_init(info.xdsp_address);
@@ -77,7 +81,9 @@ void kernel_main(KernelInfo info) {
 }
 
 void * keyboard_echo_thread() {
+  lock_acquire(&kernel_lock, -1);
   text_output_printf("Starting keyboard_echo_thread.\n");
+  lock_release(&kernel_lock);
 
   while (1) {
     int c = keyboard_controller_read_char(false);
@@ -115,25 +121,50 @@ void * kernel_main_thread() {
   KernelThread *keyboard_thread = thread_create(keyboard_echo_thread, NULL, 1, 1);
   thread_start(keyboard_thread);
 
+  PCIDeviceDriverError error;
+
   PCIDevice *ahci_device = pci_find_device(0x01, 0x06, 0x01);
   PCIDeviceDriver *driver = &ahci_device->driver;
-  driver->execute_command(driver, AHCI_COMMAND_LIST_DEVICES, NULL, 0, NULL, 0);
+  uint64_t num_devices;
+  error = driver->execute_command(driver, AHCI_COMMAND_NUM_DEVICES, NULL, 0, &num_devices, sizeof(num_devices));
+  text_output_printf("Num AHCI devices: %d\n", num_devices);
 
-  uint16_t buffer[256];
-  struct AHCIIdentifyCommand command = { .device_id = 1 };
-  PCIDeviceDriverError error = driver->execute_command(driver, AHCI_COMMAND_IDENTIFY, &command,
-                                                       sizeof(command), buffer, sizeof(buffer));
+  for (uint64_t i = 0; i < num_devices; ++i) {
+    struct AHCIDeviceInfo device_info;
+    struct AHCIDeviceInfoCommand device_info_command = { .device_id = i };
+    error = driver->execute_command(driver, AHCI_COMMAND_DEVICE_INFO, &device_info_command,
+                                    sizeof(device_info_command), &device_info, sizeof(device_info));
 
+    lock_acquire(&kernel_lock, -1);
+    text_output_printf("Device type: %s\n"
+                       "Serial Number: %.20s\n"
+                       "Firmware Revision: %.8s\n"
+                       "Model Number: %.40s\n"
+                       "Media serial number: %.60s\n"
+                       "LBA48 Supported: %s\n"
+                       "Logical sector size: %d words\n"
+                       "Number of sectors: %d\n",
+                       device_info.device_type == AHCI_DEVICE_SATA ? "SATA" : "SATAPI",
+                       device_info.serial_number, device_info.firmware_revision,
+                       device_info.model_number, device_info.media_serial_number,
+                       device_info.lba48_supported ? "Yes" : "No",
+                       device_info.logical_sector_size, device_info.num_sectors);
+    lock_release(&kernel_lock);
+  }
 
+  uint8_t buffer[512];
+  for (int i = 0; i < 512; ++i) {
+    buffer[i] = (uint8_t)i;
+  }
 
-  if (error == PCI_ERROR_NONE) {
-    text_output_printf("Supports LBA48? %s\n", (buffer[83] & (1 << 10)) > 0 ? "yes" : "no");
-    text_output_printf("Max LBA: 0x%.4x%.4x%.4x%.4x\n", buffer[103], buffer[102], buffer[101], buffer[100]);
-    uint64_t byte_capacity = (buffer[100] + ((uint64_t)buffer[101] << 16) + ((uint64_t)buffer[101] << 32) + ((uint64_t)buffer[101] << 48)) * 512;
+  struct AHCIWriteCommand write_command = { .device_id = 1, .address = 0, .block_count = 1 };
+  error = driver->execute_command(driver, AHCI_COMMAND_WRITE, &write_command,
+                                  sizeof(write_command), buffer, sizeof(buffer));
 
-    text_output_printf("Capacity: %d bytes\n", byte_capacity);
-  } else {
+  if (error != PCI_ERROR_NONE) {
+    lock_acquire(&kernel_lock, -1);
     text_output_printf("PCI Error: %d\n", error);
+    lock_release(&kernel_lock);
   }
 
   memset(buffer, 0xFF, sizeof(buffer));
@@ -141,16 +172,18 @@ void * kernel_main_thread() {
   error = driver->execute_command(driver, AHCI_COMMAND_READ, &read_command,
                                   sizeof(read_command), buffer, sizeof(buffer));
 
+  lock_acquire(&kernel_lock, -1);
   if (error != PCI_ERROR_NONE) {
     text_output_printf("PCI Error: %d\n", error);
-  }
-
-  for (int i = 0; i < 16; ++i) {
-    for (int j = 0; j < 16; ++j) {
-      text_output_printf("%.2x %.2x ", (uint8_t)buffer[i*16+j], (uint8_t)(buffer[i*16+j] >> 8));
+  } else {
+    for (int i = 0; i < 16; ++i) {
+      for (int j = 0; j < 32; ++j) {
+        text_output_printf("%.2x ", buffer[i*32+j]);
+      }
+      text_output_printf("\n");
     }
-    text_output_printf("\n");
   }
+  lock_release(&kernel_lock);
   
 
   text_output_set_foreground_color(0x0000FF00);

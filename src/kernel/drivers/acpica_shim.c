@@ -18,8 +18,6 @@
 #include <acpi.h>
 
 ACPI_STATUS AcpiOsInitialize(void) {
-  // text_output_printf("ACPI OS Initialize!\n");
-
   return AE_OK;
 }
 
@@ -243,20 +241,6 @@ ACPI_STATUS AcpiOsWritePciConfiguration(ACPI_PCI_ID *pci_id, UINT32 reg, UINT64 
 
   return AE_OK;
 }
-
-// ACPI_STATUS AcpiOsInstallInterruptHandler(UINT32 interrupt_number, ACPI_OSD_HANDLER isr, void *context) {
-//   if (!interrupt_slot_empty(interrupt_number)) return AE_BAD_PARAMETER;
-
-//   interrupt_register_handler(interrupt_number, isr, context);
-
-//   return AE_OK;
-// }
-
-// ACPI_STATUS AcpiOsRemoveInterruptHandler(UINT32 interrupt_number, ACPI_OSD_HANDLER isr UNUSED) {
-//   interrupt_remove_handler(interrupt_number);
-
-//   return AE_OK;
-// }
 
 void AcpiOsPrintf(const char *format, ...) {
   va_list arg_list;

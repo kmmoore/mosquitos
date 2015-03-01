@@ -26,6 +26,8 @@ typedef void (* PCIDeviceDriverISR) (PCIDeviceDriver *driver);
 struct _PCIDeviceDriver {
   int class_code, subclass, program_if;
 
+  const char *driver_name;
+
   PCIDeviceDriverInitFunction init;
   PCIDeviceDriverCommandFunction execute_command;
   PCIDeviceDriverISR isr;

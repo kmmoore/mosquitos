@@ -12,7 +12,6 @@
 #include <limits.h>
 
 #define KEYBOARD_IRQ 1
-#define KEYBOARD_IV 0x21
 
 static struct {
   bool shift_down;
