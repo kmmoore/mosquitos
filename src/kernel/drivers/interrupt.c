@@ -61,12 +61,12 @@ extern void isr18();
 extern void isr19();
 extern void isr20();
 extern void isr30();
-extern void isr33();
-extern void isr34();
-extern void isr35();
 // TODO: Figure out how to not special case this here
 extern void scheduler_timer_isr(); // We have to handle this separately
 extern void scheduler_yield_without_saving_isr(); // We have to handle this separately
+extern void isr35();
+extern void isr36();
+extern void isr37();
 extern void isr39();
 
 // Public functions
@@ -104,13 +104,15 @@ void interrupt_init() {
   set_idt_entry(30, (uint64_t)isr30, GDT_KERNEL_CS, 0b10001110);
 
   // IRQs (interrupt gates)
-  set_idt_entry(33, (uint64_t)isr33, GDT_KERNEL_CS, 0b10001110); // Keyboard
-  set_idt_entry(34, (uint64_t)isr34, GDT_KERNEL_CS, 0b10001110); // PIC timer
-  set_idt_entry(35, (uint64_t)isr35, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (calibration)
-  set_idt_entry(36, (uint64_t)scheduler_timer_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
-  set_idt_entry(37, (uint64_t)scheduler_yield_without_saving_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
+  set_idt_entry(SCHEDULER_TIMER_IV, (uint64_t)scheduler_timer_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
+  set_idt_entry(SCHEDULER_YEILD_WITHOUT_SAVING_IV, (uint64_t)scheduler_yield_without_saving_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
+
+  set_idt_entry(KEYBOARD_IV, (uint64_t)isr35, GDT_KERNEL_CS, 0b10001110); // Keyboard
+  set_idt_entry(PIC_TIMER_IV, (uint64_t)isr36, GDT_KERNEL_CS, 0b10001110); // PIC timer
+  set_idt_entry(PCI_IV, (uint64_t)isr37, GDT_KERNEL_CS, 0b10001110); // PCI ISR
+
+  set_idt_entry(LOCAL_APIC_CALIBRATION_IV, (uint64_t)isr39, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (calibration)
   // Something is weird about IV 38...
-  set_idt_entry(39, (uint64_t)isr39, GDT_KERNEL_CS, 0b10001110); // SATA HBA
 
   IDTR.size = sizeof(IDT) - 1;
   IDTR.address = (uint64_t)&IDT[0];

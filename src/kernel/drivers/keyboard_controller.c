@@ -12,7 +12,6 @@
 #include <limits.h>
 
 #define KEYBOARD_IRQ 1
-#define KEYBOARD_IV 0x21
 
 static struct {
   bool shift_down;
@@ -76,7 +75,7 @@ void keyboard_controller_init() {
 
   // Map keyboard interrupt
   interrupt_register_handler(KEYBOARD_IV, keyboard_isr);
-  ioapic_map(KEYBOARD_IRQ, KEYBOARD_IV);
+  ioapic_map(KEYBOARD_IRQ, KEYBOARD_IV, false, false);
 
   REGISTER_MODULE("keyboard_controller");
 }

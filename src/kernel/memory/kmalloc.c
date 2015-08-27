@@ -3,6 +3,7 @@
 #include <kernel/util.h>
 #include <kernel/datastructures/list.h>
 #include <kernel/drivers/text_output.h>
+#include <common/mem_util.h>
 
 typedef struct _FreeBlockHeader {
   uint64_t size:63;
@@ -157,6 +158,12 @@ void * kmalloc(size_t alloc_size) {
 
     return ret->user_data;
   }
+}
+
+void * kcalloc(size_t count, size_t size) {
+  void *ret = kmalloc(count * size);
+  memset(ret, 0, count * size);
+  return ret;
 }
 
 void kfree(void *pointer) {

@@ -55,7 +55,8 @@ isr_noerror 18
 isr_noerror 19
 isr_noerror 20
 isr_noerror 30
-isr_noerror 33
-isr_noerror 34
+# ISRs 33&34 are handled by the scheduler 
 isr_noerror 35
+isr_noerror 36
+isr_noerror 37
 isr_noerror 39

@@ -7,6 +7,7 @@
 
 void kmalloc_init();
 void * kmalloc(size_t alloc_size);
+void * kcalloc(size_t count, size_t size);
 void kfree(void *pointer);
 
 #endif // _KMALLOC_H_

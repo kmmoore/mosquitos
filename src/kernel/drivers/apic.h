@@ -20,10 +20,11 @@ typedef enum {
 } APICTimerMode;
 
 void apic_init();
+int apic_current_irq();
 void apic_send_eoi_if_necessary(uint8_t interrupt_vector);
 void apic_send_eoi();
 void apic_setup_local_timer(APICTimerDivider divider, uint8_t interrupt_vector, APICTimerMode mode, uint32_t initial_count);
 void apic_set_local_timer_masked(bool masked);
-void ioapic_map(uint8_t irq_index, uint8_t idt_index);
+void ioapic_map(uint8_t irq_index, uint8_t idt_index, bool level_triggered, bool active_low);
 
 #endif

@@ -1,5 +1,7 @@
 #include <kernel/drivers/pci.h>
 #include <kernel/drivers/text_output.h>
+#include <kernel/drivers/apic.h>
+#include <kernel/drivers/interrupt.h>
 #include <acpi.h>
 
 #define PCI_MAX_BUS_NUM 256
@@ -8,6 +10,7 @@
 #define PCI_NUM_INTERRUPT_PORTS 4
 
 #define PCI_MAX_DEVICES 20
+#define PCI_MAX_DRIVERS (2*PCI_MAX_DEVICES)
 
 typedef union {
 
@@ -25,9 +28,25 @@ typedef union {
 
 static struct {
   PCIDevice devices[PCI_MAX_DEVICES];
-  uint32_t irq_routing_table[PCI_MAX_SLOT_NUM][4]; // TODO: Support more than just bus 0
   int num_devices;
+
+  PCIDeviceDriver drivers[PCI_MAX_DRIVERS];
+  int num_drivers;
+
+  uint32_t irq_routing_table[PCI_MAX_SLOT_NUM][4]; // TODO: Support more than just bus 0
 } pci_data;
+
+
+// TODO: Try to set up MSI again
+static void pci_isr() {
+  for (int i = 0; i < pci_data.num_devices; ++i) {
+    PCIDevice *device = &pci_data.devices[i];
+
+    if (device->has_interrupts && device->has_driver) {
+      device->driver.isr(&device->driver);
+    }
+  }
+}
 
 uint32_t pci_config_read_word (uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset) {
   PCIConfigAddress address;
@@ -76,8 +95,6 @@ ACPI_STATUS acpi_system_bus_walk_callback(ACPI_HANDLE Object, UINT32 NestingLeve
 
         // TODO: Make sure the SourceIndex isn't referencing a link device
         pci_data.irq_routing_table[slot_number][routing_table[i].Pin] = routing_table[i].SourceIndex;
-
-        // text_output_printf("IRQ Pin %d, PCI slot number: %d, Real IRQ: %d Source: %x %x %x %x\n", routing_table[i].Pin, slot_number, routing_table[i].SourceIndex, routing_table[i].Source[0], routing_table[i].Source[1], routing_table[i].Source[2], routing_table[i].Source[3]);
       }
   }
 
@@ -99,6 +116,19 @@ static void pci_load_irq_routing_table() {
 UNUSED static void print_pci_device(PCIDevice *device) {
   text_output_printf("[PCI Device 0x%02x 0x%02x 0x%02x] Class Code: 0x%02x, Subclass: 0x%02x, Program IF: 0x%02x, IRQ #: %d, Multifunction? %d\n", device->bus, device->slot, device->function, device->class_code, device->subclass, device->program_if, device->real_irq, device->multifunction);
 
+}
+
+static PCIDeviceDriver *driver_for_device(PCIDevice *device) {
+  for (int i = 0; i < pci_data.num_drivers; ++i) {
+    PCIDeviceDriver *driver = &pci_data.drivers[i];
+    if (driver->class_code == device->class_code &&
+        driver->subclass == device->subclass &&
+        driver->program_if == device->program_if) {
+      return driver;
+    }
+  }
+
+  return NULL;
 }
 
 static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
@@ -132,6 +162,24 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
       new_device->real_irq = pci_data.irq_routing_table[slot][interrupt_pin-1]; // INTA# is 0x01
     }
 
+    PCIDeviceDriver *driver = driver_for_device(new_device);
+    if (driver != NULL) {
+      text_output_printf("Loading PCI driver \"%s\"...\n", driver->driver_name);
+      new_device->driver = *driver;
+      new_device->has_driver = true;
+      new_device->driver.device = new_device;
+
+      if (new_device->has_interrupts) {
+        // TODO: We probably shouldn't remap if this IRQ has already been mapped
+        ioapic_map(new_device->real_irq, PCI_IV, true, true);
+      }
+
+      // init() must be called when the device is able to issue commands
+      new_device->driver.init(&new_device->driver);
+    } else {
+      new_device->has_driver = false;
+    }
+
     return new_device;
   }
 
@@ -139,7 +187,10 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
 }
 
 
-static void enumerate_devices() {
+void pci_enumerate_devices() {
+  REQUIRE_MODULE("pci");
+  pci_data.num_devices = 0;
+
   for(int bus = 0; bus < PCI_MAX_BUS_NUM; bus++) {
     for(int slot = 0; slot < PCI_MAX_SLOT_NUM; slot++) {
       PCIDevice *new_device = add_pci_device(bus, slot, 0);
@@ -156,9 +207,13 @@ static void enumerate_devices() {
 void pci_init() {
   REQUIRE_MODULE("interrupt");
   REQUIRE_MODULE("acpi_full");
+
+  pci_data.num_drivers = 0;
   
   pci_load_irq_routing_table();
-  enumerate_devices();
+
+  // TODO: Handle each interrupt number with a different ISR for better performance
+  interrupt_register_handler(PCI_IV, pci_isr);
 
   REGISTER_MODULE("pci");
 }
@@ -174,3 +229,9 @@ PCIDevice * pci_find_device(uint8_t class_code, uint8_t subclass, uint8_t progra
   return NULL;
 }
 
+void pci_register_device_driver(PCIDeviceDriver driver) {
+  REQUIRE_MODULE("pci");
+
+  assert(pci_data.num_drivers < PCI_MAX_DRIVERS);
+  pci_data.drivers[pci_data.num_drivers++] = driver;
+}

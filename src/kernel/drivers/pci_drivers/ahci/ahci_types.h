@@ -3,15 +3,6 @@
 #ifndef _SATA_TYPES_H
 #define _SATA_TYPES_H
 
-typedef enum {
-  AHCI_DEVICE_NONE,
-  AHCI_DEVICE_SATA,
-  AHCI_DEVICE_SATAPI,
-  AHCI_DEVICE_SEMB,
-  AHCI_DEVICE_PM,
-  AHCI_DEVICE_UNKNOWN
-} AHCIDeviceType;
-
 enum {
   IPM_NOT_PRESENT  = 0x0,
   IPM_ACTIVE       = 0x1,
@@ -105,7 +96,7 @@ typedef struct {
  
   // DW2, 3
   uint32_t command_table_base_address;   // Command table descriptor base address
-  uint32_t command_table_base_address_upper;    // Command table descriptor base address upper 32 bits
+  uint32_t command_table_base_address_upper; // Command table descriptor base address upper 32 bits
  
   // DW4 - 7
   uint32_t reserved1[4];  // Reserved
@@ -239,7 +230,9 @@ typedef struct {
   uint8_t    rsved[2];       // Reserved
 
   //DWORD 1&2
-  uint64_t   DMAbufferID;    // DMA Buffer Identifier. Used to Identify DMA buffer in host memory. SATA Spec says host specific and not in Spec. Trying AHCI spec might work.
+  // DMA Buffer Identifier. Used to Identify DMA buffer in host memory.
+  // SATA Spec says host specific and not in Spec. Trying AHCI spec might work.
+  uint64_t   DMAbufferID;
 
   //DWORD 3
   uint32_t   rsvd;           //More reserved

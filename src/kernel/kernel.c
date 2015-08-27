@@ -12,7 +12,7 @@
 #include <kernel/drivers/text_output.h>
 #include <kernel/drivers/keyboard_controller.h>
 #include <kernel/drivers/pci.h>
-#include <kernel/drivers/ahci.h>
+#include <kernel/drivers/pci_drivers/ahci/ahci.h>
 
 #include <kernel/drivers/acpi.h>
 #include <kernel/drivers/interrupt.h>
@@ -28,9 +28,9 @@
 
 #include <common/build_info.h>
 
-Lock kernel_lock;
-
 void * kernel_main_thread();
+
+Lock kernel_lock;
 
 // Pre-threaded initialization is done here
 void kernel_main(KernelInfo info) {
@@ -72,7 +72,7 @@ void kernel_main(KernelInfo info) {
   // Set up scheduler
   scheduler_init();
 
-  KernelThread *main_thread = thread_create(kernel_main_thread, NULL, 31, 2);
+  KernelThread *main_thread = thread_create(kernel_main_thread, NULL, 31, 4);
   thread_start(main_thread);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call
@@ -110,17 +110,20 @@ void * kernel_main_thread() {
 
   // PCI needs APCICA to determine IRQ mappings
   pci_init();
-  ahci_init();
+
+  // Register PCI drivers
+  ahci_register();
+
+  // Once we've registered the PCI drivers, enumerate and instantiate PCI drivers
+  pci_enumerate_devices();
 
   // Set up low-priority thread to echo keyboard to screen
   KernelThread *keyboard_thread = thread_create(keyboard_echo_thread, NULL, 1, 1);
   thread_start(keyboard_thread);
 
-  lock_acquire(&kernel_lock, -1);
   text_output_set_foreground_color(0x0000FF00);
   text_output_printf("\nKernel initialization complete. Exiting kernel_main_thread.\n\n");
   text_output_set_foreground_color(0x00FFFFFF);
-  lock_release(&kernel_lock);
 
   thread_exit(); // TODO: Maybe make returning do the same thing?
   return NULL;

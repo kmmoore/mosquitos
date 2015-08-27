@@ -9,10 +9,6 @@
 #include <kernel/drivers/text_output.h>
 #include <kernel/datastructures/list.h>
 
-#define SCHEDULER_TIMER_CALIBRATION_IV 35
-#define SCHEDULER_TIMER_IV 36
-#define SCHEDULER_YIELD_NO_SAVE_IV 37
-
 #define SCHEDULER_TIMER_CALIBRATION_PERIOD 0x0ffffff
 #define SCHEDULER_TIMER_DIVIDER APIC_DIV_2
 #define SCHEDULER_TIME_SLICE_MS 10
@@ -31,10 +27,9 @@ static void apic_timer_calibration_isr() {
 
 static void calibrate_apic_timer() {
   // Setup a one-shot timer
-  apic_setup_local_timer(SCHEDULER_TIMER_DIVIDER, SCHEDULER_TIMER_CALIBRATION_IV, APIC_TIMER_ONE_SHOT, SCHEDULER_TIMER_CALIBRATION_PERIOD);
-  interrupt_register_handler(SCHEDULER_TIMER_CALIBRATION_IV, apic_timer_calibration_isr);
-
-  text_output_printf("Calibrating APIC timer...");
+  apic_setup_local_timer(SCHEDULER_TIMER_DIVIDER, LOCAL_APIC_CALIBRATION_IV, APIC_TIMER_ONE_SHOT,
+                         SCHEDULER_TIMER_CALIBRATION_PERIOD);
+  interrupt_register_handler(LOCAL_APIC_CALIBRATION_IV, apic_timer_calibration_isr);
 
   uint64_t calibration_start = timer_ticks();
   apic_set_local_timer_masked(false);
@@ -43,9 +38,8 @@ static void calibrate_apic_timer() {
   while(calibration_end == 0);
 
   // Determine APIC frequency pased on number of PIC ticks that happened
-  scheduler_data.apic_timer_frequency = (uint64_t)SCHEDULER_TIMER_CALIBRATION_PERIOD * TIMER_FREQUENCY / (calibration_end - calibration_start);
-
-  text_output_printf("Done - frequency: %dHz\n", scheduler_data.apic_timer_frequency);
+  scheduler_data.apic_timer_frequency = (uint64_t)SCHEDULER_TIMER_CALIBRATION_PERIOD *
+    TIMER_FREQUENCY / (calibration_end - calibration_start);
 }
 
 static void setup_scheduler_timer() {
@@ -151,7 +145,7 @@ void scheduler_yield() {
 
 void scheduler_yield_no_save() {
   // Yield without saving the current thread
-  __asm__ ("int $" STR(SCHEDULER_YIELD_NO_SAVE_IV));
+  __asm__ ("int $" STR(SCHEDULER_YEILD_WITHOUT_SAVING_IV));
 }
 
 void scheduler_remove_thread(KernelThread *thread) {

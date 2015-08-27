@@ -88,7 +88,7 @@ uint32_t apic_read(int index) {
   return *(apic_base + index * 4); // Registers are 16 bytes wide
 }
 
-void ioapic_map(uint8_t irq_index, uint8_t idt_index) {
+void ioapic_map(uint8_t irq_index, uint8_t idt_index, bool level_triggered, bool active_low) {
   const uint32_t low_index = 0x10 + irq_index * 2;
   const uint32_t high_index = 0x10 + irq_index * 2 + 1;
 
@@ -98,20 +98,19 @@ void ioapic_map(uint8_t irq_index, uint8_t idt_index) {
   high |= apic_read(0x02) << 24; // Local APIC id
   ioapic_write(high_index, high);
 
-  uint32_t low = ioapic_read(low_index);
-
-  // Unmask the IRQ
-  low &= ~(1<<16);
-
   // Set to physical delivery mode
-  low &= ~(1<<11);
-
   // Set to fixed delivery mode
-  low &= ~0x700;
+  // Unmask the IRQ
+  uint32_t low = 0;
+
+  // Set triggering mode
+  low |= (level_triggered << 15);
+
+  // Set polarity
+  low |= (active_low << 13);
 
   // Set delivery vector
-  low &= ~0xff;
-  low |= idt_index;
+  low |= (idt_index & 0b1111111);
 
   ioapic_write(low_index, low);
 }
@@ -217,6 +216,22 @@ void apic_init() {
   apic_write(0x0f, spurious_irq_num);
 
   REGISTER_MODULE("apic");
+}
+
+int apic_current_irq() {
+  // Determine the highest bit on in the APIC ISR registers
+  for (int reg = 0x17; reg >= 0x10; --reg) {
+    uint32_t isr_value = apic_read(reg);
+    if (isr_value > 0) {
+      for (int i = 31; i >= 0; --i) {
+        if ((isr_value & FIELD_MASK(1, i)) != 0) {
+          return (reg - 0x10) * 32 + i;
+        }
+      }
+    }
+  }
+
+  return -1;
 }
 
 void apic_send_eoi_if_necessary(uint8_t interrupt_vector) {
