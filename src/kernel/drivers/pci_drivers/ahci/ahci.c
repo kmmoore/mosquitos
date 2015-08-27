@@ -1,6 +1,7 @@
 #include <kernel/drivers/pci_drivers/ahci/ahci.h>
 #include <kernel/drivers/pci_drivers/ahci/ahci_internal.h>
 #include <kernel/drivers/pci_drivers/ahci/sata.h>
+#include <kernel/drivers/pci_drivers/ahci/satapi.h>
 #include <kernel/drivers/text_output.h>
 #include <kernel/drivers/pci.h>
 #include <kernel/drivers/interrupt.h>
@@ -68,6 +69,19 @@ inline struct AHCIDeviceInfo * ahci_device_info(AHCIDevice *device) {
   return &device->device_info;
 }
 
+
+// Swap the byte order of each word in `indentify_buffer`
+void ahci_copy_identify_string(uint16_t *identify_buffer, uint8_t offset, uint8_t word_length, 
+                               uint8_t *destination) {
+  for (int i = 0; i < word_length; ++i) {
+    uint16_t word = identify_buffer[offset + i];
+
+    destination[i * 2] = (uint8_t)(word >> 8);
+    destination[i * 2 + 1] = (uint8_t)word;
+  }
+}
+
+__attribute__((unused))
 static void print_ahci_device(AHCIDevice *device) {
   char *type = "Unknown";
   switch (ahci_device_type(device)) {
@@ -133,7 +147,8 @@ int ahci_begin_command(AHCIDevice *device) {
 
 FISRegisterH2D * ahci_initialize_command_fis(AHCIDevice *device, int slot, bool write,
                                              bool prefetchable, uint64_t byte_size,
-                                             uint8_t *dma_buffer) {
+                                             uint8_t *dma_buffer, bool atapi,
+                                             uint8_t *atapi_command) {
   HBAPort *port = port_from_device(device);
 
   // Get the command header associated with our free slot
@@ -155,6 +170,11 @@ FISRegisterH2D * ahci_initialize_command_fis(AHCIDevice *device, int slot, bool 
 
   HBACommandTable *command_table = (HBACommandTable *)command_table_address;
   memset(command_table, 0, sizeof(HBACommandTable) + (command_header->prdt_count * sizeof(HBAPRDTEntry)));
+
+  if (atapi && atapi_command) {
+    command_header->atapi = 1;
+    memcpy(command_table->acmd, atapi_command, ATAPI_COMMAND_LENGTH);
+  }
 
   // Get PRDT from command table
   HBAPRDTEntry *prdt = command_table->prdt_entry;
@@ -209,6 +229,9 @@ bool ahci_issue_command(AHCIDevice *device, int slot) {
     return false;
   }
 
+  // Clear error before issuing command
+  port->sata_error = ALL_ONES;
+
   // Issue command
   port->command_issue |= 1 << slot;
 
@@ -220,6 +243,7 @@ bool ahci_issue_command(AHCIDevice *device, int slot) {
     if (!semaphore_down(&device->pending_command, 1, COMMAND_TIMEOUT_MS)) {
       text_output_printf("AHCI command issue timeout.\n");
       success = false;
+      break;
     }
   }
 
@@ -269,6 +293,8 @@ static void enumerate_devices(PCIDeviceDriver *driver, HBAMemory *hba, AHCIData 
         // fill_device_info issues a command, so the command infrastructure must be ready
         if (device_type == AHCI_DEVICE_SATA) {
           sata_fill_device_info(driver, new_device);
+        } else if (device_type == AHCI_DEVICE_SATAPI) {
+          satapi_fill_device_info(driver, new_device);
         } else {
           // TODO: Fill in device info for other device types
         }
@@ -308,23 +334,13 @@ static bool initialize_hba(PCIDeviceDriver *driver) {
   // TODO: Fall back to polling if there isn't a PCI interrupt associated. In reality this should never(?) happen.
   assert(hba_device->has_interrupts);
 
-  uint32_t cmd_word = PCI_HEADER_READ_FIELD_WORD(hba_device->bus, hba_device->slot, hba_device->function, command);
-  text_output_printf("HBA PCI CMD Field: 0b%b\n", PCI_HEADER_FIELD_IN_WORD(cmd_word, command) & (1 << 10));
-
-  text_output_printf("HBA Slot: %d, IRQ #: %d\n", hba_device->slot, hba_device->real_irq);
-
   uint32_t abar_word = pci_config_read_word(hba_device->bus, hba_device->slot, hba_device->function, 0x24);
   uintptr_t hba_base_address = (abar_word & FIELD_MASK(19, 13));
   HBAMemory *hba = (HBAMemory *)hba_base_address;
 
   uint16_t major_version = field_in_word(hba->version, 2, 2);
   uint16_t minor_version = field_in_word(hba->version, 1, 1);
-  uint16_t subminor_version = field_in_word(hba->version, 0, 1);
-  text_output_printf("HBA AHCI Version: %d.%d.%d\n", major_version, minor_version, subminor_version);
-
   assert(major_version == 1 && minor_version <= 3); // We only know how to deal with ACHI version 1.0 - 1.3
-
-  text_output_printf("HBA Capabilities: 64-bit? %d, SSS? %d, AHCI Only? %d, num cmd slots: %d\n", (hba->capabilities & (1 << 31)) > 0, (hba->capabilities & (1 << 27)) > 0, (hba->capabilities & (1 << 18)) > 0, ((hba->capabilities & FIELD_MASK(5, 8)) >> 8) + 1);
 
   assert(reset_hba(hba));
 
@@ -334,19 +350,12 @@ static bool initialize_hba(PCIDeviceDriver *driver) {
   ahci_data->use_64_bits = (hba->capabilities & (1 << 31)) > 0;
   ahci_data->hba = hba;
 
-
   enumerate_devices(driver, hba, ahci_data);
-
-  for (int i = 0; i < ahci_data->num_devices; ++i) {
-    print_ahci_device(&ahci_data->devices[i]);
-  }
 
   return true;
 }
 
 static void ahci_driver_init(PCIDeviceDriver *driver) {
-  text_output_printf("Initializing AHCI driver for PCI device: %p\n");
-
   if (!initialize_hba(driver)) {
     panic("Could not initialize HBA!\n");
   }
@@ -382,7 +391,6 @@ static PCIDeviceDriverError ahci_execute_command(PCIDeviceDriver *driver,
         return PCI_ERROR_INVALID_PARAMETERS;
       }
 
-      text_output_printf("Device ID: %d\n", command->device_id);
       AHCIDevice *device = &ahci_data->devices[command->device_id];
       *(struct AHCIDeviceInfo *)output_buffer = device->device_info;
     }
@@ -405,6 +413,10 @@ static PCIDeviceDriverError ahci_execute_command(PCIDeviceDriver *driver,
         case AHCI_DEVICE_SATA:
           return sata_read(driver, device, command->address, command->block_count,
                            output_buffer, output_buffer_size);
+
+        case AHCI_DEVICE_SATAPI:
+          return satapi_read(driver, device, command->address, command->block_count,
+                             output_buffer, output_buffer_size);
 
         default:
           NOT_IMPLEMENTED
@@ -429,6 +441,10 @@ static PCIDeviceDriverError ahci_execute_command(PCIDeviceDriver *driver,
         case AHCI_DEVICE_SATA:
           return sata_write(driver, device, command->address, command->block_count,
                             output_buffer, output_buffer_size);
+
+        case AHCI_DEVICE_SATAPI:
+          return satapi_write(driver, device, command->address, command->block_count,
+                              output_buffer, output_buffer_size);
 
         default:
           NOT_IMPLEMENTED

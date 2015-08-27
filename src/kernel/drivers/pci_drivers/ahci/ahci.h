@@ -27,7 +27,7 @@ struct AHCIDeviceInfo {
   char media_serial_number[60];
 
   bool lba48_supported;
-  uint32_t logical_sector_size;
+  uint32_t logical_sector_size; // In bytes
   uint64_t num_sectors;
 };
 

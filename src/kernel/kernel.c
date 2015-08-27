@@ -72,7 +72,7 @@ void kernel_main(KernelInfo info) {
   // Set up scheduler
   scheduler_init();
 
-  KernelThread *main_thread = thread_create(kernel_main_thread, NULL, 31, 2);
+  KernelThread *main_thread = thread_create(kernel_main_thread, NULL, 31, 4);
   thread_start(main_thread);
 
   scheduler_start_scheduling(); // kernel_main will not execute any more after this call
@@ -142,7 +142,7 @@ void * kernel_main_thread() {
                        "Model Number: %.40s\n"
                        "Media serial number: %.60s\n"
                        "LBA48 Supported: %s\n"
-                       "Logical sector size: %d words\n"
+                       "Logical sector size: %d bytes\n"
                        "Number of sectors: %d\n",
                        device_info.device_type == AHCI_DEVICE_SATA ? "SATA" : "SATAPI",
                        device_info.serial_number, device_info.firmware_revision,
@@ -152,31 +152,31 @@ void * kernel_main_thread() {
     lock_release(&kernel_lock);
   }
 
-  uint8_t buffer[512];
-  for (int i = 0; i < 512; ++i) {
-    buffer[i] = (uint8_t)i;
-  }
+  uint8_t *buffer = kmalloc(2048);
+  // for (int i = 0; i < 2048; ++i) {
+  //   buffer[i] = (uint8_t)i*2;
+  // }
 
-  struct AHCIWriteCommand write_command = { .device_id = 1, .address = 0, .block_count = 1 };
-  error = driver->execute_command(driver, AHCI_COMMAND_WRITE, &write_command,
-                                  sizeof(write_command), buffer, sizeof(buffer));
+  // struct AHCIWriteCommand write_command = { .device_id = 1, .address = 0, .block_count = 1 };
+  // error = driver->execute_command(driver, AHCI_COMMAND_WRITE, &write_command,
+  //                                 sizeof(write_command), buffer, sizeof(buffer));
 
-  if (error != PCI_ERROR_NONE) {
-    lock_acquire(&kernel_lock, -1);
-    text_output_printf("PCI Error: %d\n", error);
-    lock_release(&kernel_lock);
-  }
+  // if (error != PCI_ERROR_NONE) {
+  //   lock_acquire(&kernel_lock, -1);
+  //   text_output_printf("PCI Error: %d\n", error);
+  //   lock_release(&kernel_lock);
+  // }
 
   memset(buffer, 0xFF, sizeof(buffer));
-  struct AHCIReadCommand read_command = { .device_id = 1, .address = 0, .block_count = 1 };
+  struct AHCIReadCommand read_command = { .device_id = 0, .address = 0, .block_count = 1 };
   error = driver->execute_command(driver, AHCI_COMMAND_READ, &read_command,
-                                  sizeof(read_command), buffer, sizeof(buffer));
+                                  sizeof(read_command), buffer, 2048);
 
   lock_acquire(&kernel_lock, -1);
   if (error != PCI_ERROR_NONE) {
     text_output_printf("PCI Error: %d\n", error);
   } else {
-    for (int i = 0; i < 16; ++i) {
+    for (int i = 0; i < 64; ++i) {
       for (int j = 0; j < 32; ++j) {
         text_output_printf("%.2x ", buffer[i*32+j]);
       }

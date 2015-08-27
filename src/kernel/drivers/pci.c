@@ -164,6 +164,7 @@ static PCIDevice * add_pci_device(uint8_t bus, uint8_t slot, uint8_t function) {
 
     PCIDeviceDriver *driver = driver_for_device(new_device);
     if (driver != NULL) {
+      text_output_printf("Loading PCI driver \"%s\"...\n", driver->driver_name);
       new_device->driver = *driver;
       new_device->has_driver = true;
       new_device->driver.device = new_device;
