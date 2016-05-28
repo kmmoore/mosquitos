@@ -24,6 +24,8 @@ void spinlock_init(SpinLock *lock) {
 
 void spinlock_acquire(SpinLock *lock) {
   // TODO: Determine the appropriate memory model (currently the strictest)
+  // TODO: This is probably very broken, I think it will never let a lower
+  // priority thread run while the lock is held
   while (__sync_lock_test_and_set(&lock->value, 1));
 }
 

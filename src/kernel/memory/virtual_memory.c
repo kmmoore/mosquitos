@@ -173,10 +173,12 @@ void * vm_palloc(uint64_t num_pages) {
     chunk = (FreeBlock *)list_next(&chunk->entry);
   }
 
-  if (chunk == NULL) {
+  if (chunk == NULL || chunk->num_pages < num_pages) {
     return NULL; // We can't fulfill the request
   }
 
+  // Pull off and return the last pages of the chunk (since this allows us to simply
+  // subtract the number of pages from chunk->num_pages instead of moving the chunk)
   void *last_pages = ((uint8_t *)chunk) + (chunk->num_pages - num_pages) * VM_PAGE_SIZE;
 
   if (chunk->num_pages == num_pages) {

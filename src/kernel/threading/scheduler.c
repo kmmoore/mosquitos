@@ -71,9 +71,7 @@ void scheduler_init() {
 }
 
 void scheduler_set_next() {
-  // Attempt to use next thread in list to round-robin
-  // schedule all top priority threads
-
+  // Attempt to use next thread in list to round-robin schedule all top priority threads
   KernelThread *next = NULL;
   ListEntry *first_thread_entry = list_head(&scheduler_data.thread_list);
   KernelThread *first_thread = thread_from_list_entry(first_thread_entry);
@@ -112,6 +110,8 @@ void scheduler_start_scheduling() {
   
   // TODO: There is a race condition between these lines, but it shouldn't be an issue
   // because the thread loading should happen so much faster than the first clock tick
+  // TODO: Let the timer load the first thread by setting current_thread to NULL and 
+  // calling "hlt" here.
   scheduler_load_thread(thread_register_list_pointer(scheduler_data.current_thread));
 }
 

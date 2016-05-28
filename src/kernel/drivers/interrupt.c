@@ -1,15 +1,23 @@
+#include <common/mem_util.h>
 #include <kernel/drivers/interrupt.h>
 #include <kernel/drivers/gdt.h>
 #include <kernel/drivers/apic.h>
 #include <kernel/drivers/text_output.h>
 #include <kernel/util.h>
 
+enum IDTEntryType {
+  INTERRUPT_GATE = 0b01110,
+  TRAP_GATE = 0b01111
+};
+
 // Private structs
 static struct IDTEntry {
   uint16_t base_low;
   uint16_t selector;
   uint8_t  zero_1;
-  uint8_t  attributes;
+  uint8_t  type:5;
+  uint8_t  privilege_level:2;
+  uint8_t  present:1;
   uint16_t base_middle;
   uint32_t base_high;
   uint32_t zero_2;
@@ -23,16 +31,15 @@ static struct IDTR {
 static void (*interrupts_handlers[256])(int);
 
 // Helper functions
-static void set_idt_entry(int index, uint64_t base, uint16_t selector, uint8_t attributes) {
-   IDT[index].base_low    = (base & 0xFFFF);
-   IDT[index].base_middle = (base >> 16) & 0xFFFF;
-   IDT[index].base_high   = (base >> 32) & 0xFFFFFFFF;
+static void set_idt_entry(int index, uint64_t base, enum IDTEntryType type) {
+  memset(&IDT[index], 0, sizeof(IDT[index]));
+  IDT[index].base_low    = (base & 0xFFFF);
+  IDT[index].base_middle = (base >> 16) & 0xFFFF;
+  IDT[index].base_high   = (base >> 32) & 0xFFFFFFFF;
 
-   IDT[index].selector    = selector;
-   IDT[index].attributes  = attributes;
-
-   IDT[index].zero_1      = 0;
-   IDT[index].zero_2      = 0;
+  IDT[index].selector    = GDT_KERNEL_CS;
+  IDT[index].type        = type;
+  IDT[index].present     = 1;
 }
 
 void isr_common(uint64_t num, uint64_t error_code) {
@@ -78,40 +85,38 @@ void interrupt_init() {
   REQUIRE_MODULE("gdt");
   REQUIRE_MODULE("apic");
 
-  // TODO: Explain what the attributes mean
-
   // Exceptions (trap gates)
-  set_idt_entry(0, (uint64_t)isr0, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(1, (uint64_t)isr1, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(2, (uint64_t)isr2, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(3, (uint64_t)isr3, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(4, (uint64_t)isr4, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(5, (uint64_t)isr5, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(6, (uint64_t)isr6, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(7, (uint64_t)isr7, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(8, (uint64_t)isr8, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(9, (uint64_t)isr9, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(10, (uint64_t)isr10, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(11, (uint64_t)isr11, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(12, (uint64_t)isr12, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(13, (uint64_t)isr13, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(14, (uint64_t)isr14, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(16, (uint64_t)isr16, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(17, (uint64_t)isr17, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(18, (uint64_t)isr18, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(19, (uint64_t)isr19, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(20, (uint64_t)isr20, GDT_KERNEL_CS, 0b10001111);
-  set_idt_entry(30, (uint64_t)isr30, GDT_KERNEL_CS, 0b10001110);
+  set_idt_entry(0, (uint64_t)isr0, TRAP_GATE);
+  set_idt_entry(1, (uint64_t)isr1, TRAP_GATE);
+  set_idt_entry(2, (uint64_t)isr2, TRAP_GATE);
+  set_idt_entry(3, (uint64_t)isr3, TRAP_GATE);
+  set_idt_entry(4, (uint64_t)isr4, TRAP_GATE);
+  set_idt_entry(5, (uint64_t)isr5, TRAP_GATE);
+  set_idt_entry(6, (uint64_t)isr6, TRAP_GATE);
+  set_idt_entry(7, (uint64_t)isr7, TRAP_GATE);
+  set_idt_entry(8, (uint64_t)isr8, TRAP_GATE);
+  set_idt_entry(9, (uint64_t)isr9, TRAP_GATE);
+  set_idt_entry(10, (uint64_t)isr10, TRAP_GATE);
+  set_idt_entry(11, (uint64_t)isr11, TRAP_GATE);
+  set_idt_entry(12, (uint64_t)isr12, TRAP_GATE);
+  set_idt_entry(13, (uint64_t)isr13, TRAP_GATE);
+  set_idt_entry(14, (uint64_t)isr14, TRAP_GATE);
+  set_idt_entry(16, (uint64_t)isr16, TRAP_GATE);
+  set_idt_entry(17, (uint64_t)isr17, TRAP_GATE);
+  set_idt_entry(18, (uint64_t)isr18, TRAP_GATE);
+  set_idt_entry(19, (uint64_t)isr19, TRAP_GATE);
+  set_idt_entry(20, (uint64_t)isr20, TRAP_GATE);
+  set_idt_entry(30, (uint64_t)isr30, INTERRUPT_GATE);
 
   // IRQs (interrupt gates)
-  set_idt_entry(SCHEDULER_TIMER_IV, (uint64_t)scheduler_timer_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
-  set_idt_entry(SCHEDULER_YEILD_WITHOUT_SAVING_IV, (uint64_t)scheduler_yield_without_saving_isr, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (scheduler)
+  set_idt_entry(SCHEDULER_TIMER_IV, (uint64_t)scheduler_timer_isr, INTERRUPT_GATE); // Local APIC timer (scheduler)
+  set_idt_entry(SCHEDULER_YEILD_WITHOUT_SAVING_IV, (uint64_t)scheduler_yield_without_saving_isr, INTERRUPT_GATE); // Local APIC timer (scheduler)
 
-  set_idt_entry(KEYBOARD_IV, (uint64_t)isr35, GDT_KERNEL_CS, 0b10001110); // Keyboard
-  set_idt_entry(PIC_TIMER_IV, (uint64_t)isr36, GDT_KERNEL_CS, 0b10001110); // PIC timer
-  set_idt_entry(PCI_IV, (uint64_t)isr37, GDT_KERNEL_CS, 0b10001110); // PCI ISR
+  set_idt_entry(KEYBOARD_IV, (uint64_t)isr35, INTERRUPT_GATE); // Keyboard
+  set_idt_entry(PIC_TIMER_IV, (uint64_t)isr36, INTERRUPT_GATE); // PIC timer
+  set_idt_entry(PCI_IV, (uint64_t)isr37, INTERRUPT_GATE); // PCI ISR
 
-  set_idt_entry(LOCAL_APIC_CALIBRATION_IV, (uint64_t)isr39, GDT_KERNEL_CS, 0b10001110); // Local APIC timer (calibration)
+  set_idt_entry(LOCAL_APIC_CALIBRATION_IV, (uint64_t)isr39, INTERRUPT_GATE); // Local APIC timer (calibration)
   // Something is weird about IV 38...
 
   IDTR.size = sizeof(IDT) - 1;

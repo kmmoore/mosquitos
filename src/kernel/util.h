@@ -18,6 +18,10 @@
 
 #define field_in_word(word, byte_offset, byte_size) (((word) & FIELD_MASK(NUM_BITS(byte_size), NUM_BITS(byte_offset))) >> NUM_BITS(byte_offset))
 
+// From: http://www.cocoawithlove.com/2008/04/using-pointers-to-recast-in-c-is-bad.html
+#define UNION_CAST(x, destType) \
+  (((union {__typeof__(x) a; destType b;})x).b)
+
 #ifdef DEBUG
   #define assert(condition) do { if (!(condition)) panic("assert(" STR(condition) ")"); } while(0)
 #else

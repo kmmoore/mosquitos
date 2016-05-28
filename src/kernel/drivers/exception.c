@@ -53,8 +53,8 @@ static void stack_segment_fault(int error_code) {
   text_output_printf("\nStack Segment Fault! Error Code: %d\n", error_code);
 }
 
-static void general_protection_fault(int error_code) {
-  panic("\nGeneral Protection Fault! Error Code: 0x%x\n", error_code);
+static void general_protection_fault(int faulting_address) {
+  panic("\nGeneral Protection Fault! Faulting Address: 0x%x\n", faulting_address);
 }
 
 static void page_fault(int error_code) {

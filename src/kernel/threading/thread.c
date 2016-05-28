@@ -48,14 +48,14 @@ KernelThread * thread_create(KernelThreadMain main_func, void * parameter, uint8
   new_thread->priority = priority;
   new_thread->waiting_on = 0;
   new_thread->stack_num_pages = stack_num_pages;
-  new_thread->status = THREAD_SLEEPING;
+  new_thread->status = THREAD_SLEEPING; 
 
   // Setup entry point
   new_thread->rip = (uint64_t)main_func;
   new_thread->rdi = (uint64_t)parameter;
 
   // Setup stack at end of region allocated for thread
-  new_thread->rsp = (uint64_t) ((uint8_t *)new_thread + 4096*2);
+  new_thread->rsp = (uint64_t) ((uint8_t *)new_thread + stack_num_pages * VM_PAGE_SIZE);
   new_thread->rbp = new_thread->rsp;
 
   // Setup flags and segments
@@ -109,12 +109,12 @@ void thread_exit() {
   sti();
 
   // TODO: There is a race if the scheduler comes in right now
+  // TODO: Make setting scheduler->current_thread to NULL cause yield_no_save to be called
   scheduler_yield_no_save();
 }
 
 void thread_sleep(KernelThread *thread) {
   // NOTE: This function must be called with interrupts disabled
-
   thread->status = THREAD_SLEEPING;
 
   ++thread->waiting_on;
@@ -136,7 +136,6 @@ void thread_start(KernelThread *thread) {
 
 void thread_wake(KernelThread *thread) {
   // NOTE: This function must be called with interrupts disabled
-
   if (thread->status == THREAD_RUNNING) return;
   
   assert(thread->waiting_on > 0);

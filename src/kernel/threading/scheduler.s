@@ -96,8 +96,8 @@ scheduler_load_thread:
   push  0x18(%rdi) # cs
   push  0x20(%rdi) # rip
 
-  #uint64_t rax, rbx, rcx, rdx, rsi, rdi, rbp;
-  #uint64_t r8, r9, r10, r11, r12, r13, r14, r15;
+  # uint64_t rax, rbx, rcx, rdx, rsi, rdi, rbp;
+  # uint64_t r8, r9, r10, r11, r12, r13, r14, r15;
   # uint64_t ds, es, fs, gs;
 
   mov   0x28(%rdi), %rax
