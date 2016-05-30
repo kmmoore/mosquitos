@@ -5,21 +5,22 @@
 #include <kernel/drivers/text_output.h>
 #include <kernel/util.h>
 
-enum IDTEntryType {
+enum IDTDescriptorType {
   INTERRUPT_GATE = 0b01110,
   TRAP_GATE = 0b01111
 };
 
 // Private structs
-static struct IDTEntry {
-  uint16_t base_low;
+static struct IDTDescriptor {
+  uint16_t offset_low;
   uint16_t selector;
-  uint8_t  zero_1;
+  uint8_t  ist_index:3;
+  uint8_t  zero_1:5;
   uint8_t  type:5;
   uint8_t  privilege_level:2;
   uint8_t  present:1;
-  uint16_t base_middle;
-  uint32_t base_high;
+  uint16_t offset_middle;
+  uint32_t offset_high;
   uint32_t zero_2;
 } __attribute__((packed)) IDT[256];
 
@@ -31,13 +32,14 @@ static struct IDTR {
 static void (*interrupts_handlers[256])(int);
 
 // Helper functions
-static void set_idt_entry(int index, uint64_t base, enum IDTEntryType type) {
+static void set_idt_entry(int index, uint64_t isr_address, enum IDTDescriptorType type) {
   memset(&IDT[index], 0, sizeof(IDT[index]));
-  IDT[index].base_low    = (base & 0xFFFF);
-  IDT[index].base_middle = (base >> 16) & 0xFFFF;
-  IDT[index].base_high   = (base >> 32) & 0xFFFFFFFF;
+  IDT[index].offset_low    = (isr_address & 0xFFFF);
+  IDT[index].offset_middle = (isr_address >> 16) & 0xFFFF;
+  IDT[index].offset_high   = (isr_address >> 32) & 0xFFFFFFFF;
 
   IDT[index].selector    = GDT_KERNEL_CS;
+  // IDT[index].ist_index   = 1;
   IDT[index].type        = type;
   IDT[index].present     = 1;
 }
@@ -78,10 +80,6 @@ extern void isr39();
 
 // Public functions
 void interrupt_init() {
-  // Setup GDT and APIC before we can do interrupts
-  gdt_init();
-  apic_init();
-
   REQUIRE_MODULE("gdt");
   REQUIRE_MODULE("apic");
 
@@ -106,7 +104,7 @@ void interrupt_init() {
   set_idt_entry(18, (uint64_t)isr18, TRAP_GATE);
   set_idt_entry(19, (uint64_t)isr19, TRAP_GATE);
   set_idt_entry(20, (uint64_t)isr20, TRAP_GATE);
-  set_idt_entry(30, (uint64_t)isr30, INTERRUPT_GATE);
+  set_idt_entry(30, (uint64_t)isr30, TRAP_GATE);
 
   // IRQs (interrupt gates)
   set_idt_entry(SCHEDULER_TIMER_IV, (uint64_t)scheduler_timer_isr, INTERRUPT_GATE); // Local APIC timer (scheduler)

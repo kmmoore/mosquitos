@@ -15,6 +15,8 @@
 #include <kernel/drivers/pci_drivers/ahci/ahci.h>
 
 #include <kernel/drivers/acpi.h>
+#include <kernel/drivers/gdt.h>
+#include <kernel/drivers/apic.h>
 #include <kernel/drivers/interrupt.h>
 #include <kernel/drivers/exception.h>
 #include <kernel/drivers/timer.h>
@@ -57,6 +59,8 @@ void kernel_main(KernelInfo info) {
 
   // Initialize subsystems
   acpi_init(info.xdsp_address);
+  gdt_init();
+  apic_init();
   interrupt_init();
   exception_init();
 

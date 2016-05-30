@@ -53,14 +53,15 @@ BlockHeader *next_block_header(BlockHeader *header) {
 FreeBlockHeader * kmalloc_increase_allocation(size_t num_bytes) {
   // Request more pages from the OS and setup sentinel regions
   // Sentinel regions keep us from trying to coalesce with memory that we don't own
-
-  num_bytes += 2*sizeof(BlockHeader) + 2*sizeof(BlockFooter); // Add extra space for sentinel blocks
-  num_bytes = ((num_bytes - 1) | VM_PAGE_SIZE) + 1; // Round up to pages
-
+  num_bytes += 3 * sizeof(BlockHeader) + 3 * sizeof(BlockFooter); // Add extra space for sentinel blocks and block header/footers
   // Amortize small requests
   if (num_bytes < kKmallocMinIncreaseBytes) num_bytes = kKmallocMinIncreaseBytes;
 
-  uint8_t *new_chunk = vm_palloc(num_bytes / VM_PAGE_SIZE);
+  size_t num_pages = ((num_bytes - 1) >> 12) + 1; // Round up to the nearest page
+  assert(num_pages * VM_PAGE_SIZE >= num_bytes);
+  num_bytes = num_pages * VM_PAGE_SIZE;
+
+  uint8_t *new_chunk = vm_palloc(num_pages);
   if (new_chunk == NULL) return NULL;
 
   // Place zero-length sentinel at the beginning of the new chunk

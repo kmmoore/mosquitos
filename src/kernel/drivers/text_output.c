@@ -94,10 +94,10 @@ inline void text_output_putchar(const char c) {
   if (c == '\n') {
     text_output_data.current_row += 2; // Put an empty line between text lines
 
-    // int max_lines = text_output_data.gop->Mode->Info->VerticalResolution / kCharacterHeight;
-    // if (text_output_data.current_row == 100) {
-    //   text_output_clear_screen();
-    // }
+    if (text_output_data.current_row >= 100) {
+      text_output_clear_screen();
+      text_output_data.current_row = kTextOutputPadding;
+    }
 
     text_output_data.current_col = kTextOutputPadding;
   } else{
