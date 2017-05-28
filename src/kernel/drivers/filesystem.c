@@ -49,6 +49,8 @@ const char *filesystem_error_string(FilesystemError error) {
       return "Device error";
     case FS_ERROR_OUT_OF_SPACE:
       return "Out of space";
+    case FS_ERROR_CORRUPT_FILESYSTEM:
+      return "Corrupt filesystem";
     default:
       return "Unknown error code";
   }

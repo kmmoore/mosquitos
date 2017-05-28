@@ -55,15 +55,12 @@ typedef FilesystemError (*FilesystemInitFunction)(Filesystem *filesystem,
 typedef FilesystemError (*FilesystemFormatFunction)(
     Filesystem *filesystem, const char const *volume_name,
     uint64_t size_blocks);
-typedef void (*FilesystemInfoFunction)(Filesystem *filesystem,
-                                       FilesystemInfo *info);
+typedef FilesystemError (*FilesystemInfoFunction)(Filesystem *filesystem,
+                                                  FilesystemInfo *info);
+
 typedef FilesystemError (*FilesystemCreateDirectoryFunction)(
     Filesystem *filesystem, const char const *name,
     const Directory *parent_directory, Directory **directory);
-typedef FilesystemError (*FilesystemCreateFileFunction)(
-    Filesystem *filesystem, const char const *name,
-    const Directory *parent_directory, File **file);
-
 typedef FilesystemError (*FilesystemOpenDirectoryFunction)(
     Filesystem *filesystem, const char const *path, Directory **directory);
 typedef FilesystemError (*FilesystemCloseDirectoryFunction)(
@@ -73,17 +70,24 @@ typedef FilesystemError (*FilesystemReadDirectoryEntryFunction)(
 typedef FilesystemError (*FilesystemSeekFrontDirectoryFunction)(
     Filesystem *filesystem, Directory *const directory);
 
+typedef FilesystemError (*FilesystemCreateFileFunction)(
+    Filesystem *filesystem, const Directory *parent_directory,
+    const char const *name, File **file);
 typedef FilesystemError (*FilesystemOpenFileFunction)(Filesystem *filesystem,
                                                       const char const *path,
                                                       File **file);
 typedef FilesystemError (*FilesystemCloseFileFunction)(Filesystem *filesystem,
                                                        File *file);
 typedef FilesystemError (*FilesystemReadFileFunction)(Filesystem *filesystem,
-                                                      const File *file,
-                                                      const uint64_t bytes,
+                                                      File *file,
+                                                      uint64_t *length,
                                                       uint8_t *buffer);
+typedef FilesystemError (*FilesystemWriteFileFunction)(Filesystem *filesystem,
+                                                       File *file,
+                                                       const uint8_t *buffer,
+                                                       const uint64_t length);
 typedef FilesystemError (*FilesystemSeekFileFunction)(Filesystem *filesystem,
-                                                      const File *file,
+                                                      File *file,
                                                       const uint64_t position);
 typedef FilesystemError (*FilesystemTellFileFunction)(Filesystem *filesystem,
                                                       const File *file,
@@ -111,6 +115,7 @@ struct _Filesystem {
   FilesystemOpenFileFunction open_file;
   FilesystemCloseFileFunction close_file;
   FilesystemReadFileFunction read_file;
+  FilesystemWriteFileFunction write_file;
   FilesystemSeekFileFunction seek_file;
   FilesystemTellFileFunction tell_file;
 };

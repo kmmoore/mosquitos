@@ -1,3 +1,4 @@
+#include <common/math.h>
 #include <common/mem_util.h>
 #include <kernel/datastructures/list.h>
 #include <kernel/drivers/filesystems/mfs.h>
@@ -14,6 +15,7 @@
 #define ROOT_DIRECTORY_INODE 1
 
 enum InodeFlags {
+  INODE_FLAG_NONE = 0,
   INODE_FLAG_DIRECTORY = 1 << 0,
 };
 
@@ -66,8 +68,22 @@ typedef struct {
 
 struct _Directory {
   uint64_t inode_number;
-  uint64_t entry_seek_position;
+  uint64_t seek_position;
 };
+
+struct _File {
+  uint64_t inode_number;
+  uint64_t seek_position;
+};
+
+static inline void print_block(const uint8_t *const block) {
+  for (int i = 0; i < 16; ++i) {
+    for (int j = 0; j < 32; ++j) {
+      text_output_printf("%02x ", block[i * 32 + j]);
+    }
+    text_output_printf("\n");
+  }
+}
 
 static inline uint64_t bytes_to_blocks(uint64_t bytes) {
   return ((bytes - 1) / FILESYSTEM_BLOCK_SIZE_BYTES) + 1;
@@ -235,7 +251,7 @@ static inline uint64_t block_numbers_per_indirect_block(int level) {
 // Note: indices must have space for 4 uint64_t's
 // TODO: Remove Inode* parameter
 WARN_UNUSED
-static FilesystemError inode_block_indices(const Inode *inode,
+static FilesystemError inode_block_indices(const Inode *const inode,
                                            uint64_t block_index,
                                            int *num_indices,
                                            uint64_t *indices) {
@@ -268,7 +284,7 @@ static FilesystemError inode_block_indices(const Inode *inode,
 
 WARN_UNUSED
 static FilesystemError block_number_from_indirect_block(
-    Filesystem *filesystem, const Inode *inode, int num_indices,
+    Filesystem *filesystem, const Inode *const inode, int num_indices,
     uint64_t *indices, uint64_t *block_number) {
   assert(num_indices > 0 && num_indices < 4);
   // Index 0 is the index into the (in)direct block array in the inode
@@ -291,7 +307,7 @@ static FilesystemError block_number_from_indirect_block(
 
 WARN_UNUSED
 static FilesystemError inode_block_index_to_block_number(
-    Filesystem *filesystem, const Inode *inode, uint64_t block_index,
+    Filesystem *filesystem, const Inode *const inode, uint64_t block_index,
     uint64_t *block_number) {
   int num_indices;
   uint64_t indices[4] = {0};
@@ -321,7 +337,7 @@ static FilesystemError inode_set_block_number(Filesystem *filesystem,
     ++num_unallocated;
   }
 
-  uint64_t *block_level_array[4] = {
+  uint64_t *const block_level_array[4] = {
       inode->direct_blocks, inode->indirect_blocks,
       inode->double_indirect_blocks, inode->triple_indirect_blocks};
 
@@ -393,8 +409,7 @@ static FilesystemError inode_add_block(Filesystem *filesystem, Inode *inode,
   if (error != FS_ERROR_NONE) return error;
 
   inode->block_size++;
-  error = write_inode(filesystem, inode_number, inode);
-  return error;
+  return write_inode(filesystem, inode_number, inode);
 }
 
 // TODO: Test this
@@ -469,6 +484,220 @@ static FilesystemError path_to_inode_number(Filesystem *filesystem,
   return FS_ERROR_NOT_FOUND;
 }
 
+static FilesystemError read_data_from_inode(Filesystem *filesystem,
+                                            const Inode *const inode,
+                                            const uint64_t start_offset,
+                                            uint8_t *const buffer,
+                                            uint64_t *const length) {
+  if (start_offset >= inode->byte_size) {
+    *length = 0;
+    return FS_ERROR_NONE;
+  }
+
+  // Don't read past the end of the data.
+  *length = min(*length, inode->byte_size - start_offset);
+
+  uint64_t bytes_read = 0;
+  while (bytes_read < *length) {
+    const uint64_t block_index =
+        (start_offset + bytes_read) / FILESYSTEM_BLOCK_SIZE_BYTES;
+    const uint64_t block_offset =
+        (start_offset + bytes_read) % FILESYSTEM_BLOCK_SIZE_BYTES;
+
+    uint64_t block_number = -1;
+    FilesystemError error = inode_block_index_to_block_number(
+        filesystem, inode, block_index, &block_number);
+    if (error != FS_ERROR_NONE) return error;
+
+    // Read a whole block, if possible.
+    // TODO: Read multiple blocks if they're consecutive.
+    if (block_offset == 0 &&
+        (*length - bytes_read) > FILESYSTEM_BLOCK_SIZE_BYTES) {
+      error = filesystem->read_blocks(filesystem, block_number, 1,
+                                      &buffer[bytes_read]);
+      if (error != FS_ERROR_NONE) return error;
+      bytes_read += FILESYSTEM_BLOCK_SIZE_BYTES;
+    } else {
+      FilesystemBlock data_block;
+      error = filesystem->read_blocks(filesystem, block_number, 1, &data_block);
+      if (error != FS_ERROR_NONE) return error;
+
+      const uint64_t bytes_to_read =
+          min(*length - bytes_read, FILESYSTEM_BLOCK_SIZE_BYTES - block_offset);
+      memcpy(&buffer[bytes_read], &data_block.data[block_offset],
+             bytes_to_read);
+      bytes_read += bytes_to_read;
+    }
+  }
+
+  *length = bytes_read;
+  return FS_ERROR_NONE;
+}
+
+static FilesystemError write_data_to_inode(Filesystem *filesystem, Inode *inode,
+                                           uint64_t inode_number,
+                                           const uint64_t start_offset,
+                                           const uint8_t *buffer,
+                                           const uint64_t length) {
+  // Determine where to add the new data, addings blocks to the inode if
+  // necessary.
+  uint64_t bytes_written = 0;
+  FilesystemError error = FS_ERROR_NONE;
+  while (bytes_written < length) {
+    uint64_t current_block_index =
+        (start_offset + bytes_written) / FILESYSTEM_BLOCK_SIZE_BYTES;
+    uint64_t current_block_offset =
+        (start_offset + bytes_written) % FILESYSTEM_BLOCK_SIZE_BYTES;
+
+    // TODO: Add multiple blocks at once
+    while (current_block_index >= inode->block_size) {  // Allocate a new block
+      uint64_t block_number = -1;
+      error = inode_add_block(filesystem, inode, inode_number, &block_number);
+      if (error != FS_ERROR_NONE) return error;
+    }
+
+    uint64_t current_block_number;
+    error = inode_block_index_to_block_number(
+        filesystem, inode, current_block_index, &current_block_number);
+    if (error != FS_ERROR_NONE) return error;
+
+    // Determine if we can write a full block at once.
+    // TODO: Write more than one block at once.
+    if (current_block_offset == 0 &&
+        (length - bytes_written) >= FILESYSTEM_BLOCK_SIZE_BYTES) {
+      error = filesystem->write_blocks(filesystem, current_block_number, 1,
+                                       &buffer[bytes_written]);
+      if (error != FS_ERROR_NONE) return error;
+      bytes_written += FILESYSTEM_BLOCK_SIZE_BYTES;
+    } else {  // Write a partial block
+      FilesystemBlock block = {0};
+      if (start_offset + bytes_written < inode->byte_size ||
+          start_offset != 0) {
+        // This is being written into an existing block, read it first.
+        error = filesystem->read_blocks(filesystem, current_block_number, 1,
+                                        &block);
+        if (error != FS_ERROR_NONE) return error;
+      }
+
+      const uint64_t bytes_to_write =
+          min(length - bytes_written,
+              FILESYSTEM_BLOCK_SIZE_BYTES - current_block_offset);
+      memcpy(&block.data[current_block_offset], buffer, bytes_to_write);
+      error =
+          filesystem->write_blocks(filesystem, current_block_number, 1, &block);
+      if (error != FS_ERROR_NONE) return error;
+      bytes_written += bytes_to_write;
+    }
+
+    inode->byte_size = max(inode->byte_size, start_offset + bytes_written);
+  }
+
+  inode->checksum = inode_compute_checksum(inode);
+  return write_inode(filesystem, inode_number, inode);
+}
+
+static FilesystemError create_directory_entry(
+    Filesystem *filesystem, const char *name,
+    const Directory *const parent_directory, const uint64_t flags,
+    uint64_t *new_inode_number) {
+  // Don't allow empty names.
+  if (name[0] == '\0') {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  MFSData *data = (MFSData *)filesystem->data;
+  FilesystemError error =
+      bitmap_set_next_free_bit(filesystem, inode_bitmap_start(filesystem),
+                               data->num_inodes, new_inode_number);
+  if (error != FS_ERROR_NONE) return error;
+
+  // Read the parent directory's inode and check it's validity.
+  Inode parent_inode;
+  error = read_inode(filesystem, parent_directory->inode_number, &parent_inode);
+  if (error != FS_ERROR_NONE) return error;
+
+  if (!inode_check_checksum(&parent_inode) ||
+      (parent_inode.byte_size % sizeof(DirectoryEntry)) != 0) {
+    return FS_ERROR_CORRUPT_FILESYSTEM;
+  }
+  if ((parent_inode.flags & INODE_FLAG_DIRECTORY) == 0) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  DirectoryEntry new_entry = {0};
+  new_entry.id = *new_inode_number;
+  strlcpy(new_entry.name, name, sizeof(new_entry.name));
+  error = write_data_to_inode(
+      filesystem, &parent_inode, parent_directory->inode_number,
+      parent_inode.byte_size, UNION_CAST(&new_entry, const uint8_t *),
+      sizeof(new_entry));
+  if (error != FS_ERROR_NONE) return error;
+
+  // Create and write the new inode
+  Inode new_inode;
+  memset(&new_inode, 0, sizeof(new_inode));
+  new_inode.flags = flags;
+  new_inode.link_count = 1;
+  new_inode.checksum = inode_compute_checksum(&new_inode);
+
+  error = write_inode(filesystem, *new_inode_number, &new_inode);
+  if (error != FS_ERROR_NONE) return error;
+  return FS_ERROR_NONE;
+}
+
+static FilesystemError open_inode(Filesystem *filesystem,
+                                  uint64_t inode_number) {
+  MFSData *const data = (MFSData *)filesystem->data;
+  ListEntry *const new_entry = kmalloc(sizeof(ListEntry));
+  if (!new_entry) return FS_ERROR_DEVICE_ERROR;
+  list_entry_set_value(new_entry, inode_number);
+  list_push_front(&data->open_inodes, new_entry);
+
+  return FS_ERROR_NONE;
+}
+
+static FilesystemError close_inode(Filesystem *filesystem,
+                                   uint64_t inode_number) {
+  MFSData *const data = (MFSData *)filesystem->data;
+  ListEntry *entry = list_head(&data->open_inodes);
+  while (entry) {
+    if (list_entry_value(entry) == inode_number) {
+      list_remove(&data->open_inodes, entry);
+      return FS_ERROR_NONE;
+    }
+    entry = list_next(entry);
+  }
+
+  return FS_ERROR_NOT_FOUND;
+}
+
+static FilesystemError open_directory(Filesystem *filesystem,
+                                      uint64_t inode_number,
+                                      Directory **directory) {
+  const FilesystemError error = open_inode(filesystem, inode_number);
+  if (error != FS_ERROR_NONE) return error;
+
+  *directory = kmalloc(sizeof(Directory));  // Freed on close
+  if (!directory) return FS_ERROR_DEVICE_ERROR;
+  (*directory)->inode_number = inode_number;
+  (*directory)->seek_position = 0;
+
+  return FS_ERROR_NONE;
+}
+
+static FilesystemError open_file(Filesystem *filesystem, uint64_t inode_number,
+                                 File **file) {
+  const FilesystemError error = open_inode(filesystem, inode_number);
+  if (error != FS_ERROR_NONE) return error;
+
+  *file = kmalloc(sizeof(File));  // Freed on close
+  if (!file) return FS_ERROR_DEVICE_ERROR;
+  (*file)->inode_number = inode_number;
+  (*file)->seek_position = 0;
+
+  return FS_ERROR_NONE;
+}
+
 static void store_metadata(Filesystem *filesystem,
                            const MetadataBlock *metadata) {
   MFSData *data = (MFSData *)filesystem->data;
@@ -537,6 +766,10 @@ static FilesystemError in_memory_write_blocks(Filesystem *filesystem,
 
 WARN_UNUSED
 static FilesystemError mfs_init(Filesystem *filesystem) {
+  if (filesystem == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
   assert(sizeof(MetadataBlock) < FILESYSTEM_BLOCK_SIZE_BYTES);
   assert(sizeof(Inode) == FILESYSTEM_BLOCK_SIZE_BYTES);
   assert(FILESYSTEM_BLOCK_SIZE_BYTES % sizeof(DirectoryEntry) == 0);
@@ -564,6 +797,10 @@ static FilesystemError mfs_init(Filesystem *filesystem) {
 
 static FilesystemError mfs_init_in_memory(Filesystem *filesystem,
                                           void *initialization_data) {
+  if (filesystem == NULL || initialization_data == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
   MFSInMemoryInitData *init = (MFSInMemoryInitData *)initialization_data;
   if (init->blocks == NULL) return FS_ERROR_INVALID_PARAMETERS;
 
@@ -578,6 +815,10 @@ static FilesystemError mfs_init_in_memory(Filesystem *filesystem,
 
 static FilesystemError mfs_init_sata(Filesystem *filesystem,
                                      void *initialization_data) {
+  if (filesystem == NULL || initialization_data == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
   MFSSATAInitData *init = (MFSSATAInitData *)initialization_data;
   // TODO: Free this somewhere
   MFSData *data = kcalloc(1, sizeof(MFSData));
@@ -589,6 +830,10 @@ static FilesystemError mfs_init_sata(Filesystem *filesystem,
 static FilesystemError mfs_format(Filesystem *filesystem,
                                   const char const *volume_name,
                                   uint64_t size_blocks) {
+  if (filesystem == NULL || volume_name == NULL || size_blocks == 0) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
   MFSData *data = (MFSData *)filesystem->data;
   data->formatted = true;
 
@@ -641,6 +886,9 @@ static FilesystemError mfs_format(Filesystem *filesystem,
   // Zero the root-directory inode
   Inode root_directory_inode;
   memset(&root_directory_inode, 0, sizeof(root_directory_inode));
+  root_directory_inode.flags = INODE_FLAG_DIRECTORY;
+  root_directory_inode.link_count = 1;
+  root_directory_inode.checksum = inode_compute_checksum(&root_directory_inode);
   error = write_inode(filesystem, root_directory_inode_number(),
                       &root_directory_inode);
   if (error != FS_ERROR_NONE) return error;
@@ -648,147 +896,68 @@ static FilesystemError mfs_format(Filesystem *filesystem,
   return FS_ERROR_NONE;
 }
 
-static void mfs_info(Filesystem *filesystem, FilesystemInfo *info) {
-  MFSData *data = (MFSData *)filesystem->data;
-  info->formatted = data->formatted;
-  info->size_blocks = data->size_blocks;
-  strlcpy(info->volume_name, data->volume_name, sizeof(info->volume_name));
-}
-
-static FilesystemError mfs_create_directory(Filesystem *filesystem,
-                                            const char *name,
-                                            const Directory *parent_directory,
-                                            Directory **directory) {
-  // Don't allow empty directory names.
-  if (name[0] == '\0') {
+static FilesystemError mfs_info(Filesystem *filesystem, FilesystemInfo *info) {
+  if (filesystem == NULL || info == NULL) {
     return FS_ERROR_INVALID_PARAMETERS;
   }
 
   MFSData *data = (MFSData *)filesystem->data;
-  uint64_t new_inode_number = -1;
-  FilesystemError error =
-      bitmap_set_next_free_bit(filesystem, inode_bitmap_start(filesystem),
-                               data->num_inodes, &new_inode_number);
-  if (error != FS_ERROR_NONE) return error;
-
-  // Read the parent directory's inode and check it's validity
-  Inode parent_inode;
-  error = read_inode(filesystem, parent_directory->inode_number, &parent_inode);
-  if (error != FS_ERROR_NONE) return error;
-  if (!inode_check_checksum(&parent_inode) ||
-      (parent_inode.byte_size % sizeof(DirectoryEntry)) != 0) {
-    return FS_ERROR_CORRUPT_FILESYSTEM;
-  }
-
-  // Determine where to add the new DirectoryEntry, adding a block to the
-  // parent directory if necessary.
-  const uint64_t bytes_left =
-      (parent_inode.block_size * FILESYSTEM_BLOCK_SIZE_BYTES) -
-      parent_inode.byte_size;
-  uint64_t directory_block_number, directory_entry_index;
-  if (bytes_left < sizeof(DirectoryEntry)) {  // Allocate a new block
-    error = inode_add_block(filesystem, &parent_inode,
-                            parent_directory->inode_number,
-                            &directory_block_number);
-    if (error != FS_ERROR_NONE) return error;
-    directory_entry_index = 0;
-  } else {  // Append to the last block so far
-    const uint64_t current_block_index =
-        parent_inode.byte_size / FILESYSTEM_BLOCK_SIZE_BYTES;
-    error = inode_block_index_to_block_number(filesystem, &parent_inode,
-                                              current_block_index,
-                                              &directory_block_number);
-    directory_entry_index =
-        (parent_inode.byte_size % FILESYSTEM_BLOCK_SIZE_BYTES) /
-        sizeof(DirectoryEntry);
-  }
-
-  // Add the new directory entry
-  DirectoryEntry entries[FILESYSTEM_BLOCK_SIZE_BYTES / sizeof(DirectoryEntry)];
-  error =
-      filesystem->read_blocks(filesystem, directory_block_number, 1, &entries);
-  if (error != FS_ERROR_NONE) return error;
-  entries[directory_entry_index].id = new_inode_number;
-  strlcpy(entries[directory_entry_index].name, name,
-          sizeof(entries[directory_entry_index].name));
-  error =
-      filesystem->write_blocks(filesystem, directory_block_number, 1, &entries);
-  if (error != FS_ERROR_NONE) return error;
-
-  parent_inode.byte_size += sizeof(DirectoryEntry);
-  parent_inode.checksum = inode_compute_checksum(&parent_inode);
-  error =
-      write_inode(filesystem, parent_directory->inode_number, &parent_inode);
-  if (error != FS_ERROR_NONE) return error;
-
-  // Create and write the new inode
-  Inode new_inode;
-  memset(&new_inode, 0, sizeof(new_inode));
-  new_inode.flags = INODE_FLAG_DIRECTORY;
-  new_inode.link_count = 1;
-  new_inode.checksum = inode_compute_checksum(&new_inode);
-
-  error = write_inode(filesystem, new_inode_number, &new_inode);
-  if (error != FS_ERROR_NONE) return error;
-
-  // Open the directory and populate the Directory structure for the user
-  ListEntry *new_entry = kmalloc(sizeof(ListEntry));
-  if (!new_entry) return FS_ERROR_DEVICE_ERROR;
-  list_entry_set_value(new_entry, new_inode_number);
-  list_push_front(&data->open_inodes, new_entry);
-
-  *directory =
-      kmalloc(sizeof(Directory));  // Will be free'd in mfs_close_directory()
-  if (!directory) return FS_ERROR_DEVICE_ERROR;
-  (*directory)->inode_number = new_inode_number;
+  info->formatted = data->formatted;
+  info->size_blocks = data->size_blocks;
+  strlcpy(info->volume_name, data->volume_name, sizeof(info->volume_name));
 
   return FS_ERROR_NONE;
+}
+
+static FilesystemError mfs_create_directory(
+    Filesystem *filesystem, const char *name,
+    const Directory *const parent_directory, Directory **directory) {
+  if (filesystem == NULL || name == NULL || parent_directory == NULL ||
+      directory == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  uint64_t new_inode_number = -1;
+  const FilesystemError error =
+      create_directory_entry(filesystem, name, parent_directory,
+                             INODE_FLAG_DIRECTORY, &new_inode_number);
+  if (error != FS_ERROR_NONE) return error;
+
+  return open_directory(filesystem, new_inode_number, directory);
 }
 
 static FilesystemError mfs_open_directory(Filesystem *filesystem,
                                           const char const *path,
                                           Directory **directory) {
+  if (filesystem == NULL || path == NULL || directory == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
   uint64_t inode_number;
   FilesystemError error = path_to_inode_number(filesystem, path, &inode_number);
   if (error != FS_ERROR_NONE) return error;
 
-  // Add the directory to the list of open directories
-  MFSData *data = (MFSData *)filesystem->data;
-  ListEntry *new_entry = kmalloc(sizeof(ListEntry));
-  if (!new_entry) return FS_ERROR_DEVICE_ERROR;
-  list_entry_set_value(new_entry, inode_number);
-  list_push_front(&data->open_inodes, new_entry);
-
-  *directory =
-      kmalloc(sizeof(Directory));  // Will be free'd in mfs_close_directory()
-  if (!directory) return FS_ERROR_DEVICE_ERROR;
-  (*directory)->inode_number = inode_number;
-  (*directory)->entry_seek_position = 0;
-
-  return FS_ERROR_NONE;
+  return open_directory(filesystem, inode_number, directory);
 }
 
 static FilesystemError mfs_close_directory(Filesystem *filesystem,
                                            Directory *directory) {
-  MFSData *data = (MFSData *)filesystem->data;
-  const uint64_t inode_number = directory->inode_number;
-
-  ListEntry *entry = list_head(&data->open_inodes);
-  while (entry) {
-    if (list_entry_value(entry) == inode_number) {
-      list_remove(&data->open_inodes, entry);
-      kfree(directory);
-      return FS_ERROR_NONE;
-    }
-    entry = list_next(entry);
+  if (filesystem == NULL || directory == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
   }
 
-  return FS_ERROR_INVALID_PARAMETERS;
+  const FilesystemError error =
+      close_inode(filesystem, directory->inode_number);
+  if (error == FS_ERROR_NONE) {
+    kfree(directory);
+  }
+
+  return error;
 }
 
 static FilesystemError mfs_read_directory_entry(Filesystem *filesystem,
                                                 Directory *const directory,
-                                                DirectoryEntry *entry) {
+                                                DirectoryEntry *const entry) {
   if (filesystem == NULL || directory == NULL || entry == NULL) {
     return FS_ERROR_INVALID_PARAMETERS;
   }
@@ -797,35 +966,27 @@ static FilesystemError mfs_read_directory_entry(Filesystem *filesystem,
   FilesystemError error =
       read_inode(filesystem, directory->inode_number, &inode);
   if (error != FS_ERROR_NONE) return error;
-  assert(inode.byte_size % sizeof(DirectoryEntry) == 0);
 
-  if (directory->entry_seek_position * sizeof(DirectoryEntry) >=
-      inode.byte_size) {
-    entry->id = -1;
-    entry->name[0] = '\0';
-    return FS_ERROR_NONE;
+  if (!inode_check_checksum(&inode) ||
+      inode.byte_size % sizeof(DirectoryEntry) != 0) {
+    return FS_ERROR_CORRUPT_FILESYSTEM;
+  }
+  if ((inode.flags & INODE_FLAG_DIRECTORY) == 0) {
+    return FS_ERROR_INVALID_PARAMETERS;
   }
 
-  const uint64_t block_index =
-      directory->entry_seek_position / DIRECTORY_ENTRIES_PER_BLOCK;
-  const uint64_t entry_index =
-      directory->entry_seek_position % DIRECTORY_ENTRIES_PER_BLOCK;
+  uint64_t length = sizeof(DirectoryEntry);
+  error = read_data_from_inode(
+      filesystem, &inode, directory->seek_position * sizeof(DirectoryEntry),
+      UNION_CAST(entry, uint8_t *), &length);
 
-  uint64_t block_number = 0;
-  error = inode_block_index_to_block_number(filesystem, &inode, block_index,
-                                            &block_number);
-  if (error != FS_ERROR_NONE) return error;
+  if (length != sizeof(DirectoryEntry)) {
+    entry->id = -1;
+    entry->name[0] = '\0';
+  } else {
+    directory->seek_position++;
+  }
 
-  FilesystemBlock directory_data_block;
-  error = filesystem->read_blocks(filesystem, block_number, 1,
-                                  &directory_data_block);
-  if (error != FS_ERROR_NONE) return error;
-
-  const DirectoryEntry *directory_entries =
-      (DirectoryEntry *)directory_data_block.data;
-  *entry = directory_entries[entry_index];
-
-  directory->entry_seek_position++;
   return FS_ERROR_NONE;
 }
 
@@ -835,7 +996,116 @@ static FilesystemError mfs_seek_front_directory(Filesystem *filesystem,
     return FS_ERROR_INVALID_PARAMETERS;
   }
 
-  directory->entry_seek_position = 0;
+  directory->seek_position = 0;
+  return FS_ERROR_NONE;
+}
+
+static FilesystemError mfs_create_file(Filesystem *filesystem,
+                                       const Directory *parent_directory,
+                                       const char const *name, File **file) {
+  if (filesystem == NULL || name == NULL || parent_directory == NULL ||
+      file == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  uint64_t new_inode_number = -1;
+  const FilesystemError error = create_directory_entry(
+      filesystem, name, parent_directory, INODE_FLAG_NONE, &new_inode_number);
+  if (error != FS_ERROR_NONE) return error;
+
+  return open_file(filesystem, new_inode_number, file);
+}
+
+static FilesystemError mfs_open_file(Filesystem *filesystem,
+                                     const char const *path, File **file) {
+  if (filesystem == NULL || path == NULL || file == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  uint64_t inode_number;
+  FilesystemError error = path_to_inode_number(filesystem, path, &inode_number);
+  if (error != FS_ERROR_NONE) return error;
+
+  return open_file(filesystem, inode_number, file);
+}
+
+static FilesystemError mfs_close_file(Filesystem *filesystem, File *file) {
+  if (filesystem == NULL || file == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  const FilesystemError error = close_inode(filesystem, file->inode_number);
+  if (error == FS_ERROR_NONE) {
+    kfree(file);
+  }
+
+  return error;
+}
+
+static FilesystemError mfs_read_file(Filesystem *filesystem, File *const file,
+                                     uint64_t *const length, uint8_t *buffer) {
+  if (filesystem == NULL || file == NULL || length == 0 || buffer == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  Inode inode;
+  FilesystemError error = read_inode(filesystem, file->inode_number, &inode);
+  if (error != FS_ERROR_NONE) return error;
+
+  if (!inode_check_checksum(&inode)) {
+    return FS_ERROR_CORRUPT_FILESYSTEM;
+  }
+  if ((inode.flags & INODE_FLAG_DIRECTORY) != 0) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  return read_data_from_inode(filesystem, &inode, file->seek_position, buffer,
+                              length);
+}
+
+static FilesystemError mfs_write_file(Filesystem *filesystem, File *const file,
+                                      const uint8_t *buffer,
+                                      const uint64_t length) {
+  if (filesystem == NULL || file == NULL || length == 0 || buffer == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  Inode inode;
+  FilesystemError error = read_inode(filesystem, file->inode_number, &inode);
+  if (error != FS_ERROR_NONE) return error;
+
+  if (!inode_check_checksum(&inode)) {
+    return FS_ERROR_CORRUPT_FILESYSTEM;
+  }
+  if ((inode.flags & INODE_FLAG_DIRECTORY) != 0) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  error = write_data_to_inode(filesystem, &inode, file->inode_number,
+                              file->seek_position, buffer, length);
+  if (error != FS_ERROR_NONE) return error;
+
+  file->seek_position += length;
+  return FS_ERROR_NONE;
+}
+
+static FilesystemError mfs_seek_file(Filesystem *filesystem, File *const file,
+                                     const uint64_t position) {
+  if (filesystem == NULL || file == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  file->seek_position = position;
+  return FS_ERROR_NONE;
+}
+
+static FilesystemError mfs_tell_file(Filesystem *filesystem, const File *file,
+                                     uint64_t *position) {
+  if (filesystem == NULL || file == NULL || position == NULL) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  *position = file->seek_position;
   return FS_ERROR_NONE;
 }
 
@@ -848,6 +1118,13 @@ static Filesystem mfs_create_default() {
       .close_directory = mfs_close_directory,
       .read_directory_entry = mfs_read_directory_entry,
       .seek_front_directory = mfs_seek_front_directory,
+      .create_file = mfs_create_file,
+      .open_file = mfs_open_file,
+      .close_file = mfs_close_file,
+      .read_file = mfs_read_file,
+      .write_file = mfs_write_file,
+      .seek_file = mfs_seek_file,
+      .tell_file = mfs_tell_file,
   };
   return fs;
 }
