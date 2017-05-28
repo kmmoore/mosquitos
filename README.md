@@ -14,7 +14,7 @@ MosquitOS is a tiny x86_64 UEFI-based operating system built from scratch.
 
 **Compilation:**
 
-*Note:* I do all development on Ubuntu 14. Other linux environments should work just fine. I cannot get the code to compile on Mac OS X, and I have not tried Windows.
+*Note:* I do all development on Ubuntu 16.04. Other Linux environments should work just fine. I cannot get the code to compile on Mac OS X, and I have not tried Windows.
 
   1. Make sure `binutils` and `gcc` are installed.
   
@@ -33,13 +33,15 @@ MosquitOS is a tiny x86_64 UEFI-based operating system built from scratch.
 
   1. Install [VirtualBox](https://www.virtualbox.org/).
   
-  2. Create a new virtual machine with type 'Other' and version 'Other/Unknown (64-bit)'. You do not need to make a hard drive for this VM.
+  2. Create a new virtual machine with type 'Other' and version 'Other/Unknown (64-bit)'.
   
   3. Highlight the new virtual machine. Go to Settings->System and check 'Enable EFI' under Extended Features.
   
   4. Create a new FAT-16 formatted CD-image (on Mac OS X this can be done in Disk Utility) and copy `build/bootloader` that you compiled earlier into a file called `/EFI/BOOT/BOOTx64.EFI` on the disk image. Additionally, copy `kernel` into the root directory of the disk image.
   
-  5. Attach the disk image as a virtual CD drive to the VM.
+  5. Attach the disk image as a virtual CD to the VM with a SATA controller.
+  
+  6. Add a virtual HD under the same SATA controller. You can delete the existing IDE controller.
 
   6. Boot the VM, it should boot off of the CD image and into MosquitOS.
   
