@@ -31,13 +31,57 @@ int memcmp(const void *s1, const void *s2, size_t n) {
 
 size_t strlen(const char *s) {
   size_t length = 0;
-  while (s[length] != 0) length++;
+  while (s[length] != '\0') length++;
 
   return length;
 }
 
+char * strchr(const char *s, int c) {
+  while (*s != (char)c) {
+    if (*s == '\0') {
+      return NULL;
+    }
+    s++;
+  }
+
+  return (char *)s;
+}
+
+char * strrchr(const char *s, int c) {
+  size_t index = strlen(s);
+  while (1) {
+    if (s[index] == c) return (char *)&s[index];
+    if (index == 0) return NULL;
+    index--;
+  }
+
+  return NULL;
+}
+
+char * strchrnul(const char *s, int c) {
+  while (*s != (char)c && *s != '\0') {
+    s++;
+  }
+
+  return (char *)s;
+}
+
 int strcmp(const char *s1, const char *s2) {
   while (*s1 == *s2 && *s1 != '\0' && *s2 != '\0') {
+    ++s1;
+    ++s2;
+  }
+
+  return *s1 - *s2;
+}
+
+int strncmp(const char *s1, const char *s2, size_t num) {
+  if (num == 0) return 0;
+
+  size_t i = 0;
+  while (*s1 == *s2 && *s1 != '\0' && *s2 != '\0') {
+    if (++i == num) return 0;
+
     ++s1;
     ++s2;
   }
@@ -54,7 +98,7 @@ size_t strlcpy(char * restrict dst, const char * restrict src, size_t size) {
     ++chars_read;
   }
 
-  dst[size-1] = '\0';
+  dst[chars_read] = '\0';
 
   return chars_read;
 }
