@@ -2,6 +2,7 @@
 #include <kernel/drivers/pci_drivers/ahci/ahci_internal.h>
 #include <kernel/drivers/pci_drivers/ahci/sata.h>
 #include <kernel/drivers/pci_drivers/ahci/satapi.h>
+#include <kernel/drivers/pci_drivers/pci_device_driver.h>
 #include <kernel/drivers/text_output.h>
 #include <kernel/drivers/pci.h>
 #include <kernel/drivers/interrupt.h>
