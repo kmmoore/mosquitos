@@ -1,45 +1,45 @@
+#include <common/mem_util.h>
+#include <kernel/datastructures/list.h>
+#include <kernel/drivers/text_output.h>
 #include <kernel/memory/kmalloc.h>
 #include <kernel/memory/virtual_memory.h>
 #include <kernel/util.h>
-#include <kernel/datastructures/list.h>
-#include <kernel/drivers/text_output.h>
-#include <common/mem_util.h>
 
 typedef struct _FreeBlockHeader {
-  uint64_t size:63;
-  uint64_t free:1;
+  uint64_t size : 63;
+  uint64_t free : 1;
   ListEntry entry;
 } FreeBlockHeader;
 
 typedef struct _BlockHeader {
-  uint64_t size:63;
-  uint64_t free:1;
+  uint64_t size : 63;
+  uint64_t free : 1;
   uint8_t user_data[];
 } BlockHeader;
 
 typedef struct _BlockFooter {
-  uint64_t size:63;
-  uint64_t free:1;
+  uint64_t size : 63;
+  uint64_t free : 1;
 } BlockFooter;
 
-
-static struct {
-  List free_list;
-} kmalloc_data;
+static struct { List free_list; } kmalloc_data;
 
 void print_block(BlockHeader *header);
 void print_free_list();
 
 uint8_t *block_end(BlockHeader *header) {
-  return (uint8_t *)header + sizeof(BlockHeader) + header->size + sizeof(BlockFooter);
+  return (uint8_t *)header + sizeof(BlockHeader) + header->size +
+         sizeof(BlockFooter);
 }
 
 BlockFooter *block_footer(BlockHeader *header) {
-  return (BlockFooter *)((uint8_t *)header + sizeof(BlockHeader) + header->size);
+  return (BlockFooter *)((uint8_t *)header + sizeof(BlockHeader) +
+                         header->size);
 }
 
 BlockHeader *block_header(BlockFooter *footer) {
-  return (BlockHeader *)((uint8_t *)footer - footer->size - sizeof(BlockHeader));
+  return (BlockHeader *)((uint8_t *)footer - footer->size -
+                         sizeof(BlockHeader));
 }
 
 BlockHeader *previous_block_header(BlockHeader *header) {
@@ -50,14 +50,19 @@ BlockHeader *next_block_header(BlockHeader *header) {
   return (BlockHeader *)block_end(header);
 }
 
-FreeBlockHeader * kmalloc_increase_allocation(size_t num_bytes) {
-  // Request more pages from the OS and setup sentinel regions
-  // Sentinel regions keep us from trying to coalesce with memory that we don't own
-  num_bytes += 3 * sizeof(BlockHeader) + 3 * sizeof(BlockFooter); // Add extra space for sentinel blocks and block header/footers
+FreeBlockHeader *kmalloc_increase_allocation(size_t num_bytes) {
+  // Request more pages from the OS and setup sentinel regions.
+  // Sentinel regions keep us from trying to coalesce with memory that we don't
+  // own.
+  num_bytes += 3 * sizeof(BlockHeader) +
+               3 * sizeof(BlockFooter);  // Add extra space for sentinel blocks
+                                         // and block header/footers
   // Amortize small requests
-  if (num_bytes < kKmallocMinIncreaseBytes) num_bytes = kKmallocMinIncreaseBytes;
+  if (num_bytes < kKmallocMinIncreaseBytes)
+    num_bytes = kKmallocMinIncreaseBytes;
 
-  size_t num_pages = ((num_bytes - 1) >> 12) + 1; // Round up to the nearest page
+  size_t num_pages =
+      ((num_bytes - 1) / VM_PAGE_SIZE) + 1;  // Round up to the nearest page
   assert(num_pages * VM_PAGE_SIZE >= num_bytes);
   num_bytes = num_pages * VM_PAGE_SIZE;
 
@@ -73,7 +78,9 @@ FreeBlockHeader * kmalloc_increase_allocation(size_t num_bytes) {
   front_sentinel_footer->free = 0;
 
   // Place zero-length sentinel at the end of the new chunk
-  BlockHeader *back_sentinel_header = (BlockHeader *)(new_chunk + num_bytes - sizeof(BlockHeader) - sizeof(BlockFooter));
+  BlockHeader *back_sentinel_header =
+      (BlockHeader *)(new_chunk + num_bytes - sizeof(BlockHeader) -
+                      sizeof(BlockFooter));
   back_sentinel_header->size = 0;
   back_sentinel_header->free = 0;
   BlockFooter *back_sentinel_footer = block_footer(back_sentinel_header);
@@ -81,8 +88,11 @@ FreeBlockHeader * kmalloc_increase_allocation(size_t num_bytes) {
   back_sentinel_footer->free = 0;
 
   // Set up middle chunk as free, add it to the free list
-  FreeBlockHeader *free_chunk = (FreeBlockHeader *)next_block_header(front_sentinel_header);
-  free_chunk->size = num_bytes - 3*sizeof(BlockHeader) - 3*sizeof(BlockFooter); // Remove size of header/footer and sentinels
+  FreeBlockHeader *free_chunk =
+      (FreeBlockHeader *)next_block_header(front_sentinel_header);
+  free_chunk->size =
+      num_bytes - 3 * sizeof(BlockHeader) -
+      3 * sizeof(BlockFooter);  // Remove size of header/footer and sentinels
   free_chunk->free = 1;
 
   BlockFooter *footer = block_footer((BlockHeader *)free_chunk);
@@ -98,20 +108,21 @@ void kmalloc_init() {
   REQUIRE_MODULE("virtual_memory");
 
   list_init(&kmalloc_data.free_list);
-  kmalloc_increase_allocation(0); // Increase by the minimum amount
+  kmalloc_increase_allocation(0);  // Increase by the minimum amount
 
   REGISTER_MODULE("kmalloc");
 }
 
-void * kmalloc(size_t alloc_size) {
+void *kmalloc(size_t alloc_size) {
   if (alloc_size < 16) alloc_size = 16;
-  alloc_size = ((alloc_size - 1) | 0xf) + 1; // Round up `alloc_size` to the nearest multiple of 16 bytes
+  alloc_size = ((alloc_size - 1) | 0xf) +
+               1;  // Round up `alloc_size` to the nearest multiple of 16 bytes
   // TODO: I think the returned pointers have to be aligned to 64 bytes
 
   // Find the best fit in the free list
   ListEntry *current = list_head(&kmalloc_data.free_list);
   FreeBlockHeader *chosen_header = NULL;
-  while(current) {
+  while (current) {
     FreeBlockHeader *header = container_of(current, FreeBlockHeader, entry);
 
     if (header->size >= alloc_size) {
@@ -129,12 +140,15 @@ void * kmalloc(size_t alloc_size) {
     if (!chosen_header) return NULL;
   }
 
-  // Amount of space necessary to make a new block with `alloc_size` available bytes
-  size_t new_block_size = alloc_size + sizeof(BlockHeader) + sizeof(BlockFooter);
+  // Amount of space necessary to make a new block with `alloc_size` available
+  // bytes
+  size_t new_block_size =
+      alloc_size + sizeof(BlockHeader) + sizeof(BlockFooter);
 
   if (chosen_header->size > new_block_size) {
     // Pull the new block off of the end of the big chunk
-    BlockHeader *ret = (BlockHeader *)(block_end((BlockHeader *)chosen_header) - new_block_size);
+    BlockHeader *ret = (BlockHeader *)(block_end((BlockHeader *)chosen_header) -
+                                       new_block_size);
     ret->size = alloc_size;
     ret->free = 0;
 
@@ -147,10 +161,10 @@ void * kmalloc(size_t alloc_size) {
     BlockFooter *new_footer = block_footer((BlockHeader *)chosen_header);
     new_footer->size = chosen_header->size;
     new_footer->free = 1;
-    
+
     return ret->user_data;
   } else {
-    // Remove full block from the free-list 
+    // Remove full block from the free-list
     BlockHeader *ret = (BlockHeader *)chosen_header;
     ret->free = 0;
     block_footer(ret)->free = 0;
@@ -161,7 +175,7 @@ void * kmalloc(size_t alloc_size) {
   }
 }
 
-void * kcalloc(size_t count, size_t size) {
+void *kcalloc(size_t count, size_t size) {
   void *ret = kmalloc(count * size);
   memset(ret, 0, count * size);
   return ret;
@@ -177,12 +191,14 @@ void kfree(void *pointer) {
 
   if (previous_block->free) {
     // Coalesce with the previous block
-    previous_block->size += header->size + sizeof(BlockHeader) + sizeof(BlockFooter);
+    previous_block->size +=
+        header->size + sizeof(BlockHeader) + sizeof(BlockFooter);
     BlockFooter *previous_block_footer = block_footer(previous_block);
     previous_block_footer->size = previous_block->size;
     previous_block_footer->free = 1;
 
-    // We are now a part of the previous block, update the pointer so we can try to coalesce right
+    // We are now a part of the previous block, update the pointer so we can try
+    // to coalesce right
     header = previous_block;
   } else {
     // Since we didn't coalesce left, we need to add this block to the free list
@@ -193,8 +209,8 @@ void kfree(void *pointer) {
     list_push_front(&kmalloc_data.free_list, &free_block_header->entry);
   }
 
-  // Attempt to coalesce right, at this point `header` is a FreeBlockHeader that is on the free list
-  // (either from coalescing left, or from adding it)
+  // Attempt to coalesce right, at this point `header` is a FreeBlockHeader that
+  // is on the free list (either from coalescing left, or from adding it)
 
   BlockHeader *next_block = next_block_header(header);
 
@@ -203,17 +219,19 @@ void kfree(void *pointer) {
     FreeBlockHeader *next_freeblock = (FreeBlockHeader *)next_block;
     list_remove(&kmalloc_data.free_list, &next_freeblock->entry);
 
-    header->size += next_block->size + sizeof(BlockHeader) + sizeof(BlockFooter);
+    header->size +=
+        next_block->size + sizeof(BlockHeader) + sizeof(BlockFooter);
     BlockFooter *footer = block_footer(header);
     footer->size = header->size;
     footer->free = 1;
   }
 }
 
-
 void print_block(BlockHeader *header) {
   BlockFooter *footer = block_footer(header);
-  text_output_printf("[%p] HSize: %lld, HFree: %d, FSize: %lld, FFree: %d\n", header, header->size, header->free, footer->size, footer->free);
+  text_output_printf("[%p] HSize: %lld, HFree: %d, FSize: %lld, FFree: %d\n",
+                     header, header->size, header->free, footer->size,
+                     footer->free);
   assert(header->size == footer->size);
   assert(header->free == footer->free);
 }
@@ -222,7 +240,7 @@ void print_free_list() {
   text_output_printf("kmalloc() Free List:\n");
 
   ListEntry *current = list_head(&kmalloc_data.free_list);
-  while(current) {
+  while (current) {
     FreeBlockHeader *header = container_of(current, FreeBlockHeader, entry);
     print_block((BlockHeader *)header);
 

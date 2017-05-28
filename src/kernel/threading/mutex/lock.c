@@ -1,5 +1,6 @@
 #include <kernel/threading/mutex/lock.h>
 
+// TODO: Add memory barriers
 void lock_init(Lock *lock) {
   semaphore_init(&lock->sema, 1);
 }

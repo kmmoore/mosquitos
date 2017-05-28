@@ -1,11 +1,13 @@
 #include <efi.h>
 #include <efilib.h>
 
+#include <common/math.h>
+
 #include <kernel/memory/virtual_memory.h>
 #include <kernel/util.h>
 
-#include <kernel/drivers/text_output.h>
 #include <kernel/datastructures/list.h>
+#include <kernel/drivers/text_output.h>
 #include <kernel/memory/kmalloc.h>
 #include <kernel/threading/mutex/lock.h>
 
@@ -18,7 +20,8 @@ static struct {
   uint64_t num_free_pages;
   List free_list;
 
-  SpinLock spinlock; // Use a spinlock here, since this is used before the scheduler is initialized
+  SpinLock spinlock;  // Use a spinlock here, since this is used before the
+                      // scheduler is initialized
 
 } virtual_memory_data;
 
@@ -28,17 +31,17 @@ typedef struct {
 } FreeBlock;
 
 typedef struct {
-  uint64_t present:1, writable:1, user_accessable:1;
-  uint64_t pwt:1, pcd:1;
-  uint64_t accessed:1, dirty:1;
-  uint64_t page_size:1, global:1;
-  
-  uint64_t reserved:3;
+  uint64_t present : 1, writable : 1, user_accessable : 1;
+  uint64_t pwt : 1, pcd : 1;
+  uint64_t accessed : 1, dirty : 1;
+  uint64_t page_size : 1, global : 1;
 
-  uint64_t address:40;
+  uint64_t reserved : 3;
 
-  uint64_t ignored:11;
-  uint64_t execute_disabled:1;
+  uint64_t address : 40;
+
+  uint64_t ignored : 11;
+  uint64_t execute_disabled : 1;
 } PageTableEntry;
 
 #define PTES_PER_PAGE (EFI_PAGE_SIZE / sizeof(PageTableEntry))
@@ -53,7 +56,8 @@ static inline uint64_t physical_end(FreeBlock *block) {
 
 static void vm_add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
   // We can do this because we have identity mapping in the kernel
-  // TODO: Figure out if there is a way to directly access physical memory/if this is necessary
+  // TODO: Figure out if there is a way to directly access physical memory/if
+  // this is necessary
 
   // Search to determine where this block should be inserted
   FreeBlock *current = (FreeBlock *)list_head(&virtual_memory_data.free_list);
@@ -67,12 +71,13 @@ static void vm_add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
     // We can combine
     current->num_pages += num_pages;
   } else {
-    // Insert new chunk 
+    // Insert new chunk
     FreeBlock *new_block = (FreeBlock *)physical_address;
     new_block->num_pages = num_pages;
 
     if (current) {
-      list_insert_before(&virtual_memory_data.free_list, &current->entry, &new_block->entry);
+      list_insert_before(&virtual_memory_data.free_list, &current->entry,
+                         &new_block->entry);
     } else {
       // We couldn't find a block to insert this before
       list_push_back(&virtual_memory_data.free_list, &new_block->entry);
@@ -90,27 +95,36 @@ static void vm_add_to_free_list(uint64_t physical_address, uint64_t num_pages) {
 }
 
 static void setup_free_memory() {
-  int num_entries = virtual_memory_data.mem_map_size / virtual_memory_data.mem_map_descriptor_size;
+  const int num_entries = virtual_memory_data.mem_map_size /
+                          virtual_memory_data.mem_map_descriptor_size;
 
   for (int i = 0; i < num_entries; ++i) {
-    EFI_MEMORY_DESCRIPTOR *descriptor = (EFI_MEMORY_DESCRIPTOR *)(virtual_memory_data.memory_map + i * virtual_memory_data.mem_map_descriptor_size);
+    EFI_MEMORY_DESCRIPTOR *descriptor =
+        (EFI_MEMORY_DESCRIPTOR
+             *)(virtual_memory_data.memory_map +
+                i * virtual_memory_data.mem_map_descriptor_size);
 
-    uint64_t physical_end = descriptor->PhysicalStart + descriptor->NumberOfPages * EFI_PAGE_SIZE;
+    const uint64_t physical_end =
+        descriptor->PhysicalStart + descriptor->NumberOfPages * EFI_PAGE_SIZE;
 
     // If the type of the chunk is usable now, add it to the free list
     EFI_MEMORY_TYPE type = descriptor->Type;
     if (type == EfiLoaderCode || type == EfiBootServicesCode ||
-        type == EfiBootServicesData || type == EfiConventionalMemory) { // Types of free memory after boot services are exited
+        type == EfiBootServicesData ||
+        type == EfiConventionalMemory) {  // Types of free memory after boot
+                                          // services are exited
       if (descriptor->PhysicalStart < 0x100000) {
-        continue; // Low memory is not actually available
-        // TODO: Fix this, some of this memory (i.e., page 1) is used for things that we don't know about
+        continue;  // Low memory is not actually available
+        // TODO: Fix this, some of this memory (i.e., page 1) is used for things
+        // that we don't know about
       }
       vm_add_to_free_list(descriptor->PhysicalStart, descriptor->NumberOfPages);
       virtual_memory_data.num_free_pages += descriptor->NumberOfPages;
     }
 
     // Keep track of the highest physical address we've seen so far
-    if (physical_end > virtual_memory_data.physical_end) virtual_memory_data.physical_end = physical_end;
+    if (physical_end > virtual_memory_data.physical_end)
+      virtual_memory_data.physical_end = physical_end;
   }
 }
 
@@ -119,27 +133,27 @@ void vm_print_free_list() {
 
   FreeBlock *current = (FreeBlock *)list_head(&virtual_memory_data.free_list);
   while (current) {
-    text_output_printf("  Address: 0x%x, num_pages: %d\n", current, current->num_pages);
+    text_output_printf("  Address: 0x%x, num_pages: %d\n", current,
+                       current->num_pages);
     current = (FreeBlock *)list_next(&current->entry);
   }
 }
 
-PageTableEntry * follow_pte(PageTableEntry entry) {
+PageTableEntry *follow_pte(PageTableEntry entry) {
   return (PageTableEntry *)(intptr_t)(entry.address << 12);
 }
 
-void vm_write_cr3(uint64_t cr3) {
-  __asm__ ("movq %0, %%cr3": : "r" (cr3));
-}
+void vm_write_cr3(uint64_t cr3) { __asm__("movq %0, %%cr3" : : "r"(cr3)); }
 
 uint64_t vm_read_cr3() {
   uint64_t cr3;
-  __asm__ ("movq %%cr3, %0": "=r" (cr3));
+  __asm__("movq %%cr3, %0" : "=r"(cr3));
 
   return cr3;
 }
 
-void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descriptor_size) {
+void vm_init(uint8_t *memory_map, uint64_t mem_map_size,
+             uint64_t mem_map_descriptor_size) {
   assert(sizeof(FreeBlock) < VM_PAGE_SIZE);
 
   virtual_memory_data.memory_map = memory_map;
@@ -159,11 +173,9 @@ void vm_init(uint8_t *memory_map, uint64_t mem_map_size, uint64_t mem_map_descri
   kmalloc_init();
 }
 
-uintptr_t vm_max_physical_address() {
-  return virtual_memory_data.physical_end;
-}
+uintptr_t vm_max_physical_address() { return virtual_memory_data.physical_end; }
 
-void * vm_palloc(uint64_t num_pages) {
+void *vm_palloc(uint64_t num_pages) {
   spinlock_acquire(&virtual_memory_data.spinlock);
 
   FreeBlock *chunk = (FreeBlock *)list_head(&virtual_memory_data.free_list);
@@ -174,12 +186,14 @@ void * vm_palloc(uint64_t num_pages) {
   }
 
   if (chunk == NULL || chunk->num_pages < num_pages) {
-    return NULL; // We can't fulfill the request
+    return NULL;  // We can't fulfill the request
   }
 
-  // Pull off and return the last pages of the chunk (since this allows us to simply
-  // subtract the number of pages from chunk->num_pages instead of moving the chunk)
-  void *last_pages = ((uint8_t *)chunk) + (chunk->num_pages - num_pages) * VM_PAGE_SIZE;
+  // Pull off and return the last pages of the chunk (since this allows us to
+  // simply subtract the number of pages from chunk->num_pages instead of moving
+  // the chunk).
+  void *last_pages =
+      ((uint8_t *)chunk) + (chunk->num_pages - num_pages) * VM_PAGE_SIZE;
 
   if (chunk->num_pages == num_pages) {
     list_remove(&virtual_memory_data.free_list, &chunk->entry);
@@ -192,27 +206,28 @@ void * vm_palloc(uint64_t num_pages) {
   return last_pages;
 }
 
-void * vm_pmap(uint64_t virtual_address, uint64_t num_pages) {
+void *vm_pmap(uint64_t virtual_address, uint64_t num_pages) {
   spinlock_acquire(&virtual_memory_data.spinlock);
 
-  virtual_address = (virtual_address & BOTTOM_N_BITS_OFF(VM_PAGE_BIT_SIZE)); // Round down `virtual_address` to the nearest page
-  text_output_printf("Trying to map: 0x%x\n", virtual_address);
+  virtual_address =
+      (virtual_address &
+       BOTTOM_N_BITS_OFF(VM_PAGE_BIT_SIZE));  // Round down `virtual_address` to
+                                              // the nearest page
 
   FreeBlock *chunk = (FreeBlock *)list_head(&virtual_memory_data.free_list);
 
   while (chunk) {
     if ((uint64_t)chunk <= virtual_address &&
-        ((uint64_t)chunk + VM_PAGE_SIZE * chunk->num_pages) >= (virtual_address + VM_PAGE_SIZE * num_pages)) {
+        ((uint64_t)chunk + VM_PAGE_SIZE * chunk->num_pages) >=
+            (virtual_address + VM_PAGE_SIZE * num_pages)) {
       break;
     }
     chunk = (FreeBlock *)list_next(&chunk->entry);
   }
 
   if (chunk == NULL) {
-    return NULL; // We can't fulfill the request
+    return NULL;  // We can't fulfill the request
   }
-
-  text_output_printf("Found chunk: 0x%x\n", chunk);
 
   void *pages = (void *)virtual_address;
   uint64_t chunk_end = ((uint64_t)chunk + VM_PAGE_SIZE * chunk->num_pages);
@@ -226,19 +241,17 @@ void * vm_pmap(uint64_t virtual_address, uint64_t num_pages) {
     chunk->num_pages -= num_pages;
   } else {
     // We want a chunk from the start/middle
-    // text_output_printf("chunk from middle of 0x%x...\n", chunk);
     FreeBlock *new_block = (FreeBlock *)(requested_end);
     new_block->num_pages = (chunk_end - requested_end) / VM_PAGE_SIZE;
     chunk->num_pages = (virtual_address - (uint64_t)chunk) / VM_PAGE_SIZE;
-    // text_output_printf("Creating new block at 0x%x with size: %d pages\n", new_block, new_block->num_pages);
-    list_insert_after(&virtual_memory_data.free_list, &chunk->entry, &new_block->entry);
+    list_insert_after(&virtual_memory_data.free_list, &chunk->entry,
+                      &new_block->entry);
   }
 
   spinlock_release(&virtual_memory_data.spinlock);
 
   return pages;
 }
-
 
 void vm_pfree(void *physical_address, uint64_t num_pages) {
   spinlock_acquire(&virtual_memory_data.spinlock);
@@ -252,6 +265,4 @@ void vm_map(uint64_t physical_address, void *virtual_address, uint64_t flags) {
   (void)flags;
 }
 
-void vm_unmap(void *virtual_address) {
-  (void)virtual_address;
-}
+void vm_unmap(void *virtual_address) { (void)virtual_address; }

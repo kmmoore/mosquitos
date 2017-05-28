@@ -23,8 +23,8 @@ ListEntry *list_tail(List *l);
 
 #define ListEntry_cast(entry, type) ((type)(ListEntry_value(entry)))
 
-uint64_t ListEntry_value(ListEntry *entry);
-void ListEntry_set_value(ListEntry *entry, uint64_t value);
+uint64_t list_entry_value(ListEntry *entry);
+void list_entry_set_value(ListEntry *entry, uint64_t value);
 ListEntry *list_next(ListEntry *entry);
 ListEntry *list_prev(ListEntry *entry);
 
