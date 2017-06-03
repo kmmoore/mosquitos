@@ -530,4 +530,6 @@ void ahci_register() {
                             .isr = ahci_isr};
 
   pci_register_device_driver(driver);
+
+  REGISTER_MODULE("ahci");
 }

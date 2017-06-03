@@ -50,8 +50,8 @@ typedef FilesystemError (*FilesystemWriteBlocks)(Filesystem *filesystem,
                                                  uint64_t num_blocks,
                                                  const void *blocks);
 
-typedef FilesystemError (*FilesystemInitFunction)(Filesystem *filesystem,
-                                                  void *initialization_data);
+typedef FilesystemError (*FilesystemInitFunction)(
+    Filesystem *filesystem, const void *initialization_data);
 typedef FilesystemError (*FilesystemFormatFunction)(
     Filesystem *filesystem, const char const *volume_name,
     uint64_t size_blocks);

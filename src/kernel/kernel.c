@@ -15,6 +15,7 @@
 #include <kernel/drivers/text_output.h>
 
 #include <kernel/drivers/filesystem.h>
+#include <kernel/drivers/filesystem_tree.h>
 #include <kernel/drivers/filesystems/mfs.h>
 
 #include <kernel/drivers/acpi.h>
@@ -135,80 +136,8 @@ void *kernel_main_thread() {
   mfs_in_memory_register();
   mfs_sata_register();
 
-  const int num_blocks = 1024;
-  FilesystemBlock *blocks = kmalloc(num_blocks * sizeof(FilesystemBlock));
-  assert(blocks);
-
-  MFSInMemoryInitData initialization_data = {.blocks = blocks};
-  Filesystem mfs;
-  bool success = filesystem_create("MFS_M", &mfs);
-  assert(success);
-  FilesystemError error = mfs.init(&mfs, &initialization_data);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in init(): %i (%s)\n", error, filesystem_error_string(error));
-  }
-
-  error = mfs.format(&mfs, "Test In-Memory Volume", num_blocks);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in format(): %i (%s)\n", error,
-          filesystem_error_string(error));
-  }
-  FilesystemInfo info;
-  error = mfs.info(&mfs, &info);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in info(): %i (%s)\n", error, filesystem_error_string(error));
-  }
-  text_output_printf("Formatted: %i, # blocks: %lu, name: %s\n", info.formatted,
-                     info.size_blocks, info.volume_name);
-
-  Directory *root_directory;
-  error = mfs.open_directory(&mfs, "/", &root_directory);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in open_directory(): %i (%s)\n", error,
-          filesystem_error_string(error));
-  }
-
-  text_output_printf("Creating directories...\n");
-  Directory *test_dir;
-  error = mfs.create_directory(&mfs, "test", root_directory, &test_dir);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in create_directory(): %i (%s)\n", error,
-          filesystem_error_string(error));
-  }
-
-  Directory *subdir;
-  error = mfs.create_directory(&mfs, "subdir", test_dir, &subdir);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in create_directory(): %i (%s)\n", error,
-          filesystem_error_string(error));
-  }
-
-  text_output_printf("Creating file...\n");
-  File *test_file = NULL;
-  error = mfs.create_file(&mfs, subdir, "test_file", &test_file);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in create_file(): %i (%s)\n", error,
-          filesystem_error_string(error));
-  }
-
-  text_output_printf("Closing directories...\n");
-  error = mfs.close_directory(&mfs, subdir);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in close_directory(): %i (%s)\n", error,
-          filesystem_error_string(error));
-  }
-
-  error = mfs.close_directory(&mfs, test_dir);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in close_directory(): %i (%s)\n", error,
-          filesystem_error_string(error));
-  }
-
-  error = mfs.close_directory(&mfs, root_directory);
-  if (error != FS_ERROR_NONE) {
-    panic("Error in close_directory(): %i (%s)\n", error,
-          filesystem_error_string(error));
-  }
+  // Enumerate filesystems
+  filesystem_tree_init();
 
   text_output_set_foreground_color(0x0000FF00);
   text_output_printf(

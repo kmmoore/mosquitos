@@ -835,13 +835,14 @@ static FilesystemError mfs_init(Filesystem *filesystem) {
   return FS_ERROR_NONE;
 }
 
-static FilesystemError mfs_init_in_memory(Filesystem *filesystem,
-                                          void *initialization_data) {
+static FilesystemError mfs_init_in_memory(
+    Filesystem *filesystem, const void *const initialization_data) {
   if (filesystem == NULL || initialization_data == NULL) {
     return FS_ERROR_INVALID_PARAMETERS;
   }
 
-  MFSInMemoryInitData *init = (MFSInMemoryInitData *)initialization_data;
+  const MFSInMemoryInitData *const init =
+      (MFSInMemoryInitData *)initialization_data;
   if (init->blocks == NULL) return FS_ERROR_INVALID_PARAMETERS;
 
   // TODO: Free this somewhere
@@ -854,12 +855,12 @@ static FilesystemError mfs_init_in_memory(Filesystem *filesystem,
 }
 
 static FilesystemError mfs_init_sata(Filesystem *filesystem,
-                                     void *initialization_data) {
+                                     const void *const initialization_data) {
   if (filesystem == NULL || initialization_data == NULL) {
     return FS_ERROR_INVALID_PARAMETERS;
   }
 
-  MFSSATAInitData *init = (MFSSATAInitData *)initialization_data;
+  const MFSSATAInitData *const init = (MFSSATAInitData *)initialization_data;
   // TODO: Free this somewhere
   MFSData *data = kcalloc(1, sizeof(MFSData));
   data->device.sata.driver = init->driver;
