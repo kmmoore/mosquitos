@@ -107,7 +107,6 @@ void *keyboard_echo_thread() {
     }
   }
 
-  thread_exit();
   return NULL;
 }
 
@@ -216,6 +215,5 @@ void *kernel_main_thread() {
       "\nKernel initialization complete. Exiting kernel_main_thread.\n\n");
   text_output_set_foreground_color(0x00FFFFFF);
 
-  thread_exit();  // TODO: Maybe make returning do the same thing?
   return NULL;
 }
