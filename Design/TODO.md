@@ -1,5 +1,6 @@
 [ ] Random number generator
 [ ] Filesystem
+[ ] Block cache
 [ ] Dynamic loader
 [ ] Load kernel libraries from in-memory filesystem
 [X] Make returning from a thread call thread_exit

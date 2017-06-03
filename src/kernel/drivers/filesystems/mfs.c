@@ -2,6 +2,7 @@
 #include <common/mem_util.h>
 #include <kernel/datastructures/list.h>
 #include <kernel/drivers/filesystems/mfs.h>
+#include <kernel/drivers/pci_drivers/ahci/ahci.h>
 #include <kernel/drivers/text_output.h>
 #include <kernel/memory/kmalloc.h>
 
@@ -32,7 +33,9 @@ typedef struct {
 
   union {
     struct {
+      PCIDeviceDriver *driver;
       int device_id;
+      uint32_t sector_size;
     } sata;
 
     struct {
@@ -710,19 +713,57 @@ static void store_metadata(Filesystem *filesystem,
 }
 
 WARN_UNUSED
-static FilesystemError sata_read_blocks(UNUSED Filesystem *filesystem,
-                                        UNUSED uint64_t block_start,
-                                        UNUSED uint64_t num_blocks,
-                                        UNUSED void *blocks) {
-  return FS_ERROR_COMMAND_NOT_IMPLEMENTED;
+static FilesystemError sata_read_blocks(Filesystem *filesystem,
+                                        uint64_t block_start,
+                                        uint64_t num_blocks, void *blocks) {
+  MFSData *data = (MFSData *)filesystem->data;
+  const uint32_t sector_size = data->device.sata.sector_size;
+  assert(FILESYSTEM_BLOCK_SIZE_BYTES % sector_size == 0);
+  if (data->device.sata.driver == NULL) {
+    return FS_ERROR_DEVICE_ERROR;
+  }
+
+  if (block_start + num_blocks > data->size_blocks) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  struct AHCIReadCommand read_command = {
+      .device_id = data->device.sata.device_id,
+      .address = block_start,
+      .block_count = num_blocks * FILESYSTEM_BLOCK_SIZE_BYTES / sector_size};
+  const PCIDeviceDriverError error = data->device.sata.driver->execute_command(
+      data->device.sata.driver, AHCI_COMMAND_READ, &read_command,
+      sizeof(read_command), blocks, num_blocks * FILESYSTEM_BLOCK_SIZE_BYTES);
+
+  return error == PCI_ERROR_NONE ? FS_ERROR_NONE : FS_ERROR_DEVICE_ERROR;
 }
 
 WARN_UNUSED
-static FilesystemError sata_write_blocks(UNUSED Filesystem *filesystem,
-                                         UNUSED uint64_t block_start,
-                                         UNUSED uint64_t num_blocks,
-                                         UNUSED const void *blocks) {
-  return FS_ERROR_COMMAND_NOT_IMPLEMENTED;
+static FilesystemError sata_write_blocks(Filesystem *filesystem,
+                                         uint64_t block_start,
+                                         uint64_t num_blocks,
+                                         const void *blocks) {
+  MFSData *data = (MFSData *)filesystem->data;
+  const uint32_t sector_size = data->device.sata.sector_size;
+  assert(FILESYSTEM_BLOCK_SIZE_BYTES % sector_size == 0);
+  if (data->device.sata.driver == NULL) {
+    return FS_ERROR_DEVICE_ERROR;
+  }
+
+  if (block_start + num_blocks > data->size_blocks) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+
+  struct AHCIWriteCommand write_command = {
+      .device_id = data->device.sata.device_id,
+      .address = block_start,
+      .block_count = num_blocks * FILESYSTEM_BLOCK_SIZE_BYTES / sector_size};
+  const PCIDeviceDriverError error = data->device.sata.driver->execute_command(
+      data->device.sata.driver, AHCI_COMMAND_WRITE, &write_command,
+      sizeof(write_command), (void *)blocks,
+      num_blocks * FILESYSTEM_BLOCK_SIZE_BYTES);
+
+  return error == PCI_ERROR_NONE ? FS_ERROR_NONE : FS_ERROR_DEVICE_ERROR;
 }
 
 WARN_UNUSED
@@ -789,7 +830,6 @@ static FilesystemError mfs_init(Filesystem *filesystem) {
     store_metadata(filesystem, metadata);
   } else {
     data->formatted = false;
-    data->size_blocks = 0;
   }
 
   return FS_ERROR_NONE;
@@ -807,8 +847,8 @@ static FilesystemError mfs_init_in_memory(Filesystem *filesystem,
   // TODO: Free this somewhere
   MFSData *data = kcalloc(1, sizeof(MFSData));
   data->device.in_memory.blocks = init->blocks;
-  data->size_blocks =
-      1;  // The passed in buffer must be at least 1 block in size
+  data->size_blocks = init->num_blocks;
+
   filesystem->data = data;
   return mfs_init(filesystem);
 }
@@ -822,7 +862,24 @@ static FilesystemError mfs_init_sata(Filesystem *filesystem,
   MFSSATAInitData *init = (MFSSATAInitData *)initialization_data;
   // TODO: Free this somewhere
   MFSData *data = kcalloc(1, sizeof(MFSData));
+  data->device.sata.driver = init->driver;
   data->device.sata.device_id = init->device_id;
+
+  const struct AHCIDeviceInfoCommand info_request = {.device_id =
+                                                         init->device_id};
+  struct AHCIDeviceInfo info;
+  const PCIDeviceDriverError ahci_error = init->driver->execute_command(
+      init->driver, AHCI_COMMAND_DEVICE_INFO, &info_request,
+      sizeof(info_request), &info, sizeof(info));
+  if (ahci_error != PCI_ERROR_NONE) return FS_ERROR_DEVICE_ERROR;
+  if (info.device_type != AHCI_DEVICE_SATA) return FS_ERROR_INVALID_PARAMETERS;
+  if (FILESYSTEM_BLOCK_SIZE_BYTES % info.logical_sector_size != 0) {
+    return FS_ERROR_INVALID_PARAMETERS;
+  }
+  data->device.sata.sector_size = info.logical_sector_size;
+  data->size_blocks =
+      info.num_sectors * info.logical_sector_size / FILESYSTEM_BLOCK_SIZE_BYTES;
+
   filesystem->data = data;
   return mfs_init(filesystem);
 }
