@@ -57,10 +57,16 @@
 .globl scheduler_timer_isr
 scheduler_timer_isr:
   push %rdi
-  
-  mov   (scheduler_data), %rdi # Current thread is first element of scheduler_data struct
-  
+
+  # Current thread is first element of scheduler_data struct
+  mov   (scheduler_data), %rdi
+
+  # Only save the current thread if the pointer is non-NULL
+  test %rdi, %rdi
+  jz no_save
   save_thread
+
+  no_save:
 
   # NOTE: We can do whatever we want to registers now, they are all saved
   # NOTE 2: Theoretically this is true, but empirically it is false
@@ -70,25 +76,8 @@ scheduler_timer_isr:
   call  scheduler_set_next # Set current thread to next thread
 
   # Load new thread
-  mov   (scheduler_data), %rdi # Current thread is first element of scheduler_data struct
-  call  scheduler_load_thread
+  mov   (scheduler_data), %rdi
 
-# Yields the current thread without saving its state
-.globl scheduler_yield_without_saving_isr
-scheduler_yield_without_saving_isr:
-  call  apic_send_eoi
-
-  call  scheduler_set_next # Set current thread to next thread
-
-  # Load new thread
-  mov   (scheduler_data), %rdi # Current thread is first element of scheduler_data struct
-  call  scheduler_load_thread
-
-# This needs to be a function call because it is called from scheduler_start_scheduling()
-# NOTE: Should be called from the end of an interrupt handler
-# instead of iretq
-.globl scheduler_load_thread
-scheduler_load_thread:
   # rdi contains the address of ss in the KernelThread struct
   push  0x00(%rdi) # ss
   push  0x08(%rdi) # rsp

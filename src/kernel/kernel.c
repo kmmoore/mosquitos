@@ -139,10 +139,12 @@ void *kernel_main_thread() {
   // Enumerate filesystems
   filesystem_tree_init();
 
+  lock_acquire(&kernel_lock, -1);
   text_output_set_foreground_color(0x0000FF00);
   text_output_printf(
       "\nKernel initialization complete. Exiting kernel_main_thread.\n\n");
   text_output_set_foreground_color(0x00FFFFFF);
+  lock_release(&kernel_lock);
 
   return NULL;
 }

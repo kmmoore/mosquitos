@@ -15,7 +15,8 @@ void graphics_init(EFI_GRAPHICS_OUTPUT_PROTOCOL *gop) {
 }
 
 void graphics_clear_screen(uint32_t color) {
-  graphics_fill_rect(0, 0, graphics_data.gop->Mode->Info->HorizontalResolution, graphics_data.gop->Mode->Info->VerticalResolution, color);
+  graphics_fill_rect(0, 0, graphics_data.gop->Mode->Info->HorizontalResolution,
+                     graphics_data.gop->Mode->Info->VerticalResolution, color);
 }
 
 void graphics_fill_rect(int x, int y, int w, int h, uint32_t color) {
@@ -27,5 +28,6 @@ void graphics_fill_rect(int x, int y, int w, int h, uint32_t color) {
 }
 
 void graphics_draw_pixel(int x, int y, uint32_t color) {
-  graphics_data.frame_buffer_base[y * graphics_data.pixels_per_line + x] = color;
+  graphics_data.frame_buffer_base[y * graphics_data.pixels_per_line + x] =
+      color;
 }
