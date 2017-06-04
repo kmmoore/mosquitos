@@ -1,24 +1,21 @@
 #include <common/mem_util.h>
-#include <kernel/drivers/interrupt.h>
-#include <kernel/drivers/gdt.h>
 #include <kernel/drivers/apic.h>
+#include <kernel/drivers/gdt.h>
+#include <kernel/drivers/interrupt.h>
 #include <kernel/drivers/text_output.h>
 #include <kernel/util.h>
 
-enum IDTDescriptorType {
-  INTERRUPT_GATE = 0b01110,
-  TRAP_GATE = 0b01111
-};
+enum IDTDescriptorType { INTERRUPT_GATE = 0b01110, TRAP_GATE = 0b01111 };
 
 // Private structs
 static struct IDTDescriptor {
   uint16_t offset_low;
   uint16_t selector;
-  uint8_t  ist_index:3;
-  uint8_t  zero_1:5;
-  uint8_t  type:5;
-  uint8_t  privilege_level:2;
-  uint8_t  present:1;
+  uint8_t ist_index : 3;
+  uint8_t zero_1 : 5;
+  uint8_t type : 5;
+  uint8_t privilege_level : 2;
+  uint8_t present : 1;
   uint16_t offset_middle;
   uint32_t offset_high;
   uint32_t zero_2;
@@ -32,16 +29,17 @@ static struct IDTR {
 static void (*interrupts_handlers[256])(int);
 
 // Helper functions
-static void set_idt_entry(int index, uint64_t isr_address, enum IDTDescriptorType type) {
+static void set_idt_entry(int index, uint64_t isr_address,
+                          enum IDTDescriptorType type) {
   memset(&IDT[index], 0, sizeof(IDT[index]));
-  IDT[index].offset_low    = (isr_address & 0xFFFF);
+  IDT[index].offset_low = (isr_address & 0xFFFF);
   IDT[index].offset_middle = (isr_address >> 16) & 0xFFFF;
-  IDT[index].offset_high   = (isr_address >> 32) & 0xFFFFFFFF;
+  IDT[index].offset_high = (isr_address >> 32) & 0xFFFFFFFF;
 
-  IDT[index].selector    = GDT_KERNEL_CS;
+  IDT[index].selector = GDT_KERNEL_CS;
   // IDT[index].ist_index   = 1;
-  IDT[index].type        = type;
-  IDT[index].present     = 1;
+  IDT[index].type = type;
+  IDT[index].present = 1;
 }
 
 void isr_common(uint64_t num, uint64_t error_code) {
@@ -71,8 +69,7 @@ extern void isr19();
 extern void isr20();
 extern void isr30();
 // TODO: Figure out how to not special case this here
-extern void scheduler_timer_isr(); // We have to handle this separately
-extern void scheduler_yield_without_saving_isr(); // We have to handle this separately
+extern void scheduler_timer_isr();  // We have to handle this separately
 extern void isr35();
 extern void isr36();
 extern void isr37();
@@ -107,20 +104,21 @@ void interrupt_init() {
   set_idt_entry(30, (uint64_t)isr30, TRAP_GATE);
 
   // IRQs (interrupt gates)
-  set_idt_entry(SCHEDULER_TIMER_IV, (uint64_t)scheduler_timer_isr, INTERRUPT_GATE); // Local APIC timer (scheduler)
-  set_idt_entry(SCHEDULER_YEILD_WITHOUT_SAVING_IV, (uint64_t)scheduler_yield_without_saving_isr, INTERRUPT_GATE); // Local APIC timer (scheduler)
+  set_idt_entry(SCHEDULER_TIMER_IV, (uint64_t)scheduler_timer_isr,
+                INTERRUPT_GATE);  // Local APIC timer (scheduler)
 
-  set_idt_entry(KEYBOARD_IV, (uint64_t)isr35, INTERRUPT_GATE); // Keyboard
-  set_idt_entry(PIC_TIMER_IV, (uint64_t)isr36, INTERRUPT_GATE); // PIC timer
-  set_idt_entry(PCI_IV, (uint64_t)isr37, INTERRUPT_GATE); // PCI ISR
+  set_idt_entry(KEYBOARD_IV, (uint64_t)isr35, INTERRUPT_GATE);   // Keyboard
+  set_idt_entry(PIC_TIMER_IV, (uint64_t)isr36, INTERRUPT_GATE);  // PIC timer
+  set_idt_entry(PCI_IV, (uint64_t)isr37, INTERRUPT_GATE);        // PCI ISR
 
-  set_idt_entry(LOCAL_APIC_CALIBRATION_IV, (uint64_t)isr39, INTERRUPT_GATE); // Local APIC timer (calibration)
+  set_idt_entry(LOCAL_APIC_CALIBRATION_IV, (uint64_t)isr39,
+                INTERRUPT_GATE);  // Local APIC timer (calibration)
   // Something is weird about IV 38...
 
   IDTR.size = sizeof(IDT) - 1;
   IDTR.address = (uint64_t)&IDT[0];
 
-  __asm__ ("lidt %0" : : "m" (IDTR));
+  __asm__("lidt %0" : : "m"(IDTR));
 
   REGISTER_MODULE("interrupt");
 }

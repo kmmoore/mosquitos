@@ -15,13 +15,14 @@ typedef enum {
   PCI_ERROR_DEVICE_ERROR
 } PCIDeviceDriverError;
 
-typedef void (* PCIDeviceDriverInitFunction) (PCIDeviceDriver *driver);
+typedef void (*PCIDeviceDriverInitFunction)(PCIDeviceDriver *driver);
 
-typedef PCIDeviceDriverError (* PCIDeviceDriverCommandFunction)
-        (PCIDeviceDriver *driver, uint64_t command_id, void *input_buffer,
-        uint64_t input_buffer_size, void *output_buffer, uint64_t output_buffer_size);
+typedef PCIDeviceDriverError (*PCIDeviceDriverCommandFunction)(
+    PCIDeviceDriver *driver, uint64_t command_id, const void *input_buffer,
+    uint64_t input_buffer_size, void *output_buffer,
+    uint64_t output_buffer_size);
 
-typedef void (* PCIDeviceDriverISR) (PCIDeviceDriver *driver);
+typedef void (*PCIDeviceDriverISR)(PCIDeviceDriver *driver);
 
 struct _PCIDeviceDriver {
   int class_code, subclass, program_if;
