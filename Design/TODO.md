@@ -9,3 +9,4 @@
 [ ] Kmalloc bitmap arena allocator
 [ ] Save x87/SSE registers on context switch
 [ ] Migrate to new #include guard style
+[ ] Use XSAVE XRESTORE instructions for context switches

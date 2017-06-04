@@ -20,6 +20,7 @@
 
 #include <kernel/drivers/acpi.h>
 #include <kernel/drivers/apic.h>
+#include <kernel/drivers/cpuid.h>
 #include <kernel/drivers/exception.h>
 #include <kernel/drivers/gdt.h>
 #include <kernel/drivers/interrupt.h>
@@ -64,6 +65,7 @@ void kernel_main(KernelInfo info) {
   lock_init(&kernel_lock);
 
   // Initialize subsystems
+  cpuid_init();
   acpi_init(info.xdsp_address);
   gdt_init();
   apic_init();
