@@ -3,6 +3,7 @@
 #include <kernel/datastructures/list.h>
 #include <kernel/drivers/filesystems/mfs.h>
 #include <kernel/drivers/pci_drivers/ahci/ahci.h>
+#include <kernel/drivers/random.h>
 #include <kernel/drivers/text_output.h>
 #include <kernel/memory/kmalloc.h>
 
@@ -910,8 +911,9 @@ static FilesystemError mfs_format(Filesystem *filesystem,
   metadata->num_data_blocks = size_blocks - 1 -
                               block_bitmap_size_blocks_estimated -
                               inode_bitmap_size_blocks - metadata->num_inodes;
-  // TODO: Fill UUID
   strlcpy(metadata->volume_name, volume_name, sizeof(metadata->volume_name));
+  metadata->uuid1 = random_random();
+  metadata->uuid2 = random_random();
   filesystem->write_blocks(filesystem, 0, 1, &metadata_block);
   store_metadata(filesystem, metadata);
 
