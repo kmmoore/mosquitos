@@ -23,7 +23,9 @@
 #include <kernel/drivers/exception.h>
 #include <kernel/drivers/gdt.h>
 #include <kernel/drivers/interrupt.h>
+#include <kernel/drivers/random.h>
 #include <kernel/drivers/serial_port.h>
+#include <kernel/drivers/text_output.h>
 #include <kernel/drivers/timer.h>
 
 #include <kernel/memory/kmalloc.h>
@@ -76,6 +78,9 @@ void kernel_main(KernelInfo info) {
 
   timer_init();
   keyboard_controller_init();
+
+  // Set up random numbers and start collecting entropy
+  random_init();
 
   // Set up scheduler
   scheduler_init();
