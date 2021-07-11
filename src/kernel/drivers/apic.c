@@ -167,6 +167,7 @@ static bool load_ioapic_address() {
         found = true;
         ioapic_index = (uint32_t *)(intptr_t)header->address;
         ioapic_data = (uint32_t *)(intptr_t)(header->address + 0x10);
+        break;
       }
     }
 
